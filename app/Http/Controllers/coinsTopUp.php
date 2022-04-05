@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\coinsTopUpModel;
+use Auth;
+use App\TransHistModel;
+use App\TransactionCode;
+use App\notification;
+class coinsTopUp extends Controller
+{
+    function submitTopUp(Request $request){
+        $is_trans_code_existed = TransactionCode::trans_code_duplicate_check_display($request->transaction_id);
+        if($is_trans_code_existed == 'no'){
+            $proofCoinsTopUpPaymentImage = $request->file('proofTopUpPayment');
+            if($proofCoinsTopUpPaymentImage == NULL || $proofCoinsTopUpPaymentImage == ''){
+                return redirect('user_coins_top_up')->withMessage('Please insert image proof of top up payment  ');     
+            }
+            $proofImageSaveAsName = time() . uniqid() . "-coinsTopUp." . $proofCoinsTopUpPaymentImage->getClientOriginalExtension();
+            $upload_path = 'storage/coinsTopUp/' . date('FY') . '/';
+    
+            $proof_image_url = 'coinsTopUp\\' . date('FY') . '\\' . $proofImageSaveAsName;
+            $success = $proofCoinsTopUpPaymentImage->move($upload_path, $proofImageSaveAsName);
+    
+            // $seller_reg_fee = seller_reg_fee::where('user_id', Auth::user()->id)->first();
+            $coinsTopUpModel = new coinsTopUpModel();
+            $coinsTopUpModel->image_proof = $proof_image_url;
+            $coinsTopUpModel->user_id = Auth::user()->id;
+            $coinsTopUpModel->trans_id = $request->transaction_id;
+            $coinsTopUpModel->value = $request->coins_top_up_amount;
+            $coinsTopUpModel->reference_id = 'COINS' . uniqid();
+            $coinsTopUpModel->coins_trans_type = $request->coins_top_up_type;
+            $coinsTopUpModel->remarks = '2';
+            $coinsTopUpModel->save();
+    
+            $trans = new TransHistModel();
+            $trans->user_id_master =  Auth::user()->id;
+            $trans->user_id_slave = '1';
+            $trans->remarks = 'User commited coins topped up';
+            $trans->trans_type = 'Coins top up';
+            $trans->trans_ref_id = $request->transaction_id;
+            $trans->amount = $request->coins_top_up_amount;
+            $trans->save();
+
+            // notification entity for orders
+            $notification_ent = new notification();
+            $notification_ent->user_id = Auth::user()->id;
+            $notification_ent->frm_user_id = '2';
+            $notification_ent->notification_title = 'Coins top up for ' . $coinsTopUpModel->reference_id;
+            $status_messages = '<br>Your coins top up for the value ' .$request->coins_top_up_amount .'<br>PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.</br>';
+            $notification_ent->notification_txt = $status_messages;
+            $notification_ent->save();
+
+            return redirect('user_home')->withMessage('PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.');
+        }else{
+            return redirect('user_coins_top_up')->withMessage('PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.');
+        }
+
+    }
+
+    function invalidCoinsTopUp(Request $request){
+        $coinsTopUpModel = coinsTopUpModel::find($request->coins_top_uid);
+        $coinsTopUpModel->invalid_reason = $request->coins_top_up_invalid;
+        $coinsTopUpModel->remarks = '0';
+        $coinsTopUpModel->approved_by_user_id = '';
+        $coinsTopUpModel->save();
+
+         // notification entity for orders
+         $notification_ent = new notification();
+         $notification_ent->user_id = $coinsTopUpModel->user_id;
+         $notification_ent->frm_user_id = '2';
+         $notification_ent->notification_title = 'Coins top up for ' . $coinsTopUpModel->reference_id;
+         $status_messages = '<br>Your coins top up for failed invalid reason: </br>' . $request->coins_top_up_invalid;
+         $notification_ent->notification_txt = $status_messages;
+         $notification_ent->save();
+        return back();
+    }
+}

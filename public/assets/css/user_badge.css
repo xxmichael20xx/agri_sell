@@ -1,0 +1,100 @@
+:root{
+    --admin: #019267;
+    --user: #019267;
+    --rider: #019267;
+    --seller: #D82148;
+    --pendingseller: #D82148;
+    --coinsemployee: #D29D2B;
+}
+
+.profile-header-container{
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+
+
+
+
+.profile-header-img-admin > img.img-circle-admin {
+    width: 120px;
+    height: 120px;
+    border-radius: 100px !important;
+    border: 2px solid var(--admin);
+}
+
+.profile-header-img-notseller > img.img-circle-notseller {
+    width: 120px;
+    height: 120px;
+   border-radius: 100px !important;
+    border: 2px solid #FFD365;
+}
+
+.profile-header-img-user > img.img-circle-user {
+    width: 120px;
+    height: 120px;
+   border-radius: 100px !important;
+    border: 3px solid var(--user);
+}
+
+.profile-header-img-seller > img.img-circle-seller {
+    width: 120px;
+    height: 120px;
+   border-radius: 100px !important;
+    border: 2px solid var(--seller);
+}
+
+.profile-header-img-rider > img.img-circle-rider {
+    width: 120px;
+    height: 120px;
+   border-radius: 100px !important;
+    border: 2px solid var(--rider);
+}
+
+.profile-header-img-coinsemployee > img.img-circle-rider {
+    width: 120px;
+    height: 120px;
+   border-radius: 100px !important;
+    border: 2px solid var(--rider);
+}
+
+
+.profile-header {
+    margin-top: 43px;
+}
+
+.rank-label-container {
+    margin-top: -19px;
+    /* z-index: 1000; */
+    text-align: center;
+}
+
+.label.label-user.rank-label {
+    background-color: var(--user);
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}
+.label.label-admin.rank-label {
+    background-color: var(--admin);
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}
+
+.label.label-coinsemployee.rank-label {
+    background-color: rgb(81, 210, 183);
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}
+
+.label.label-seller.rank-label {
+    background-color: var(--seller);
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}
+
+.label.label-notseller.rank-label {
+        background-color: #FFD365;
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}

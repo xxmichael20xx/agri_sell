@@ -11,10 +11,13 @@ use App\Shop;
 use DB;
 use Auth;
 use App\deliveryStaffModel;
+use App\Events\OrderEvent;
+use App\notification;
 use App\orderDeliveryStatusModel;
 use App\orderpickupStatusModel;
 use App\ProductMonitoringLogs;
 use App\SubOrderItem;
+use Carbon\Carbon;
 
 class OrderMgmtPanelController extends Controller
 {
@@ -93,10 +96,12 @@ class OrderMgmtPanelController extends Controller
     // Parcel has been delivered - Completed
     // Delivery attempt was unsuccessful - Delivery failed
     public function markOrderDeliveryStatus($status_id, $order_id){
-        $order = Suborder::where('order_id', $order_id)->first();
+        $sub_order = Suborder::where('order_id', $order_id)->first();
         // {{$order->deliverystatus->display_name}}
-        $order->status_id = $status_id;
-        $order->save(); 
+        $sub_order->status_id = $status_id;
+        $sub_order->save();
+
+        $this->checkStatuses( 'order_status', $status_id, $order_id );
         return back();
     }
 
@@ -107,11 +112,13 @@ class OrderMgmtPanelController extends Controller
 
     }
     public function markOrderPickUpStatus($status_id, $order_id){
-        $order = Suborder::where('order_id', $order_id)->first();
-        // {{$order->deliverystatus->display_name}}
-        // $order->status_id = $status_id;
-        $order->pick_up_status_id = $status_id;
-        $order->save();
+        $sub_order = Suborder::where('order_id', $order_id)->first();
+        // {{$sub_order->deliverystatus->display_name}}
+        // $sub_order->status_id = $status_id;
+        $sub_order->pick_up_status_id = $status_id;
+        $sub_order->save();
+        
+        $this->checkStatuses( 'pickup_status', $status_id, $order_id );
         return back();
     }
     public function assignRiderOrder($rider_id, $order_id){
@@ -165,5 +172,39 @@ class OrderMgmtPanelController extends Controller
         $product_monitoring_logs->save();
         return back();
 
+    }
+
+    /**
+     * Check for the status for pick up and order
+     * @param config_key File name from config directory
+     * @param status_id Status id
+     * @param order_id Order Id
+     * @return Void
+     */
+    public function checkStatuses( $config_key, $status_id, $order_id ) {
+        $statuses = config( $config_key );
+        $order = Order::find( $order_id );
+        $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
+
+        foreach ( $statuses as $key => $status ) {
+            if ( $key == $status_id && $order ) {
+
+                $title = "Your order has been marked as `{$status}`";
+                $title .= "<br> Date notified: {$currentTime}<br><br>";
+
+                $notifData = [
+                    'user_id' => $order->user_id,
+                    'frm_user_id' => $this->userId(),
+                    'notification_title' => "Order #{$order_id} Updated",
+                    'notification_txt' => $title,
+                ];
+                $eventData = [ 
+                    'customer_id' => $order->user_id, 
+                    'type' => 'customer-order-update'
+                ];
+                $this->newNotificationWithEvent( $notifData, true, $eventData );
+                break;
+            }
+        }
     }
 }

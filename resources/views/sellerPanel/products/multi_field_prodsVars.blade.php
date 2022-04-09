@@ -90,7 +90,7 @@ var fieldHTML = '';
                             </div>
                         </div>     
                                 
-                                <div class="row">
+                                <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Product sold per </label>
                                     <div class="col-md-9">
                                         <select class="form-control" name="variation_sold_per[]"> 
@@ -103,21 +103,17 @@ var fieldHTML = '';
                                     </div>
                                 </div>
                     
-                                <div class="row">
+                                <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Standard net weight</label>
                                     <div class="col-md-9">
-                                        <div clas="row"> 
-                                            <div class="col-md-8">
-                                                <input type="text" class="form-control mb-2" name="standard_net_weight[]" placeholder="">
-                                                <select class="form-control" name="standard_net_weight_unit[]"> 
-                                                    <option value="gram">Gram</option>
-                                                    <option value="kilogram">Kilogram</option>
-                                                </select>
-                                            </div>
-                                        </div>  
+                                        <input type="text" class="form-control mb-2" name="standard_net_weight[]" placeholder="">
+                                        <select class="form-control" name="standard_net_weight_unit[]"> 
+                                            <option value="gram">Gram</option>
+                                            <option value="kilogram">Kilogram</option>
+                                        </select>
                                     </div>
                                 </div>
-                                        <div class="row mt-2">
+                                        <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Stocks</label>
                                             <div class="col-md-9">
                                                 <div class="form-group">

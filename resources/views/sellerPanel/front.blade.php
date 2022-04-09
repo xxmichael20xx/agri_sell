@@ -32,14 +32,14 @@ Coded by www.creative-tim.com
   <link href="/paper_assets/css/paper-dashboard.min1036.css?v=2.1.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/paper_assets/demo/demo.css" rel="stylesheet" />
-  <!-- 
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js" type="text/javascript"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script>
- -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script>
+
+  <!-- Seller Custom Style -->
+  <link href="{{ asset('css/seller.css') }}" rel="stylesheet">
 </head>
 <style>
  /* ===== Scrollbar CSS ===== */

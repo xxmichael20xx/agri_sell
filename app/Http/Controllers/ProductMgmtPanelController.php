@@ -88,20 +88,21 @@ class ProductMgmtPanelController extends Controller
     // form function changelog march 20 2022 variation
     // form function changelog march 22 variation multi
     function add_new_display_form_variation(Request $request){
-         $product = new Product();
-         $product->name = $request->product_name;
-            $product->description = $request->product_desc;
-            $product->is_sale = $request->is_Sale;
-            $product->is_pre_sale = $request->is_preSale;
-            $product->sale_pct_deduction = ($request->is_Sale == 1) ? $request->sale_pct_deduction : '0';
-            $product->shop_id = Auth::user()->shop->id;
-            
-            $product->is_whole_sale = $request->is_wholeSale;
-            
+        $product = new Product();
+        $product->name = $request->product_name;
+        $product->description = $request->product_desc;
+        $product->is_sale = $request->is_Sale;
+        $product->is_pre_sale = $request->is_preSale;
+        $product->sale_pct_deduction = ($request->is_Sale == 1) ? $request->sale_pct_deduction : '0';
+        $product->shop_id = Auth::user()->shop->id;
+        
+        $product->is_whole_sale = $request->is_wholeSale;
+        $product->product_user_id = $this->userId() ?? NULL; // add the user id of the current user
 
-                    $multiple_images = $request->file('images');
+        $multiple_images = $request->file('images');
         $multiple_images_path = '';
         $multiple_images_counter = 1;
+        
         if($request->hasFile('images')){
             foreach($multiple_images as $single_image){
                 $productImage = $single_image;
@@ -125,9 +126,7 @@ class ProductMgmtPanelController extends Controller
             $product->shop_id = Auth::user()->shop->id;
         }
            
-           
-            $product->save();
-
+        $product->save();
 
         $multiple_variation_counter = 0;
         $multiple_variation_names = $request->variation_name;
@@ -161,8 +160,8 @@ class ProductMgmtPanelController extends Controller
             }else{
                 // with wholesale
                 // thus retail with wholesale will be reflected
-            $productVariation->variation_price_per = $multiple_variation_price[$multiple_variation_counter];
-            $productVariation->variation_wholesale_price_per = $multiple_variation_price_whole_sale[$multiple_variation_counter];
+                $productVariation->variation_price_per = $multiple_variation_price[$multiple_variation_counter];
+                $productVariation->variation_wholesale_price_per = $multiple_variation_price_whole_sale[$multiple_variation_counter];
                 $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale[$multiple_variation_counter];
                 $productVariation->is_variation_wholesale = 'yes';    
                 $productVariation->is_variation_wholesale_only = 'no';
@@ -183,18 +182,17 @@ class ProductMgmtPanelController extends Controller
 
             $productVariation->save();
         }
-        
 
-            $productCategory = new ProductCategory();
-            $productCategory->product_id = $product->id;
-            $productCategory->category_id = $request->category_id;
-            $productCategory->save();
+        $productCategory = new ProductCategory();
+        $productCategory->product_id = $product->id;
+        $productCategory->category_id = $request->category_id;
+        $productCategory->save();
 
-            $adminnotif_ent = new adminNotifModel();
-            $adminnotif_ent->action_type = 'Product addition';
-            $adminnotif_ent->user_id = Auth::user()->id;
-            $adminnotif_ent->action_description = 'Added ' . $product->name . ' to the products list';
-            $adminnotif_ent->save();  
+        $adminnotif_ent = new adminNotifModel();
+        $adminnotif_ent->action_type = 'Product addition';
+        $adminnotif_ent->user_id = Auth::user()->id;
+        $adminnotif_ent->action_description = 'Added ' . $product->name . ' to the products list';
+        $adminnotif_ent->save();  
 
         $productCategory = new ProductCategory();
         $productCategory->product_id = $product->id;
@@ -210,13 +208,28 @@ class ProductMgmtPanelController extends Controller
 
     // form function changelog march 20 2022 regular 
     // changed function march 22 2022 regular
-    function save_new_display_form_regular(Request $request){
+    function save_new_display_form_regular( Request $request ){
+        $this->validate( $request, [
+            'product_name' => 'required',
+            'images' => 'required',
+            'category_id' => 'required',
+            'retail_price' => 'required_if:is_wholeSale,==,retail',
+            'wholesale_price' => 'required_if:is_wholeSale,==,wholesale',
+            'wholesale_min_qty' => 'required_if:is_wholeSale,==,wholesale',
+            'wholesale_sold_per' => 'required',
+            'product_desc' => 'required',
+            'standard_net_weight' => 'required',
+            'standard_net_weight_unit' => 'required',
+            'stocks' => 'required',
+        ] );
+
         $product = new Product();
-        $multiple_images = $request->file('images');
+        $multiple_images = $request->file( 'images' );
         $multiple_images_path = '';
         $multiple_images_counter = 1;
-        if($request->hasFile('images')){
-            foreach($multiple_images as $single_image){
+
+        if ( $request->hasFile('images') ) {
+            foreach($multiple_images as $single_image) {
                 $productImage = $single_image;
                 $productImageSaveAsName = time() . uniqid() . "-product." . $productImage->getClientOriginalExtension();
                 $upload_path = 'storage/products/' . date('FY') . '/';
@@ -224,7 +237,8 @@ class ProductMgmtPanelController extends Controller
                 $product_image_url = $upload_path_url . $productImageSaveAsName;
                 $success = $productImage->move($upload_path, $productImageSaveAsName);
                 $multiple_images_path .= $product_image_url . ',';
-                if($multiple_images_counter == 1){
+
+                if ( $multiple_images_counter == 1 ) {
                     $product->cover_img = $product_image_url;
                 }
                 $multiple_images_counter++;
@@ -232,80 +246,85 @@ class ProductMgmtPanelController extends Controller
         }
         
         $product->secondary_cover_img = $multiple_images_path;
-        if (Auth::user()->role->name == 'admin'){
+        if ( Auth::user()->role->name == 'admin') {
             $product->shop_id = $request->shop_id;
-        }else if (Auth::user()->role->name == 'seller'){
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
             $product->shop_id = Auth::user()->shop->id;
+
         }
-            $product->name = $request->product_name;
-            $product->category_id = $request->category_id;
-            $product->description = $request->product_desc;
-            $product->is_sale = $request->is_Sale;
-            $product->is_pre_sale = $request->is_preSale;
-            $product->sale_pct_deduction = ($request->is_Sale == 1) ? $request->sale_pct_deduction : '0';
-            $product->is_whole_sale = $request->is_wholeSale;
-            $product->whole_sale_min_qty = $request->wholesale_min_qty;
-            $product->save();
-            
-            $productVariation = new ProductVariation;
-            $productVariation->product_id = $product->id;
-            $productVariation->variation_name = 'Regular';
 
-
-            // 3 variations 
-            // Wholesale only 
-            // retail only 
-            // wholesale and retail
-
-            // wholesale and rretail
-            // wholesale price vars if the form is not filled with wholesale ent 
-            if($request->wholesale_price == NULL || $request->wholesale_min_qty == NULL || $request->wholesale_min_qty == '' || $request->wholesale_price == '') {
-                // retail only
-                $productVariation->is_variation_wholesale = 'no';
-            }else{
-                // with wholesale
-                // thus retail with wholesale will be reflected
-                $productVariation->variation_price_per = $request->retail_price;
-                $productVariation->variation_wholesale_price_per = $request->wholesale_price;
-                $productVariation->variation_min_qty_wholesale = $request->wholesale_min_qty; 
-                $productVariation->is_variation_wholesale = 'yes';    
-                $productVariation->is_variation_wholesale_only = 'no';
-            }
-
-            // wholesale only entity
-            if($request->retail_price == NULL || $request->retail_price == ''){
-                $productVariation->is_variation_wholesale = 'yes';
-                $productVariation->is_variation_wholesale_only = 'yes';
-                $productVariation->variation_price_per = $request->wholesale_price;
-                $productVariation->variation_wholesale_price_per = $request->wholesale_price;
-                $productVariation->variation_min_qty_wholesale = $request->wholesale_min_qty; 
-            }else{
-                // retail only
-                $productVariation->variation_price_per = $request->retail_price;
-            }
-
-            // quantity refer to stocks
-            $productVariation->variation_quantity = $request->stocks;
-            // net weight
-            $productVariation->variation_net_weight = $request->standard_net_weight;
-            $productVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
-            $productVariation->save();
-     
-            $productCategory = new ProductCategory();
-            $productCategory->product_id = $product->id;
-            $productCategory->category_id = $request->category_id;
-            $productCategory->save();
-
-            $adminnotif_ent = new adminNotifModel();
-            $adminnotif_ent->action_type = 'Product addition';
-            $adminnotif_ent->user_id = Auth::user()->id;
-            $adminnotif_ent->action_description = 'Added ' . $product->name . ' to the products list';
-            $adminnotif_ent->save();  
+        $product->name = $request->product_name;
+        $product->category_id = $request->category_id;
+        $product->description = $request->product_desc;
+        $product->is_sale = $request->is_Sale;
+        $product->is_pre_sale = $request->is_preSale;
+        $product->sale_pct_deduction = ($request->is_Sale == 1) ? $request->sale_pct_deduction : '0';
+        $product->is_whole_sale = ( $request->is_wholeSale == 'retail' ) ? false : true; // check if product is whole sale or retail
+        $product->whole_sale_min_qty = $request->wholesale_min_qty;
+        $product->product_user_id = $this->userId() ?? NULL; // add the user id of the current user
+        $product->save();
         
-        if (Auth::user()->role->name == 'admin') {
-            return redirect('/admin/manage_products');
-        }else if (Auth::user()->role->name == 'seller') {
-            return redirect('/sellerpanel/products');
+        $productVariation = new ProductVariation;
+        $productVariation->product_id = $product->id;
+        $productVariation->variation_name = 'Regular';
+
+
+        // 3 variations 
+        // Wholesale only 
+        // retail only 
+        // wholesale and retail
+
+        // wholesale and rretail
+        // wholesale price vars if the form is not filled with wholesale ent 
+        if ($request->wholesale_price == NULL || $request->wholesale_min_qty == NULL || $request->wholesale_min_qty == '' || $request->wholesale_price == '') {
+            // retail only
+            $productVariation->is_variation_wholesale = 'no';
+        } else {
+            // with wholesale
+            // thus retail with wholesale will be reflected
+            $productVariation->variation_price_per = $request->retail_price;
+            $productVariation->variation_wholesale_price_per = $request->wholesale_price;
+            $productVariation->variation_min_qty_wholesale = $request->wholesale_min_qty; 
+            $productVariation->is_variation_wholesale = 'yes';    
+            $productVariation->is_variation_wholesale_only = 'no';
+        }
+
+        // wholesale only entity
+        if ($request->retail_price == NULL || $request->retail_price == ''){
+            $productVariation->is_variation_wholesale = 'yes';
+            $productVariation->is_variation_wholesale_only = 'yes';
+            $productVariation->variation_price_per = $request->wholesale_price;
+            $productVariation->variation_wholesale_price_per = $request->wholesale_price;
+            $productVariation->variation_min_qty_wholesale = $request->wholesale_min_qty; 
+        } else {
+            // retail only
+            $productVariation->variation_price_per = $request->retail_price;
+        }
+
+        // quantity refer to stocks
+        $productVariation->variation_quantity = $request->stocks;
+        // net weight
+        $productVariation->variation_net_weight = $request->standard_net_weight;
+        $productVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
+        $productVariation->save();
+    
+        $productCategory = new ProductCategory();
+        $productCategory->product_id = $product->id;
+        $productCategory->category_id = $request->category_id;
+        $productCategory->save();
+
+        $adminnotif_ent = new adminNotifModel();
+        $adminnotif_ent->action_type = 'Product addition';
+        $adminnotif_ent->user_id = Auth::user()->id;
+        $adminnotif_ent->action_description = 'Added ' . $product->name . ' to the products list';
+        $adminnotif_ent->save();  
+        
+        if ( Auth::user()->role->name == 'admin' ) {
+            return redirect( '/admin/manage_products' );
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
+            return redirect( '/sellerpanel/products' );
         }
 
     }

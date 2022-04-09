@@ -40,7 +40,7 @@
                         @php
                         $category_id = '1';
                         $category_name = 'Crops';
-                        $products = App\Product::where('category_id', $category_id)->get();
+                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
                         @include('sellerPanel.products.index_subcat')
                     </div>
@@ -50,7 +50,7 @@
                         @php
                         $category_id = '2';
                         $category_name = 'Vegetables';
-                        $products = App\Product::where('category_id', $category_id)->get();
+                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
                         @include('sellerPanel.products.index_subcat')
                     </div>
@@ -60,7 +60,7 @@
                         @php
                         $category_id = '3';
                         $category_name = 'Fruits';
-                        $products = App\Product::where('category_id', $category_id)->get();
+                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
                         @include('sellerPanel.products.index_subcat')
                     </div>
@@ -71,7 +71,7 @@
                         @php
                         $category_id = '4';
                         $category_name = 'Livestocks';
-                        $products = App\Product::where('category_id', $category_id)->get();
+                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
                         @include('sellerPanel.products.index_subcat')
                     </div>
@@ -82,7 +82,7 @@
                         @php
                         $category_id = '5';
                         $category_name = 'Seeds';
-                        $products = App\Product::where('category_id', $category_id)->get();
+                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
                         @include('sellerPanel.products.index_subcat')
                     </div>
@@ -92,7 +92,7 @@
                         @php
                         $category_id = '6';
                         $category_name = 'Grains';
-                        $products = App\Product::where('category_id', $category_id)->get();
+                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
                         @include('sellerPanel.products.index_subcat')
                     </div>

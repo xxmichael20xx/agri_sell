@@ -6,6 +6,8 @@ use App\Order;
 use App\User;
 use Illuminate\Http\Request;
 use App\coinsTransaction;
+use App\Events\OrderEvent;
+use App\notification;
 use App\Product;
 use App\PreOrderModel;
 use App\TransHistModel;
@@ -180,15 +182,23 @@ class OrderController extends Controller
     
         $order->save();
 
+        // Create a variable to store the seller data of each items 
+        $sellerNotifs = [];
         $cartItems = \Cart::session(auth()->id())->getContent();
         // looping of cart items
         foreach ($cartItems as $item) {
             // get product instance
             $product = Product::where('id', $item->product_id)->first();
+            $notifData = [
+                'seller_id' => $product->product_user_id ?? NULL,
+                'item_name' => $product->name,
+                'item_qty' => $item->quantity,
+            ];
 
             if ($product->is_pre_sale != '1') {
                 // not pre order or presale
                 $order->items()->attach($item->product_id, ['price' => $item->price, 'quantity' => $item->quantity, 'variation_id' => $item->variation_id]);
+                $notifData['item_type'] = 'Order';
             } else {
                 // to pre order table
                 $pre_order_inst = new PreOrderModel();
@@ -204,6 +214,7 @@ class OrderController extends Controller
                 $pre_order_inst->quantity = $item->quantity;
                 
                 $pre_order_inst->save();
+                $notifData['item_type'] = 'Pre-Order';
             }
             // add quantity deduction
             // update product stocks
@@ -214,35 +225,59 @@ class OrderController extends Controller
             $product_variation_ent->save();
             // $product->stocks = $product->stocks - $item->quantity;
             // $product->save();
+
+            $sellerNotifs[] = $notifData;
         }
 
         $order->generateSubOrders();
         $trans = new TransHistModel();
-        $trans->user_id_master = Auth::id();
+        $trans->user_id_master = $this->userId();
         $trans->user_id_slave = '1';
         $trans->remarks = 'User order';
         $trans->trans_type = 'Order';
         $trans->trans_ref_id = $order_ref_id;
         $trans->amount = $order_ref_amount;
-        
         $trans->save();
 
         \Cart::session(auth()->id())->clear();
 
-        if (request('payment_method') == 'agrisell_coins') {
-            return redirect('/otp_validation_payment_reg/'.$order->order_number.'');
-        }else{
-            return redirect()->route('home')->withMessage('Order has been placed');
+        if ( count( $sellerNotifs ) > 0 ) {
+
+            // loop through all the items notification
+            foreach( $sellerNotifs as $sellerNotif ) {
+                $sellerId = $sellerNotif['seller_id'];
+                if ( $sellerId ) {
+                    $title_partial = $sellerNotif['item_type'];
+                    $text_partial = strtolower( $sellerNotif['item_type'] );
+                    $item_qty = number_format( $sellerNotif['item_qty'] );
+
+                    $notification_ent = new notification();
+                    $notification_ent->user_id = $sellerId;
+                    $notification_ent->frm_user_id = $this->userId();
+                    $notification_ent->notification_title = "New {$title_partial} - #{$order->id}";
+                    $notification_ent->notification_txt = "New {$text_partial} has been placed. Item `{$sellerNotif['item_name']} x{$item_qty}`<br><br>";
+                    
+                    if ( $notification_ent->save() ) {
+                        event( new OrderEvent( [ 'seller_id' => $sellerId, 'type' => 'new-order' ] ) );
+                    }
+                }
+            }
+
+        } else {
+            // notification entity for orders
+            $notification_ent = new notification();
+            $notification_ent->user_id = $this->userId();
+            $notification_ent->frm_user_id = 1;
+            $notification_ent->notification_title = 'Order ' . $order->id;
+            $notification_ent->notification_txt = "<br>New order has been placed.</br>";
+            $notification_ent->save();
         }
 
-          // notification entity for orders
-        $notification_ent = new notification();
-        $notification_ent->user_id = Auth::user()->id;
-        $notification_ent->frm_user_id = '1';
-        $notification_ent->notification_title = 'Order ' . $order->id;
-        $status_messages = '<br>Order completed!</br>';
-        $notification_ent->notification_txt = $status_messages;
-        $notification_ent->save();
+        if ( request('payment_method') == 'agrisell_coins' ) {
+            return redirect('/otp_validation_payment_reg/'.$order->order_number.'');
+        } else {
+            return redirect()->route('home')->withMessage('Order has been placed');
+        }
 
     }
 

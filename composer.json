@@ -20,6 +20,7 @@
         "livewire/livewire": "^2.10",
         "nicolaslopezj/searchable": "^1.12",
         "orangehill/iseed": "^2.6",
+        "pusher/pusher-php-server": "^7.0",
         "seshac/otp-generator": "^0.0.7",
         "willvincent/laravel-rateable": "^2.3"
     },

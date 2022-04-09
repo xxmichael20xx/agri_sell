@@ -37,13 +37,15 @@ $date_now_formatted = $date_now->format('Y/m/d H:i: A');
         {{ $pre_sale_product->pre_sale_deadline }}
         <p data-countdown="{{ $finned }}" hidden></p>
         <script>
-            $('[data-countdown]').each(function () {
-                var $this = $(this),
-                    finalDate = $(this).data('countdown');
-                $this.countdown(finalDate, function (event) {
-                    $this.html(event.strftime('%D days %H:%M:%S'));
+            window.onload = () => {
+                $('[data-countdown]').each(function () {
+                    var $this = $(this),
+                        finalDate = $(this).data('countdown');
+                    $this.countdown(finalDate, function (event) {
+                        $this.html(event.strftime('%D days %H:%M:%S'));
+                    });
                 });
-            });
+            }
         </script>
         <h4>
             <a href="{{ route('products.show', $pre_sale_product) }}">{{ $pre_sale_product->name }}</a>

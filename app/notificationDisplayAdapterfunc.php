@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Auth;
 use App\notification;
 class notificationDisplayAdapterfunc
 {
@@ -22,6 +19,4 @@ class notificationDisplayAdapterfunc
         }
         return $display_new_notifications_counter;
     }
-
-
 }

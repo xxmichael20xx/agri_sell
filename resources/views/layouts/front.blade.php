@@ -11,12 +11,12 @@
 
 
     <!-- You can use Open Graph tags to customize link previews.
-Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
-<meta property="og:url"           content="{{url()->current()}}" />
-<meta property="og:type"          content="website" />
-<meta property="og:title"         content="Agrisell product" />
-<meta property="og:description"   content="Your description" />
-<meta property="og:image"         content="{{url()->current()}}/assets/img/favicon.png" />
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+    <meta property="og:url"           content="{{url()->current()}}" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="Agrisell product" />
+    <meta property="og:description"   content="Your description" />
+    <meta property="og:image"         content="{{url()->current()}}/assets/img/favicon.png" />
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.png">
@@ -34,10 +34,14 @@ Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
     <link rel="stylesheet" href="/assets/css/bundle.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/responsive.css">
+
+    <!-- Custom Style -->
+    <link href="{{ asset('css/new-custom.css') }}" rel="stylesheet">
     @livewireStyles
 
     <script src="/assets/js/vendor/modernizr-2.8.3.min.js"></script>
-
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <div id="fb-root"></div>
 </head>
 <style>
@@ -249,9 +253,12 @@ Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
                     </div>
                     <div class="same-style-text">
                         <a href="/notifications">Notifications<br>
-                        @auth
-                            {{ App\notificationDisplayAdapterfunc::display_new_notifications_count() }} new
-                        @endauth
+                        <span id="navbar--notification-container">
+                            @auth
+                                {{ App\notificationDisplayAdapterfunc::display_new_notifications_count() }}
+                            @endauth
+                        </span>
+                        <span>new</span>
                         </a>
                     </div>
                 </div>
@@ -387,6 +394,38 @@ Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
 <script src="/assets/js/owl.carousel.min.js"></script>
 <script src="/assets/js/plugins.js"></script>
 <script src="/assets/js/main.js"></script>
+
+<script>
+    const user_id = {{ Auth::check() ? Auth::user()->id : NULL }} 
+    let pusher = new Pusher( 'd527cc315432ec685113', {
+        cluster: 'ap1'
+    } )
+
+    var channel = pusher.subscribe( 'my-channel' )
+    channel.bind( 'order-event', function( res ) {
+        const data = res.message
+
+        // Check and update Sellers' notification count
+        if ( data.type == 'new-order' && user_id == data.seller_id ) getNotificationCount()
+
+        // Check and update Customers' notificatioin cound
+        if ( data.type == 'customer-order-update' && user_id == data.customer_id ) getNotificationCount()
+    } )
+
+    /**
+     * Get the updated notifications count via GET Request on API Routes
+     * Updates the count in the header's notification content
+     */
+    function getNotificationCount() {
+        try {
+            const selector = `#navbar--notification-container`
+            $.get( `/api/notifications/seller/count/${user_id}`, {}, function( res ) {
+                if ( res.success ) $( selector ).text( res.count )
+            } )
+            
+        } catch (error) { /* silently exit */ }
+    }
+</script>
 
 @livewireScripts
 </body>

@@ -2,7 +2,7 @@
     <div class="product-fruit-wrapper mb-60">
         <div class="product-fruit-img">
 
-            <img src="{{asset('storage/'.$product->cover_img)}}" alt="">
+            <img src="{{asset('storage/'.$product->featured_image)}}" alt="">
             <div class="product-furit-action">
                 <a class="furit-animate-left" title="Add To Cart" href="{{route('cart.add', $product->id)}}">
                     <i class="pe-7s-cart"></i>

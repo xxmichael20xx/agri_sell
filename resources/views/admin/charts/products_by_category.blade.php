@@ -14,7 +14,9 @@
     }
     foreach($productCategory_prods as $product_categories_prods){
         $index_cat_tmp = $product_categories_prods->category_id - 1;
-        $categories_prods_total[$index_cat_tmp] += 1;
+        if ( isset( $categories_prods_total[$index_cat_tmp] ) ) {
+            $categories_prods_total[$index_cat_tmp] += 1;
+        }
     }
 
     foreach($categories_prods_total as $categories_prods_total_item){

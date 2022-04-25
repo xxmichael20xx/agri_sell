@@ -13,7 +13,7 @@ $(document).ready(function(){
     
     var wrapper = $('.field_wrapper'); //Input field wrapper
 
-var fieldHTML = '';
+    var fieldHTML = '';
     
     
     //Once add button is clicked

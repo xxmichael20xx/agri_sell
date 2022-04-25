@@ -29,75 +29,39 @@
                 <div class="col-md-12 col-lg-7 col-12">
                     @php
                         $product_variations_counter = 0;
-                        $product_variations = DB::table('product_variations')->where('product_id', $product->id)->get();
-                        $product_variation_max_price = DB::table('product_variations')->where('product_id', $product->id)->max('variation_price_per');
-                        $product_variation_min_price = DB::table('product_variations')->where('product_id', $product->id)->min('variation_price_per');
-                        $product_variation_count_qty = DB::table('product_variations')->where('product_id', $product->id)->sum('variation_quantity');
+                        $_product_variant = DB::table('product_variations')->where('product_id', $product->id);
+                        $product_variations = $_product_variant->get();
+                        $product_variation_max_price = $_product_variant->max('variation_price_per');
+                        $product_variation_min_price = $_product_variant->min('variation_price_per');
+                        $product_variation_count_qty = $_product_variant->sum('variation_quantity');
                         $product_variation_range = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱' . $product_variation_max_price;
                     @endphp
 
                     <div class="product-details-img-content">
                         <div class="product-details-tab mr-70">
                             <div class="product-details-large tab-content">
-                                @php
-                                    $images = $product->secondary_cover_img ?? 'not available';
-                                    $pieces = explode(',', $images);
-                                    $image_counter = 0;
-                                @endphp
-                                @foreach ($pieces as $piece)
-                                    @php
-                                        $image_counter++;
-                                    @endphp
-                                    @if ($image_counter == 1)
-                                        <div class="tab-pane active show fade" id="pro-details{{ $image_counter }}"
-                                            role="tabpanel">
-                                            <div class="">
-                                                <a href="{{ env('APP_URL') }}/storage/{{ $piece }}">
-                                                    <div
-                                                        style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('{{ env('APP_URL') }}/storage/{{ $piece }}');">
-                                                    </div>
-                                                </a>
-                                            </div>
+                                @foreach ( $product->images as $key => $image )
+                                    <div class="tab-pane {{ $key == 0 ? 'active show' : '' }} fade" id="pro-details{{ $key }}"
+                                        role="tabpanel">
+                                        <div class="">
+                                            <a href="/storage/{{ $image }}">
+                                                <div
+                                                    style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('/storage/{{ $image }}');">
+                                                </div>
+                                            </a>
                                         </div>
-                                    @else
-                                        <div class="tab-pane fade" id="pro-details{{ $image_counter }}" role="tabpanel">
-                                            <div class="">
-                                                <a href="{{ env('APP_URL') }}/storage/{{ $piece }}">
-                                                    <div
-                                                        style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('{{ env('APP_URL') }}/storage/{{ $piece }}');">
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    @endif
+                                    </div>
                                 @endforeach
 
                             </div>
                             <div class="product-details-small nav mt-12" role=tablist>
-                                @php
-                                    $images = $product->secondary_cover_img ?? 'not available';
-                                    $pieces = explode(',', $images);
-                                    $image_counter = 0;
-                                @endphp
-                                @foreach ($pieces as $piece)
-                                    @php
-                                        $image_counter++;
-                                    @endphp
-                                    @if ($image_counter == 1)
-                                        <a class="active mr-12 mt-1" href="#pro-details{{ $image_counter }}"
-                                            data-toggle="tab" role="tab" aria-selected="true">
-                                            <div
-                                                style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('{{ env('APP_URL') }}/storage/{{ $piece }}');">
-                                            </div>
-                                        </a>
-                                    @else
-                                        <a class="mr-12 mt-1" href="#pro-details{{ $image_counter }}" data-toggle="tab"
-                                            role="tab" aria-selected="true">
-                                            <div
-                                                style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('{{ env('APP_URL') }}/storage/{{ $piece }}');">
-                                            </div>
-                                        </a>
-                                    @endif
+                                @foreach ( $product->images as $key => $image )
+                                    <a class="mr-12 mt-1 {{ $key == 0 ? 'active' : '' }}" href="#pro-details{{ $key }}"
+                                        data-toggle="tab" role="tab" aria-selected="true">
+                                        <div
+                                            style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('/storage/{{ $image }}');">
+                                        </div>
+                                    </a>
                                 @endforeach
                             </div>
                         </div>
@@ -174,10 +138,11 @@
                         <div class="details-price my-2 mb-4">
                             <span class="display-3">
                                 @php
-                                    $product_variation_max_price = DB::table('product_variations')->where('product_id', $product->id)->max('variation_price_per');
-                                    $product_variation_min_price = DB::table('product_variations')->where('product_id', $product->id)->min('variation_price_per');
-                                    $product_variation_count_qty = DB::table('product_variations')->where('product_id', $product->id)->sum('variation_quantity');
-                                    $product_variation_sold_per_initial = DB::table('product_variations')->where('product_id', $product->id)->pluck('variation_sold_per')->first();
+                                    $_product_variant = DB::table('product_variations')->where('product_id', $product->id);
+                                    $product_variation_max_price = $_product_variant->max('variation_price_per');
+                                    $product_variation_min_price = $_product_variant->min('variation_price_per');
+                                    $product_variation_count_qty = $_product_variant->sum('variation_quantity');
+                                    $product_variation_sold_per_initial = $_product_variant->pluck('variation_sold_per')->first();
                                     $product_variation_range = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . $product_variation_max_price;
                                     $product_variation_range_sale = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . ($product_variation_max_price - ($product->sale_pct_deduction / 100) * $product->product_variation_max_price);
                                 @endphp
@@ -224,14 +189,16 @@
                             $variantMinQty = 1;
                             $variantStocks = number_format( $product_variation_if_regular->variation_quantity );
                             $variantWeight = number_format( $product_variation_if_regular->variation_net_weight );
+                            $variantWeightUnit = $product_variation_if_regular->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g';
                             $variantSoldPer = $product_variation_if_regular->variation_sold_per;
                             $variantPrice = number_format( $product_variation_if_regular->variation_price_per );
                             $variantText = "Retail";
                             $variantWholesale = 'no';
                             
                             if ( $product_variation_if_regular->is_variation_wholesale == 'yes' ) {
-                                $variantText = "Wholesale: Buy a minimum qty of {$variantMinQty} and the price will be ₱{$product_variation_if_regular->variation_price_per}";
                                 $variantMinQty = $product_variation_if_regular->variation_min_qty_wholesale;
+                                $variation_wholesale_price_per = number_format( $product_variation_if_regular->variation_wholesale_price_per );
+                                $variantText = "Wholesale: Buy a minimum qty of {$variantMinQty} and the price will be ₱{$variation_wholesale_price_per}";
                                 $variantWholesale = 'yes';
                             }
                         @endphp
@@ -258,7 +225,7 @@
                                             @endphp
                                             <button 
                                                 type="button"
-                                                class="btn btn-outline-success {{ $spacing }} product--variation-action"
+                                                class="btn btn-outline-success mb-2 {{ $spacing }} product--variation-action"
                                                 data-id="{{ $variation->id }}"
                                                 data-data="{{ json_encode( $variation ) }}"
                                                 {{ $variant_btn_id }}>
@@ -274,21 +241,26 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" require type="number" value="1" id="variation_max_stock" min="{{ $variantMinQty }}">
+                                    <input class="input-form" name="quantity" type="number" value="1" id="variation_max_stock" min="{{ $variantMinQty }}" required>
                                 </div>
                                 <div class="col-8">
                                     <span>Available stocks </span> <span id="variant--stock">{{ $variantStocks }}</span>
                                     <br>
-                                    <span>Product net weight</span> <span id="variant--weight">{{ $variantWeight }}</span> (g)
+                                    <span>Product net weight</span> <span id="variant--weight">{{ $variantWeight }}</span> (<span id="variant--weight-unit">{{ $variantWeightUnit }}</span>)
                                     <br>
                                     <span>Sold per </span> <span id="variant--sold-for">{{ $variantSoldPer }}</span>
-                                    <span></span> <span id="variant--additional-text">{{ $variantText }}</span>
+                                    <br>
+                                    <span id="variant--additional-text">{{ $variantText }}</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <span>
-                                        <input class="mt-3 add--to-cart" type="submit" value="Add to cart">
+                                        @if ( $variantStocks < 1 )
+                                            <input class="mt-3 add--to-cart disabled" disabled type="button" value="Out of stuck">
+                                        @else
+                                            <input class="mt-3 add--to-cart" type="submit" value="Add to cart">
+                                        @endif
                                     </span>
                                 </div>
                             </div>
@@ -310,6 +282,7 @@
 
     <script>
         const cartFormValidated = false
+        let isOutOfStock = false
 
         window.onload = () => {
             if ( $( '.product--variation-action' ) ) {
@@ -318,6 +291,7 @@
                     const data = $( this ).data( 'data' )
                     const checkIcon = `<i class="fa fa-check"></i>`
                     const iconPlaceholder = $( this ).find( '#icon--placeholder' )
+                    const stock = data.variation_quantity
 
                     removeActiveIcon()
 
@@ -326,12 +300,14 @@
 
                     const variantStock = Number( data.variation_quantity ).toLocaleString()
                     const variantWeight = data.variation_net_weight
+                    const variantWeightUnit = data.variation_net_weight_unit == 'kilogram' ? 'kg' : 'g'
                     const variantPrice = Number( data.variation_price_per ).toLocaleString()
                     const variantWholeSaleMinQty = data.variation_min_qty_wholesale
                     const variantSoldFor = data.variation_sold_per
 
                     $( '#variant--stock' ).text( variantStock )
                     $( '#variant--weight' ).text( variantWeight )
+                    $( '#variant--weight-unit' ).text( variantWeightUnit )
                     $( '#price_list' ).text( `₱ ${variantPrice}` )
                     $( '#variation_max_stock' ).attr( 'max', variantStock )
                     $( '#variant--sold-for' ).text( variantSoldFor )
@@ -344,8 +320,33 @@
                         $( '#variation_max_stock' ).attr( 'min', 1 )
                         $( '#variant--additional-text' ).text( 'Retail' )
                     }
+
+                    const btn = $( 'input.add--to-cart' )
+                    if ( stock > 0 ) {
+                        btn.attr( 'disabled', false )
+                        btn.removeClass( 'disabled' )
+                        btn.val( 'Add to Cart' )
+                        isOutOfStock = false
+
+                    } else {
+                        btn.attr( 'disabled', true )
+                        btn.addClass( 'disabled' )
+                        btn.val( 'Out of Stock' )
+                        isOutOfStock = true
+                    }
                 } )
             }
+
+            $( document ).on( 'submit', '#add--cart-form', function( e ) {
+                if ( isOutOfStock ) {
+                    e.preventDefault()
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Out of stock',
+                        text: 'Selected product / variant is out of stock.'
+                    })
+                }
+            } )
 
             /**
              * Remove the check icon inside each variant buttons

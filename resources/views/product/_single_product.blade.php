@@ -5,7 +5,7 @@
     <div class="product-fruit-wrapper mb-60">
         <div class="product-fruit-img">
         <a href="{{route('products.show', $product)}}">
-        <div style="width: 100%; height: 300px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$product->cover_img}}');" ></div>
+        <div style="width: 100%; height: 300px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$product->featured_image}}');" ></div>
         </a>
         </div>
         

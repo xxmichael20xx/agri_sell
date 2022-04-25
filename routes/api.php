@@ -19,5 +19,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group([ 'prefix' => 'notifications' ], function() {
-    Route::get( 'seller/count/{id}', 'NotificationsController@getNotificationsCount' );
+    Route::get( 'count/{id}', 'NotificationsController@getNotificationsCount' );
+});
+
+Route::group([ 'prefix' => 'admin' ], function() {
+    Route::post( 'pending/shops', 'AdminPushNotifications@pendingShops' );
+    Route::post( 'verification/ids', 'AdminPushNotifications@userIdVerification' );
+});
+
+Route::group([ 'prefix' => 'admin' ], function() {
+    Route::post('rider/verify', 'riderMgmtController@riderVerify');
 });

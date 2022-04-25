@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\deliveryStaffModel;
 use App\User;
-use DB;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+
 class riderMgmtController extends Controller
 {
-    function index(){
+    function index() {
+        Cookie::queue( 'auth_user_id', Auth::id(), 3600 );
         $deliver_Staffs = deliveryStaffModel::get();
         return view('admin.deliveryStaff.index')->with(compact('deliver_Staffs'))->with('panel_name', 'rider_mgmt');
     }
+
     function add_new_form(){
         return view('admin.deliveryStaff.register_rider')->with('panel_name', 'rider_mgmt');
     }
@@ -22,16 +28,22 @@ class riderMgmtController extends Controller
         return back();
     }
 
-    function add_new(Request $request){
-        $tbl_user = DB::table('users')->where('email', $request->email)->first();
-        if ($tbl_user == NULL) {
+    function add_new( Request $request ) {
+        $this->validate( $request, [
+            'rider_name' => 'required',
+            'rider_email' => 'required|email|unique:users,email',
+            'rider_password' => 'required',
+            'rider_contact' => 'required',
+            'rider_vehicle' => 'required'
+        ] );
+
         $user = new User();
         $user->role_id = '5';
         $user->name = $request->rider_name;
         $user->email = $request->rider_email;
-        $user->password = bcrypt($request->rider_password);
+        $user->password = bcrypt( $request->rider_password );
         $user->mobile = $request->rider_contact;
-        $user->email_verified_at = '2022-02-19 19:40:43';
+        $user->email_verified_at = NOW();
         $user->address = 'not defined';
         $user->barangay = 'Amamperez';
         $user->town = 'Villasis';
@@ -47,11 +59,23 @@ class riderMgmtController extends Controller
         $deliveryStaffModel->vehicle_used = $request->rider_vehicle;
         $deliveryStaffModel->save();
 
-        return redirect('/admin/rider_management');
-        }else{
-            return back()->withMessage('Email exists');
-        }
-      
+        return redirect( '/admin/rider_management' );
+    }
 
+    public function riderVerify( Request $request ) {
+        $data = NULL;
+        $decrypted = Crypt::decrypt( Cookie::get( 'auth_user_id' ), false );
+        $auth_user_id = explode( '|', $decrypted )[1];
+        if ( ! $auth_user_id ) return response()->json( false );
+
+        $user = User::find( $auth_user_id );
+        $match = Hash::check( $request->password , $user->password );
+        $rider = deliveryStaffModel::find( $request->id );
+        if ( $match ) $data = $rider->password;
+
+        return response()->json( [ 
+            'success' => $match,
+            'data' => $data
+        ] );
     }
 }

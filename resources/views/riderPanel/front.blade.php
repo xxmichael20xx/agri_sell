@@ -32,6 +32,9 @@ Coded by www.creative-tim.com
   <link href="/paper_assets/css/paper-dashboard.min1036.css?v=2.1.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/paper_assets/demo/demo.css" rel="stylesheet" />
+  
+  <!-- Rider Custom Style -->
+  <link href="{{ asset('css/rider.css') }}" rel="stylesheet">
   <!--
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js" type="text/javascript"></script>
 
@@ -39,7 +42,7 @@ Coded by www.creative-tim.com
  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script>
 </head>
 <style>
  /* ===== Scrollbar CSS ===== */
@@ -197,7 +200,9 @@ Coded by www.creative-tim.com
   <script src="/paper_assets/demo/demo.js"></script>
   <!-- Sharrre libray -->
   <script src="/paper_assets/demo/jquery.sharrre.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('admin.additional_scripts')
+    @yield('custom.scripts')
 </body>
 
 

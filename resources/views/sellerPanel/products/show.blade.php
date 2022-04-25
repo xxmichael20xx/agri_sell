@@ -12,7 +12,7 @@
                     $product_variation_range = ($product_variation_min_price != $product_variation_max_price) ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . $product_variation_max_price;
                     $product_variation_range_sale = ($product_variation_min_price != $product_variation_max_price) ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . ($product_variation_max_price - (($product->sale_pct_deduction/100) * $product->product_variation_max_price));
                 @endphp
-            <img src="{{asset('storage/'.$product->cover_img)}}"  >
+            <img src="{{asset('storage/'.$product->featured_image)}}"  >
 
                 <div class="card-header">
                     <h4>{{$product->name}}</h4>

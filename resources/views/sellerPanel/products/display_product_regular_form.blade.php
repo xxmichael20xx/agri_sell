@@ -1,7 +1,8 @@
-<form method="POST" enctype="multipart/form-data" action="{{ route('save_new_product_regular')}}" id="save_new_product_regular">
+<form method="POST" enctype="multipart/form-data" action="{{ route('save_new_products')}}" id="save_new_product_regular">
     @csrf
     @method('POST')
-    <input type="hidden" name="shop_id" value="{{Auth::user()->shop->id}}">
+    <input type="hidden" name="shop_id" value="{{ Auth::user()->shop->id }}">
+    <input type="hidden" name="featured_index" id="featured_index">
     <div class="card-body">
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Product name</label>
@@ -18,11 +19,12 @@
         <div class="row mb-2">
             <label class="col-md-3 col-form-label">Product images</label>
             <div class="col-md-9">
-                <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" multiple/>
+                <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" multiple />
+                <small class="text-secondary">Note: Click on a image to set it as the featured imaged</small>
                 @if ( $errors->has( 'images' ) )
                     <span class="text-danger">{{ $errors->first( 'images' ) }}</span>
                 @endif
-                <div class="row" id="image_preview"></div>
+                <div class="row mt-3" id="image_preview"></div>
             </div>
         </div>
 
@@ -33,7 +35,7 @@
                     $product_categories = App\Category::all();
                 @endphp
                 <select class="selectpicker w-100" data-style="btn btn-primary btn-round" title="Select product category" name="category_id">
-                    @foreach ($product_categories as $product_category)
+                    @foreach ( $product_categories as $product_category )
                         @php
                             $isSelected = old( 'category_id' ) == $product_category->id ? 'selected' : '';
                         @endphp
@@ -46,93 +48,25 @@
             </div>
         </div>
 
-        <div hidden class="form-group row">
-            <label class="col-md-3 col-form-label">Variation name</label>
+        <div class="formgr-group row">
+            <label class="col-md-3 col-form-label">Regular price</label>
             <div class="col-md-9">
                 <div class="form-group">
-                    <input
-                        type="text" 
-                        class="form-control"
-                        name="variation_name"
-                        value=""
-                        placeholder=""
-                    />
-                </div>
-            </div>
-        </div>
-        
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Price</label>
-            <input type="hidden" id="is_wholeSale" name="is_wholeSale" value="retail">
-            <div class="col-md-9">
-                <div class="form-group py-2">
-                    <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center" data-action-type="is--retail-wholesale" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#retail_container" role="tablist" data-type="retail">
-                                <i class="now-ui-icons objects_umbrella-13"></i> Retail
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#wholesale_container" role="tablist" data-type="wholesale">
-                                <i class="now-ui-icons shopping_shop"></i>Wholesale
-                            </a>
-                        </li>
-                    </ul>
+                    <input type="number" class="form-control" name="retail_price" value="{{ old( 'retail_price' ) }}">
+                    @if ( $errors->has( 'retail_price' ) )
+                        <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
+                    @endif
                 </div>
             </div>
         </div>
 
-        <div class="tab-content tab-space tab-subcategories">
-            <div class="tab-pane active" id="retail_container">
-                <!-- retail container -->
-                <div class="row">
-                    <label class="col-md-3 col-form-label">Retail price</label>
-                    <div class="col-md-9">
-                        <div class="form-group">
-                            <input type="number" class="form-control" name="retail_price" value="{{ old( 'retail_price' ) }}">
-                            @if ( $errors->has( 'retail_price' ) )
-                                <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            <!-- end retail container -->
-            </div>
-            <div class="tab-pane" id="wholesale_container">
-                <!-- Wholesale container-->                                    
-                <div class="row">
-                    <label class="col-md-3 col-form-label">Wholesale price</label>
-                    <div class="col-md-9">
-                        <div class="form-group"> 
-                            <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
-                            @if ( $errors->has( 'wholesale_price' ) )
-                                <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <label class="col-md-3 col-form-label">Wholesale min quantity</label>
-                    <div class="col-md-9">
-                        <div class="form-group"> 
-                            <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
-                            @if ( $errors->has( 'wholesale_min_qty' ) )
-                                <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                <!-- end of wholesale_container -->
-            </div>
-        </div>     
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Product sold per</label>
             <div class="col-md-9">
                 @php
                     $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
                 @endphp
-                <select class="form-control" name="wholesale_sold_per"> 
+                <select class="form-control" name="wholesale_sold_per" id="wholesale_sold_per"> 
                     <option selected disabled>Select option</option>
                     @foreach ( $soldPerOptions as $soldPerOption )
                         @php
@@ -163,18 +97,24 @@
         <div class="form-group row">
             <label class="col-md-3 col-form-label">Standard net weight</label>
             <div class="col-md-9">
-                <input type="number" class="form-control mb-2" name="standard_net_weight" value="{{ old( 'standard_net_weight' ) }}">
-                @if ( $errors->has( 'standard_net_weight' ) )
-                    <span class="text-danger">{{ $errors->first( 'standard_net_weight' ) }}</span>
-                @endif
-
-                <select class="form-control" name="standard_net_weight_unit">
-                    <option value="gram" {{ old( 'standard_net_weight_unit' ) == 'gram' ? 'selected': '' }}>Gram</option>
-                    <option value="kilogram" {{ old( 'standard_net_weight_unit' ) == 'kilogram' ? 'selected': '' }}>Kilogram</option>
-                </select>
-                @if ( $errors->has( 'standard_net_weight_unit' ) )
-                    <span class="text-danger">{{ $errors->first( 'standard_net_weight_unit' ) }}</span>
-                @endif
+                <div class="row">
+                    <div class="col">
+                        <select class="form-control custom--disabled" name="standard_net_weight_unit" id="standard_net_weight_unit" readonly>
+                            <option selected disabled>Select option</option>
+                            <option value="gram" {{ old( 'standard_net_weight_unit' ) == 'gram' ? 'selected': '' }}>Gram</option>
+                            <option value="kilogram" {{ old( 'standard_net_weight_unit' ) == 'kilogram' ? 'selected': '' }}>Kilogram</option>
+                        </select>
+                        @if ( $errors->has( 'standard_net_weight_unit' ) )
+                            <span class="text-danger">{{ $errors->first( 'standard_net_weight_unit' ) }}</span>
+                        @endif
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control mb-2" name="standard_net_weight" value="{{ old( 'standard_net_weight' ) }}">
+                        @if ( $errors->has( 'standard_net_weight' ) )
+                            <span class="text-danger">{{ $errors->first( 'standard_net_weight' ) }}</span>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -187,6 +127,92 @@
                         <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
                     @endif
                 </div>
+            </div>
+        </div>
+        
+        <div class="form-group row wholesale--container">
+            <div class="col">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale">
+                    <label class="custom-control-label" for="is_wholesale">Is Wholesale?</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row d-none wholesale--input">
+            <label class="col-md-12 col-form-label font-weight-bold">Wholesale</label>
+            <label class="col-md-3 col-form-label">Price</label>
+            <div class="col-md-9">
+                <div class="form-group"> 
+                    <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
+                    @if ( $errors->has( 'wholesale_price' ) )
+                        <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row d-none wholesale--input">
+            <label class="col-md-3 col-form-label">Minimum quantity</label>
+            <div class="col-md-9">
+                <div class="form-group"> 
+                    <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
+                    @if ( $errors->has( 'wholesale_min_qty' ) )
+                        <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group row variants--container">
+            <div class="col">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="has_vartiants" id="has_vartiants">
+                    <label class="custom-control-label" for="has_vartiants">Has variants?</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row d-none variant--input-container">
+            <div class="col-12">
+                <div class="border-top border-bottom py-2" id="variant--0">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Variant details</label>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="col-form-label">Name</label>
+                                <input type="text" class="form-control" name="variant_names[]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Price</label>
+                                        <input type="number" class="form-control mb-2" name="variant_prices[]">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Stocks</label>
+                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-right">
+                                    <button type="button" class="btn btn-primary add--more-variant">
+                                        <i class="nc-icon nc-simple-add"></i> Add More
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="more--variants"></div>
             </div>
         </div>
 
@@ -212,32 +238,6 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Pre sale</label>
-            <div class="col-md-4">
-
-                <input class="bootstrap-switch" type="checkbox" onchange="changeIsProductPreSaleStatus()"
-                        id="switch_is_prod_presale" data-toggle="switch"
-                        data-on-label="<i class='nc-icon nc-check-2'></i>"
-                        data-off-label="<i class='nc-icon nc-simple-remove'></i>" data-on-color="success"
-                        data-off-color="success" />
-                <input  type="hidden" id="isPreSaleValueSetter" name="is_preSale">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Product pre sale deadline</label>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <input type="text" name="pre_sale_deadline" class="form-control datetimepicker" value="{{ old( 'pre_sale_deadline' ) }}">
-                    <small>(Note: Please select the date of your estimated product availability/harvest)</small>
-                    @if ( $errors->has( 'pre_sale_deadline' ) )
-                        <span class="text-danger">{{ $errors->first( 'pre_sale_deadline' ) }}</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row">
             <div class="col-md-12">
                 <input type="submit" value="save" class="btn btn-primary" />
             </div>
@@ -245,19 +245,159 @@
     </div>  
 </form>
 
-
 <script>
     window.onload = () => {
-        $( document ).on( 'click', '[data-action-type="is--retail-wholesale"] li a', function() {
-            const type = $( this ).data( 'type' )
-            $( '#is_wholeSale' ).val( type )
+        $( document ).on( 'change', '#wholesale_sold_per', function() {
+            const val = $( this ).val()
+            const weightOptionSelector = '#standard_net_weight_unit'
+            let weightOptionValue = 'kilogram'
+
+            if ( val == 'piece' ) weightOptionValue = 'gram'
+            $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
         } )
+
+        $( document ).on( 'click', '#is_wholesale,#has_vartiants', function() {
+            const isChecked = $( this ).is( ':checked' )
+            const selectors = $( this ).attr( 'id' ) == 'is_wholesale' ? '.wholesale--input' : '.variant--input-container'
+            const inputs = $( selectors )
+
+            if ( isChecked ) {
+                inputs.each( function() {
+                    $( this ).removeClass( 'd-none' )
+                } )
+            } else {
+                inputs.each( function() {
+                    $( this ).addClass( 'd-none' )
+                } )
+            }
+        } )
+
+        $( document ).on( 'click', '.add--more-variant', function() {
+            let variantsCount = $( '#more--variants .more--variants' ).length
+            if ( variantsCount < 1 ) {
+                variantsCount = 1
+            } else {
+                variantsCount++
+            }
+
+            let moreVariant = `
+                <div class="border-top border-bottom py-2 more--variants" id="variant--${variantsCount}">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label">Variant details</label>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="col-form-label">Name</label>
+                                <input type="text" class="form-control" name="variant_names[]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Price</label>
+                                        <input type="number" class="form-control mb-2" name="variant_prices[]">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Stocks</label>
+                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-right">
+                                    <button type="button" class="btn btn-primary add--more-variant">
+                                        <i class="nc-icon nc-simple-add"></i> Add More
+                                    </button>
+                                    <button type="button" class="btn btn-secondary delete--more-variant" data-id="variant--${variantsCount}">
+                                        <i class="nc-icon nc-simple-minus"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+
+            $( '#more--variants' ).append( moreVariant )
+        } )
+
+        $( document ).on( 'click', '.delete--more-variant', function() {
+            const id = $( this ).data( 'id' )
+            $( `#${id}` ).remove()
+        } )
+
+        $( document ).on( 'click', '.file--image-remove', function() {
+            const index = $( this ).data( 'index' )
+            const indexInput = $( '#featured_index' )
+            let files = document.getElementById( "images" ).files
+            let newFiles = Array.from( files )
+            newFiles.splice( index, 1 )
+            document.getElementById( "images" ).files = new FileListItems( newFiles )
+            $( `#image--${index}` ).remove()
+
+            if ( index == indexInput.val() ) {
+                indexInput.val( '' )
+            }
+        } )
+
+        $( document ).on( 'click', '.image--featured', function() {
+            const index = $( this ).data( 'index' )
+            clearFeatured()
+            $( this ).addClass( 'is-featured' )
+            $( `#featured_index` ).val( index )
+        } )
+
+        $( document ).on( 'submit', '#save_new_product_regular', function( e ) {
+            const indexInput = $( '#featured_index' )
+
+            if ( indexInput.val() == '' ) {
+                e.preventDefault()
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No featured image',
+                    text: 'Please select a featured image'
+                })
+            }
+        } )
+    }
+    
+    function clearFeatured() {
+        const newImages = $( '.image--featured' )
+        newImages.each( function() { $( this ).removeClass( 'is-featured' ) } )
+    }
+
+    /**
+     * @params {File[]} files Array of files to add to the FileList
+     * @return {FileList}
+     */
+     function FileListItems( files ) {
+        let b = new ClipboardEvent( "" ).clipboardData || new DataTransfer()
+        for ( let i = 0, len = files.length; i<len; i++ ) b.items.add( files[i] )
+        return b.files
     }
 
     function preview_images() {
-        var total_file = document.getElementById("images").files.length;
-        for (var i = 0; i < total_file; i++) {
-            $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='" + URL.createObjectURL(event.target.files[i]) + "'></div>");
+        let total_file = document.getElementById( "images" ).files.length
+        let is_featured = ''
+        
+        for ( let i = 0; i < total_file; i++ ) {
+            if ( total_file == 1 && $( '#featured_index' ).val() == '' ) {
+                $( '#featured_index' ).val( i )
+                is_featured = ' is-featured'
+            }
+
+            const image = `
+                <div class="col-md-3" id="image--${i}">
+                    <img class="img-fluid clickable image--featured${is_featured}" data-index="${i}" src="${URL.createObjectURL(event.target.files[i])}">
+                    <label class="d-block text-right clickable file--image-remove" data-index="${i}">Remove</label>
+                </div>
+            `
+            $( '#image_preview' ).append( image )
         }
     }
 

@@ -10,6 +10,7 @@ use App\User;
 use App\seller_reg_fee;
 use App\notification;
 use App\adminNotifModel;
+use App\Events\ShopEvent;
 use App\TransHistModel;
 class sellRegController extends Controller
 {
@@ -169,6 +170,8 @@ class sellRegController extends Controller
         $seller_reg_fee->payment_proof = '';
         $seller_reg_fee->status = '4';
         $seller_reg_fee->save();
+
+        event( new ShopEvent( [ 'type' => 'new-pending-shop' ] ) );
 
         // add a record to seller_registration
         return redirect('/registration_fee_instructions');

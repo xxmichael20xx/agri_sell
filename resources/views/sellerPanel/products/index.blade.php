@@ -39,30 +39,24 @@
                     <div class="col-md-12">
                         @php
                         $category_id = '1';
-                        $category_name = 'Crops';
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
-                        @include('sellerPanel.products.index_subcat')
+                        @include('sellerPanel.products.index_subcat', ['table' => 'crops', 'id' => $category_id])
                     </div>
                 </div>
                 <div class="tab-pane" id="vegetables" role="tabpanel" aria-expanded="false">
                 <div class="col-md-12">
                         @php
                         $category_id = '2';
-                        $category_name = 'Vegetables';
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
-                        @include('sellerPanel.products.index_subcat')
+                        @include('sellerPanel.products.index_subcat', ['table' => 'vegetables', 'id' => $category_id])
                     </div>
                 </div>
                 <div class="tab-pane" id="fruits" role="tabpanel" aria-expanded="false">
                   <div class="col-md-12">
                         @php
                         $category_id = '3';
-                        $category_name = 'Fruits';
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
-                        @include('sellerPanel.products.index_subcat')
+                        @include('sellerPanel.products.index_subcat', ['table' => 'fruits', 'id' => $category_id])
                     </div>
                 </div>
 
@@ -70,10 +64,8 @@
                   <div class="col-md-12">
                         @php
                         $category_id = '4';
-                        $category_name = 'Livestocks';
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
-                        @include('sellerPanel.products.index_subcat')
+                        @include('sellerPanel.products.index_subcat', ['table' => 'livestocks', 'id' => $category_id])
                     </div>
                 </div>
 
@@ -81,24 +73,31 @@
                   <div class="col-md-12">
                         @php
                         $category_id = '5';
-                        $category_name = 'Seeds';
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
-                        @include('sellerPanel.products.index_subcat')
+                        @include('sellerPanel.products.index_subcat', ['table' => 'seeds', 'id' => $category_id])
                     </div>
                 </div>
                 <div class="tab-pane" id="grains" role="tabpanel" aria-expanded="false">
                   <div class="col-md-12">
                         @php
                         $category_id = '6';
-                        $category_name = 'Grains';
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
                         @endphp
-                        @include('sellerPanel.products.index_subcat')
+                        @include('sellerPanel.products.index_subcat', ['table' => 'grains', 'id' => $category_id])
                     </div>
                 </div>
             </div>  
             </div>
           </div>
       </div>
+@endsection
+
+@section('custom-scripts')
+    <script>
+        window.onload = () => {
+            const tables = [ 'crops', 'vegetables', 'fruits', 'livestocks', 'seeds', 'grains' ]
+            tables.forEach( function( el ) {
+                $( `#datatable-${el}` ).DataTable()
+            } )
+        }
+    </script>
 @endsection

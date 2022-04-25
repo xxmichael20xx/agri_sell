@@ -9,8 +9,8 @@
                     <table class="table">
                             <tr>
                                 <th scope="row" width="30">
-                                    @if(!empty($pre_sale_entity->product->cover_img))
-                                        <img src="{{ asset('storage/'.$pre_sale_entity->product->cover_img) }}"
+                                    @if(!empty($pre_sale_entity->product->featured_image))
+                                        <img src="{{ asset('storage/'.$pre_sale_entity->product->featured_image) }}"
                                             alt="" height="70" width="70">
                                     @else
                                         <img src="/assets/img/product/electro/1.jpg" alt="">

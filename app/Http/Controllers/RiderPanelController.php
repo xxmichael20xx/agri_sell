@@ -20,11 +20,11 @@ class RiderPanelController extends Controller
 
     }
 
-    function index(){
+    function index() {
         $orders = SubOrder::all();
-        $assign_order_status_options = orderDeliveryStatusModel::all();
+        $assign_order_status_options = orderDeliveryStatusModel::whereIn( 'id', array( 2, 3, 4 ) )->get();
         $my_rider_id = Auth::user()->rider_staff->id;
-        return view('riderPanel.dashboard')
+        return view( 'riderPanel.dashboard' )
             ->with(compact('orders', 'assign_order_status_options'))
             ->with('panel_name', 'orders')
             ->with('my_rider_id', $my_rider_id);

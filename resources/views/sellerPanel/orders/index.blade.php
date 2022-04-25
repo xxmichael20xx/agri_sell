@@ -1,42 +1,67 @@
 @extends('sellerPanel.front')
 @section('content')
+@php
+    if ( isset( $category_type ) ) {
+        $pickupSection = $category_type == 'pickup' ? 'active show' : '';
+        $deliverySection = $category_type == 'delivery' ? 'active show' : '';
+    }
+@endphp
 <div class="content">
-
     <div class="row">
         <div class="col-md-12">
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
                     <ul id="tabs" class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link " data-toggle="tab" href="#Pickup" role="tab"
-                                aria-expanded="false">Pick up</a>
+                            <a class="nav-link font-weight-bold {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" data-toggle="tab" href="#Pickup" role="tab" aria-expanded="false">Pick up</a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link" data-toggle="tab" href="#Delivery" role="tab" aria-expanded="">Delivery</a>
+                            <a class="nav-link font-weight-bold {{ isset( $deliverySection ) ? $deliverySection : '' }}" data-toggle="tab" href="#Delivery" role="tab" aria-expanded="">Delivery</a>
                         </li> 
                     </ul>
                 </div>
             </div>
             <div id="my-tab-content" class="tab-content">
-                <div class="tab-pane active" id="Pickup" role="tabpanel" aria-expanded="false">
+                <div class="tab-pane {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" id="Pickup" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
                         @include('sellerPanel.orders.index_subcat_parent_pickup')
                     </div>
                 </div>
-                <div class="tab-pane" id="Delivery" role="tabpanel" aria-expanded="false">
+                <div class="tab-pane {{ isset( $deliverySection ) ? $deliverySection : 'active' }}" id="Delivery" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
-                    @include('sellerPanel.orders.index_subcat_parent_delivery')
+                        @include('sellerPanel.orders.index_subcat_parent_delivery')
                     </div>
                 </div>
-               
             </div>
+        </div>
+    </div>
 
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            @include('sellerPanel.orders.index_stock_table')
-        </div>
-    </div>
+    @include('sellerPanel.orders.index_stock_table')
 </div>
+@endsection
+
+@section('custom-scripts')
+    <script>
+        (function($) {
+            $(document).ready(function() {
+                $( document ).on( 'click', '.btn-confirm,.btn-pickup,.btn-delivery', function() {
+                    const href = $( this ).data( 'href' )
+                    const title = $( this ).data( 'title' )
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Are you sure?',
+                        text: `Order status will be changed to '${title}'`,
+                        showCancelButton: true,
+                        confirmButtonColor: '#219F94',
+                        confirmButtonText: 'Yes, proceed'
+                    }).then( ( result ) => {
+                        if ( result.value ) {
+                            window.location.href = href
+                        }
+                    } )
+                } )
+            })
+        })(jQuery)
+    </script>
 @endsection

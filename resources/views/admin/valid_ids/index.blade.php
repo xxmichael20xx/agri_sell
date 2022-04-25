@@ -1,7 +1,5 @@
 @extends('admin.front')
 @section('content')
-<style>
-</style>
 
 <div class="content">
     <div class="row">
@@ -19,7 +17,6 @@
                          <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#uploaded" role="tab" aria-expanded="false">For verification</a>
                         </li>
-
                     </ul>
                 </div>
             </div>

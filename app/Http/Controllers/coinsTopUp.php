@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\coinsTopUpModel;
+use App\Events\CoinEvent;
 use Auth;
 use App\TransHistModel;
 use App\TransactionCode;
 use App\notification;
+use App\User;
+use Carbon\Carbon;
+
 class coinsTopUp extends Controller
 {
     function submitTopUp(Request $request){
@@ -51,6 +55,21 @@ class coinsTopUp extends Controller
             $status_messages = '<br>Your coins top up for the value ' .$request->coins_top_up_amount .'<br>PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.</br>';
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
+
+            $coinUser = User::where( 'email', 'coins@agrisell.com' )->first();
+            $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
+            $status_messages = "Date created: {$currentTime}";
+
+            if ( $coinUser ) {
+                $notification_ent = new notification();
+                $notification_ent->user_id = $coinUser->id;
+                $notification_ent->frm_user_id = Auth::user()->id;
+                $notification_ent->notification_title = 'New Coins top up for ' . $coinsTopUpModel->reference_id;
+                $notification_ent->notification_txt = $status_messages;
+                $notification_ent->save();
+
+                event( new CoinEvent( [ 'user_id' => $coinUser->id, 'type' => 'new-top-up' ] ) );
+            }
 
             return redirect('user_home')->withMessage('PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.');
         }else{

@@ -82,11 +82,12 @@ class SellerPanelController extends Controller
             $orders = SubOrder::where('seller_id', Auth::user()->id)->where('is_pick_up', $is_pick_up)->where('status_id', $status_id)->get();
             $status_obj = orderDeliveryStatusModel::find($status_id);
         }else{
+            // $temp_orders = SubOrder::where('seller_id', Auth::user()->id)->where('is_pick_up', $is_pick_up);
             $orders = SubOrder::where('seller_id', Auth::user()->id)->where('is_pick_up', $is_pick_up)->where('pick_up_status_id', $status_id)->get();
             $status_obj = orderpickupStatusModel::find($status_id);
         }
         $assign_order_status_options = orderDeliveryStatusModel::all();
-        return view('sellerPanel.orders.index')->with(compact('orders', 'assign_order_status_options','is_pick_up','status_obj'))->with('panel_name', 'orders');
+        return view('sellerPanel.orders.index')->with(compact('orders', 'assign_order_status_options','is_pick_up','status_obj','category_type','status_id'))->with('panel_name', 'orders');
     
     }
 
@@ -98,6 +99,4 @@ class SellerPanelController extends Controller
     function pre_order_index(){
         
     }
-    
-    
 }

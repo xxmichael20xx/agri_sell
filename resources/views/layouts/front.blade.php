@@ -402,14 +402,21 @@
     } )
 
     var channel = pusher.subscribe( 'my-channel' )
+    channel.bind( 'coin-event', function( res ) {
+        const data = res.message
+
+        // Check and update Customers' notificatioin count
+        if ( data.type == 'new-top-up' && user_id == data.user_id ) getNotificationCount()
+    } )
+
     channel.bind( 'order-event', function( res ) {
         const data = res.message
 
         // Check and update Sellers' notification count
         if ( data.type == 'new-order' && user_id == data.seller_id ) getNotificationCount()
 
-        // Check and update Customers' notificatioin cound
-        if ( data.type == 'customer-order-update' && user_id == data.customer_id ) getNotificationCount()
+        // Check and update Customers' notificatioin count
+        if ( ( data.type == 'customer-order-update' || data.type == 'new-top-up' ) && user_id == data.customer_id ) getNotificationCount()
     } )
 
     /**
@@ -419,7 +426,7 @@
     function getNotificationCount() {
         try {
             const selector = `#navbar--notification-container`
-            $.get( `/api/notifications/seller/count/${user_id}`, {}, function( res ) {
+            $.get( `/api/notifications/count/${user_id}`, {}, function( res ) {
                 if ( res.success ) $( selector ).text( res.count )
             } )
             

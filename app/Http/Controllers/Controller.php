@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\OrderEvent;
 use App\notification;
+use App\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -38,5 +39,19 @@ class Controller extends BaseController
         $notification_ent->save();
 
         if ( $hasEvent ) event( new OrderEvent( $eventData ) );
+    }
+
+    /**
+     * Query the user data and check if role can access
+     * 
+     * @param user_id User id of the user
+     * @param role Number value of the role
+     * @return Boolean
+     */
+    public function userCan( $user_id, $role ) {
+        $user = User::find( $user_id );
+        if ( ! $user ) return false;
+        
+        return $user->role_id == $role ? true : false;
     }
 }

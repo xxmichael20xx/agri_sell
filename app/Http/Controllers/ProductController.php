@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\Category;
+use App\ProductImage;
 use Illuminate\Http\Request;
 use App\Shop;
 class ProductController extends Controller
@@ -51,11 +52,23 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        if ( ! $this->checkProductImages( $product->id ) ) {
+            $layout = 'layouts.front';
+            $backUrl = '/';
+            $panel_name = 'Not Found';
+            return view( '404' )->with( compact( 'layout', 'backUrl', 'panel_name' ) );
+        }
         return view('product.show', compact('product'));
     }
 
     public function presale_show(Product $product){
         return view('product.show_presale', compact('product'));
+    }
+
+    public function checkProductImages( $id ) {
+        $productImage = ProductImage::where( 'product_id', $id )->get()->count();
+
+        return $productImage > 0 ? true : false;
     }
 
 

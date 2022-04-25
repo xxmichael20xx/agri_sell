@@ -32,14 +32,16 @@ Coded by www.creative-tim.com
   <link href="/paper_assets/css/paper-dashboard.min1036.css?v=2.1.1" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/paper_assets/demo/demo.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.js" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/js/fileinput.min.js" integrity="sha512-CCLv901EuJXf3k0OrE5qix8s2HaCDpjeBERR2wVHUwzEIc7jfiK9wqJFssyMOc1lJ/KvYKsDenzxbDTAQ4nh1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- Custom Style -->
+  <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/css/fileinput-rtl.min.css" integrity="sha512-RPEs+sFuzfGVQ91quc+4MsZuQqrgev5kdXyYcfzKEYKJlrUVXzFVLkcGt0tz3MsKppbrAA8aCNxu2DB+i1/afA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/css/fileinput.min.css" integrity="sha512-qPjB0hQKYTx1Za9Xip5h0PXcxaR1cRbHuZHo9z+gb5IgM6ZOTtIH4QLITCxcCp/8RMXtw2Z85MIZLv6LfGTLiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet" />
-
-  </head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/js/fileinput.min.js" integrity="sha512-CCLv901EuJXf3k0OrE5qix8s2HaCDpjeBERR2wVHUwzEIc7jfiK9wqJFssyMOc1lJ/KvYKsDenzxbDTAQ4nh1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+</head>
 <style>
  /* ===== Scrollbar CSS ===== */
   /* Firefox */
@@ -84,7 +86,7 @@ Coded by www.creative-tim.com
           <!-- <p>CT</p> -->
         </a>
         <a href="" class="simple-text logo-normal">
-          {{Auth::user()->name}}
+          {{ Auth::user()->name }}
           <!-- <div class="logo-image-big">
             <img src="/paper_assets/img/logo-big.png">
           </div> -->
@@ -92,7 +94,6 @@ Coded by www.creative-tim.com
       </div>
 
       <div class="sidebar-wrapper">
-
         <ul class="nav">
           <li class="{{($panel_name == 'dashboard') ? 'active' : ''}} ">
             <a href="/admin">
@@ -115,12 +116,13 @@ Coded by www.creative-tim.com
               </a>
           </li>
 
-          <li  class="{{($panel_name == 'user_valid_ids') ? 'active' : ''}} ">
+          <li class="{{($panel_name == 'user_valid_ids') ? 'active' : ''}} ">
             <a href="/admin/valid_ids">
               <i class="nc-icon nc-badge"></i>
-              <p>User valid ids</p>
+              <p id="verification--valid-ids">User valid ids</p>
             </a>
           </li>
+
           <li hidden class="{{($panel_name == 'coins_top_up') ? 'active' : ''}} ">
             <a href="/admin/coins_top_up">
               <i class="nc-icon nc-money-coins"></i>
@@ -129,24 +131,26 @@ Coded by www.creative-tim.com
           </li>
 
           <li class="{{($panel_name == 'seller_reg_fee') ? 'active' : ''}}">
-
-          <a href="/admin/sell_reg_fees">
+            <a href="/admin/sell_reg_fees">
               <i class="nc-icon nc-badge"></i>
-              <p>Pending shops</p>
-          </a>
+              <p id="pending--shops-count">Pending shops</p>
+            </a>
           </li>
+
           <li class="{{($panel_name == 'shops') ? 'active' : ''}}">
             <a href="/admin/manage_shops">
               <i class="nc-icon nc-shop"></i>
               <p>Approved shops</p>
             </a>
           </li>
+
           <li  class="{{($panel_name == 'users') ? 'active' : ''}}">
             <a href="/admin/manage_users">
               <i class="nc-icon nc-single-02"></i>
               <p>Users</p>
             </a>
           </li>
+
           <li class="{{($panel_name == 'orders') ? 'active' : ''}}">
             <a href="/admin/manage_orders">
               <i class="nc-icon nc-tile-56"></i>
@@ -162,41 +166,33 @@ Coded by www.creative-tim.com
           </li>
          
           <li class="{{($panel_name == 'products') ? 'active' : ''}}">
-
             <a href="/admin/manage_products">
               <i class="nc-icon nc-box"></i>
               <p>Monitor products</p>
             </a>
           </li>
            
-            <li class="{{($panel_name == 'transaction_hist') ? 'active' : ''}}">
+          <li class="{{($panel_name == 'transaction_hist') ? 'active' : ''}}">
+            <a href="/admin/trans_hist">
+              <i class="nc-icon nc-app"></i>
+              <p>Transaction history</p>
+            </a>
+          </li>
 
-                <a href="/admin/trans_hist">
-                    <i class="nc-icon nc-app"></i>
-                    <p>Transaction history</p>
-                </a>
-            </li>
-            <li hidden class="{{($panel_name == 'pre_orders') ? 'active' : ''}}">
-                <a href="/admin/pre_orders">
-                    <i class="nc-icon nc-basket"></i>
-                    <p>Pre orders</p>
-                </a>
-            </li>
-              <li  class="{{($panel_name == 'refund_management') ? 'active' : ''}}">
-                <a href="/admin/refund_management">
-                    <i class="nc-icon nc-basket"></i>
-                    <p>Refund management</p>
-                </a>
-            </li>
-          <!-- <li class="{{($panel_name == 'seller_validation') ? 'active' : ''}}">
-          <a href="/admin/seller_validation">
-            <i class="nc-icon nc-tile-56"></i>
-            <p>Seller validation</p>
-          </a>
-        </li> -->
+          <li hidden class="{{($panel_name == 'pre_orders') ? 'active' : ''}}">
+            <a href="/admin/pre_orders">
+              <i class="nc-icon nc-basket"></i>
+              <p>Pre orders</p>
+            </a>
+          </li>
 
+          <li  class="{{($panel_name == 'refund_management') ? 'active' : ''}}">
+            <a href="/admin/refund_management">
+              <i class="nc-icon nc-basket"></i>
+              <p>Refund management</p>
+            </a>
+          </li>
         </ul>
-
       </div>
     </div>
     <div class="main-panel">
@@ -206,7 +202,6 @@ Coded by www.creative-tim.com
           <div class="navbar-wrapper">
 
             <div class="navbar-toggle">
-
               <button type="button" class="navbar-toggler">
                 <span class="navbar-toggler-bar bar1"></span>
                 <span class="navbar-toggler-bar bar2"></span>
@@ -244,7 +239,6 @@ Coded by www.creative-tim.com
                 </div>
               </li>
 
-
             </ul>
           </div>
         </div>
@@ -259,8 +253,9 @@ Coded by www.creative-tim.com
       </footer>
     </div>
   </div>
-    <!--   Core JS Files   -->
-    <script src="/paper_assets/js/core/jquery.min.js"></script>
+
+  <!--   Core JS Files   -->
+  <script src="/paper_assets/js/core/jquery.min.js"></script>
   <script src="/paper_assets/js/core/popper.min.js"></script>
   <script src="/paper_assets/js/core/bootstrap.min.js"></script>
   <script src="/paper_assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
@@ -309,18 +304,19 @@ Coded by www.creative-tim.com
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <script>
-    $(function () {
-      $('input')
-        .on('change', function (event) {
+    (function($) {
+      $(document).ready(function() {
+
+        $('input').on('change', function (event) {
           var $element = $(event.target);
           var $container = $element.closest('.example');
-
-          if (!$element.data('tagsinput')) return;
-
+    
+          if ( ! $element.data( 'tagsinput' ) ) return;
+    
           var val = $element.val();
           if (val === null) val = 'null';
           var items = $element.tagsinput('items');
-
+    
           $('code', $('pre.val', $container)).html(
             $.isArray(val)
               ? JSON.stringify(val)
@@ -329,35 +325,97 @@ Coded by www.creative-tim.com
           $('code', $('pre.items', $container)).html(
             JSON.stringify($element.tagsinput('items'))
           );
-        })
-        .trigger('change');
-    });
-   
-    $(function() {
-        var scntDiv = $('#p_scents');
-        var i = $('#p_scents p').size() + 1;
-        
-        $('#addScnt').live('click', function() {
-                $('<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt_' + i +'" value="" placeholder="Input Value" /></label> <a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
-                i++;
-                return false;
-        });
-        
-        $('#remScnt').live('click', function() { 
-                if( i > 2 ) {
-                        $(this).parents('p').remove();
-                        i--;
-                }
-                return false;
-        });
-});
+        }).trigger('change');
 
+        if ( $('#p_scents p') ) {
+          var scntDiv = $('#p_scents');
+          var i = $('#p_scents p').length + 1;
+          
+          try {
+            $('#addScnt').live('click', function() {
+              $('<p><label for="p_scnts"><input type="text" id="p_scnt" size="20" name="p_scnt_' + i +'" value="" placeholder="Input Value" /></label> <a href="#" id="remScnt">Remove</a></p>').appendTo(scntDiv);
+              i++;
+              return false;
+            });
+            
+            $('#remScnt').live('click', function() { 
+              if( i > 2 ) {
+                $(this).parents('p').remove();
+                i--;
+              }
+              return false;
+            });
+            
+          } catch (error) {
+            
+          }
+        }
 
+        const user_id = {{ Auth::check() ? Auth::user()->id : NULL }} 
+        let pusher = new Pusher( 'd527cc315432ec685113', {
+          cluster: 'ap1'
+        } )
+        getPendingShopCount()
+        getValidIdsForVerification()
+
+        var channel = pusher.subscribe( 'my-channel' )
+        channel.bind( 'shop-event', function( res ) {
+          const data = res.message
+
+          // Check and update Sellers' notification count
+          if ( data.type == 'new-pending-shop' ) getPendingShopCount()
+        } )
+
+        /**
+        * Get the updated notifications count via GET Request on API Routes
+        * Updates the count in the header's notification content
+        */
+        function getPendingShopCount() {
+          try {
+            const selector = `#pending--shops-count`
+            $.post( `/api/admin/pending/shops`, { user_id: user_id }, function( res ) {
+              if ( res.success ) {
+                const count = res.data
+                const badge = `
+                  Pending shops <span class="badge badge-primary">${count}</span>
+                `
+                $( selector ).html( badge )
+
+              } else {
+                $( selector ).html( `Pending shops` )
+              }
+            } )
+              
+          } catch (error) { /* silently exit */ }
+        }
+
+        /**
+        * Get the count of valid ids for verification
+        */
+        function getValidIdsForVerification() {
+          try {
+            const selector = `#verification--valid-ids`
+            $.post( `/api/admin/verification/ids`, { user_id: user_id }, function( res ) {
+              if ( res.success ) {
+                const count = res.data
+                const badge = `
+                  User valid ids <span class="badge badge-primary">${count}</span>
+                `
+                $( selector ).html( badge )
+
+              } else {
+                $( selector ).html( `User valid ids` )
+              }
+            } )
+              
+          } catch (error) { /* silently exit */ }
+        }
+
+      })
+
+    })(jQuery)
   </script>
-
   @include('admin.additional_scripts')
-
+  @yield('admin.custom_scripts')
 </body>
-
-
 </html>

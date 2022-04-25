@@ -1,3 +1,12 @@
+@php
+    $links = array(
+        array( 1, 'Pending' ),
+        array( 2, 'Confirmed' ),
+        array( 2, 'Ready to pickup' ),
+        array( 3, 'Cancelled' ),
+        array( 5, 'Completed' ),
+    );
+@endphp
 <div class="nav-tabs-navigation">
     <div class="nav-tabs-wrapper">
         <ul id="tabs" class="nav nav-tabs" role="tablist">

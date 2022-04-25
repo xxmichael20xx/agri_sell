@@ -23,16 +23,15 @@
                     <h5>Delivery info</h5>
                 </div>
                 <div class="card-body">
-                    @if (isset($order->order->rider_id))
-                    <p>Rider ID:{{ $order->order->rider->rider_id}}</p>
-                    <p>Delivery man name:{{ $order->order->rider->user->name}}</p>
-                    <p>Delivery man mobile:{{ $order->order->rider->user->mobile}}</p>
-                    <p>Vehicle used: {{$order->order->rider->vehicle_used}} </p>
-                    <p> Delivery status: {{$order->deliverystatus->display_name}} </p>
+                    @if ( isset( $order->order->rider_id ) && isset( $order->order->rider->user ) )
+                        <p>Rider ID:{{ $order->order->rider->rider_id }}</p>
+                        <p>Delivery man name:{{ $order->order->rider->user->name ?? '-' }}</p>
+                        <p>Delivery man mobile:{{ $order->order->rider->user->mobile ?? '-' }}</p>
+                        <p>Vehicle used: {{$order->order->rider->vehicle_used ?? '-' }} </p>
+                        <p> Delivery status: {{$order->deliverystatus->display_name ?? '-' }} </p>
                     @else
-                    <p>Delivery man not set</p>
+                        <p>Delivery man not set</p>
                     @endif
-                   
                 </div>
               
                 <div class="card-footer">
@@ -60,7 +59,7 @@
                           <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" x-placement="top-end">
                             <div class="dropdown-header">Rider name - vehicle used</div>
                             @foreach ($delivery_man_options as $delivery_man)
-                            <a class="dropdown-item" href="/admin/edit_pickup_status/{{$delivery_man->id}}/{{$order->order->id}}">{{$delivery_man->user->name}} - {{$delivery_man->vehicle_used}} </a>
+                            <a class="dropdown-item" href="/admin/edit_pickup_status/{{ $delivery_man->id }}/{{ $order->order->id }}">{{ $delivery_man->user->name ?? '-' }} - {{ $delivery_man->vehicle_used }} </a>
                             @endforeach
                           </div>
                         </div>

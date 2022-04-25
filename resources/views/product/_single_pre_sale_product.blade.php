@@ -16,8 +16,8 @@ $date_now_formatted = $date_now->format('Y/m/d H:i: A');
 <div class="product-wrapper">
     <div class="product-img">
         <a href="{{ route('products.show', $pre_sale_product) }}">
-        <div style="width: 100%; height: 400px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$pre_sale_product->cover_img}}');" ></div>
-            <!-- <img style="width: 312px; height: 400px;background-position: center;background-image: url('{{ env('APP_URL')}}/storage/{{$pre_sale_product->cover_img}}');" /> -->
+        <div style="width: 100%; height: 400px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$pre_sale_product->featured_image}}');" ></div>
+            <!-- <img style="width: 312px; height: 400px;background-position: center;background-image: url('{{ env('APP_URL')}}/storage/{{$pre_sale_product->featured_image}}');" /> -->
         </a>
         <div class="product-action">
             <a class="animate-top bg-success" title="Add To Cart" href="{{ route('cart.add', $pre_sale_product->id) }}">

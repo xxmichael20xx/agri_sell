@@ -1,12 +1,12 @@
 <div class="card">
     <div class="card-header">
-        <h4 class="card-title">Users</h4>
+        <h4 class="card-title">{{ $title ?? 'Users' }}</h4>
     </div>
     <div class="card-body">
         <div class="table-responsive">
             <div class="toolbar">
             </div>
-            <table id="datatable{{$datatable_index}}" class="table " cellspacing="0" width="100%">
+            <table id="datatable{{ $datatable_index }}" class="table" cellspacing="0" width="100%">
                 <thead class=" text-primary">
                     <tr>
                         <th>

@@ -101,8 +101,36 @@ class OrderMgmtPanelController extends Controller
         $sub_order->status_id = $status_id;
         $sub_order->save();
 
+        if ( $status_id == 5 ) {
+            $order = Order::find( $order_id );
+            $order->is_paid = true;
+            $order->status = "completed";
+            $order->save();
+        }
+
         $this->checkStatuses( 'order_status', $status_id, $order_id );
         return back();
+    }
+
+    public function editDeliveryStatus( Request $request ) {
+        $order_id = $request->order_id;
+        $status_id = $request->status_id;
+
+        $sub_order = Suborder::where( 'order_id', $order_id )->first();
+        $sub_order->status_id = $status_id;
+        $sub_order->pick_up_status_id = $status_id;
+        $sub_order->order_notes = $request->reason;
+        $sub_order->save();
+
+        if ( $status_id == 6 ) {
+            $order = Order::find( $order_id );
+            $order->is_paid = false;
+            $order->status = "pending";
+            $order->save();
+        }
+        
+        $this->checkStatuses( 'order_status', $status_id, $order_id );
+        return redirect( '/rider_dashboard' );
     }
 
     public function showOrderDeliveryPickUpStatus($status_id){
@@ -206,5 +234,29 @@ class OrderMgmtPanelController extends Controller
                 break;
             }
         }
+    }
+    
+    public function editOrderStatus( Request $request ) {
+        $order_id = $request->order_id;
+        $status_id = $request->status_id;
+        $is_delivery = isset( $request->type );
+
+        $sub_order = Suborder::where( 'order_id', $order_id )->first();
+        $sub_order->status_id = $status_id;
+        $sub_order->pick_up_status_id = $status_id;
+        $sub_order->order_notes = $request->cancel_reason;
+        $sub_order->save();
+
+        if ( in_array( $status_id, [ 6, 7 ] ) ) {
+            $order = Order::find( $order_id );
+            $order->is_paid = false;
+            $order->status = "pending";
+            $order->save();
+        }
+        
+        // order_status or pickup_status
+        $_status = $is_delivery ? 'order_status' : 'pickup_status';
+        $this->checkStatuses( $_status, $status_id, $order_id );
+        return back();
     }
 }

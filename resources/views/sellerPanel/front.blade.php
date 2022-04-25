@@ -21,7 +21,7 @@ Coded by www.creative-tim.com
   <link rel="icon" type="image/png" href="/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Seller panel {{$panel_name}}
+    Seller panel {{ $panel_name }}
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -91,7 +91,7 @@ Coded by www.creative-tim.com
           </li>
      
           <li class="{{($panel_name == 'orders') ? 'active' : ''}}">
-            <a href="/sellerpanel/orders">
+            <a href="/sellerpanel/manage_orders/pickup/1">
               <i class="nc-icon nc-tile-56"></i>
               <p>Manage orders</p>
             </a>
@@ -102,12 +102,12 @@ Coded by www.creative-tim.com
               <p>My products</p>
             </a>
           </li>
-          <li class="{{($panel_name == 'pre_orders') ? 'active' : ''}}">
+          {{-- <li class="{{($panel_name == 'pre_orders') ? 'active' : ''}}">
             <a href="/sellerpanel/pre_orders">
               <i class="nc-icon nc-box"></i>
               <p>Pre orders</p>
             </a>
-          </li>
+          </li> --}}
         </ul>
       
       </div>
@@ -218,6 +218,7 @@ Coded by www.creative-tim.com
   <script src="/paper_assets/demo/jquery.sharrre.js"></script>
 
     @include('admin.additional_scripts')
+    @yield('custom-scripts')
     
 </body>
 

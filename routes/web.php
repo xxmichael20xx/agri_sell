@@ -196,6 +196,7 @@ Route::get('autovalidatecronjob', 'CoinsPanelController@autoValidateCronJobs');
 
 Route::get('/order_products_monitoring_upload/{suborder_item_id}', 'OrderMgmtPanelController@addProductMonitoringLogs');
 Route::get('/admin/edit_order_status/{status_id}/{order_id}', 'OrderMgmtPanelController@markOrderDeliveryStatus');
+Route::post('/edit_delivery_status', 'OrderMgmtPanelController@editDeliveryStatus')->name('order.delivery.update');
 
 Route::get('user_pre_orders', ['middleware' => 'auth', function()
 {

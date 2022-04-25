@@ -5,18 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Shop;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\ProductCategory;
-use App\ProductAttribute;
-use App\User;
-use App\notification;
 use App\PreOrderModel;
 use App\ProductVariation;
-use App\ratingsModel;
 use App\SubOrderItem;
 use App\OrderItem;
 use App\adminNotifModel;
-use App\ProductVars;
+use App\ProductImage;
 use DB;
 class ProductMgmtPanelController extends Controller
 {
@@ -35,13 +31,22 @@ class ProductMgmtPanelController extends Controller
         }
     }
 
-    function edit($product_id){
-        $product = Product::where('id', $product_id)->first();
+    function edit( $product_id ) {
+        $product = Product::with('prod_variation')->where( 'id', $product_id )->first();
         $shops = Shop::all();
-        if(Auth::user()->role->name == 'admin'){
+        $panel_name = ( $product ) ? "Update " . $product->name : '';
+        
+        if ( Auth::user()->role->name == 'admin' ) {
             return view('admin.products.edit')->with('panel_name', 'products')->with(compact('product', 'shops'));
-        }else if(Auth::user()->role->name == 'seller'){
-            return view('sellerPanel.products.edit')->with('panel_name', 'products')->with(compact('product', 'shops'));
+
+        }else if ( Auth::user()->role->name == 'seller' ) {
+            if ( $product->product_user_id !== Auth::user()->id ) {
+                $layout = 'sellerPanel.front';
+                $backUrl = '/sellerpanel/products';
+                $panel_name = 'Unauthorized';
+                return view( '401' )->with( compact( 'layout', 'backUrl', 'panel_name' ) );
+            }
+            return view( 'sellerPanel.products_variation_rev.edit' )->with( compact( 'product', 'shops', 'panel_name' ) );
         }
     }
 
@@ -286,7 +291,7 @@ class ProductMgmtPanelController extends Controller
             $productVariation->variation_price_per = $request->retail_price;
             $productVariation->variation_wholesale_price_per = $request->wholesale_price;
             $productVariation->variation_min_qty_wholesale = $request->wholesale_min_qty; 
-            $productVariation->is_variation_wholesale = 'yes';    
+            $productVariation->is_variation_wholesale = 'yes';
             $productVariation->is_variation_wholesale_only = 'no';
         }
 
@@ -327,6 +332,126 @@ class ProductMgmtPanelController extends Controller
             return redirect( '/sellerpanel/products' );
         }
 
+    }
+
+    public function save_new_products_v2( Request $request ){
+        $this->validate( $request, [
+            'product_name' => 'required',
+            'images' => 'required',
+            'category_id' => 'required',
+            'retail_price' => 'required',
+            'wholesale_price' => 'required_if:is_wholesale,==,on',
+            'wholesale_min_qty' => 'required_if:is_wholesale,==,on',
+            'wholesale_sold_per' => 'required_if:is_wholesale,==,on',
+            'product_desc' => 'required',
+            'standard_net_weight' => 'required',
+            'standard_net_weight_unit' => 'required',
+            'stocks' => 'required',
+        ] );
+
+        $is_wholesale = $request->is_wholesale == 'on' ? true : false;
+        $has_variants = $request->has_vartiants == 'on' ? true : false;
+
+        $product = new Product();
+        $product->name = $request->product_name;
+        $product->category_id = $request->category_id;
+        $product->description = $request->product_desc;
+        $product->is_sale = $request->is_Sale;
+        $product->is_pre_sale = 0;
+        $product->sale_pct_deduction = 0;
+        $product->shop_id = Auth::user()->shop->id;
+        
+        $product->is_whole_sale = $is_wholesale;
+        $product->product_user_id = $this->userId() ?? NULL; // add the user id of the current user
+        
+        if ( $request->hasFile( 'images' ) ) {
+            $multiple_images = $request->file( 'images' );
+            $images = array();
+
+            foreach( $multiple_images as $index => $single_image ) {
+                $image = $this->uploadImages( $single_image );
+                $single_image->move( $image[0], $image[1] );
+                $is_featured = ( $request->featured_index == $index ) ? true : false;
+                $images[] = array( $image[2], $is_featured );
+            }
+        }
+
+        if ( Auth::user()->role->name == 'admin' ) {
+            $product->shop_id = $request->shop_id;
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
+            $product->shop_id = Auth::user()->shop->id;
+        }
+           
+        if ( $product->save() && isset( $multiple_images ) ) {
+            foreach( $images as $image ) {
+                $productImage = new ProductImage;
+                $productImage->product_id = $product->id;
+                $productImage->is_featured = $image[1];
+                $productImage->image = $image[0];
+                $productImage->save();
+            }
+        }
+
+        $checkVariants = $has_variants && ( $request->variant_names && count( $request->variant_names ) > 0 );
+
+        $productVariation = new ProductVariation;
+        $productVariation->product_id = $product->id;
+        $productVariation->variation_name = $checkVariants ? $request->product_name : "Regular";
+        $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
+        $productVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
+        $productVariation->variation_price_per = $request->retail_price;
+        $productVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
+        $productVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
+        $productVariation->variation_quantity = $request->stocks;
+        $productVariation->variation_net_weight = $request->standard_net_weight;
+        $productVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
+        $productVariation->save();
+
+        if ( $checkVariants ) {
+            $multiple_variation_names = $request->variant_names;
+            $multiple_variation_prices = $request->variant_prices;
+            $multiple_variation_price_whole_sale = $is_wholesale ? $request->wholesale_price : 0;
+    
+            $multiple_variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
+            $multiple_variation_net_weight = $request->standard_net_weight;
+            $multiple_variation_net_weight_unit = $request->standard_net_weight_unit;
+            $multiple_variation_stocks = $request->variant_stocks;
+    
+            foreach ( $multiple_variation_names as $index => $variation_name ) {      
+                $productVariation = new ProductVariation;
+                $productVariation->product_id = $product->id;
+                $productVariation->variation_name = $multiple_variation_names[$index];
+                $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale;
+                $productVariation->variation_quantity = $multiple_variation_stocks[$index];
+                $productVariation->variation_net_weight = $multiple_variation_net_weight;
+                $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit;
+                $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
+                $productVariation->variation_price_per = $multiple_variation_prices[$index];
+                $productVariation->variation_wholesale_price_per = $multiple_variation_price_whole_sale;
+                $productVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
+                $productVariation->save();
+            }
+
+        }
+
+        $productCategory = new ProductCategory();
+        $productCategory->product_id = $product->id;
+        $productCategory->category_id = $request->category_id;
+        $productCategory->save();
+
+        $adminnotif_ent = new adminNotifModel();
+        $adminnotif_ent->action_type = "Product addition";
+        $adminnotif_ent->user_id = Auth::user()->id;
+        $adminnotif_ent->action_description = "Added {$product->name} to the products list";
+        $adminnotif_ent->save();
+        
+        if ( Auth::user()->role->name == 'admin' ) {
+            return redirect( '/admin/manage_products' );
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
+            return redirect( '/sellerpanel/products' )->withSuccess( 'New Product has been added.');
+        }
     }
 
     function saveProduct_edit_form(Request $req){
@@ -540,6 +665,164 @@ class ProductMgmtPanelController extends Controller
         }else if (Auth::user()->role->name == 'seller') {
             return redirect('/sellerpanel/products');
         }
+    }
+
+    public function uploadImages( $image ) {
+        $productImageSaveAsName = time() . uniqid() . "-product." . $image->getClientOriginalExtension();
+        $upload_path = 'storage/products/' . date( 'FY' ) . '/';
+        $upload_path_url = 'products/' . date( 'FY' ) . '/';
+        $product_image_url = $upload_path_url . $productImageSaveAsName;
+
+        return [ $upload_path, $productImageSaveAsName, $product_image_url ];
+    }
+
+    public function update_product_v2( Request $request ) {
+        $this->validate( $request, [
+            'product_name' => 'required',
+            'category_id' => 'required',
+            'retail_price' => 'required',
+            'wholesale_price' => 'required_if:is_wholesale,==,on',
+            'wholesale_min_qty' => 'required_if:is_wholesale,==,on',
+            'wholesale_sold_per' => 'required_if:is_wholesale,==,on',
+            'product_desc' => 'required',
+            'standard_net_weight' => 'required',
+            'standard_net_weight_unit' => 'required',
+            'stocks' => 'required',
+        ] );
+
+        $is_wholesale = $request->is_wholesale == 'on' ? true : false;
+        $has_variants = $request->has_vartiants == 'on' ? true : false;
+
+        $product = Product::find( $request->product_id );
+        $product->name = $request->product_name;
+        $product->category_id = $request->category_id;
+        $product->description = $request->product_desc;
+        $product->is_sale = 0;
+        $product->is_pre_sale = 0;
+        $product->sale_pct_deduction = 0;
+        $product->is_whole_sale = $is_wholesale;
+        
+        if ( $request->hasFile( 'images' ) ) {
+            $multiple_images = $request->file( 'images' );
+            $images = array();
+
+            foreach( $multiple_images as $index => $single_image ) {
+                $image = $this->uploadImages( $single_image );
+                $single_image->move( $image[0], $image[1] );
+                $is_featured = false;
+
+                if ( $request->featured_type == 'new' && $request->featured_index == $index ) {
+                    $is_featured = true;
+                }
+                $images[] = array( $image[2], $is_featured );
+            }
+        }
+
+        if ( Auth::user()->role->name == 'admin' ) {
+            $product->shop_id = $request->shop_id;
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
+            $product->shop_id = Auth::user()->shop->id;
+        }
+
+        $this->resetFeaturedImage( $request->product_id );
+        if ( $request->removed_images !== '' ) $this->removeImages( $request );
+        if ( $request->featured_type == 'old' ) $this->setFeaturedImage( $request );
+           
+        if ( $product->save() && isset( $multiple_images ) ) {
+            foreach( $images as $image ) {
+                $productImage = new ProductImage;
+                $productImage->product_id = $product->id;
+                $productImage->is_featured = $image[1];
+                $productImage->image = $image[0];
+                $productImage->save();
+            }
+        }
+
+        $checkVariants = $has_variants && ( $request->variant_names && count( $request->variant_names ) > 0 );
+
+        if ( $request->removed_variants ) {
+            $removedVariants = explode( ',', $request->removed_variants );
+            foreach( $removedVariants as $removedVariant ) {
+                ProductVariation::find( $removedVariant )->delete();
+            }
+        }
+
+        $firstVariation = ProductVariation::where( 'product_id', $request->product_id )->first();
+
+        if ( $firstVariation ) {
+            $firstVariation->variation_name = $checkVariants ? $request->product_name : "Regular";
+            $firstVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
+            $firstVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
+            $firstVariation->variation_price_per = $request->retail_price;
+            $firstVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
+            $firstVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
+            $firstVariation->variation_quantity = $request->stocks;
+            $firstVariation->variation_net_weight = $request->standard_net_weight;
+            $firstVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
+            $firstVariation->save();
+        }
+
+        if ( $checkVariants ) {
+            $multiple_variation_names = $request->variant_names;
+            $multiple_variant_ids = $request->variant_id;
+            $multiple_variation_prices = $request->variant_prices;
+            $multiple_variation_price_whole_sale = $is_wholesale ? $request->wholesale_price : 0;
+    
+            $multiple_variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
+            $multiple_variation_net_weight = $request->standard_net_weight;
+            $multiple_variation_net_weight_unit = $request->standard_net_weight_unit;
+            $multiple_variation_stocks = $request->variant_stocks;
+    
+            foreach ( $multiple_variation_names as $index => $variant ) {
+                $productVariation = isset( $multiple_variant_ids[$index] ) ? ProductVariation::find( $multiple_variant_ids[$index] ) : new ProductVariation;
+                $productVariation->product_id = $request->product_id;
+                $productVariation->variation_name = $multiple_variation_names[$index];
+                $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale;
+                $productVariation->variation_quantity = $multiple_variation_stocks[$index];
+                $productVariation->variation_net_weight = $multiple_variation_net_weight;
+                $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit;
+                $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
+                $productVariation->variation_price_per = $multiple_variation_prices[$index];
+                $productVariation->variation_wholesale_price_per = $multiple_variation_price_whole_sale;
+                $productVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
+                $productVariation->save();
+            }
+        } else {
+            $_productVariation = ProductVariation::where( 'product_id', $request->product_id )->first();
+            $productVariations = ProductVariation::where( 'product_id', $request->product_id )->get();
+
+            if ( $productVariations ) {
+                foreach( $productVariations as $productVariation ) {
+                    if ( $productVariation->id !== $_productVariation->id ) $productVariation->delete();
+                }
+            }
+
+            $_productVariation->variation_name = "Regular";
+            $_productVariation->save();
+        }
+        
+        if ( Auth::user()->role->name == 'admin' ) {
+            return redirect( '/admin/manage_products' );
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
+            return redirect( '/sellerpanel/products' )->withSuccess( 'Product has been updated successfully.');
+        }
+    }
+
+    public function resetFeaturedImage( $id ) {
+        ProductImage::where( 'product_id', $id )->update([
+            'is_featured' => false
+        ]);
+    }
+
+    public function removeImages( $request ) {
+        $ids = explode( ',', $request->removed_images );
+        ProductImage::where( 'product_id', $request->product_id )->whereIn( 'id', $ids )->delete();
+    }
+
+    public function setFeaturedImage( $request ) {
+        ProductImage::find( $request->featured_index )->update([ 'is_featured' => true ]);
     }
  
 }

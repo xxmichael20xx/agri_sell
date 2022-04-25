@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
     Route::get('/edit_order_status/{status_id}/{order_id}', 'OrderMgmtPanelController@markOrderDeliveryStatus');
     // edit order pickup status
     Route::get('/edit_pickup_status/{status_id}/{order_id}', 'OrderMgmtPanelController@markOrderPickUpStatus');
+    Route::post('/edit_order_status' ,'OrderMgmtPanelController@editOrderStatus')->name('order.order.update');
 
     Route::get('/sellerpanel/manage_orders/{status_type}/{status_id}', 'SellerPanelController@show_by_cat');
    
@@ -42,7 +43,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
     Route::get('/sellerpanel/add_new_product/productVariation', 'ProductMgmtPanelController@add_new_display_form_product_variation');
 
     // submit of add new display form of Regular product
-    Route::post('/sellerpanel/product_save_info/regular', 'ProductMgmtPanelController@save_new_display_form_regular')->name('save_new_product_regular');
+    // Route::post('/sellerpanel/product_save_info/regular', 'ProductMgmtPanelController@save_new_display_form_regular')->name('save_new_product_regular');
+    Route::post('/sellerpanel/product_save_info/regular', 'ProductMgmtPanelController@save_new_products_v2')->name('save_new_products');
+    Route::post('/sellerpanel/update_info', 'ProductMgmtPanelController@update_product_v2')->name('update_product_v2');
 
     // submit of add new display form of Variation product
     Route::post('/sellerpanel/product_save_info/variation', 'ProductMgmtPanelController@add_new_display_form_variation')->name('save_new_product_variation');

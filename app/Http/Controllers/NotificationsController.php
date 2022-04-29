@@ -24,7 +24,7 @@ class NotificationsController extends Controller
             $delta_time %= 3600;
             $minutes = floor( $delta_time / 60 );
 
-            if ( ( $hours < 1 && $minutes < 59 ) || $notif->is_seen == 'no ') {
+            if ( ( $hours < 1 && $minutes < 59 ) && ( $notif->is_seen == 'no' || $notif->is_seen == '' ) ) {
                 $display_new_notifications_counter++;
             }
 

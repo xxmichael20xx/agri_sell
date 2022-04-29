@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\seller_reg_fee;
 use App\Shop;
 use App\UserValidId;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class AdminPushNotifications extends Controller
     public function pendingShops( Request $request ) {
         $this->hasAccess( $request );
         
-        $shops = Shop::where( 'is_active', false )->get()->count();
+        $shops = seller_reg_fee::where( 'status', 4 )->get()->count();
         return response()->json( [
             'success' => true,
             'data' => $shops

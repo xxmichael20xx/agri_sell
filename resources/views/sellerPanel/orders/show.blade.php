@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="content">
-<a href="/sellerpanel/orders" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
+    <a href="/sellerpanel/manage_orders/pickup/1" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
     <div class="row">
         <div class="col-5">
             <div class="card">
@@ -156,9 +156,9 @@
                     <h5>Order totals</h5>          
                 </div>
                 <div class="card-body">
-                <table class="table table-borderless">
+                    <table class="table table-borderless">
                         <tr>
-                        <td class="text-left">
+                            <td class="text-left">
                                 Shipping fee
                             </td>
                             <td class="text-right">
@@ -169,7 +169,7 @@
                             </td>
                         </tr>
                         <tr>
-                        <td class="text-left">
+                            <td class="text-left">
                                 Total
                             </td>
                             <td class="text-right">

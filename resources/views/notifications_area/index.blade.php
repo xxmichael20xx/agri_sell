@@ -2,35 +2,26 @@
 @section('user_dash')
     <div class="col-lg-9">
         <h1 class="lead display-6">My notifications</h1>
-        @foreach ($notifs as $notif)
-
-        <div class="row">
+        <div class="accordion" id="accordionNotifications">
+            @foreach ( $notifs as $notif )
+                <div class="card">
+                    <div class="card-header clickable" id="heading-{{ $notif->id }}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-block btn-link text-left text-dark font-weight-bold clickable" type="button" data-toggle="collapse" data-target="#notification-{{ $notif->id }}" aria-expanded="false" aria-controls="notification-{{ $notif->id }}">
+                                {{ $notif->notification_title }}
+                            </button>
+                        </h2>
+                    </div>
                 
-            <div class="col col-lg-12">
-                <div class="card border-0 shadow-lg">
-                    <div class="card-header">
-                        {{$notif->notification_title}}
+                    <div id="notification-{{ $notif->id }}" class="collapse" aria-labelledby="heading-{{ $notif->id }}" data-parent="#accordionNotifications">
+                        <div class="card-body">
+                            {!! $notif->notification_txt !!}
+                            <br>
+                            Date notified: {{ AppHelpers::humanDate( $notif->created_at ) }}
+                        </div>
                     </div>
-                    <div class="card-body">
-                    {!! $notif->notification_txt !!}
-
-                    </div>
-                    <div class="card-footer">
-                        {{$notif->created_at}}
-                    </div>
-            
                 </div>
-            </div>
-
-            @php
-                $notif_temp_ent = $notif->where('id', $notif->id)->first();
-                $notif_temp_ent->is_seen = 'yes';
-                $notif_temp_ent->save();
-            @endphp
-
+            @endforeach
         </div>
-
-        @endforeach
-
     </div>
 @endsection

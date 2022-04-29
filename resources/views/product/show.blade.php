@@ -213,6 +213,12 @@
                                         <label class="col-form-label">Select a variation</label>
                                     </div>
                                     <div class="col-12 d-flex flex-wrap">
+                                        @php
+                                            if ( count( $product_variations ) >= 2 ) {
+                                                $first_key = $product_variations->keys()->first();
+                                                $product_variations = $product_variations->forget( $first_key );
+                                            }
+                                        @endphp
                                         @foreach( $product_variations as $key => $variation )
                                             @php
                                                 $spacing = "mx-1";

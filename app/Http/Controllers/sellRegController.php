@@ -19,7 +19,7 @@ class sellRegController extends Controller
     // 2 invalid 
     // 4 for verification
     function admin_panel_index(){
-        $users = seller_reg_fee::where('status', '4')->get();
+        $users = seller_reg_fee::where( 'status', '4' )->get();
         $panel_name = "seller_reg_fee";
         return view('admin.sell_reg_fees.index')->with(compact('users', 'panel_name'));
     }

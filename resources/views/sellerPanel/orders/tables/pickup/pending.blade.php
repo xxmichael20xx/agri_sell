@@ -47,46 +47,8 @@
                     {{ $order->order->agcoins_transid ?? '' }}
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-warning btn-round  dropdown-toggle" type="button"
-                        id="dropStatus{{ $order_id }}" data-toggle="dropdown"
-                        aria-expanded="false">
-                        {{$order->pickupstatus->display_name ?? 'Not available'}}
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropStatus{{ $order->order->id ?? '' }}">
-                        @foreach ($assign_order_pickup_status_options as $option)
-                            @if ( AppHelpers::filterStatus( $option, $status_id ) )
-                                @php
-                                    $isModal = "";
-                                    $href = "/edit_pickup_status/{$option->id}/{$order->order_id}";
-
-                                    if ( $option->name == 'cancelled' ) {
-                                        if ( ! $isModal ) {
-                                            $isModal = "modal";
-                                            $modelId = 3;
-                                        }
-                                        $href = "#cancelOrderModal-{$order->order_id}";
-                                    }
-                                @endphp
-                                @if ( $isModal )
-                                    <a 
-                                        class="dropdown-item"
-                                        href="{{ $href }}"
-                                        data-toggle="modal"
-                                    >
-                                        {{ $option->name == 'cancelled' ? 'Cancel order' : $option->display_name }}
-                                    </a>
-                                @else
-                                    <a 
-                                        class="dropdown-item btn-confirm clickable"
-                                        data-href="{{ $href }}"
-                                        data-title="Confirmed"
-                                    >
-                                        {{ $option->display_name }}
-                                    </a>
-                                @endif
-                            @endif
-                        @endforeach
-                    </div>
+                    <button type="button" class="btn btn-danger btn-sm btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm btn-round btn-pickup" data-href="/edit_pickup_status/6/{{ $order->order_id }}" data-title="Confirmed">Confirm</button>
 
                     @foreach ($assign_order_pickup_status_options as $option)
                         @if ( AppHelpers::filterStatus( $option, $status_id ) && $option->name == 'cancelled' )
@@ -110,7 +72,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-success">Cancel order</button>
+                                                <button type="submit" class="btn btn-danger">Cancel order</button>
                                             </div>
                                         </div>
                                     </form>

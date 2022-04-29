@@ -16,7 +16,6 @@
         'User addresses', 
         'Shop addresses',
         'Total',
-        'Wholesale discounts'
     );
     $basketValues = [];
     $basketValuesTemp = [
@@ -29,7 +28,6 @@
         Auth::user()->town,
         implode( ' ', $cartSession->getShopAddresses() ),
         $cartSession->getTotal(),
-        $cartSession->getWholeSaleDeductions()
     ];
 
     foreach( $basketValuesTemp as $_ ) {

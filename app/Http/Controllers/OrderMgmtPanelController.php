@@ -36,6 +36,8 @@ class OrderMgmtPanelController extends Controller
     }
 
     function show_by_cat($category_type, $status_id){
+        if ( ! isset( $status_id ) ) return redirect( '/sellerpanel/manage_orders/pickup/1' );
+        
         $is_pick_up = ($category_type == 'pickup') ? 'yes' : 'no';
         if($is_pick_up != 'yes'){
             $orders = SubOrder::where('is_pick_up', $is_pick_up)->where('status_id', $status_id)->latest()->get();
@@ -217,7 +219,7 @@ class OrderMgmtPanelController extends Controller
         foreach ( $statuses as $key => $status ) {
             if ( $key == $status_id && $order ) {
 
-                $title = "Your order has been marked as `{$status}`";
+                $title = "Your order has been marked as <span style='color: #28A745;'>'{$status}'</span>";
                 $title .= "<br> Date notified: {$currentTime}<br><br>";
 
                 $notifData = [

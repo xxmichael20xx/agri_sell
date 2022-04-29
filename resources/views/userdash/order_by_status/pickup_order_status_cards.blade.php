@@ -18,46 +18,45 @@
                 <div class="card-body">
                     <table class="table">
                         @php
-                            $order_items = App\OrderItem::where('order_id', '=', $order->order->id)->get();
-                            @endphp
-                        @foreach($order_items as $order_item)
+                            $order_items = App\OrderItem::where( 'order_id', $order->order->id )->get();
+                        @endphp
+                        @foreach ( $order_items as $order_item )
                             <tr>
                                 @php
-                                    $product_item = App\Product::where('id', '=',$order_item->product_id)->first();
+                                    $product_item = App\Product::where( 'id', $order_item->product_id )->first();
                                 @endphp
                                 <th scope="row" width="30">
-                                <a href="{{ url('products/' . $product_item->id) }}">
-                                    @if(!empty($product_item->cover_img))
-                                        <img src="{{ asset('storage/'.$product_item->cover_img) }}"
-                                            alt="" height="70" width="70">
-                                    @else
-                                        <img src="/assets/img/product/electro/1.jpg" alt="">
-                                    @endif
-                                </a>
+                                    <a href="{{ url('products/' . $product_item->id) }}">
+                                        @if ( ! empty( $product_item->featured_image ) )
+                                            <img src="{{ asset( 'storage/'.$product_item->featured_image ) }}" alt="" height="150" width="150">
+                                        @else
+                                            <img src="/assets/img/product/electro/1.jpg" alt="">
+                                        @endif
+                                    </a>
                                 </th>
                                 <td width="350">
                                     <a href="{{ url('products/' . $product_item->id) }}">
-                                    @if ($pickup_status_id == '5')
-                                        @php
-                                            $prid = $product_item->id;
-                                        @endphp
-                                        @livewireStyles
-                                        <livewire:orders-product-ratings :prid="$prid"  />
-                                        @livewireScripts    
-                                    @endif
+                                        @if ($pickup_status_id == '5')
+                                            @php
+                                                $prid = $product_item->id;
+                                            @endphp
+                                            @livewireStyles
+                                            <livewire:orders-product-ratings :prid="$prid"  />
+                                            @livewireScripts    
+                                        @endif
                                    
-                                            {{ $product_item->name }}
-                                          
-                                            @if($product_item->is_sale == 1)
-                                                <s>₱ {{ $order_item->product_variation->variation_price_per }} </s> x {{ $order_item->quantity }} 
-                                                <h5>
-                                                    ₱
-                                                    {{  $order_item->product_variation->variation_price_per - (($product_item->sale_pct_deduction / 100) *  $order_item->product_variation->variation_price_per) }}
-                                                     </h5>
-                                            @else
-                                                <h5>₱ {{ $order_item->product_variation->variation_price_per }} x {{ $order_item->quantity }} </h5>
-                                            @endif  
-                                        </a>
+                                        {{ $product_item->name }}
+                                        
+                                        @if($product_item->is_sale == 1)
+                                            <s>₱ {{ $order_item->product_variation->variation_price_per }} </s> x {{ $order_item->quantity }} 
+                                            <h5>
+                                                ₱
+                                                {{  $order_item->product_variation->variation_price_per - (($product_item->sale_pct_deduction / 100) *  $order_item->product_variation->variation_price_per) }}
+                                                    </h5>
+                                        @else
+                                            <h5>₱ {{ $order_item->product_variation->variation_price_per }} x {{ $order_item->quantity }} </h5>
+                                        @endif  
+                                    </a>
                                     <br>
                                     {{$product_item->shop->name}} 
                                     <br>              

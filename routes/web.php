@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 use App\Mail\otpsenderemail;
 use Illuminate\Support\Facades\Mail;
 
+Route::group(['prefix' => 'artisan'], function() {
+    Route::get('optimize', 'ArtisanCommands@optimize');
+    Route::get('stroage-link', 'ArtisanCommands@storageLink');
+});
+
 
 // Route::redirect('/', '/home');
 Route::get('/', 'HomeController@index')->name('home');

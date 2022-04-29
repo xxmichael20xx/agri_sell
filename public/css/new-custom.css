@@ -70,3 +70,16 @@
 button.product--variation-action {
     cursor: pointer !important;
 }
+
+.clickable {
+    cursor: pointer !important;
+}
+
+#accordionNotifications .card-header button.btn:hover {
+    color: #28A745 !important;
+    text-decoration: none !important;
+}
+
+#accordionNotifications .card-header button[aria-expanded="true"] {
+    color: #28A745 !important;
+}

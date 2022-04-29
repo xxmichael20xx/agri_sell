@@ -9,9 +9,14 @@
         <a class="active" href="#to_pay" data-toggle="tab" role="tab" aria-selected="true">
             <h4 style="text-transform: initial;">Pending</h4>
         </a>
+
+        <a class="active" href="#confirmed" data-toggle="tab" role="tab" aria-selected="true">
+            <h4 style="text-transform: initial;">Confirmed</h4>
+        </a>
+
        <a class="" href="#to_ship" data-toggle="tab" role="tab" >
-                <h4 style="text-transform: initial;">To ship</h4>
-            </a>
+            <h4 style="text-transform: initial;">To ship</h4>
+        </a>
 
         <a class="" href="#shipping" data-toggle="tab" role="tab" aria-selected="false">
             <h4 style="text-transform: initial;">Shipping</h4>
@@ -33,40 +38,38 @@
 
     <div class="tab-content">
         <div class="tab-pane active show fade" id="to_pay" role="tabpanel">
-            <div class="row">
-                @php
+            @php
                 $status_id = '1';
-                @endphp
-                @include('userdash.order_by_status.order_cards')
-            </div>
+            @endphp
+            @include('userdash.order_by_status.order_cards')
         </div>
-    <div class="tab-pane fade" id="to_ship" role="tabpanel">
-                    @php
-                        $status_id = '2';
-                    @endphp
-                    @include('userdash.order_by_status.order_cards')
+        <div class="tab-pane fade" id="to_ship" role="tabpanel">
+            @php
+                $status_id = '2';
+            @endphp
+            @include('userdash.order_by_status.order_cards')
             </div> 
         <div class="tab-pane fade" id="shipping" role="tabpanel">
             @php
-            $status_id = '3';
+                $status_id = '3';
             @endphp
             @include('userdash.order_by_status.order_cards')
         </div>
         <div class="tab-pane fade" id="to_receive" role="tabpanel">
             @php
-            $status_id = '4';
+                $status_id = '4';
             @endphp
             @include('userdash.order_by_status.order_cards')
         </div>
         <div class="tab-pane fade" id="to_rate" role="tabpanel">
             @php
-            $status_id = '5';
+                $status_id = '5';
             @endphp
             @include('userdash.order_by_status.order_cards')
         </div>
         <div class="tab-pane fade" id="cancelled" role="tabpanel">
             @php
-            $status_id = '7';
+                $status_id = '7';
             @endphp
             @include('userdash.order_by_status.order_cards')
         </div>

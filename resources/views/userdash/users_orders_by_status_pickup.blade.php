@@ -11,9 +11,9 @@
             <h4 style="text-transform: initial;">Pending</h4>
         </a>
 
-        <!-- <a class="" href="#to_ship" data-toggle="tab" role="tab" >
-                <h4 style="text-transform: initial;">To ship</h4>
-            </a> -->
+        <a class="" href="#confirmed" data-toggle="tab" role="tab">
+            <h4 style="text-transform: initial;">Confirmed</h4>
+        </a>
 
         <a class="" href="#ready_to_pickup" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Ready to pickup</h4>
@@ -26,10 +26,7 @@
         <a class="" href="#cancelled" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Cancelled</h4>
         </a>
-
-
     </div>
-
 
     <div class="tab-content">
         <div class="tab-pane active show fade" id="pending" role="tabpanel">
@@ -41,12 +38,15 @@
                 @include('userdash.order_by_status.pickup_order_status_cards')
             </div>
         </div>
-        <!-- <div class="tab-pane fade" id="to_ship" role="tabpanel">
-@php
-                        $status_id = '2';
-@endphp
-@include('userdash.order_by_status.order_cards')
-            </div> -->
+        <div class="tab-pane fade" id="confirmed" role="tabpanel">
+            <div class="row">
+                @php
+                    $status_id = '2';
+                    $pickup_status_id = '6';
+                @endphp
+                @include('userdash.order_by_status.pickup_order_status_cards')
+            </div>
+        </div>
         <div class="tab-pane fade" id="ready_to_pickup" role="tabpanel">
             @php
                 $status_id = '8';
@@ -70,8 +70,8 @@
         </div>
         <div class="tab-pane fade" id="cancelled" role="tabpanel">
             @php
-            $status_id = '8';
-            $pickup_status_id = '3';
+                $status_id = '8';
+                $pickup_status_id = '3';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>

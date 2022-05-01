@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class SubOrder extends Model
 {
@@ -31,5 +32,15 @@ class SubOrder extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function scopeUserOrder( $query, $param1, $param2 ) {
+        $query->where( $param1[0], $param1[1] );
+        $query->where( $param2[0], $param2[1] );
+        $query->whereHas( 'order', function( $q ) {
+            $user_id = Auth::user()->id;
+            $q->where( 'user_id', $user_id );
+        } );
+        return $query;
     }
 }

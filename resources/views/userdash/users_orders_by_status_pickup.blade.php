@@ -11,19 +11,19 @@
             <h4 style="text-transform: initial;">Pending</h4>
         </a>
 
-        <a class="" href="#confirmed" data-toggle="tab" role="tab">
+        <a href="#confirmed" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Confirmed</h4>
         </a>
 
-        <a class="" href="#ready_to_pickup" data-toggle="tab" role="tab">
+        <a href="#ready_to_pickup" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Ready to pickup</h4>
         </a>
 
-        <a class="" href="#pickup_to_rate" data-toggle="tab" role="tab">
+        <a href="#pickup_to_rate" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">To rate</h4>
         </a>
 
-        <a class="" href="#cancelled" data-toggle="tab" role="tab">
+        <a href="#cancelled" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Cancelled</h4>
         </a>
     </div>

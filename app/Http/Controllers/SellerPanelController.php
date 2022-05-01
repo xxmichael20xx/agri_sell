@@ -76,17 +76,21 @@ class SellerPanelController extends Controller
         return view('sellerPanel.orders.index')->with(compact('orders', 'assign_order_status_options'))->with('panel_name', 'orders');
     }
 
-    function show_by_cat($category_type, $status_id){      
-        $is_pick_up = ($category_type == 'pickup') ? 'yes' : 'no';
-        if($is_pick_up != 'yes'){
-            $orders = SubOrder::where('seller_id', Auth::user()->id)->where('is_pick_up', $is_pick_up)->where('status_id', $status_id)->get();
-            $status_obj = orderDeliveryStatusModel::find($status_id);
-        }else{
-            // $temp_orders = SubOrder::where('seller_id', Auth::user()->id)->where('is_pick_up', $is_pick_up);
-            $orders = SubOrder::where('seller_id', Auth::user()->id)->where('is_pick_up', $is_pick_up)->where('pick_up_status_id', $status_id)->get();
+    function show_by_cat( $category_type, $status_id ) {
+        $is_pick_up = ( $category_type == 'pickup' ) ? 'yes' : 'no';
+        $_temp = SubOrder::where( 'seller_id', Auth::user()->id )->where( 'is_pick_up', $is_pick_up );
+        $_col = "status_id";
+        $assign_order_status_options = orderDeliveryStatusModel::all();
+        $status_obj = orderDeliveryStatusModel::find( $status_id );
+
+        if ( $is_pick_up == 'yes' ) {
+            $_col = "pick_up_status_id";
             $status_obj = orderpickupStatusModel::find($status_id);
         }
-        $assign_order_status_options = orderDeliveryStatusModel::all();
+
+        $orders = $_temp->where( $_col, $status_id )->get();
+        foreach ( $orders as $index => $value ) $orders->forget( $index );
+
         return view('sellerPanel.orders.index')->with(compact('orders', 'assign_order_status_options','is_pick_up','status_obj','category_type','status_id'))->with('panel_name', 'orders');
     
     }

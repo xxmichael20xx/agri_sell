@@ -10,7 +10,7 @@
             <h4 style="text-transform: initial;">Pending</h4>
         </a>
 
-        <a class="active" href="#confirmed" data-toggle="tab" role="tab" aria-selected="true">
+        <a href="#confirmed" data-toggle="tab" role="tab" aria-selected="true">
             <h4 style="text-transform: initial;">Confirmed</h4>
         </a>
 

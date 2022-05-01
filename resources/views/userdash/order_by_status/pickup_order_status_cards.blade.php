@@ -1,15 +1,14 @@
 <div class="col-12">
     <div class="col col-lg-12">
         @php
-            $orders = App\SubOrder::where('pick_up_status_id', $pickup_status_id)->latest()->get();
+            // $orders = App\SubOrder::where('pick_up_status_id', $pickup_status_id)->latest()->get();
+            $param1 = [ 'pick_up_status_id', $pickup_status_id ];
+            $param2 = [ 'is_pick_up', 'yes' ];
+            $orders = App\SubOrder::userOrder( $param1, $param2 )->latest()->get();
         @endphp
-        @foreach($orders as $order)
-         
-            @if ($order->order->user_id == Auth::user()->id)
-            @if ($order->is_pick_up != NULL || $order->is_pick_up == 'yes')
-
+        @forelse($orders as $order)
             <div class="card mt-1 border-0">
-                <div class="card-header bg-light  border-0">
+                <div class="card-header bg-light border-0">
                     @if ($status_id != '5')
                     <span class="text-left">{{ $order->order->order_number ?? 'not available'}} </span>
                     @endif
@@ -70,8 +69,8 @@
                 <span class="text-left">  &#8369; {{ $order_item->product_variation->variation_price_per }} </span>
                 <span style="float:right;"> {{ ($order->deliverystatus->display_name == 'Not delivery') ? '' : ''}} </span></div>
             </div>
-            @endif
-            @endif
-        @endforeach
+        @empty
+            <p class="card-title text-center">No order(s) yet.</p>
+        @endforelse
     </div>
 </div>

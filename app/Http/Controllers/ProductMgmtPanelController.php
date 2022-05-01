@@ -18,17 +18,21 @@ class ProductMgmtPanelController extends Controller
 {
 
     // product mgmt panel controller for both admin and seller
-    function index(){
-        if(Auth::user()->role->name == 'admin'){
-             $products = Product::latest()->get();
-            return view('admin.products.index')->with('panel_name', 'products')->with(compact('products'));
-        }else if(Auth::user()->role->name == 'seller'){
-            $products = Product::where('shop_id', Auth::user()->shop->id)->get();
-            return view('sellerPanel.products.index')->with('panel_name', 'products')->with(compact('products'));
-        }else{
-             $products = Product::latest()->get();
-            return view('admin.products.index')->with('panel_name', 'products')->with(compact('products'));
+    function index() {
+        if ( Auth::user()->role->name == 'admin' ) {
+            $products = Product::latest()->get();
+            $view = 'admin.products.index';
+
+        } else if ( Auth::user()->role->name == 'seller' ) {
+            $products = Product::where( 'shop_id', Auth::user()->shop->id )->get();
+            $view = 'sellerPanel.products.index';
+
+        } else {
+            $products = Product::latest()->get();
+            $view = 'admin.products.index';
         }
+
+        return view( $view )->with('panel_name', 'products')->with(compact('products'));
     }
 
     function edit( $product_id ) {
@@ -39,7 +43,7 @@ class ProductMgmtPanelController extends Controller
         if ( Auth::user()->role->name == 'admin' ) {
             return view('admin.products.edit')->with('panel_name', 'products')->with(compact('product', 'shops'));
 
-        }else if ( Auth::user()->role->name == 'seller' ) {
+        } else if ( Auth::user()->role->name == 'seller' ) {
             if ( $product->product_user_id !== Auth::user()->id ) {
                 $layout = 'sellerPanel.front';
                 $backUrl = '/sellerpanel/products';
@@ -50,17 +54,17 @@ class ProductMgmtPanelController extends Controller
         }
     }
 
-    function show($product_id){
+    function show($product_id) {
         $product = Product::where('id', $product_id)->first();
         if (Auth::user()->role->name == 'admin') {
             return view('admin.products.show')->with('panel_name', 'products')->with(compact('product'));
-        }else if(Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             return view('sellerPanel.products.show')->with('panel_name', 'products')->with(compact('product'));
         }
     }
 
 
-    function delete($product_id){
+    function delete($product_id) {
         $product = Product::where('id', $product_id)->delete();
         $productCategory = ProductCategory::where('product_id', $product_id)->delete();
         // $ratingsTbl = ratingsModel::where('rateable_id', $product_id)->delete();
@@ -72,27 +76,27 @@ class ProductMgmtPanelController extends Controller
         return back();
     }
 
-    function add_new_display_form_regular(){
+    function add_new_display_form_regular() {
         $shops = Shop::all();
         if (Auth::user()->role->name == 'admin') {
             return view('admin.products.add_new')->with('panel_name', 'product')->with('shops', $shops);
-        }else if (Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             return view('sellerPanel.products.add_new_product_regular_default')->with('panel_name', 'product');
         }
     }
 
-    function add_new_display_form_product_variation(){
+    function add_new_display_form_product_variation() {
         $shops = Shop::all();
         if (Auth::user()->role->name == 'admin') {
             return view('admin.products.add_new_product_variation_default')->with('panel_name', 'product')->with('shops', $shops);
-        }else if (Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             return view('sellerPanel.products.add_new_product_variation_default')->with('panel_name', 'product');
         }
     }
 
     // form function changelog march 20 2022 variation
     // form function changelog march 22 variation multi
-    function add_new_display_form_variation(Request $request){
+    function add_new_display_form_variation(Request $request) {
         $product = new Product();
         $product->name = $request->product_name;
         $product->description = $request->product_desc;
@@ -108,8 +112,8 @@ class ProductMgmtPanelController extends Controller
         $multiple_images_path = '';
         $multiple_images_counter = 1;
         
-        if($request->hasFile('images')){
-            foreach($multiple_images as $single_image){
+        if ($request->hasFile('images')) {
+            foreach($multiple_images as $single_image) {
                 $productImage = $single_image;
                 $productImageSaveAsName = time() . uniqid() . "-product." . $productImage->getClientOriginalExtension();
                 $upload_path = 'storage/products/' . date('FY') . '/';
@@ -117,7 +121,7 @@ class ProductMgmtPanelController extends Controller
                 $product_image_url = $upload_path_url . $productImageSaveAsName;
                 $success = $productImage->move($upload_path, $productImageSaveAsName);
                 $multiple_images_path .= $product_image_url . ',';
-                if($multiple_images_counter == 1){
+                if ($multiple_images_counter == 1) {
                     $product->cover_img = $product_image_url;
                 }
                 $multiple_images_counter++;
@@ -125,9 +129,9 @@ class ProductMgmtPanelController extends Controller
         }
 
         $product->secondary_cover_img = $multiple_images_path;
-        if (Auth::user()->role->name == 'admin'){
+        if (Auth::user()->role->name == 'admin') {
             $product->shop_id = $request->shop_id;
-        }else if (Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             $product->shop_id = Auth::user()->shop->id;
         }
            
@@ -159,10 +163,10 @@ class ProductMgmtPanelController extends Controller
             $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit[$multiple_variation_counter];
           
 
-            if($multiple_variation_price_whole_sale[$multiple_variation_counter] == NULL || $multiple_variation_min_qty_wholesale[$multiple_variation_counter] == NULL || $multiple_variation_price_whole_sale[$multiple_variation_counter] == '' || $multiple_variation_min_qty_wholesale[$multiple_variation_counter] == '' ) {
+            if ($multiple_variation_price_whole_sale[$multiple_variation_counter] == NULL || $multiple_variation_min_qty_wholesale[$multiple_variation_counter] == NULL || $multiple_variation_price_whole_sale[$multiple_variation_counter] == '' || $multiple_variation_min_qty_wholesale[$multiple_variation_counter] == '' ) {
                 // retail only
                 $productVariation->is_variation_wholesale = 'no';
-            }else{
+            } else {
                 // with wholesale
                 // thus retail with wholesale will be reflected
                 $productVariation->variation_price_per = $multiple_variation_price[$multiple_variation_counter];
@@ -173,12 +177,12 @@ class ProductMgmtPanelController extends Controller
             }
 
             // wholesale only entity
-            if( $multiple_variation_price[$multiple_variation_counter] == NULL ||  $multiple_variation_price[$multiple_variation_counter] == ''){
+            if ( $multiple_variation_price[$multiple_variation_counter] == NULL ||  $multiple_variation_price[$multiple_variation_counter] == '') {
                 $productVariation->is_variation_wholesale = 'yes';
                 $productVariation->is_variation_wholesale_only = 'yes';
                 $productVariation->variation_price_per = $multiple_variation_price_whole_sale[$multiple_variation_counter];
                 $productVariation->variation_wholesale_price_per =  $multiple_variation_price_whole_sale[$multiple_variation_counter];                $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale[$multiple_variation_counter]; 
-            }else{
+            } else {
                 // retail only
                 $productVariation->variation_price_per =  $multiple_variation_price[$multiple_variation_counter];
             }
@@ -206,14 +210,14 @@ class ProductMgmtPanelController extends Controller
         
         if (Auth::user()->role->name == 'admin') {
             return redirect('/admin/manage_products');
-        }else if (Auth::user()->role->name == 'seller') {
+        } else if (Auth::user()->role->name == 'seller') {
             return redirect('/sellerpanel/products');
         }
     }
 
     // form function changelog march 20 2022 regular 
     // changed function march 22 2022 regular
-    function save_new_display_form_regular( Request $request ){
+    function save_new_display_form_regular( Request $request ) {
         $this->validate( $request, [
             'product_name' => 'required',
             'images' => 'required',
@@ -296,7 +300,7 @@ class ProductMgmtPanelController extends Controller
         }
 
         // wholesale only entity
-        if ($request->retail_price == NULL || $request->retail_price == ''){
+        if ($request->retail_price == NULL || $request->retail_price == '') {
             $productVariation->is_variation_wholesale = 'yes';
             $productVariation->is_variation_wholesale_only = 'yes';
             $productVariation->variation_price_per = $request->wholesale_price;
@@ -334,7 +338,7 @@ class ProductMgmtPanelController extends Controller
 
     }
 
-    public function save_new_products_v2( Request $request ){
+    public function save_new_products_v2( Request $request ) {
         $this->validate( $request, [
             'product_name' => 'required',
             'images' => 'required',
@@ -454,13 +458,13 @@ class ProductMgmtPanelController extends Controller
         }
     }
 
-    function saveProduct_edit_form(Request $req){
+    function saveProduct_edit_form(Request $req) {
         $product = Product::where('id', $req->product_id)->first();
         $multiple_images = $req->file('images');
         $multiple_images_path = '';
         $multiple_images_counter = 1;
-        if($req->hasFile('images')){
-            foreach($multiple_images as $single_image){
+        if ($req->hasFile('images')) {
+            foreach($multiple_images as $single_image) {
                 $productImage = $single_image;
                 $productImageSaveAsName = time() . uniqid() . "-product." . $productImage->getClientOriginalExtension();
                 $upload_path = 'storage/products/' . date('FY') . '/';
@@ -468,16 +472,16 @@ class ProductMgmtPanelController extends Controller
                 $product_image_url = $upload_path_url . $productImageSaveAsName;
                 $success = $productImage->move($upload_path, $productImageSaveAsName);
                 $multiple_images_path .= $product_image_url . ',';
-                if($multiple_images_counter == 1){
+                if ($multiple_images_counter == 1) {
                     $product->cover_img = $product_image_url;
                 }
                 $multiple_images_counter++;
             }
         }
-        if($req->hasFile('images')){
+        if ($req->hasFile('images')) {
             $product->secondary_cover_img = $multiple_images_path;
         }
-        if($req->file('new_product_image') != null){
+        if ($req->file('new_product_image') != null) {
             $productImage = $req->file('new_product_image');
             $productImageSaveAsName = time() . uniqid() . "-product." . $productImage->getClientOriginalExtension();
             $upload_path = 'storage/products/' . date('FY') . '/';
@@ -486,9 +490,9 @@ class ProductMgmtPanelController extends Controller
             $success = $productImage->move($upload_path, $productImageSaveAsName);
             $product->cover_img = $product_image_url;
         }
-        if (Auth::user()->role->name == 'admin'){
+        if (Auth::user()->role->name == 'admin') {
             $product->shop_id = $req->shop_id;
-        }else if (Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             $product->shop_id = Auth::user()->shop->id;
         }
             $product->name = $req->product_name;
@@ -507,7 +511,7 @@ class ProductMgmtPanelController extends Controller
         $product->save();
         $product_variation_delete_tmp = ProductVariation::where('product_id', $req->product_id)->delete();
 
-        if($req->is_have_variation == 'yes'){
+        if ($req->is_have_variation == 'yes') {
             // clear product variation in editing
             $multiple_variation_counter = 0;
             $multiple_variation_names = $req->variation_name;
@@ -519,7 +523,7 @@ class ProductMgmtPanelController extends Controller
             $multiple_variation_net_weight = $req->variation_net_weight;
             $multiple_variation_sold_per = $req->variation_sold_per;
     
-            foreach($multiple_variation_names as $variation_name){
+            foreach($multiple_variation_names as $variation_name) {
                 $productVariation = new ProductVariation;
                 $productVariation->product_id = $req->product_id;
                 $productVariation->variation_name = $variation_name;
@@ -530,7 +534,7 @@ class ProductMgmtPanelController extends Controller
                 $productVariation->save();
                 $multiple_variation_counter++;
             }
-        }else{
+        } else {
             $productVariation = new ProductVariation;
             $productVariation->product_id = $product->id;
             $productVariation->variation_name = 'Regular';
@@ -548,33 +552,33 @@ class ProductMgmtPanelController extends Controller
         $productCategory->save();
         if (Auth::user()->role->name == 'admin') {
             return redirect('/admin/manage_products');
-        }else if (Auth::user()->role->name == 'seller') {
+        } else if (Auth::user()->role->name == 'seller') {
             return redirect('/sellerpanel/products');
         }
 
         if (Auth::user()->role->name == 'admin') {
             return redirect('/admin/manage_products');
-        }else if (Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             return redirect('/sellerpanel/products');
         }
 
     }
 
-    function hide_product($product_id){
+    function hide_product($product_id) {
         // hide product
         $product_entity = Product::where('id', $product_id);
         $product_entity->delete();
         return back();
     }
 
-    function saveNewProductRegular(Request $req){
+    function saveNewProductRegular(Request $req) {
         
         $product = new Product();
         $multiple_images = $req->file('images');
         $multiple_images_path = '';
         $multiple_images_counter = 1;
-        if($req->hasFile('images')){
-            foreach($multiple_images as $single_image){
+        if ($req->hasFile('images')) {
+            foreach($multiple_images as $single_image) {
                 $productImage = $single_image;
                 $productImageSaveAsName = time() . uniqid() . "-product." . $productImage->getClientOriginalExtension();
                 $upload_path = 'storage/products/' . date('FY') . '/';
@@ -582,7 +586,7 @@ class ProductMgmtPanelController extends Controller
                 $product_image_url = $upload_path_url . $productImageSaveAsName;
                 $success = $productImage->move($upload_path, $productImageSaveAsName);
                 $multiple_images_path .= $product_image_url . ',';
-                if($multiple_images_counter == 1){
+                if ($multiple_images_counter == 1) {
                     $product->cover_img = $product_image_url;
                 }
                 $multiple_images_counter++;
@@ -592,10 +596,10 @@ class ProductMgmtPanelController extends Controller
         $product->secondary_cover_img = $multiple_images_path;
         $product->net_weight = ($req->product_weight_regular != NULL) ? $req->product_weight_regular : '';
         
-        if (Auth::user()->role->name == 'admin'){
+        if (Auth::user()->role->name == 'admin') {
             $product->shop_id = $req->shop_id;
 
-        }else if (Auth::user()->role->name == 'seller'){
+        } else if (Auth::user()->role->name == 'seller') {
             $product->shop_id = Auth::user()->shop->id;
         }
     
@@ -662,7 +666,7 @@ class ProductMgmtPanelController extends Controller
 
         if (Auth::user()->role->name == 'admin') {
             return redirect('/admin/manage_products');
-        }else if (Auth::user()->role->name == 'seller') {
+        } else if (Auth::user()->role->name == 'seller') {
             return redirect('/sellerpanel/products');
         }
     }

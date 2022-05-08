@@ -89,7 +89,7 @@ class SellerPanelController extends Controller
         }
 
         $orders = $_temp->where( $_col, $status_id )->get();
-        foreach ( $orders as $index => $value ) $orders->forget( $index );
+        // foreach ( $orders as $index => $value ) $orders->forget( $index );
 
         return view('sellerPanel.orders.index')->with(compact('orders', 'assign_order_status_options','is_pick_up','status_obj','category_type','status_id'))->with('panel_name', 'orders');
     

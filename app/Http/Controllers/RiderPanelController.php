@@ -21,9 +21,14 @@ class RiderPanelController extends Controller
     }
 
     function index() {
-        $orders = SubOrder::all();
+        $orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->get();
         $assign_order_status_options = orderDeliveryStatusModel::whereIn( 'id', array( 2, 3, 4 ) )->get();
         $my_rider_id = Auth::user()->rider_staff->id;
+
+        foreach ( $orders as $index => $order ) {
+            if ( ! $order->order ) $orders->forget( $index );
+        }
+
         return view( 'riderPanel.dashboard' )
             ->with(compact('orders', 'assign_order_status_options'))
             ->with('panel_name', 'orders')

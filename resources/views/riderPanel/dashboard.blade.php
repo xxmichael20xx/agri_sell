@@ -79,7 +79,26 @@
                                                 @if ( $button )
                                                     <button type="button" class="btn btn-primary btn-sm btn-round btn-action" data-href="{{ $href }}" data-title="{{ $button }}">{{ $button }}</button>
                                                 @else
-                                                    No actions needed
+                                                    @php
+                                                        $title = "No actions needed";
+                                                        switch ( $order->status_id ) {
+                                                            case 1:
+                                                                $title = "Pending";
+                                                                break;
+                                                            
+                                                            case 2:
+                                                                $title = "Confirmed";
+                                                                break;
+
+                                                            case 3:
+                                                                $title = "Order has been picked up";
+                                                                break;
+                                                                
+                                                            default:
+                                                                break;
+                                                        }
+                                                    @endphp
+                                                    {{ $title }}
                                                     <br>
                                                 @endif
 

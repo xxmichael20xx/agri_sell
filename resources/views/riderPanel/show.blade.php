@@ -59,8 +59,6 @@
                         </div>
                     </div>
                 </div>
-            @else
-
             @endif
 
         </div>
@@ -71,55 +69,46 @@
                         <h5>Order Summary</h5>
                     </div>
                     <div class="card-body">
-                        <table class="table"  class="table " cellspacing="0" width="100%">
-                            <thead  class=" text-primary">
-                            <tr>
-                                <th>Name</th>
-                                <th>Qty</th>
-                                <th>Price</th>
-                                <th>Product monitoring status</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @php
-                                use App\Product;
-                            @endphp
-                            @foreach($items as $item)
-                                {{-- Get if the item has Sale or discounted price this will fix the regular price bug --}}
-
-                                @php
-                                    $item_product_pivot = Product::where('id', $item->id)->first();
-                                    $item_product_pivot_price = $item_product_pivot->price;
-                                    $item_product_price_proc = 0;
-                                    if($item_product_pivot->is_sale==1){
-                                    $item_product_price_proc = $item->price - (($item_product_pivot->sale_pct_deduction
-                                    / 100) *
-                                    $item->price);
-                                    }else{
-                                    $item_product_price_proc = $item->price;
-                                    }
-                                @endphp
+                        <table class="table" class="table " cellspacing="0" width="100%">
+                            <thead  class="text-primary">
                                 <tr>
-                                    <td scope="row">
-                                        {{ $item->name }}
-                                    </td>
-                                    <td>
-                                        {{ $item->pivot->quantity }}
-                                    </td>
-                                    <td>
-                                        @if($item_product_pivot->is_sale==1)
-                                            <s>{{ $item->pivot->price }}</s>
-                                            {{ $item_product_price_proc }}
-                                        @else
-                                            {{ $item_product_price_proc }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="/product_monitoring_status/{{$item->id}}" class="btn btn-primary">Product monitoring</a>
-                                    </td>
+                                    <th>Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Product monitoring status</th>
                                 </tr>
-                            @endforeach
+                                </thead>
+                            <tbody>
+                                @foreach( $items as $item )
+                                    @php
+                                        /* $item_product_pivot = App\Product::where('id', $item->id)->first();
+                                        $item_product_pivot_price = $item_product_pivot->price;
+                                        $item_product_price_proc = 0;
+                                        if ( $item_product_pivot->is_sale == 1 ) {
+                                            $item_product_price_proc = $item->price - ( ( $item_product_pivot->sale_pct_deduction/ 100) * $item->price );
 
+                                        } else {
+                                            $item_product_price_proc = $item->price;
+                                        } */
+                                    @endphp
+                                    <tr>
+                                        <td scope="row">
+                                            {{ $item->product->name }}
+                                        </td>
+                                        <td>
+                                            {{ AppHelpers::numeric( $item->quantity ) }}
+                                        </td>
+                                        <td>
+                                            {{-- @if( $item_product_pivot->is_sale == 1 )
+                                                <s>{{ $item->pivot->price }}</s>
+                                            @endif --}}
+                                            ₱ {{ AppHelpers::numeric( $item->price ) }}
+                                        </td>
+                                        <td>
+                                            <a href="/product_monitoring_status/{{ $item->id }}" class="btn btn-primary">Product monitoring</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -132,7 +121,6 @@
                 <div class="card">
                     <div class="card-header">
                         <h5>Order totals</h5>
-
                     </div>
                     <div class="card-body">
                         <table class="table table-borderless">
@@ -141,10 +129,8 @@
                                     Shipping fee
                                 </td>
                                 <td class="text-right">
-                                    @if ($order->order->is_pick_up != 'yes')
-                                        {{$order->order->shipping_fee}}
-
-                                    @else
+                                    @if ( $order->order->is_pick_up != 'yes' )
+                                        ₱ {{ AppHelpers::numeric( $order->order->shipping_fee ) }}
                                     @endif
                                 </td>
                             </tr>
@@ -153,10 +139,10 @@
                                     Total
                                 </td>
                                 <td class="text-right">
-                                    @if ($order->order->is_pick_up != 'yes')
-                                        {{$order->order->grand_total}}
+                                    @if ( $order->order->is_pick_up != 'yes' )
+                                        ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
                                     @else
-                                        {{$order->order->grand_total - $order->order->shipping_fee}}
+                                        ₱ {{ AppHelpers::numeric( $order->order->grand_total - $order->order->shipping_fee ) }}
                                     @endif
                                 </td>
                             </tr>
@@ -166,7 +152,4 @@
             </div>
         </div>
     </div>
-
-
-
 @stop

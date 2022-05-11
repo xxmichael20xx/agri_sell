@@ -88,15 +88,16 @@ class SellerPanelController extends Controller
             $status_obj = orderpickupStatusModel::find($status_id);
         }
 
-        $orders = $_temp->where( $_col, $status_id )->get();
+        $orders = $_temp->where( $_col, $status_id )->latest()->get();
         foreach ( $orders as $index => $value ) {
             if ( ! $value->order ) {
                 $orders->forget( $index );
             }
         }
 
-        return view('sellerPanel.orders.index')->with(compact('orders', 'assign_order_status_options','is_pick_up','status_obj','category_type','status_id'))->with('panel_name', 'orders');
-    
+        return view( 'sellerPanel.orders.index' )
+            ->with( compact( 'orders', 'assign_order_status_options', 'is_pick_up', 'status_obj', 'category_type', 'status_id' ) )
+            ->with( 'panel_name', 'orders' );
     }
 
     function product_index(){

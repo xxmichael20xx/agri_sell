@@ -35,19 +35,28 @@ class OrderMgmtPanelController extends Controller
         return view('admin.order_mgmt.index')->with(compact('orders', 'assign_order_status_options'))->with('panel_name', 'orders');
     }
 
-    function show_by_cat($category_type, $status_id){
-        if ( ! isset( $status_id ) ) return redirect( '/sellerpanel/manage_orders/pickup/1' );
-        
-        $is_pick_up = ($category_type == 'pickup') ? 'yes' : 'no';
-        if($is_pick_up != 'yes'){
-            $orders = SubOrder::where('is_pick_up', $is_pick_up)->where('status_id', $status_id)->latest()->get();
-            $status_obj = orderDeliveryStatusModel::find($status_id);
-        }else{
-            $orders = SubOrder::where('is_pick_up', $is_pick_up)->where('pick_up_status_id', $status_id)->latest()->get();
+    function show_by_cat( $category_type, $status_id ) {
+        $is_pick_up = ( $category_type == 'pickup' ) ? 'yes' : 'no';
+        $_temp = SubOrder::where( 'is_pick_up', $is_pick_up );
+        $_col = "status_id";
+        $assign_order_status_options = orderDeliveryStatusModel::all();
+        $status_obj = orderDeliveryStatusModel::find( $status_id );
+
+        if ( $is_pick_up == 'yes' ) {
+            $_col = "pick_up_status_id";
             $status_obj = orderpickupStatusModel::find($status_id);
         }
-        $assign_order_status_options = orderDeliveryStatusModel::all();
-        return view('admin.order_mgmt.index')->with(compact('orders', 'assign_order_status_options','is_pick_up','status_obj'))->with('panel_name', 'orders');
+
+        $orders = $_temp->where( $_col, $status_id )->latest()->get();
+        foreach ( $orders as $index => $value ) {
+            if ( ! $value->order ) {
+                $orders->forget( $index );
+            }
+        }
+
+        return view( 'admin.order_mgmt.index' )
+            ->with( compact( 'orders', 'assign_order_status_options', 'is_pick_up', 'status_obj', 'category_type', 'status_id' ) )
+            ->with( 'panel_name', 'orders' );
     }
 
     public function show($order_id)
@@ -61,17 +70,32 @@ class OrderMgmtPanelController extends Controller
     }
 
     // for product monitoring index
-    public function showSingleSubItemSingle($suborder_item_id)
-    {
+    public function showSingleSubItemSingle( $suborder_item_id ) {
         // note for product monitoring make sure that your product is only for the shop that has been selected
-        $order_item = SubOrderItem::where('id', $suborder_item_id)->first();
-        $product_monitoring_logs = ProductMonitoringLogs::where('sub_order_item_id', $suborder_item_id)->get();  
-        if(Auth::user()->role->name == 'seller'){
-            return view('sellerPanel.orders.product_monitoring_w_setter')->with('product_monitoring_logs', $product_monitoring_logs)->with('order_item', $order_item)->with('panel_name', 'orders')->with('suborder_item_id', $suborder_item_id);
-        }else if(Auth::user()->role->name == 'admin'){
-            return view('admin.order_mgmt.suborder_item_monitoring')->with('product_monitoring_logs', $product_monitoring_logs)->with('order_item', $order_item)->with('panel_name', 'orders');
-        }else if(Auth::user()->role->name == 'rider'){
-            return view('riderPanel.show_product_monitoring')->with('product_monitoring_logs', $product_monitoring_logs)->with('order_item', $order_item)->with('panel_name', 'orders')->with('suborder_item_id', $suborder_item_id);
+        $order_item = SubOrderItem::where( 'id', $suborder_item_id )->first();
+        $product_monitoring_logs = ProductMonitoringLogs::where( 'sub_order_item_id', $suborder_item_id )->get();
+
+        // dd( $order_item, $product_monitoring_logs );
+
+        if ( Auth::user()->role->name == 'seller' ) {
+            return view('sellerPanel.orders.product_monitoring_w_setter')
+                ->with('product_monitoring_logs', $product_monitoring_logs)
+                ->with('order_item', $order_item)->with('panel_name', 'orders')
+                ->with('suborder_item_id', $suborder_item_id);
+
+        } else if ( Auth::user()->role->name == 'admin' ) {
+            return view('admin.order_mgmt.suborder_item_monitoring')
+                ->with('product_monitoring_logs', $product_monitoring_logs)
+                ->with('order_item', $order_item)
+                ->with('panel_name', 'orders');
+
+        } else if ( Auth::user()->role->name == 'rider' ) {
+            return view('riderPanel.show_product_monitoring')
+                ->with('product_monitoring_logs', $product_monitoring_logs)
+                ->with('order_item', $order_item)
+                ->with('panel_name', 'orders')
+                ->with('suborder_item_id', $suborder_item_id);
+
         }
     }
     

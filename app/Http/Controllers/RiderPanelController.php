@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Order;
-use App\Product;
 use App\SubOrder;
 use App\OrderItem;
-use App\Shop;
-use DB;
 use Auth;
 use App\deliveryStaffModel;
 use App\orderDeliveryStatusModel;
 use App\coinsTopUpModel;
+use App\SubOrderItem;
 
 class RiderPanelController extends Controller
 {
@@ -98,22 +96,18 @@ class RiderPanelController extends Controller
 
     // for seller show
 
-    public function show_seller_order($order_id){
-
+    public function show_seller_order( $order_id ) {
         $order = Suborder::where('order_id', $order_id)->first();
-        $items = $order->items;
+        // $items = $order->items;
+        $items = SubOrderItem::where( 'sub_order_id', $order_id )->get();
         $assign_order_status_options = orderDeliveryStatusModel::all();
         $delivery_man_options = deliveryStaffModel::where('status', '!=', 'on_leave')->get();
         $my_rider_id = Auth::user()->rider_staff->id;
+        $panel_name = "Orders";
 
-        return view('riderPanel.show')
-            ->with('panel_name', 'orders')
-            ->with('items', $items)
-            ->with('assign_order_status_options', $assign_order_status_options)
-            ->with('delivery_man_options', $delivery_man_options)
-            ->with('order', $order)
-            ->with('my_rider_id', $my_rider_id);
-
+        return view('riderPanel.show')->with( compact(
+            'panel_name', 'items', 'assign_order_status_options', 'delivery_man_options', 'order', 'my_rider_id'
+        ) );
     }
 
     public function setOrderStatus($option_id, $order_id){

@@ -14,7 +14,7 @@ class SubOrderItem extends Model
         return $this->belongsTo(SubOrder::class, 'sub_order_id', 'id') ?? 'not available';
     }
 
-    
-
-    
+    function variant() {
+        return $this->hasOne( ProductVariation::class, 'id', 'variation_id' );
+    }
 }

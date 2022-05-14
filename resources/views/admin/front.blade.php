@@ -152,7 +152,7 @@ Coded by www.creative-tim.com
           </li>
 
           <li class="{{($panel_name == 'orders') ? 'active' : ''}}">
-            <a href="/admin/manage_orders">
+            <a href="/admin/manage_orders/pickup/1">
               <i class="nc-icon nc-tile-56"></i>
               <p>Orders monitoring</p>
             </a>

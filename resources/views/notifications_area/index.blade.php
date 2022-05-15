@@ -4,10 +4,15 @@
         <h1 class="lead display-6">My notifications</h1>
         <div class="accordion" id="accordionNotifications">
             @foreach ( $notifs as $notif )
+                @php
+                    $is_unseen = "";
+
+                    if ( $notif->is_seen !== 'yes' ) $is_unseen = "unseen";
+                @endphp
                 <div class="card">
                     <div class="card-header clickable" id="heading-{{ $notif->id }}">
                         <h2 class="mb-0">
-                            <button class="btn btn-block btn-link text-left text-dark font-weight-bold clickable" type="button" data-toggle="collapse" data-target="#notification-{{ $notif->id }}" aria-expanded="false" aria-controls="notification-{{ $notif->id }}">
+                            <button class="btn btn-block btn-link text-left text-dark font-weight-bold clickable {{ $is_unseen }}" type="button" data-toggle="collapse" data-target="#notification-{{ $notif->id }}" aria-expanded="false" aria-controls="notification-{{ $notif->id }}">
                                 {{ $notif->notification_title }}
                             </button>
                         </h2>

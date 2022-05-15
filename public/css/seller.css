@@ -91,3 +91,12 @@
 .nav-tabs .nav-item .nav-link.active:after, .nav-tabs .nav-item .nav-link.active:focus:after, .nav-tabs .nav-item .nav-link.active:hover:after {
     border-bottom-color: rgba(33, 161, 150, .4) !important;
 }
+
+.monitor--logs-image {
+    width: 135px;
+    height: 135px;
+    display: inline-block;
+    margin: 5px;
+    background-position: center;
+    background-size: cover;
+}

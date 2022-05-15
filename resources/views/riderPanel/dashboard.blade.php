@@ -43,7 +43,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ AppHelpers::numeric( $order->order->grand_total ) }}
+                                                ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
                                             </td>
                                             <td>
                                                 <button class="btn btn-sm btn-info btn-round dropdown-toggle" type="button" id="dropPaid{{ $order->order->id }}" data-toggle="dropdown" aria-expanded="false">

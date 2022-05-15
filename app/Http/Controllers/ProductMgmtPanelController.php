@@ -408,6 +408,7 @@ class ProductMgmtPanelController extends Controller
         $productVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
         $productVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
         $productVariation->variation_quantity = $request->stocks;
+        $productVariation->variation_sold_per = $request->wholesale_sold_per;
         $productVariation->variation_net_weight = $request->standard_net_weight;
         $productVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
         $productVariation->save();
@@ -428,6 +429,7 @@ class ProductMgmtPanelController extends Controller
                 $productVariation->variation_name = $multiple_variation_names[$index];
                 $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale;
                 $productVariation->variation_quantity = $multiple_variation_stocks[$index];
+                $productVariation->variation_sold_per = $request->wholesale_sold_per;
                 $productVariation->variation_net_weight = $multiple_variation_net_weight;
                 $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit;
                 $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
@@ -762,6 +764,7 @@ class ProductMgmtPanelController extends Controller
             $firstVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
             $firstVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
             $firstVariation->variation_quantity = $request->stocks;
+            $firstVariation->variation_sold_per = $request->wholesale_sold_per;
             $firstVariation->variation_net_weight = $request->standard_net_weight;
             $firstVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
             $firstVariation->save();
@@ -784,6 +787,7 @@ class ProductMgmtPanelController extends Controller
                 $productVariation->variation_name = $multiple_variation_names[$index];
                 $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale;
                 $productVariation->variation_quantity = $multiple_variation_stocks[$index];
+                $productVariation->variation_sold_per = $request->wholesale_sold_per;
                 $productVariation->variation_net_weight = $multiple_variation_net_weight;
                 $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit;
                 $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 use DB;
 use App\coinsTopUpModel;
+use App\Events\CoinEvent;
 use App\User;
 use Illuminate\Http\Request;
 use Auth;
 use App\notification;
+use Carbon\Carbon;
 
 class CoinsTopUpAdminController extends Controller
 {
@@ -86,6 +88,16 @@ class CoinsTopUpAdminController extends Controller
 
             ]);
         }
+
+        event( new CoinEvent( [ 'user_id' => $req->_userid, 'type' => 'update-top-up' ] ) );
+        $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
+        $notifData = [
+            'user_id' => $req->_userid,
+            'frm_user_id' => $this->userId(),
+            'notification_title' => "Coin top up approved",
+            'notification_txt' => "Your coin top up has been approved. <br><br> Reference ID: {$req->ref_id} <br> Date approved: {$currentTime}",
+        ];
+        $this->newNotificationWithEvent( $notifData );
         return back();
     }
 

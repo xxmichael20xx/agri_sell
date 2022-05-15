@@ -10,10 +10,12 @@ use App\Events\OrderEvent;
 use App\notification;
 use App\Product;
 use App\PreOrderModel;
+use App\ProductMonitoringLogs;
 use App\TransHistModel;
 use Auth;
 use App\SubOrder;
 use App\ProductVariation;
+use App\SubOrderItem;
 
 class OrderController extends Controller
 {
@@ -273,12 +275,27 @@ class OrderController extends Controller
             $notification_ent->save();
         }
 
+        $subOrder = SubOrder::where( 'order_id', $order->id )->first();
+        if ( $subOrder ) {
+            $subOrderItems = SubOrderItem::where( 'sub_order_id', $order->id )->get();
+
+            if ( $subOrderItems->count() > 0 ) {
+                foreach( $subOrderItems as $subOrderItem ) {
+                    $log = new ProductMonitoringLogs;
+                    $log->sub_order_item_id = $subOrderItem->id;
+                    $log->status = "Item pending";
+                    $log->user_id = $this->userId();
+                    $log->images = "//";
+                    $log->save();
+                }
+            }
+        }
+
         if ( request('payment_method') == 'agrisell_coins' ) {
             return redirect('/otp_validation_payment_reg/'.$order->order_number.'');
         } else {
             return redirect()->route('home')->withMessage('Order has been placed');
         }
-
     }
 
     /**

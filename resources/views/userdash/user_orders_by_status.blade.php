@@ -18,10 +18,6 @@
             <h4 style="text-transform: initial;">To ship</h4>
         </a>
 
-        <a class="" href="#shipping" data-toggle="tab" role="tab" aria-selected="false">
-            <h4 style="text-transform: initial;">Shipping</h4>
-        </a>
-
         <a class="" href="#to_receive" data-toggle="tab" role="tab" aria-selected="false">
             <h4 style="text-transform: initial;">To receive</h4>
         </a>
@@ -48,13 +44,7 @@
                 $status_id = '2';
             @endphp
             @include('userdash.order_by_status.order_cards')
-            </div> 
-        <div class="tab-pane fade" id="shipping" role="tabpanel">
-            @php
-                $status_id = '3';
-            @endphp
-            @include('userdash.order_by_status.order_cards')
-        </div>
+        </div> 
         <div class="tab-pane fade" id="to_receive" role="tabpanel">
             @php
                 $status_id = '4';

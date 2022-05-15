@@ -80,6 +80,10 @@ button.product--variation-action {
     text-decoration: none !important;
 }
 
+#accordionNotifications .card-header button.btn.unseen {
+    color: #28A745 !important;
+}
+
 #accordionNotifications .card-header button[aria-expanded="true"] {
     color: #28A745 !important;
 }

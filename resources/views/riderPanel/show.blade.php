@@ -10,57 +10,57 @@
                         <h5>Customer info</h5>
                     </div>
                     <div class="card-body">
-                        <p>Name: {{$order->order->user->name ?? 'not available'}}</p>
-                        <p>Address: {{$order->order->user->address ?? 'not available'}} {{$order->order->user->barangay ?? 'not available'}} {{$order->order->user->town ?? 'not available'}} {{$order->order->user->province ?? 'not available'}}</p>
-                        <p>Mobile: {{$order->order->user->mobile ?? 'not available'}}
+                        <p>Name: {{ $order->order->user->name ?? 'not available' }}</p>
+                        <p>Address: {{ $order->order->user->address ?? 'not available' }} {{ $order->order->user->barangay ?? 'not available' }} {{ $order->order->user->town ?? 'not available' }} {{ $order->order->user->province ?? 'not available' }}</p>
+                        <p>Mobile: {{ $order->order->user->mobile ?? 'not available' }}
                     </div>
                 </div>
             </div>
-            @if ($order->order->is_pick_up != "yes")
-                <div class="col-7">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Delivery info</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (isset($order->order->rider_id))
-                                <p>Rider ID:{{ $order->order->rider->rider_id}}</p>
-                                <p>Delivery man name:{{ $order->order->rider->user->name ?? 'not available'}}</p>
-                                <p>Delivery man mobile:{{ $order->order->rider->user->mobile ?? 'not available'}}</p>
-                                <p>Vehicle used: {{$order->order->rider->vehicle_used ?? 'not available'}} </p>
-                                <p> Delivery status: {{$order->deliverystatus->display_name ?? 'not available'}} </p>
-                            @else
-                                <p>Delivery man not set</p>
-                            @endif
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Delivery info</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (isset($order->order->rider_id))
+                            <p>Rider ID:{{ $order->order->rider->rider_id}}</p>
+                            <p>Delivery man name:{{ $order->order->rider->user->name ?? 'not available'}}</p>
+                            <p>Delivery man mobile:{{ $order->order->rider->user->mobile ?? 'not available'}}</p>
+                            <p>Vehicle used: {{$order->order->rider->vehicle_used ?? 'not available'}} </p>
+                            <p> Delivery status: {{$order->deliverystatus->display_name ?? 'not available'}} </p>
+                        @else
+                            <p>Delivery man not set</p>
+                        @endif
+                    </div>
 
-                        </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col col-6">
 
-                        <div class="card-footer">
-                            <div class="row">
-                                <div class="col col-6">
-
-                                    <div class="dropdown ">
-                                        <button class="dropdown-toggle btn btn-warning btn-round btn-block " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
-                                            Assign delivery status
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" style="will-change: transform; position: absolute; transform: translate3d(-25px, -173px, 0px); top: 0px; left: 0px;" x-placement="top-end">
-                                            <div class="dropdown-header">Select delivery status option</div>
-                                            @foreach ($assign_order_status_options as $option)
-                                                @if ($option->name != 'notdelivery')
-                                                            <a class="dropdown-item"
-                                                                href="/admin/edit_order_status/{{$option->id}}/{{$order->order_id}}">{{$option->display_name}}</a>
-                                                @endif
-                                            @endforeach
-                                        </div>
+                                <div class="dropdown ">
+                                    <button class="dropdown-toggle btn btn-warning btn-round btn-block " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
+                                        Assign delivery status
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" style="will-change: transform; position: absolute; transform: translate3d(-25px, -173px, 0px); top: 0px; left: 0px;" x-placement="top-end">
+                                        <div class="dropdown-header">Select delivery status option</div>
+                                        @foreach ( $assign_order_status_options as $option )
+                                            @if ($option->name != 'notdelivery')
+                                                <a 
+                                                    class="dropdown-item" 
+                                                    href="/admin/edit_order_status/{{ $option->id }}/{{ $order->order_id }}"
+                                                >
+                                                    {{ $option->display_name }}
+                                                </a>
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
                     </div>
                 </div>
-            @endif
-
+            </div>
         </div>
         <div class="row ">
             <div class="col-12">

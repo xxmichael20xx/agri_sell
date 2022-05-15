@@ -97,7 +97,15 @@ class RiderPanelController extends Controller
     // for seller show
 
     public function show_seller_order( $order_id ) {
-        $order = Suborder::where('order_id', $order_id)->first();
+        $order = Suborder::where( 'order_id', $order_id )->first();
+
+        if ( ! $order ) {
+            $layout = "riderPanel.front";
+            $backUrl = "/rider_dashboard";
+            $panel_name = "";
+            return view( '404' )->with( compact( 'layout', 'backUrl', 'panel_name' ) );
+        }
+
         // $items = $order->items;
         $items = SubOrderItem::where( 'sub_order_id', $order_id )->get();
         $assign_order_status_options = orderDeliveryStatusModel::all();

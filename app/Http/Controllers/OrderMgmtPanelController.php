@@ -75,8 +75,6 @@ class OrderMgmtPanelController extends Controller
         $order_item = SubOrderItem::where( 'id', $suborder_item_id )->first();
         $product_monitoring_logs = ProductMonitoringLogs::where( 'sub_order_item_id', $suborder_item_id )->get();
 
-        // dd( $order_item, $product_monitoring_logs );
-
         if ( Auth::user()->role->name == 'seller' ) {
             return view('sellerPanel.orders.product_monitoring_w_setter')
                 ->with('product_monitoring_logs', $product_monitoring_logs)
@@ -192,10 +190,11 @@ class OrderMgmtPanelController extends Controller
        
         $order = Suborder::where('order_id', $order_id)->where('seller_id', Auth::user()->id)->first();
         $items = $order->order->items;
+        $sub_ids = SubOrderItem::where( 'sub_order_id', $order_id )->get();
 
         $assign_order_status_options = orderDeliveryStatusModel::all();
         $delivery_man_options = deliveryStaffModel::where('status', '!=', 'on_leave')->get();
-        return view('sellerPanel.orders.show', compact('items', 'order', 'delivery_man_options', 'assign_order_status_options'))->with('panel_name', 'orders');
+        return view('sellerPanel.orders.show', compact('items', 'sub_ids', 'order', 'delivery_man_options', 'assign_order_status_options'))->with('panel_name', 'orders');
 
    
     }
@@ -238,11 +237,11 @@ class OrderMgmtPanelController extends Controller
     public function checkStatuses( $config_key, $status_id, $order_id ) {
         $statuses = config( $config_key );
         $order = Order::find( $order_id );
+        $sub_ids = SubOrderItem::where( 'sub_order_id', $order_id )->get();
         $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
 
         foreach ( $statuses as $key => $status ) {
             if ( $key == $status_id && $order ) {
-
                 $title = "Your order has been marked as <span style='color: #28A745;'>'{$status}'</span>";
                 $title .= "<br> Date notified: {$currentTime}<br><br>";
 
@@ -257,6 +256,13 @@ class OrderMgmtPanelController extends Controller
                     'type' => 'customer-order-update'
                 ];
                 $this->newNotificationWithEvent( $notifData, true, $eventData );
+
+                foreach ( $sub_ids as $sub_id ) {
+                    $log = ProductMonitoringLogs::where( 'sub_order_item_id', $sub_id->id )->first();
+                    $log->status = $status;
+                    $log->save();
+                }
+
                 break;
             }
         }

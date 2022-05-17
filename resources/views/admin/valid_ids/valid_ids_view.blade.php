@@ -10,25 +10,23 @@
                     <h5 class="card-title">Valid id</h5>
                 </div>
                 <div class="card-body">
-                    <!-- {{$valid_id_user->valid_id_path ?? 'na'}} -->
                     <img src="{{ asset('storage/'.$valid_id_user->valid_id_path ) }}">
                     <br>
                     <div class="mt-5"></div>
-                    <span class="text-muted ">Name: {{ $valid_id_user->owner->name ?? 'deleted'}}</span>
+                    <span class="text-muted ">Name: {{ $valid_id_user->owner->name }}</span>
                     <br>
-                    <span class="text-muted">Address: {{ $valid_id_user->owner->address ?? 'deleted'}} {{ $valid_id_user->owner->barangay ?? 'deleted'}} {{ $valid_id_user->owner->town ?? 'deleted'}}
-                        {{ $valid_id_user->owner->province ?? 'deleted' }}</span>
+                    <span class="text-muted">Address: {{ $valid_id_user->owner->address }} {{ $valid_id_user->owner->barangay }} {{ $valid_id_user->owner->town }} {{ $valid_id_user->owner->province }}</span>
                     <br>
-                    <span class="text-muted">Birthday: {{ $valid_id_user->owner->bday ?? 'deleted'}}</span>
+                    <span class="text-muted">Birthday: {{ $valid_id_user->owner->bday }}</span>
                     <br>
                     <span class="text-muted">Validity:
                         @if ($valid_id_user->is_valid == '1')
-                        valid
+                            valid
                         @else
-                        invalid
-                        @php
-                            $invalid_id_reason_obj = DB::table('invalid_id_reasons')->where('id', $valid_id_user->invalid_reason_id)->first();
-                        @endphp
+                            invalid
+                            @php
+                                $invalid_id_reason_obj = DB::table('invalid_id_reasons')->where('id', $valid_id_user->invalid_reason_id)->first();
+                            @endphp
                         @endif
 
                         </span>
@@ -36,23 +34,19 @@
                     </span>
                     <br>
                     @if ($valid_id_user->is_valid == '0')
-                    <span class="text-muted">Invalid reason: {{$valid_id_user->invalid_reason->display_name}}
-                    </span>
+                        <span class="text-muted">Invalid reason: {{$valid_id_user->invalid_reason->display_name}}</span>
                     @endif
 
                     <br>
                     <a href="/set_as_valid_id/{{ $valid_id_user->id }}" class="btn btn-outline-success btn-round m-1">Mark as valid</a>
-                    <a class="btn btn-outline-danger btn-round m-1 text-danger" data-toggle="modal"
-                        data-target="#modal_not_valid">Mark as not valid</a>
+                    <a class="btn btn-outline-danger btn-round m-1 text-danger" data-toggle="modal" data-target="#modal_not_valid">Mark as not valid</a>
                     <div class="modal fade" id="modal_not_valid" tabindex="-1" role="dialog"
                         aria-labelledby="modal_not_validTitle" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header border-0">
-
                                     <h5 class="modal-title" id="exampleModalLongTitle">Reason for not valid</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <form method="POST" id="form_invalid" action="/unset_as_valid_id/{{ $valid_id_user->id }}"
@@ -62,14 +56,13 @@
                                             <select class="selectpicker"
                                                 data-style="btn btn-primary btn-round" name="invalid_id_reason" title="Select reason">
                                                 @php
-                                                $invalid_reasons = DB::table('invalid_id_reasons')->get();
+                                                    $invalid_reasons = DB::table('invalid_id_reasons')->get();
                                                 @endphp
                                                 @foreach ($invalid_reasons as $invalid_reason)
-                                                <option value="{{$invalid_reason->id}}">{{$invalid_reason->display_name}}</option>
-                                             @endforeach
+                                                    <option value="{{$invalid_reason->id}}">{{$invalid_reason->display_name}}</option>
+                                                @endforeach
                                             </select>
-                                            </div>
-
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer border-0">
@@ -81,23 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card card-plain mt-2 py-3">
-
-                <div class="card-body">
-
-                    <div class="row">
-
-                        <div class="col-md-12 pr-1"> </div>
-
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-
         </div>
     </div>
-    @endsection
+</div>
+@endsection

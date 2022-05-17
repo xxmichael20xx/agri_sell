@@ -403,10 +403,11 @@
 
     var channel = pusher.subscribe( 'my-channel' )
     channel.bind( 'coin-event', function( res ) {
+        const types = [ 'new-top-up', 'update-top-up', 'refund-top-up' ]
         const data = res.message
 
         // Check and update Customers' notificatioin count
-        if ( ( data.type == 'new-top-up' || data.type == 'update-top-up' ) && user_id == data.user_id ) getNotificationCount()
+        if ( types.includes( data.type ) && user_id == data.user_id ) getNotificationCount()
     } )
 
     channel.bind( 'order-event', function( res ) {

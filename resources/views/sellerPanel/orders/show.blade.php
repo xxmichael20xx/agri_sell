@@ -99,6 +99,11 @@
                                     } else {
                                         $item_product_price_proc = $product_variety_ent->variation_price_per;
                                     }
+
+                                    $item_id = $item->id;
+                                    if ( isset( $sub_ids[$index] ) ) {
+                                        $item_id = $sub_ids[$index]->id;
+                                    }
                                 @endphp
                                 <tr>
                                     <td scope="row">
@@ -110,7 +115,7 @@
                                     <td>                            
                                         {{ $product_variety_ent->variation_name ?? '' }}
                                     </td>
-
+                                    
                                     <td>
                                         @php
                                             $product_variety_ent = App\ProductVariation::where( 'id', $item->pivot->variation_id )->first();
@@ -125,7 +130,7 @@
                                         @endif 
                                     </td>
                                     <td>
-                                        <a href="/seller_product_monitor/{{ $sub_ids[$index]->id }}" class="btn btn-primary">Product monitoring</a>
+                                        <a href="/seller_product_monitor/{{ $item_id }}" class="btn btn-primary">Product monitoring</a>
                                     </td>
                                 </tr>
                             @endforeach

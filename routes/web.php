@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Mail;
 
 Route::group(['prefix' => 'artisan'], function() {
     Route::get('optimize', 'ArtisanCommands@optimize');
-    Route::get('stroage-link', 'ArtisanCommands@storageLink');
+    Route::get('storageLink', 'ArtisanCommands@storageLink');
+    Route::get('migrate', 'ArtisanCommands@migrate');
 });
 
 
@@ -144,10 +145,6 @@ Route::group(['prefix' => 'seller', 'middleware' => 'auth', 'as' => 'seller.', '
 
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
-});
-
-Route::get('/optimizeclear', function () {
-    Artisan::call('optimize:clear');
 });
 
 Route::get('/seller_center', function () {

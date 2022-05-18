@@ -11,7 +11,7 @@
                             <a class="nav-link active" data-toggle="tab" href="#confirmed" role="tab" aria-expanded="true">Confirmed</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#cancelled" role="tab" aria-expanded="false">Cancelled</a>
+                            <a class="nav-link" data-toggle="tab" href="#rejected" role="tab" aria-expanded="false">Rejected</a>
                         </li>
                         
                          <li class="nav-item">
@@ -24,35 +24,67 @@
                 <div class="tab-pane active" id="confirmed" role="tabpanel" aria-expanded="true">
                     <div class="col-md-12">
                         @php
-                            $users = App\UserValidId::where('is_valid', 1)->get();
-                            $datatable_index = "0";
-                            $title = "Confirmed refunds";
+                            $inc = array(
+                                "title" => "Confirmed refunds",
+                                "index" => 0,
+                                "data" => []
+                            );
                         @endphp
-                        @include( 'admin.refunds.table' )
+                        @include( 'admin.refunds.table', $inc )
                     </div>
                 </div>
-                <div class="tab-pane" id="cancelled" role="tabpanel" aria-expanded="false">
+                <div class="tab-pane" id="rejected" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
                         @php
-                            $users = App\UserValidId::where('is_valid', 0)->get();
-                            $datatable_index = "1";
-                            $title = "Cancelled refunds";
+                            $inc = array(
+                                "title" => "Rejected refunds",
+                                "index" => 1,
+                                "data" => []
+                            );
                         @endphp
-                        @include( 'admin.refunds.table' )
+                        @include( 'admin.refunds.table', $inc )
                     </div>
                 </div>   
                 <div class="tab-pane" id="requests" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
                         @php
-                            $users = App\UserValidId::where('is_valid', 2)->get();
-                            $datatable_index = "2";
-                            $title = "Refund requests";
+                            $inc = array(
+                                "title" => "Pending refunds",
+                                "index" => 2,
+                                "data" => $requests
+                            );
                         @endphp
-                        @include( 'admin.refunds.table' )
+                        @include( 'admin.refunds.table', $inc )
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+@section( 'admin.custom_scripts' )
+    <script>
+        (function($) {
+            $(document).ready(function() {
+
+                $( document ).on( 'click', '.view-images', function() {
+                    const id = $( this ).data( 'id' )
+                    const raw = $( this ).data( 'raw' )
+                    const _slick = $( this ).parents( `#refund--container-${raw}` )
+
+                    $( `#${id}` ).modal( 'show' )
+
+                    _slick.find( $( '.refund--images' ) ).slick({
+                        infinite: true,
+                        slidesToShow: 1,
+                        dots: false,
+                        prevArrow: false,
+                        nextArrow: false
+                    })
+                    _slick.find( $( '.refund--images .slick-track' ) ).css( 'width', '100% !important' )
+                } )
+
+            })
+        })(jQuery)
+    </script>
 @endsection

@@ -29,19 +29,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach( $product_monitoring_logs as $product_monitoring_ent )
+                            @forelse($product_monitoring_logs as $product_monitoring_ent)
                                 <tr>
                                     <td>
                                         <div class="monitor--logs-image" style="background-image: url('/storage/{{ $product_monitoring_ent->item_image }}');" ></div>
                                     </td>
                                     <td>{{ $product_monitoring_ent->created_by_user->name ?? 'not available' }}</td>
                                     <td>{{ $product_monitoring_ent->sub_order_item->product->name ?? 'not available' }}</td>
-                                    <td>{{ $product_monitoring_ent->status }}</td>
-                                    <td>{{ $product_monitoring_ent->sub_order_item->quantity ?? 'not available' }}</td>
-                                    <td>₱ {{ $product_monitoring_ent->sub_order_item->price ?? 'not available' }}</td>
+                                    <td>{{ $product_monitoring_ent->status}}</td>
+                                    <td>{{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->quantity ) ?? 'not available' }}</td>
+                                    <td>₱ {{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->price ) ?? 'not available' }}</td>
                                     <td>{{ $product_monitoring_ent->sub_order_item->sub_order_parent->updated_at ?? 'not available' }}</td>
-                                </tr>  
-                            @endforeach                   
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td></td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                     <!-- Modal -->
@@ -51,7 +61,7 @@
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Monitoring log title</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
@@ -61,14 +71,14 @@
                                     <div class="col-md-12">
                                         <label>Product images</label>
                                         <input type="hidden" name="user_id"  form="addprodmonitor" value="{{Auth::user()->id}}"/>
-                                        <input type="file" class="form-control" id="images" form="addprodmonitor" name="images[]" onchange="preview_images();" multiple/>
+                                        <input type="file" class="form-control" id="images" form="addprodmonitor" name="images[]" onchange="preview_images();" />
                                     </div>
                                     <input type="hidden" form="addprodmonitor" name="product_sub_order_id" value="{{$suborder_item_id}}" />
                                     <div class="row m-1" id="image_preview"></div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                        <label>Product status notes</label>
-                                        <textarea class="form-control" form="addprodmonitor" name="prod_status_names" rows="3"></textarea>
+                                            <label>Product status notes</label>
+                                            <textarea class="form-control" form="addprodmonitor" name="prod_status_names" rows="3"></textarea>
                                         </div>
                                     </div>
                                     <script>

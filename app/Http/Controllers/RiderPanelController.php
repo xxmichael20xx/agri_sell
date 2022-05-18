@@ -107,14 +107,16 @@ class RiderPanelController extends Controller
         }
 
         // $items = $order->items;
-        $items = SubOrderItem::where( 'sub_order_id', $order_id )->get();
+        // $items = SubOrderItem::where( 'sub_order_id', $order_id )->get();
+        $items = $order->order->items;
+        $sub_ids = SubOrderItem::where( 'sub_order_id', $order->id )->get();
         $assign_order_status_options = orderDeliveryStatusModel::all();
         $delivery_man_options = deliveryStaffModel::where('status', '!=', 'on_leave')->get();
         $my_rider_id = Auth::user()->rider_staff->id;
         $panel_name = "Orders";
 
         return view('riderPanel.show')->with( compact(
-            'panel_name', 'items', 'assign_order_status_options', 'delivery_man_options', 'order', 'my_rider_id'
+            'panel_name', 'items', 'sub_ids', 'assign_order_status_options', 'delivery_man_options', 'order', 'my_rider_id'
         ) );
     }
 

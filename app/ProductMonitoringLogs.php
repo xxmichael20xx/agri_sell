@@ -26,9 +26,9 @@ class ProductMonitoringLogs extends Model
     }
 
     public function getItemImageAttribute() {
-        $item = SubOrderItem::where( 'sub_order_id', $this->sub_order_item_id )->first();
+        $item = SubOrderItem::find( $this->sub_order_item_id );
         
-        if ( ! $item ) return "//";
+        if ( ! $item ) return $this->images;
         return $item->product->featured_image;
     }
     

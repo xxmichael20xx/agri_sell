@@ -199,7 +199,12 @@ class OrderController extends Controller
 
             if ($product->is_pre_sale != '1') {
                 // not pre order or presale
-                $order->items()->attach($item->product_id, ['price' => $item->price, 'quantity' => $item->quantity, 'variation_id' => $item->variation_id]);
+                $data = array(
+                    'price' => $item->price,
+                    'quantity' => $item->quantity,
+                    'variation_id' => $item->variation_id
+                );
+                $order->items()->attach( $item->product_id, $data );
                 $notifData['item_type'] = 'Order';
             } else {
                 // to pre order table
@@ -273,22 +278,6 @@ class OrderController extends Controller
             $notification_ent->notification_title = 'Order ' . $order->id;
             $notification_ent->notification_txt = "<br>New order has been placed.</br>";
             $notification_ent->save();
-        }
-
-        $subOrder = SubOrder::where( 'order_id', $order->id )->first();
-        if ( $subOrder ) {
-            $subOrderItems = SubOrderItem::where( 'sub_order_id', $order->id )->get();
-
-            if ( $subOrderItems->count() > 0 ) {
-                foreach( $subOrderItems as $subOrderItem ) {
-                    $log = new ProductMonitoringLogs;
-                    $log->sub_order_item_id = $subOrderItem->id;
-                    $log->status = "Item pending";
-                    $log->user_id = $this->userId();
-                    $log->images = "//";
-                    $log->save();
-                }
-            }
         }
 
         if ( request('payment_method') == 'agrisell_coins' ) {

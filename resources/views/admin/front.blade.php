@@ -151,6 +151,13 @@ Coded by www.creative-tim.com
             </a>
           </li>
 
+          <li  class="{{($panel_name == 'refunds') ? 'active' : ''}}">
+            <a href="/admin/manage_refunds">
+              <i class="nc-icon nc-money-coins"></i>
+              <p>Refunds</p>
+            </a>
+          </li>
+
           <li class="{{($panel_name == 'orders') ? 'active' : ''}}">
             <a href="/admin/manage_orders/pickup/1">
               <i class="nc-icon nc-tile-56"></i>

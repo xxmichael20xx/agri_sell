@@ -63,10 +63,11 @@ class OrderMgmtPanelController extends Controller
     {
         $order = Suborder::where('order_id', $order_id)->first();
         $items = $order->order->items;
+        $sub_ids = SubOrderItem::where( 'sub_order_id', $order->id )->get();
 
         $assign_order_status_options = orderDeliveryStatusModel::all();
         $delivery_man_options = deliveryStaffModel::where('status', '!=', 'on_leave')->get();
-        return view('admin.order_mgmt.show', compact('items', 'order', 'delivery_man_options', 'assign_order_status_options'))->with('panel_name', 'orders');
+        return view('admin.order_mgmt.show', compact('items', 'sub_ids', 'order', 'delivery_man_options', 'assign_order_status_options'))->with('panel_name', 'orders');
     }
 
     // for product monitoring index
@@ -190,7 +191,7 @@ class OrderMgmtPanelController extends Controller
        
         $order = Suborder::where('order_id', $order_id)->where('seller_id', Auth::user()->id)->first();
         $items = $order->order->items;
-        $sub_ids = SubOrderItem::where( 'sub_order_id', $order_id )->get();
+        $sub_ids = SubOrderItem::where( 'sub_order_id', $order->id )->get();
 
         $assign_order_status_options = orderDeliveryStatusModel::all();
         $delivery_man_options = deliveryStaffModel::where('status', '!=', 'on_leave')->get();
@@ -237,8 +238,11 @@ class OrderMgmtPanelController extends Controller
     public function checkStatuses( $config_key, $status_id, $order_id ) {
         $statuses = config( $config_key );
         $order = Order::find( $order_id );
-        $sub_ids = SubOrderItem::where( 'sub_order_id', $order_id )->get();
+        $subOrder = SubOrder::where( 'order_id', $order_id )->first();
+        $sub_ids = SubOrderItem::where( 'sub_order_id', $subOrder->id )->get();
         $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
+
+        \Log::info( json_encode( [ $sub_ids->count() ] ) );
 
         foreach ( $statuses as $key => $status ) {
             if ( $key == $status_id && $order ) {

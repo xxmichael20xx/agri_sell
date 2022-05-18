@@ -2,3 +2,12 @@
     background-color: #dc3545 !important;
     border-color: #dc3545 !important;
 }
+
+.monitor--logs-image {
+    width: 135px;
+    height: 135px;
+    display: inline-block;
+    margin: 5px;
+    background-position: center;
+    background-size: cover;
+}

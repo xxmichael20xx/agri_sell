@@ -257,27 +257,22 @@
     });
   </script>
   <script>
-
-    //  default datatable is 
+    // default datatable is 
     // datatable rounds 12
-       // alternate table in filtration
-       $(document).ready( function () {
-        $('#datatable').DataTable();
-      });
     // alternate table in filtration
-    for (let i = 0; i < 12; i++) {
-        $(document).ready( function () {
-        $('#datatable' + i).DataTable();
-      });
-    }
-   
+    $(document).ready( function () {
+      $('#datatable').DataTable();
 
-   
-     
-  
+      // alternate table in filtration
+      for (let i = 0; i < 12; i++) {
+        $(document).ready( function () {
+          $('#datatable' + i).DataTable();
+        });
+      }
+    });
   </script>
 
-<script>
+  <script>
     $(document).ready(function() {
 
 

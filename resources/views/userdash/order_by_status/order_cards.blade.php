@@ -28,8 +28,8 @@
                                 <tr>
                                     <th scope="row" width="30">
                                     <a href="{{ url('products/' . $product_item->id) }}">
-                                        @if(!empty($product_item->cover_img))
-                                            <img src="{{ asset('storage/'.$product_item->cover_img) }}" alt="" height="70" width="70">
+                                        @if( ! empty( $product_item->featured_image ) )
+                                            <img src="{{ asset('storage/'.$product_item->featured_image) }}" alt="" height="150" width="150">
                                         @else
                                             <img src="/assets/img/product/electro/1.jpg" alt="">
                                         @endif

@@ -33,7 +33,7 @@
                         $product_variations = $_product_variant->get();
                         $product_variation_max_price = $_product_variant->max('variation_price_per');
                         $product_variation_min_price = $_product_variant->min('variation_price_per');
-                        $product_variation_count_qty = $_product_variant->sum('variation_quantity');
+                        $var_count_qty = $_product_variant->sum('variation_quantity');
                         $product_variation_range = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱' . $product_variation_max_price;
                     @endphp
 
@@ -141,7 +141,7 @@
                                     $_product_variant = DB::table('product_variations')->where('product_id', $product->id);
                                     $product_variation_max_price = $_product_variant->max('variation_price_per');
                                     $product_variation_min_price = $_product_variant->min('variation_price_per');
-                                    $product_variation_count_qty = $_product_variant->sum('variation_quantity');
+                                    $var_count_qty = $_product_variant->sum('variation_quantity');
                                     $product_variation_sold_per_initial = $_product_variant->pluck('variation_sold_per')->first();
                                     $product_variation_range = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . $product_variation_max_price;
                                     $product_variation_range_sale = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . ($product_variation_max_price - ($product->sale_pct_deduction / 100) * $product->product_variation_max_price);
@@ -182,22 +182,28 @@
                         </div>
 
                         @php
-                            $product_variation_if_regular = App\ProductVariation::where('product_id', $product->id)->first();
-                            $product_variation_count = App\ProductVariation::where('product_id', $product->id)->count();
-                            $product_variation_id_first = App\ProductVariation::where('product_id', $product->id)->pluck('id')->first();
+                            $all_vars = App\ProductVariation::where('product_id', $product->id)->get();
+                            $first_var = App\ProductVariation::where('product_id', $product->id)->first();
+                            $var_count = App\ProductVariation::where('product_id', $product->id)->count();
+                            $first_var_id = App\ProductVariation::where('product_id', $product->id)->pluck('id')->first();
 
                             $variantMinQty = 1;
-                            $variantStocks = number_format( $product_variation_if_regular->variation_quantity );
-                            $variantWeight = number_format( $product_variation_if_regular->variation_net_weight );
-                            $variantWeightUnit = $product_variation_if_regular->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g';
-                            $variantSoldPer = $product_variation_if_regular->variation_sold_per;
-                            $variantPrice = number_format( $product_variation_if_regular->variation_price_per );
+                            $variantStocks = number_format( $first_var->variation_quantity );
+                            $variantWeight = number_format( $first_var->variation_net_weight );
+                            $variantWeightUnit = $first_var->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g';
+                            $variantSoldPer = $first_var->variation_sold_per;
+                            $variantPrice = number_format( $first_var->variation_price_per );
                             $variantText = "Retail";
                             $variantWholesale = 'no';
+
+                            if ( count( $product_variations ) >= 2 ) {
+                                $variantStocks = number_format( $all_vars[1]->variation_quantity );
+                                $first_var_id = $all_vars[1]->id;
+                            }
                             
-                            if ( $product_variation_if_regular->is_variation_wholesale == 'yes' ) {
-                                $variantMinQty = $product_variation_if_regular->variation_min_qty_wholesale;
-                                $variation_wholesale_price_per = number_format( $product_variation_if_regular->variation_wholesale_price_per );
+                            if ( $first_var->is_variation_wholesale == 'yes' ) {
+                                $variantMinQty = $first_var->variation_min_qty_wholesale;
+                                $variation_wholesale_price_per = number_format( $first_var->variation_wholesale_price_per );
                                 $variantText = "Wholesale: Buy a minimum qty of {$variantMinQty} and the price will be ₱{$variation_wholesale_price_per}";
                                 $variantWholesale = 'yes';
                             }
@@ -205,9 +211,9 @@
 
                         <!-- changelog change GET to POST -->
                         <form method="GET" action="{{ route('cart.addWquantityVariation', $product) }}" id="add--cart-form">
-                            <input type="hidden" id="variation_id_setter" name="variation_id" value="{{ $product_variation_id_first }}" required>
+                            <input type="hidden" id="variation_id_setter" name="variation_id" value="{{ $first_var_id }}" required>
 
-                            @if ( $product_variation_count > 1 )
+                            @if ( $var_count > 1 )
                                 <div class="form-group row">
                                     <div class="col-12">
                                         <label class="col-form-label">Select a variation</label>
@@ -236,7 +242,7 @@
                                                 data-data="{{ json_encode( $variation ) }}"
                                                 {{ $variant_btn_id }}>
                                                 <div id="icon--placeholder"></div>
-                                                @if ( $key == 0 ) 
+                                                @if ( $key == 1 && count( $product_variations ) >= 2 ) 
                                                     <i class="fa fa-check"></i>
                                                 @endif
                                                 {{ $variation->variation_name }}
@@ -247,7 +253,7 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" type="number" value="1" id="variation_max_stock" min="{{ $variantMinQty }}" required>
+                                    <input class="input-form" name="quantity" type="number" value="1" id="variation_max_stock" min="{{ $variantMinQty }}" max="{{ $variantStocks }}" required>
                                 </div>
                                 <div class="col-8">
                                     <span>Available stocks </span> <span id="variant--stock">{{ $variantStocks }}</span>

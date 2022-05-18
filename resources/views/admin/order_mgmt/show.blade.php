@@ -86,18 +86,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($items as $item)
+                            @foreach($items as $index => $item)
                                 {{-- Get if the item has Sale or discounted price this will fix the regular price bug --}}        
                                 @php
                                     $product_variety_ent = App\ProductVariation::where('id', $item->pivot->variation_id)->first();
                                     $item_product_pivot = App\Product::where('id', $item->id)->first();
                                     $item_product_pivot_price = $item_product_pivot->price;
                                     $item_product_price_proc = 0;
-                                    if($item_product_pivot->is_sale==1){
-                                    $item_product_price_proc = $product_variety_ent->variation_price_per - (($item_product_pivot->sale_pct_deduction
-                                    / 100) * $product_variety_ent->variation_price_per);
-                                    }else{
-                                    $item_product_price_proc =$product_variety_ent->variation_price_per;
+
+                                    if ( $item_product_pivot->is_sale == 1 ) {
+                                        $item_product_price_proc = $product_variety_ent->variation_price_per - (($item_product_pivot->sale_pct_deduction / 100) * $product_variety_ent->variation_price_per);
+                                    } else {
+                                        $item_product_price_proc =$product_variety_ent->variation_price_per;
+                                    }
+
+                                    $item_id = $item->id;
+                                    if ( isset( $sub_ids[$index] ) ) {
+                                        $item_id = $sub_ids[$index]->id;
                                     }
                                 @endphp
                                 <tr>
@@ -125,7 +130,7 @@
                                     </td>
 
                                     <td>
-                                        <a class="btn btn-primary" href="/admin_product_monitor/{{$item->id}}">Product monitoring</a>
+                                        <a class="btn btn-primary" href="/admin_product_monitor/{{ $item_id }}">Product monitoring</a>
                                     </td>
                                 </tr>
                             @endforeach

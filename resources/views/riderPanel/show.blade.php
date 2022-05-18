@@ -74,38 +74,56 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Qty</th>
+                                    <th>Variety</th>
+                                    <th>Net weight(kg)</th>
                                     <th>Price</th>
-                                    <th>Product monitoring status</th>
                                 </tr>
-                                </thead>
+                            </thead>
                             <tbody>
-                                @foreach( $items as $item )
+                                @foreach( $items as $index => $item )
                                     @php
-                                        /* $item_product_pivot = App\Product::where('id', $item->id)->first();
+                                        $product_variety_ent = App\ProductVariation::where('id', $item->pivot->variation_id)->first();
+                                        $item_product_pivot = App\Product::where('id', $item->id)->first();
                                         $item_product_pivot_price = $item_product_pivot->price;
                                         $item_product_price_proc = 0;
                                         if ( $item_product_pivot->is_sale == 1 ) {
-                                            $item_product_price_proc = $item->price - ( ( $item_product_pivot->sale_pct_deduction/ 100) * $item->price );
+                                            $item_product_price_proc = $product_variety_ent->variation_price_per ?? '0' - (($item_product_pivot->sale_pct_deduction / 100) * $product_variety_ent->variation_price_per);
 
                                         } else {
-                                            $item_product_price_proc = $item->price;
-                                        } */
+                                            $item_product_price_proc = $product_variety_ent->variation_price_per;
+                                        }
+
+                                        $item_id = $item->id;
+                                        if ( isset( $sub_ids[$index] ) ) {
+                                            $item_id = $sub_ids[$index]->id;
+                                        }
                                     @endphp
                                     <tr>
                                         <td scope="row">
-                                            {{ $item->product->name }}
+                                            {{ $item->name }}
                                         </td>
                                         <td>
-                                            {{ AppHelpers::numeric( $item->quantity ) }}
+                                            {{ AppHelpers::numeric( $item->pivot->quantity ) }}
+                                        </td>
+                                        <td>                            
+                                            {{ $product_variety_ent->variation_name ?? '' }}
+                                        </td>
+                                        
+                                        <td>
+                                            @php
+                                                $product_variety_ent = App\ProductVariation::where( 'id', $item->pivot->variation_id )->first();
+                                            @endphp
+                                            {{ $product_variety_ent->variation_net_weight ?? '' }}
                                         </td>
                                         <td>
-                                            {{-- @if( $item_product_pivot->is_sale == 1 )
-                                                <s>{{ $item->pivot->price }}</s>
-                                            @endif --}}
-                                            ₱ {{ AppHelpers::numeric( $item->price ) }}
+                                            @if ( $item_product_pivot->is_sale == 1 )
+                                                ₱ {{ $product_variety_ent->variation_price_per ?? '' }}
+                                            @else
+                                                ₱ {{ AppHelpers::numeric( $item_product_price_proc ) }}
+                                            @endif 
                                         </td>
                                         <td>
-                                            <a href="/product_monitoring_status/{{ $item->id }}" class="btn btn-primary">Product monitoring</a>
+                                            <a href="/product_monitoring_status/{{ $item_id }}" class="btn btn-primary">Product monitoring</a>
                                         </td>
                                     </tr>
                                 @endforeach

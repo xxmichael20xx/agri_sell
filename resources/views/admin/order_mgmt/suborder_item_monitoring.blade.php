@@ -21,19 +21,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($product_monitoring_logs as $product_monitoring_ent)
+                            @forelse($product_monitoring_logs as $product_monitoring_ent)
                                 <tr>
                                     <td>
                                         <div class="monitor--logs-image" style="background-image: url('/storage/{{ $product_monitoring_ent->item_image }}');" ></div>
                                     </td>
                                     <td>{{ $product_monitoring_ent->created_by_user->name ?? 'not available' }}</td>
                                     <td>{{ $product_monitoring_ent->sub_order_item->product->name ?? 'not available' }}</td>
-                                    <td>{{ $product_monitoring_ent->status }}</td>
-                                    <td>{{ $product_monitoring_ent->sub_order_item->quantity ?? 'not available' }}</td>
-                                    <td>₱ {{ $product_monitoring_ent->sub_order_item->price ?? 'not available' }}</td>
+                                    <td>{{ $product_monitoring_ent->status}}</td>
+                                    <td>{{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->quantity ) ?? 'not available' }}</td>
+                                    <td>₱ {{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->price ) ?? 'not available' }}</td>
                                     <td>{{ $product_monitoring_ent->sub_order_item->sub_order_parent->updated_at ?? 'not available' }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td></td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                    <td>No result(s)</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

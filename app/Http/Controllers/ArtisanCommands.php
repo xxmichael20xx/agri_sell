@@ -16,4 +16,9 @@ class ArtisanCommands extends Controller
         Artisan::call( 'storage:link' );
         dd( Artisan::output() );
     }
+
+    public function migrate() {
+        Artisan::call( 'migrate' );
+        dd( Artisan::output() );
+    }
 }

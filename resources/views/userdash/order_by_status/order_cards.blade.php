@@ -47,12 +47,9 @@
                                             <br>
                                             @php
                                                 $refund_ent = App\refundModelOrder::where('order_item_id', $order_item->id)->first();
-                                                $refund_status_ent = ($refund_ent != null) ? $refund_ent->status->slug : 'refund_available';
                                             @endphp
-                                            @if($refund_status_ent == 'refund_available')
-                                                <a href="/product_refund_request_user/{{$order->order->id}}/{{$order_item->id}}" class="btn btn-light">Refund</a> 
-                                            @else
-                                                Refund {{$refund_status_ent}}
+                                            @if ( ! $refund_ent )
+                                                <a href="/product_refund_request_user/{{ $order->order->id }}/{{ $order_item->id }}" class="btn btn-light">Refund</a>
                                             @endif
                                             <br>
                                         @endif

@@ -52,7 +52,7 @@ class RiderPanelController extends Controller
         $order_items = OrderItem::where('order_id', $order_id)->get();
         foreach($order_items as $order_item){
             $coinsTopUpModel = new coinsTopUpModel();
-            $coinsTopUpModel->user_id = $order_item->product->shop->user->id;
+            $coinsTopUpModel->user_id = $order_item->product->shop->owner->id;
             $coinsTopUpModel->remarks = '1';
             $coinsTopUpModel->trans_id = 'order_item' . uniqid();
             $coinsTopUpModel->coins_trans_type = 'order_item_paid' . uniqid();

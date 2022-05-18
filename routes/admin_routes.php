@@ -7,7 +7,9 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
     Route::get('/admin/coins_top_up', 'CoinsTopUpAdminController@index');
     Route::get('/admin/manage_shops', 'ShopsAdminController@index');
     Route::get('/admin/manage_users', 'UsersAdminController@index');
-    Route::get('/admin/manage_refunds', 'RefundAdminController@index');
+    Route::group([ 'prefix' => '/admin/manage_refunds'], function() {
+        Route::get( '/', 'RefundAdminController@index' );
+    });
     Route::get('/admin/manage_orders', 'OrderMgmtPanelController@index');
     
     Route::get('/admin/manage_orders/{status_type}/{status_id}', 'OrderMgmtPanelController@show_by_cat');

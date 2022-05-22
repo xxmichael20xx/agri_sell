@@ -219,10 +219,7 @@ Coded by www.creative-tim.com
   <script src="/paper_assets/demo/demo.js"></script>
   <!-- Sharrre libray -->
   <script src="/paper_assets/demo/jquery.sharrre.js"></script>
-
     @include('admin.additional_scripts')
-    
+    @yield('coins.custom_scripts')
 </body>
-
-
 </html>

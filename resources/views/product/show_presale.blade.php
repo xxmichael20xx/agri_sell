@@ -60,9 +60,9 @@
                             <span>₱ {{$product->price}}</span>
                         @endif
                     </div>
-                    <a href="{{env('APP_URL')}}/shop/catalog/{{$product->shop->id}}">{{$product->shop->name}}</a>
+                    <a href="/shop/catalog/{{$product->shop->id }}">{{ $product->shop->name }}</a>
                     @if ($product->stocks <= 0)
-                        <p>Out of stock</p>
+                        <p>OUT OF STOCK</p>
                     @else
                     <p> Available stocks: {{$product->stocks}}</p>
                     @endif

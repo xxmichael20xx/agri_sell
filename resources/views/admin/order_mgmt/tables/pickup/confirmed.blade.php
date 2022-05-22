@@ -42,7 +42,7 @@
                     {{ $order->order->agcoins_transid ?? '' }}
                 </td>
                 <td>
-                    <button type="button" class="btn btn-primary btn-sm btn-round btn-pickup" data-href="/admin/edit_pickup_status/2/{{ $order->order_id }}" data-title="Ready to Pick up">Set to Pick up</button>
+                    <span class="badge badge-info">Confirmed<br>{{ AppHelpers::humanDate( $order->order->updated_at ) }}</span>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-primary btn-round" href="/admin_seller/order/{{ $order->order_id }}">View items</a>

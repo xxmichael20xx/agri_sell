@@ -55,7 +55,7 @@
                                     <th>Product</th>
                                     <th>Quantity</th>
                                     <th>Product variation</th>
-                                    <th>Product discounts</th>
+                                    {{-- <th>Product discounts</th> --}}
                                     <th>Wholesale price</th>
                                     <th>Price</th>
                                     <th>Subtotal</th>
@@ -87,7 +87,7 @@
                                         <span class="amount">{{ $product_variation_obj->variation_name ?? 'no variation' }}</span>
                                     </td>
 
-                                    <td class="product-name">
+                                    {{-- <td class="product-name">
                                         <span class="amount">
                                             @if($item['isSale'] == 1)
                                                 {{ $item['salePct'] }} % sale
@@ -95,7 +95,8 @@
                                                 N/A
                                             @endif
                                         </span>
-                                    </td>
+                                    </td> --}}
+
                                     <td class="product-price-cart">
                                         @php
                                             $variation_ent = App\ProductVariation::where('id', $item['id'])->first();
@@ -118,9 +119,11 @@
                                             @endif
                                         </span>
                                     </td>
+                                    
                                     <td class="product-price-cart">
                                         <span class="amount">₱ {{ AppHelpers::numeric( $cartSession->getSubtotal_per_item($item['id'] ) ) }} </span>
                                     </td>
+
                                     <td class="product-remove">
                                         <a href="{{ route('cart.destroy', $item['id']) }}"><i class="pe-7s-trash"></i></a>
                                     </td>

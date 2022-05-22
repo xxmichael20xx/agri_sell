@@ -85,14 +85,28 @@
                                         </div>
                                     </div>
                             
-                                    <div class="formgr-group row">
-                                        <label class="col-md-3 col-form-label">Regular price</label>
+                                    <div class="form-group row">
+                                        <div class="col-md-3"></div>
                                         <div class="col-md-9">
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" name="retail_price" value="{{ $first->variation_price_per }}">
-                                                @if ( $errors->has( 'retail_price' ) )
-                                                    <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
-                                                @endif
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Price</label>
+                                                        <input type="number" class="form-control" name="retail_price" value="{{ $first->variation_price_per }}">
+                                                        @if ( $errors->has( 'retail_price' ) )
+                                                            <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Stocks</label>
+                                                        <input type="number" class="form-control" name="stocks" value="{{ $first->variation_quantity }}">
+                                                        @if ( $errors->has( 'stocks' ) )
+                                                            <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -151,18 +165,6 @@
                                                         <span class="text-danger">{{ $errors->first( 'standard_net_weight' ) }}</span>
                                                     @endif
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Stocks</label>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" name="stocks" value="{{ $first->variation_quantity }}">
-                                                @if ( $errors->has( 'stocks' ) )
-                                                    <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
-                                                @endif
                                             </div>
                                         </div>
                                     </div>

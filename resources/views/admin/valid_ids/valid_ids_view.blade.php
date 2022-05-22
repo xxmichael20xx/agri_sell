@@ -1,5 +1,10 @@
 @extends('admin.front')
 @section('content')
+<style>
+    .dropdown.bootstrap-select {
+        width: 100% !important;
+    }
+</style>
 <div class="content">
     <a href="/admin/valid_ids/" class="btn btn-outline-dark btn-round m-1">Go back</a>
 
@@ -53,8 +58,13 @@
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="dropdown bootstrap-select">
-                                            <select class="selectpicker"
-                                                data-style="btn btn-primary btn-round" name="invalid_id_reason" title="Select reason">
+                                            <select 
+                                                class="selectpicker"
+                                                data-style="btn btn-primary btn-round" 
+                                                name="invalid_id_reason" 
+                                                title="Select reason"
+                                                required
+                                            >
                                                 @php
                                                     $invalid_reasons = DB::table('invalid_id_reasons')->get();
                                                 @endphp

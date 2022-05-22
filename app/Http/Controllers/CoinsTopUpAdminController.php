@@ -114,6 +114,6 @@ class CoinsTopUpAdminController extends Controller
 
     function delete_coins_top_up($trans_id){
         DB::table('coins_top_up')->where('id', $trans_id)->delete();
-        return back();
+        return redirect( '/coins_dashboard' );
     }
 }

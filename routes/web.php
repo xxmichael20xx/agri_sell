@@ -77,6 +77,8 @@ Route::get('user_home', ['middleware' => 'auth', function()
 
 Route::get('/cart/destroy/{itemId}', 'CartController@destroy')->name('cart.destroy')->middleware('auth');
 
+Route::get('/valid-id/{id}', 'ValidIdUserController@showForm');
+Route::post('/valid-id/update/{id}', 'ValidIdUserController@updateId');
 
 // otp blah blah
 // include otp email here

@@ -193,9 +193,10 @@ class OrderMgmtPanelController extends Controller
         $items = $order->order->items;
         $sub_ids = SubOrderItem::where( 'sub_order_id', $order->id )->get();
 
+        $_order_status_list = config( 'order_status' );
         $assign_order_status_options = orderDeliveryStatusModel::all();
         $delivery_man_options = deliveryStaffModel::where('status', '!=', 'on_leave')->get();
-        return view('sellerPanel.orders.show', compact('items', 'sub_ids', 'order', 'delivery_man_options', 'assign_order_status_options'))->with('panel_name', 'orders');
+        return view('sellerPanel.orders.show', compact('items', 'sub_ids', 'order', 'delivery_man_options', 'assign_order_status_options', '_order_status_list'))->with('panel_name', 'orders');
 
    
     }

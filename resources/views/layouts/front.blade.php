@@ -420,6 +420,11 @@
         if ( ( data.type == 'customer-order-update' || data.type == 'new-top-up' ) && user_id == data.customer_id ) getNotificationCount()
     } )
 
+    channel.bind( 'shop-event', function( res ) {
+        const data = res.message
+        if ( user_id == data.customer_id ) getNotificationCount()
+    } )
+
     /**
      * Get the updated notifications count via GET Request on API Routes
      * Updates the count in the header's notification content

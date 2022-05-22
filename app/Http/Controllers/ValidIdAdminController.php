@@ -8,7 +8,7 @@ use App\TransHistModel;
 use Auth;
 use App\notification;
 use App\adminNotifModel;
-
+use App\Events\ShopEvent;
 
 class ValidIdAdminController extends Controller
 {
@@ -55,6 +55,8 @@ class ValidIdAdminController extends Controller
         $user_valid_id = UserValidId::find($validId_id);
         $user_valid_id->is_valid = '0';
         $user_valid_id->invalid_reason_id = $req->invalid_id_reason;
+        $user_valid_id->save();
+
         $trans = new TransHistModel();
         $trans->user_id_master = $user_valid_id->user_id;
         $trans->user_id_slave = $user_valid_id->user_id;
@@ -62,17 +64,24 @@ class ValidIdAdminController extends Controller
         $trans->trans_type = 'Valid IDs';
         $trans->trans_ref_id = 'VALID_IDs-' . uniqid();
         $trans->amount = 'not applicable';
+        $trans->save();
+
         $tbl_invalid_reasons = DB::table('invalid_id_reasons')->where('id', $req->invalid_id_reason)->first();
+        $notification_txt = "
+            {$tbl_invalid_reasons->description}
+            <br>
+            <a href='/valid-id/{$user_valid_id->id}' class='text-success font-weight-bold'>Click here to re-upload ID.</a>
+        ";
 
         // set a notification table
         $notification_ent = new notification();
         $notification_ent->user_id = $user_valid_id->owner->id ?? 'not available';
         $notification_ent->frm_user_id = Auth::user()->id;
         $notification_ent->notification_title =  'Your ID is ' . $tbl_invalid_reasons->display_name;
-        $notification_ent->notification_txt = $tbl_invalid_reasons->description;
+        $notification_ent->notification_txt = $notification_txt;
         $notification_ent->save();
-        $trans->save();
-        $user_valid_id->save();
+
+        event( new ShopEvent( [ 'customer_id' => $user_valid_id->user_id, 'type' => 'order-event' ] ) );
      
         return back();
     }

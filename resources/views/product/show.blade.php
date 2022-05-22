@@ -253,7 +253,9 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" type="number" value="1" id="variation_max_stock" min="{{ $variantMinQty }}" max="{{ $variantStocks }}" required>
+                                    <input class="input-form" name="quantity" type="number" value="1" id="variation_max_stock" data-min="{{ $variantMinQty }}" data-max="{{ $variantStocks }}" required>
+                                    <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">{{ $variantMinQty }}</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
+                                    <small class="text-danger collapse" id="quantity--message-zero">OUT OF STOCK</small>
                                 </div>
                                 <div class="col-8">
                                     <span>Available stocks </span> <span id="variant--stock">{{ $variantStocks }}</span>
@@ -293,7 +295,7 @@
     </div>
 
     <script>
-        const cartFormValidated = false
+        let cartFormValidated = false
         let isOutOfStock = false
 
         window.onload = () => {
@@ -321,15 +323,18 @@
                     $( '#variant--weight' ).text( variantWeight )
                     $( '#variant--weight-unit' ).text( variantWeightUnit )
                     $( '#price_list' ).text( `₱ ${variantPrice}` )
-                    $( '#variation_max_stock' ).attr( 'max', variantStock )
+                    $( '#variation_max_stock' ).attr( 'data-max', variantStock )
+                    $( '#quantity--max' ).text( variantStock )
                     $( '#variant--sold-for' ).text( variantSoldFor )
 
                     if ( data.is_variation_wholesale == 'yes' ) {
-                        $( '#variation_max_stock' ).attr( 'min', variantWholeSaleMinQty )
+                        $( '#variation_max_stock' ).attr( 'data-min', variantWholeSaleMinQty )
+                        $( '#quantity--min' ).text( variantWholeSaleMinQty )
                         $( '#variant--additional-text' ).text( `Wholesale: Buy a minimum qty of ${variantWholeSaleMinQty} and the price will be ₱${variantPrice}` )
 
                     } else {
-                        $( '#variation_max_stock' ).attr( 'min', 1 )
+                        $( '#variation_max_stock' ).attr( 'data-min', 1 )
+                        $( '#quantity--min' ).text( 1 )
                         $( '#variant--additional-text' ).text( 'Retail' )
                     }
 
@@ -343,18 +348,58 @@
                     } else {
                         btn.attr( 'disabled', true )
                         btn.addClass( 'disabled' )
-                        btn.val( 'Out of Stock' )
+                        btn.val( 'OUT OF STOCK' )
                         isOutOfStock = true
+                    }
+                } )
+
+                $( document ).on( 'change keyup keydown blur', '#variation_max_stock', function(e) {
+                    const types = [ 'keydown', 'keyup', 'change', 'focusout' ]
+
+                    if ( types.includes( e.type ) ) {
+                        const min = $( this ).data( 'min' )
+                        const max = $( this ).data( 'max' )
+                        const _ = $( this ).val()
+                        const value = isNaN( _ ) ? 0 : _
+
+                        if ( max < 1 ) {
+                            $( '#quantity--message' ).addClass( 'collapse' )
+                            $( '#quantity--message-zero' ).removeClass( 'collapse' )
+                            isOutOfStock = true
+
+                        } else {
+                            isOutOfStock = false
+                            if ( value >= min && value <= max ) {
+                                $( 'input.add--to-cart' ).attr( 'type', 'submit' )
+                                $( '#quantity--message' ).addClass( 'collapse' )
+                                cartFormValidated = true
+    
+                            } else {
+                                $( 'input.add--to-cart' ).attr( 'type', 'button' )
+                                $( '#quantity--message' ).removeClass( 'collapse' )
+                                cartFormValidated = false
+                            }
+                        }
+
                     }
                 } )
             }
 
             $( document ).on( 'submit', '#add--cart-form', function( e ) {
+                if ( ! cartFormValidated ) {
+                    e.preventDefault()
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Add failed',
+                        text: 'Invalid product quantity'
+                    })
+                }
+
                 if ( isOutOfStock ) {
                     e.preventDefault()
                     Swal.fire({
                         icon: 'info',
-                        title: 'Out of stock',
+                        title: 'OUT OF STOCK',
                         text: 'Selected product / variant is out of stock.'
                     })
                 }

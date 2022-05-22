@@ -43,13 +43,16 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" style="will-change: transform; position: absolute; transform: translate3d(-25px, -173px, 0px); top: 0px; left: 0px;" x-placement="top-end">
                                         <div class="dropdown-header">Select delivery status option</div>
-                                        @foreach ($assign_order_status_options as $option)
+                                        {{-- @foreach ($assign_order_status_options as $option)
                                             <a class="dropdown-item" href="/admin/edit_order_status/{{$option->id}}/{{$order->order_id}}">{{$option->display_name}}</a>
+                                        @endforeach --}}
+                                        @foreach ( $_order_status_list as $index => $list)
+                                            <a class="dropdown-item" href="/admin/edit_order_status/{{ $index }}/{{ $order->order_id }}">{{ $list }}</a>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-6">
+                            {{-- <div class="col col-6">
                                 <div class="dropdown">
                                     <button class="dropdown-toggle btn btn-primary btn-round btn-block " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
                                         Assign rider
@@ -57,11 +60,11 @@
                                     <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" x-placement="top-end">
                                         <div class="dropdown-header">Rider name - vehicle used</div>
                                         @foreach ($delivery_man_options as $delivery_man)
-                                        <   a class="dropdown-item" href="/admin/edit_pickup_status/{{ $delivery_man->id }}/{{ $order->order->id }}">{{ $delivery_man->user->name ?? '-' }} - {{ $delivery_man->vehicle_used }} </>
+                                        <a class="dropdown-item" href="/admin/edit_pickup_status/{{ $delivery_man->id }}/{{ $order->order->id }}">{{ $delivery_man->user->name ?? '-' }} - {{ $delivery_man->vehicle_used }} </a>
                                         @endforeach
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -80,9 +83,11 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Qty</th>
-                                <th>Variety</th>
+                                {{-- <th>Variety</th> --}}
                                 <th>Net weight(kg)</th>
                                 <th>Price</th>
+                                <th>Sub Total</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,12 +114,13 @@
                                     <td scope="row">
                                         {{ $item->name }}
                                     </td>
+
                                     <td>
                                         {{ AppHelpers::numeric( $item->pivot->quantity ) }}
                                     </td>
-                                    <td>                            
+                                    {{-- <td>                            
                                         {{ $product_variety_ent->variation_name ?? '' }}
-                                    </td>
+                                    </td> --}}
                                     
                                     <td>
                                         @php
@@ -128,6 +134,9 @@
                                         @else
                                             ₱ {{ AppHelpers::numeric( $item_product_price_proc ) }}
                                         @endif 
+                                    </td>
+                                    <td>
+                                        ₱ {{ AppHelpers::numeric( $item->pivot->quantity * $item->pivot->price ) }}
                                     </td>
                                     <td>
                                         <a href="/seller_product_monitor/{{ $item_id }}" class="btn btn-primary">Product monitoring</a>
@@ -150,7 +159,7 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
-                        <tr>
+                        {{-- <tr>
                             <td class="text-left">
                                 Shipping fee
                             </td>
@@ -161,7 +170,7 @@
                                     ₱ 0 
                                 @endif
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td class="text-left">
                                 Total

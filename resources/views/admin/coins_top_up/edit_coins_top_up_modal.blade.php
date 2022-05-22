@@ -1,4 +1,4 @@
-<a class="btn btn-sm btn-warning text-white m-1" data-toggle="modal" data-target="#editModal{{ $user->id }}">Update </a>
+{{-- <a class="btn btn-sm btn-warning text-white m-1" data-toggle="modal" data-target="#editModal{{ $user->id }}">Update </a> --}}
 <div class="modal fade" id="editModal{{ $user->id }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel{{ $user->id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

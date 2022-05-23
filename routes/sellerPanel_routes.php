@@ -41,6 +41,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
     Route::get('/sellerpanel/add_new_product/regular', 'ProductMgmtPanelController@add_new_display_form_regular');
     // default add new display form of Variation product
     Route::get('/sellerpanel/add_new_product/productVariation', 'ProductMgmtPanelController@add_new_display_form_product_variation');
+    // restore product page
+    Route::get('/sellerpanel/restore/{id}', 'ProductMgmtPanelController@restoreForm');
 
     // submit of add new display form of Regular product
     // Route::post('/sellerpanel/product_save_info/regular', 'ProductMgmtPanelController@save_new_display_form_regular')->name('save_new_product_regular');
@@ -56,6 +58,12 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
 
     Route::post('/sellerPanel/add_new_product_regular/', 'ProductMgmtPanelController@saveNewProductRegular')->name('add_new_product_regular');
     Route::post('/sellerPanel/add_new_product_variations/', 'ProductMgmtPanelController@saveNewProductVariation')->name('add_new_product_variation');
+
+    Route::group([ 'prefix' => '/sellerpanel/refunds' ], function() {
+        Route::get( '/', 'RefundSellerController@index');
+        Route::get( '{id}', 'RefundSellerController@show' );
+        Route::get( 'update/{id}/{status}', 'RefundSellerController@update' );
+    });
 });
 
  // sidebar menu

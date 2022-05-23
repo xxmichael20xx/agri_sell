@@ -46,78 +46,7 @@
                     {{ $order->order->agcoins_transid ?? '' }}
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-warning btn-round dropdown-toggle" type="button"
-                        id="dropStatus{{ $order_id }}" data-toggle="dropdown"
-                        aria-expanded="false">
-                        {{ $order->deliverystatus->display_name ?? 'Not available' }}
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropStatus{{ $order->order->id ?? '' }}">
-                        @foreach ($assign_order_delivery_status_options as $option)
-                            @if ( AppHelpers::filterStatus( $option, $status_id ) )
-                                @php
-                                    $isModal = "";
-                                    $href = "/admin/edit_order_status/{$option->id}/{$order->order_id}";
-
-                                    if ( $option->name == 'cancelled' ) {
-                                        if ( ! $isModal ) {
-                                            $isModal = "modal";
-                                            $modelId = 3;
-                                        }
-                                        $href = "#cancelOrderModal-{$order->order_id}";
-                                    }
-                                @endphp
-                                @if ( $isModal )
-                                    <a 
-                                        class="dropdown-item"
-                                        href="{{ $href }}"
-                                        data-toggle="modal"
-                                    >
-                                        {{ $option->name == 'cancelled' ? 'Cancel order' : $option->display_name }}
-                                    </a>
-                                @else
-                                    <a 
-                                        class="dropdown-item btn-confirm clickable"
-                                        data-href="{{ $href }}"
-                                        data-title="Confirmed"
-                                    >
-                                        {{ $option->display_name }}
-                                    </a>
-                                @endif
-                            @endif
-                        @endforeach
-                    </div>
-
-                    @foreach ($assign_order_delivery_status_options as $option)
-                        @if ( AppHelpers::filterStatus( $option, $status_id ) && $option->name == 'cancelled' )
-                            <div class="modal fade" id="cancelOrderModal-{{ $order->order_id }}">
-                                <div class="modal-dialog">
-                                    <form method="POST" action="{{ route( 'order.order.update' ) }}">
-                                        <div class="modal-content">
-                                            @csrf
-                                            <input type="hidden" name="order_id" value="{{ $order->order_id }}">
-                                            <input type="hidden" name="status_id" value="3">
-                                            <input type="hidden" name="type" value="delivery">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Cancel Order</h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group row">
-                                                    <div class="col-12">
-                                                        <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
-                                                        <textarea class="form-control" name="cancel_reason" id="cancel_reason" rows="5" required></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-success">Cancel order</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        @endif
-                    @endforeach
+                    <span class="badge badge-info">Pending</span>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-primary btn-round text-white" href="/admin_seller/order/{{ $order->order_id }}">View items</a>

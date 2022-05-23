@@ -30,3 +30,7 @@ Route::group([ 'prefix' => 'admin' ], function() {
 Route::group([ 'prefix' => 'admin' ], function() {
     Route::post('rider/verify', 'riderMgmtController@riderVerify');
 });
+
+Route::group([ 'prefix' => 'seller' ], function() {
+    Route::post( 'restore-product', 'ProductMgmtPanelController@restoreProduct' );
+});

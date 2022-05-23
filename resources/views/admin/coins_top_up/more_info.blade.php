@@ -106,7 +106,9 @@
                         title: 'Are you sure?',
                         text: `Request will be deleted! There's no going back!`,
                         showCancelButton: true,
-                        showConfirmButton: true
+                        showConfirmButton: true,
+                        confirmButtonColor: '#dc3545',
+                        confirmButtonText: 'Confirm'
                     }).then( (event) => {
                         if ( event.value ) {
                             window.location.href = href

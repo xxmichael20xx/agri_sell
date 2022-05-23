@@ -59,7 +59,7 @@
                                 {{ $item->refund_reason_prod_txt }}
                             </td>
                             <td>
-                                <a href="/admin/manage_refunds/{{ $item->id }}" class="btn btn-sm btn-primary text-white m-1">More info</a>
+                                <a href="/sellerpanel/refunds/{{ $item->id }}" class="btn btn-sm btn-primary text-white m-1">More info</a>
                                 {{-- <button type="button" class="btn btn-primary" onclick="Swal.fire({ icon: 'info', title: 'On Development' })">More Info</button> --}}
                             </td>
                         </tr>

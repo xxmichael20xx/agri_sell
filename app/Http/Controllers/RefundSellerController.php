@@ -7,20 +7,20 @@ use App\refundModelOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class RefundAdminController extends Controller
+class RefundSellerController extends Controller
 {
     public function index() {
         $panel_name = "refunds";
-        $requests = refundModelOrder::where( 'status', 0 )->get();
+        $requests = refundModelOrder::all();
 
-        return view( 'admin.refunds.index', compact( 'panel_name', 'requests' ) );
+        return view( 'sellerPanel.refunds.index', compact( 'panel_name', 'requests' ) );
     }
 
     public function show( $id ) {
         $panel_name = "refund details";
         $refund = refundModelOrder::find( $id );
 
-        return view( 'admin.refunds.show', compact( 'panel_name', 'refund', 'id' ) );
+        return view( 'sellerPanel.refunds.show', compact( 'panel_name', 'refund', 'id' ) );
     }
 
     public function update( $id, $status ) {
@@ -44,6 +44,6 @@ class RefundAdminController extends Controller
         $this->newNotificationWithEvent( $notification, false, [] );
 
         event( new RefundEvent( [ 'user_id' => $refund->user_id, 'type' => 'refund-update' ] ) );
-        return redirect( '/admin/manage_refunds' );
+        return redirect( '/seller/manage_refunds' );
     }
 }

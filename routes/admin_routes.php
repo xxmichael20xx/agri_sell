@@ -9,6 +9,8 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
     Route::get('/admin/manage_users', 'UsersAdminController@index');
     Route::group([ 'prefix' => '/admin/manage_refunds'], function() {
         Route::get( '/', 'RefundAdminController@index' );
+        Route::get( '{id}', 'RefundAdminController@show' );
+        Route::get( 'update/{id}/{status}', 'RefundAdminController@update' );
     });
     Route::get('/admin/manage_orders', 'OrderMgmtPanelController@index');
     

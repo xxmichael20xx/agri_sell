@@ -5,6 +5,9 @@
             $param1 = [ 'pick_up_status_id', $pickup_status_id ];
             $param2 = [ 'is_pick_up', 'yes' ];
             $orders = App\SubOrder::userOrder( $param1, $param2 )->latest()->get();
+            foreach ( $orders as $_index => $_order ) {
+                if ( ! $_order->has_items ) $orders->forget( $_index );
+            }
         @endphp
         @forelse($orders as $order)
             <div class="card mt-1 border-0">
@@ -17,7 +20,7 @@
                 <div class="card-body">
                     <table class="table">
                         @php
-                            $order_items = App\OrderItem::where( 'order_id', $order->order->id )->get();
+                            $order_items = App\SubOrderItem::where( 'sub_order_id', $order->order->id )->get();
                         @endphp
                         @foreach ( $order_items as $order_item )
                             <tr>
@@ -40,24 +43,21 @@
                                                 $prid = $product_item->id;
                                             @endphp
                                             @livewireStyles
-                                            <livewire:orders-product-ratings :prid="$prid"  />
+                                                <livewire:orders-product-ratings :prid="$prid"  />
                                             @livewireScripts    
                                         @endif
-                                   
+                                
                                         {{ $product_item->name }}
                                         
                                         @if($product_item->is_sale == 1)
                                             <s>₱ {{ $order_item->product_variation->variation_price_per }} </s> x {{ $order_item->quantity }} 
-                                            <h5>
-                                                ₱
-                                                {{  $order_item->product_variation->variation_price_per - (($product_item->sale_pct_deduction / 100) *  $order_item->product_variation->variation_price_per) }}
-                                                    </h5>
+                                            <h5>₱ {{ $order_item->product_variation->variation_price_per - (($product_item->sale_pct_deduction / 100) *  $order_item->product_variation->variation_price_per) }}</h5>
                                         @else
-                                            <h5>₱ {{ $order_item->product_variation->variation_price_per }} x {{ $order_item->quantity }} </h5>
+                                            <h5>₱ {{ $order_item->price }} x {{ $order_item->quantity }} </h5>
                                         @endif  
                                     </a>
                                     <br>
-                                    {{$product_item->shop->name}} 
+                                    {{ $product_item->shop->name }} 
                                     <br>              
                                 </td>
                             </tr>
@@ -65,9 +65,9 @@
                     </table>
                 </div>
                 <div class="card-footer border-0">
-                    {{-- Shipping fee added by rider --}}
-                <span class="text-left">  &#8369; {{ $order_item->product_variation->variation_price_per }} </span>
-                <span style="float:right;"> {{ ($order->deliverystatus->display_name == 'Not delivery') ? '' : ''}} </span></div>
+                    <span class="text-left">₱ {{ $order_item->price }} </span>
+                    <span style="float:right;">{{ ( $order->deliverystatus->display_name == 'Not delivery' ) ? '' : ''}}</span>
+                </div>
             </div>
         @empty
             <p class="card-title text-center">No order(s) yet.</p>

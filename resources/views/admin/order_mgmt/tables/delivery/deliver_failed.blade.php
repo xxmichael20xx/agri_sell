@@ -11,7 +11,7 @@
                 Is Order Paid?
             </th>
             <th>
-                Date Completed
+                Date Failed
             </th>
             <th>
                 Action

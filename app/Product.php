@@ -62,6 +62,8 @@ class Product extends Model
      */
     public function getHasVariantsAttribute() {
         $variants = ProductVariation::where( 'product_id', $this->id )->first();
+        if ( ! $variants ) return false;
+        
         $bool = ( $variants->variation_name == 'Regular' ) ? false : true;
 
         return $bool;

@@ -9,6 +9,10 @@ class SubOrder extends Model
 {
     protected $guarded = [];
 
+    protected $appends = [
+        'has_items'
+    ];
+
     public function items()
     {
         return $this->belongsToMany(Product::class, 'sub_order_items', 'sub_order_id', 'product_id')->withPivot('quantity', 'price');
@@ -42,5 +46,10 @@ class SubOrder extends Model
             $q->where( 'user_id', $user_id );
         } );
         return $query;
+    }
+
+    public function getHasItemsAttribute() {
+        $items = SubOrderItem::where( 'sub_order_id', $this->order_id )->get()->count();
+        return ( $items > 0 ) ? true : false;
     }
 }

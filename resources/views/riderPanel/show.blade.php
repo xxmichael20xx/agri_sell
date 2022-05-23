@@ -77,6 +77,7 @@
                                     <th>Variety</th>
                                     <th>Net weight(kg)</th>
                                     <th>Price</th>
+                                    <th>Sub total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -123,6 +124,9 @@
                                             @endif 
                                         </td>
                                         <td>
+                                            ₱ {{ AppHelpers::numeric( $item->pivot->quantity * $item->pivot->price ) }}
+                                        </td>
+                                        <td>
                                             <a href="/product_monitoring_status/{{ $item_id }}" class="btn btn-primary">Product monitoring</a>
                                         </td>
                                     </tr>
@@ -142,7 +146,7 @@
                     </div>
                     <div class="card-body">
                         <table class="table table-borderless">
-                            <tr>
+                            {{-- <tr>
                                 <td class="text-left">
                                     Shipping fee
                                 </td>
@@ -151,7 +155,7 @@
                                         ₱ {{ AppHelpers::numeric( $order->order->shipping_fee ) }}
                                     @endif
                                 </td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td class="text-left">
                                     Total

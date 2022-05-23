@@ -54,8 +54,11 @@ class ProductMgmtPanelController extends Controller
         }
     }
 
-    function show($product_id) {
-        $product = Product::where('id', $product_id)->first();
+    function show( $product_id ) {
+        $product = Product::withTrashed()->where( 'id', $product_id )->first();
+
+        if ( $product->deleted_at ) return redirect( "/sellerpanel/restore/{$product_id}" );
+
         if (Auth::user()->role->name == 'admin') {
             return view('admin.products.show')->with('panel_name', 'products')->with(compact('product'));
         } else if (Auth::user()->role->name == 'seller') {
@@ -831,6 +834,33 @@ class ProductMgmtPanelController extends Controller
 
     public function setFeaturedImage( $request ) {
         ProductImage::find( $request->featured_index )->update([ 'is_featured' => true ]);
+    }
+
+    public function restoreForm( $id ) {
+        $product = Product::withTrashed()->find( $id );
+
+        $backUrl = '/sellerpanel/products';
+        $panel_name = 'Restore';
+        return view( 'sellerPanel.products.restore' )->with( compact( 'backUrl', 'panel_name', 'id', 'product' ) );
+    }
+
+    public function restoreProduct( Request $request ) {
+        $product = Product::withTrashed()->find( $request->id );
+
+        if ( $product->product_user_id !== $this->userId() ) {
+            return response()->json( [
+                'success' => false,
+                'message' => "You're not authorized to restore this product!"
+            ] );
+
+        } else {
+            $product->restore();
+
+            return response()->json( [
+                'success' => true,
+                'message' => "Product has been restored!"
+            ] );
+        }
     }
  
 }

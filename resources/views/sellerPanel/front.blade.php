@@ -30,6 +30,7 @@ Coded by www.creative-tim.com
   <!-- CSS Files -->
   <link href="/paper_assets/css/bootstrap.min.css" rel="stylesheet" />
   <link href="/paper_assets/css/paper-dashboard.min1036.css?v=2.1.1" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/paper_assets/demo/demo.css" rel="stylesheet" />
   <!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js" type="text/javascript"></script>
@@ -100,6 +101,12 @@ Coded by www.creative-tim.com
             <a href="/sellerpanel/products">
               <i class="nc-icon nc-box"></i>
               <p>My products</p>
+            </a>
+          </li>
+          <li class="{{ ( $panel_name == 'refunds' || $panel_name == 'refund details' ) ? 'active' : '' }}">
+            <a href="/sellerpanel/refunds">
+              <i class="nc-icon nc-money-coins"></i>
+              <p>Refunds</p>
             </a>
           </li>
           {{-- <li class="{{($panel_name == 'pre_orders') ? 'active' : ''}}">
@@ -216,6 +223,7 @@ Coded by www.creative-tim.com
   <script src="/paper_assets/demo/demo.js"></script>
   <!-- Sharrre libray -->
   <script src="/paper_assets/demo/jquery.sharrre.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
     @include('admin.additional_scripts')
     @yield('custom-scripts')

@@ -1,8 +1,8 @@
 @extends('admin.front')
-
 @section('content')
+
 <div class="content">
-<a href="/admin/manage_orders/pickup/1" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
+    <a href="/admin/manage_orders/pickup/1" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
     <div class="row">
         <div class="col-5">
             <div class="card">
@@ -68,6 +68,7 @@
             </div>
         @endif
     </div>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -83,6 +84,8 @@
                                 <th>Variety</th>
                                 <th>Net weight(kg)</th>
                                 <th>Price</th>
+                                <th>Sub total</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,24 +112,25 @@
                                     <td scope="row">
                                         {{ $item->name }}
                                     </td>
+
                                     <td>
                                         {{ $item->pivot->quantity }}
                                     </td>
-                                    <td>                            
+
+                                    <td>
                                         {{$product_variety_ent->variation_name ?? ''}}
                                     </td>
+
                                     <td>
-                                        @php
-                                            $product_variety_ent = App\ProductVariation::where('id', $item->pivot->variation_id)->first();
-                                        @endphp
                                         {{ $product_variety_ent->variation_net_weight ?? '' }}
                                     </td>
+
                                     <td>
-                                        @if($item_product_pivot->is_sale==1)
-                                            {{$product_variety_ent->variation_price_per ?? ''}}
-                                        @else
-                                            ₱ {{ AppHelpers::numeric( $item_product_price_proc ) }}
-                                        @endif 
+                                        ₱ {{ AppHelpers::numeric( $item_product_price_proc ) }}
+                                    </td>
+
+                                    <td>
+                                        ₱ {{ AppHelpers::numeric( $item->pivot->quantity * $item->pivot->price ) }}
                                     </td>
 
                                     <td>
@@ -149,7 +153,7 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
-                        <tr>
+                        {{-- <tr>
                             <td class="text-left">
                                 Shipping fee
                             </td>
@@ -158,7 +162,7 @@
                                     ₱ {{ AppHelpers::numeric( $order->order->shipping_fee ) }}
                                 @endif
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td class="text-left">Total</td>
                             <td class="text-right">

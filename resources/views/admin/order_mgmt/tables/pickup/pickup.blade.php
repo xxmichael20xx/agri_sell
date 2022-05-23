@@ -42,7 +42,7 @@
                     {{ $order->order->agcoins_transid ?? '' }}
                 </td>
                 <td>
-                    <span class="badge badge-info">Ready to pick up<br>{{ AppHelpers::humanDate( $order->order->updated_at ) }}</span>
+                    <span class="badge badge-info">Ready to pick up<br>{{ AppHelpers::humanDate( $order->updated_at ) }}</span>
                 </td>
                 <td>
                     <a class="btn btn-sm btn-primary btn-round text-white" href="/admin_seller/order/{{$order->order_id}}">View items</a>

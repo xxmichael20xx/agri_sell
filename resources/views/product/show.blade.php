@@ -253,7 +253,7 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" type="number" value="1" id="variation_max_stock" data-min="{{ $variantMinQty }}" data-max="{{ $variantStocks }}" required>
+                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="{{ $variantMinQty }}" data-max="{{ $variantStocks }}" required>
                                     <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">{{ $variantMinQty }}</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
                                     <small class="text-danger collapse" id="quantity--message-zero">OUT OF STOCK</small>
                                 </div>
@@ -271,7 +271,7 @@
                                 <div class="col-12">
                                     <span>
                                         @if ( $variantStocks < 1 )
-                                            <input class="mt-3 add--to-cart disabled" disabled type="button" value="Out of stuck">
+                                            <input class="mt-3 add--to-cart disabled" disabled type="button" value="Out of stock">
                                         @else
                                             <input class="mt-3 add--to-cart" type="submit" value="Add to cart">
                                         @endif
@@ -295,7 +295,7 @@
     </div>
 
     <script>
-        let cartFormValidated = false
+        let cartFormValidated = true
         let isOutOfStock = false
 
         window.onload = () => {

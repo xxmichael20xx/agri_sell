@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        @if ($order->order->is_pick_up != "yes")
+        @if ( $order->order->is_pick_up != "yes" )
             <div class="col-7">
                 <div class="card">
                     <div class="card-header">
@@ -69,6 +69,19 @@
                     </div>
                 </div>
             </div>
+        @else
+            <div class="col-7">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Pick up info</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>User ID: {{ $order->order->user_id }}</p>
+                        <p>Pickup status: <span class="badge badge-info">{{ $order->pickupstatus->display_name ?? '' }}</span></p>
+                        <p>Order last updated: {{ AppHelpers::humanDate( $order->updated_at ) }}</p>
+                    </div>
+                </div>
+            </div>
         @endif
     </div>
     <div class="row">
@@ -78,8 +91,8 @@
                 <h5>Order Summary</h5>
                 </div>
                 <div class="card-body">
-                    <table class="table"  class="table " cellspacing="0" width="100%">
-                        <thead  class=" text-primary">
+                    <table class="table" class="table" cellspacing="0" width="100%">
+                        <thead class="text-primary">
                             <tr>
                                 <th>Name</th>
                                 <th>Qty</th>

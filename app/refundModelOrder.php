@@ -10,6 +10,10 @@ class refundModelOrder extends Model
 {
     protected $table = "refund_request_products";
 
+    protected $appends = [
+        'expl_images'
+    ];
+
     public function customer(){
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
@@ -27,6 +31,10 @@ class refundModelOrder extends Model
 
     public function status(){
         return $this->belongsTo(prod_refund_statuses::class, 'prod_refund_status_id', 'id');
+    }
+
+    public function getExplImagesAttribute() {
+        return explode( ",", rtrim( $this->image_proofs, "," ) );
     }
 
 }

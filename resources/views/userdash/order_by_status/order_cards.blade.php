@@ -49,7 +49,7 @@
                                                 $refund_ent = App\refundModelOrder::where('order_item_id', $order_item->id)->first();
                                             @endphp
                                             @if ( ! $refund_ent )
-                                                <a href="/product_refund_request_user/{{ $order->order->id }}/{{ $order_item->id }}" class="btn btn-light">Refund</a>
+                                                <a href="/product_refund_request_user/{{ $order->order->id }}/{{ $order_item->id }}" class="btn btn-danger">Refund</a>
                                             @endif
                                             <br>
                                         @endif

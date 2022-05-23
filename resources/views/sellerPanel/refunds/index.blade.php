@@ -1,4 +1,4 @@
-@extends('admin.front')
+@extends('sellerPanel.front')
 @section('content')
 
 <div class="content">
@@ -10,7 +10,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#confirmed" role="tab" aria-expanded="true">Confirmed</a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#rejected" role="tab" aria-expanded="false">Rejected</a>
                         </li>
@@ -31,7 +31,7 @@
                                 "data" => []
                             );
                         @endphp
-                        @include( 'admin.refunds.table', $inc )
+                        @include( 'sellerPanel.refunds.table', $inc )
                     </div>
                 </div>
                 <div class="tab-pane" id="rejected" role="tabpanel" aria-expanded="false">
@@ -43,7 +43,7 @@
                                 "data" => []
                             );
                         @endphp
-                        @include( 'admin.refunds.table', $inc )
+                        @include( 'sellerPanel.refunds.table', $inc )
                     </div>
                 </div>   
                 <div class="tab-pane" id="requests" role="tabpanel" aria-expanded="false">
@@ -55,7 +55,7 @@
                                 "data" => $requests
                             );
                         @endphp
-                        @include( 'admin.refunds.table', $inc )
+                        @include( 'sellerPanel.refunds.table', $inc )
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
     </div>
 </div>
 @endsection
-@section( 'admin.custom_scripts' )
+@section( 'custom-scripts' )
     <script>
         (function($) {
             $(document).ready(function() {

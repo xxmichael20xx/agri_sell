@@ -5,21 +5,21 @@
     <div class="row">
         <div class="col col-12 col-lg-7">
             <div class="card">
-                   @php
-                 $product_variation_max_price = DB::table('product_variations')->where('product_id', $product->id)->max('variation_price_per'); 
+                @php
+                    $product_variation_max_price = DB::table('product_variations')->where('product_id', $product->id)->max('variation_price_per'); 
                     $product_variation_min_price = DB::table('product_variations')->where('product_id', $product->id)->min('variation_price_per');
                     $product_variation_count_qty = DB::table('product_variations')->where('product_id', $product->id)->sum('variation_quantity');
                     $product_variation_range = ($product_variation_min_price != $product_variation_max_price) ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . $product_variation_max_price;
                     $product_variation_range_sale = ($product_variation_min_price != $product_variation_max_price) ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . ($product_variation_max_price - (($product->sale_pct_deduction/100) * $product->product_variation_max_price));
                 @endphp
-            <img src="{{asset('storage/'.$product->featured_image)}}"  >
+                <img src="{{ asset('storage/'.$product->featured_image) }}">
 
                 <div class="card-header">
-                    <h4>{{$product->name}}</h4>
+                    <h4>{{ $product->name }}</h4>
                     <h5> {!! $product_variation_range !!}</h5>
                 </div>
                 <div class="card-body">
-                    Product description:  {!! $product->description !!}
+                    Product description: {!! $product->description !!}
                     Sold by: {{$product->shop->owner->name ?? ''}}
                     <br>
                 </div>
@@ -36,7 +36,6 @@
                     @endif
                     <a class="btn btn-warning btn-round" href="/sellerpanel/product_edit/{{$product->id}}">Edit</a>
                     <a class="btn btn-danger btn-round text-white" href=" /sellerpanel/delete_product/{{$product->id}}">Delete</a>
-                   
                 </div>
             </div>
         </div>

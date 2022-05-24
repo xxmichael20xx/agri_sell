@@ -15,7 +15,7 @@ class SubOrder extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Product::class, 'sub_order_items', 'sub_order_id', 'product_id')->withPivot('quantity', 'price');
+        return $this->belongsToMany(Product::class, 'sub_order_items', 'sub_order_id', 'product_id')->withPivot('quantity', 'price')->withTrashed();
     }
 
     public function order()

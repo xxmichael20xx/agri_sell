@@ -15,7 +15,8 @@
         (function($) {
             $(document).ready(function() {
                 $( document ).on( 'click', '.btn-restore', function() {
-                    const id = $( this ).data( 'id' )
+                    const id = $( this ).data( 'id' );
+                    const user_id = {{ Auth::user()->id ?? 0 }};
 
                     Swal.fire({
                         icon: 'info',
@@ -33,7 +34,7 @@
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify( { id: id } )
+                                body: JSON.stringify( { id: id, user_id: user_id } )
                             } ).then( r => r.json() ).then( res => {
 
                                 if ( ! res.success ) {

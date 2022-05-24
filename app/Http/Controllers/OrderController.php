@@ -190,7 +190,12 @@ class OrderController extends Controller
         // looping of cart items
         foreach ($cartItems as $item) {
             // get product instance
-            $product = Product::where('id', $item->product_id)->first();
+            $_variant_query = array( 'product_id', $item->product_id );
+            if ( $_id = json_decode( $item )->id ) {
+                $_variant_query = array( 'id', $_id );
+            }
+            $product = Product::where( 'id', $item->product_id )->first();
+
             $notifData = [
                 'seller_id' => $product->product_user_id ?? NULL,
                 'item_name' => $product->name,
@@ -227,7 +232,7 @@ class OrderController extends Controller
             // update product stocks
             // deduct stocks for variation
             // declare product entity
-            $product_variation_ent = ProductVariation::where('product_id', $product->id)->first();
+            $product_variation_ent = ProductVariation::where( $_variant_query[0], $_variant_query[1] )->first();
             $product_variation_ent->variation_quantity = $product_variation_ent->variation_quantity - $item->quantity;
             $product_variation_ent->save();
             // $product->stocks = $product->stocks - $item->quantity;

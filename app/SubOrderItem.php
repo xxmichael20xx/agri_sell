@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubOrderItem extends Model
 {
     function product(){
-        return $this->belongsTo(Product::class, 'product_id', 'id') ?? 'not available';
+        return $this->belongsTo(Product::class, 'product_id', 'id')->withTrashed() ?? 'not available';
     }
     
     function sub_order_parent(){

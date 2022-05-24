@@ -225,7 +225,7 @@ Coded by www.creative-tim.com
   <script src="/paper_assets/demo/jquery.sharrre.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
-    @include('admin.additional_scripts')
+    @include('sellerPanel.additional_scripts')
     @yield('custom-scripts')
     
 </body>

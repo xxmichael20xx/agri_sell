@@ -51,7 +51,7 @@
                         <td class="text-right">
                         <a href="/admin/manage_shop/{{$shop->id}}" class="btn btn-sm btn-primary text-white m-1">More info</a>
                         <a hidden href="/admin/edit_shop/{{$shop->id}}" class="btn btn-sm btn-warning text-white m-1">Edit</a>
-                        <a href="/admin/delete_shop/{{$shop->id}}" class="btn btn-sm btn-danger text-white m-1">Delete</a>
+                        <button type="button" data-text="Shop will be deleted!" data-href="/admin/delete_shop/{{$shop->id}}" class="btn btn-sm btn-danger text-white m-1 btn--delete-confirm">Delete</button>
                         </td>
                       </tr>
                         @endforeach

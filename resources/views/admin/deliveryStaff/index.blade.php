@@ -52,7 +52,7 @@
 											{{ $delivery_staff->rider_id ?? 'not available' }}
 										</td>
 										<td>
-											<button type="button" class="btn btn-danger btn-rider-delete" data-href="/admin/remove_rider/{{ $delivery_staff->user_id }}">Remove</button>
+											<button type="button" class="btn btn-danger btn-rider-delete" data-href="/admin/remove_rider/{{ $delivery_staff->user_id }}">Delete</button>
 											<button type="button" class="btn btn-primary btn-rider-password" data-id="{{ $delivery_staff->id }}">Show Password</button>
 										</td>
 									</tr>

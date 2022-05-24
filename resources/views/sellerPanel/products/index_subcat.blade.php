@@ -13,7 +13,8 @@
             <div class="toolbar">
                 <!-- Here you can write extra buttons/actions for the toolbar -->
                 <div class="text-right">
-                    <a class="btn btn-success text-white text-right m-3" href="/sellerpanel/add_new_product/regular">Add new</a>
+                    <a class="btn btn-success text-white text-right" href="/sellerpanel/add_new_product/regular">Add new</a>
+                    <a class="btn btn-info text-white text-right" href="?with=deleted">Show deleted</a>
                 </div>
             </div>
             <table id="datatable-{{ $table }}" class="table " cellspacing="0" width="100%">
@@ -37,13 +38,18 @@
                     {{-- Update product should be belong to the shop  rule that shop owners should manage their own shop--}}
                     @php
                         $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
+
+                        if ( isset( $_GET['with'] ) && $_GET['with'] == 'deleted' ) {
+                            $products = App\Product::withTrashed()->where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
+                        }
                     @endphp
                     @foreach ( $products as $product )
                         @if( isset( $product ) )
                             @php
-                                $product_variation_max_price = DB::table('product_variations')->where('product_id', $product->id)->max('variation_price_per'); 
-                                $product_variation_min_price = DB::table('product_variations')->where('product_id', $product->id)->min('variation_price_per');
-                                $product_variation_count_qty = DB::table('product_variations')->where('product_id', $product->id)->sum('variation_quantity');
+                                $db = DB::table( 'product_variations' )->where( 'product_id', $product->id );
+                                $product_variation_max_price = $db->max('variation_price_per'); 
+                                $product_variation_min_price = $db->min('variation_price_per');
+                                $product_variation_count_qty = $db->sum('variation_quantity');
                                 $product_variation_range = ($product_variation_min_price != $product_variation_max_price) ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . $product_variation_max_price;
                                 $product_variation_range_sale = ($product_variation_min_price != $product_variation_max_price) ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . ($product_variation_max_price - (($product->sale_pct_deduction/100) * $product->product_variation_max_price));
                                 $product_variation_min_price_tmp_sale = $product_variation_min_price;
@@ -77,9 +83,13 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_info/{{ $product->id }}">More info</a>
-                                    <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_edit/{{ $product->id }}">Edit</a>
-                                    <a class="btn btn-sm btn-danger btn-round text-white m-1" href="/sellerpanel/delete_product/{{ $product->id }}">Delete</a>
+                                    @if ( $product->deleted_at !== NULL )
+                                        <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_info/{{ $product->id }}">Restore</a>
+                                    @else
+                                        <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_info/{{ $product->id }}">More info</a>
+                                        <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_edit/{{ $product->id }}">Edit</a>
+                                        <button type="button" class="btn btn-sm btn-danger btn-round text-white m-1 btn--delete-confirm" data-text="Product will be marked as deleted!" data-href="/sellerpanel/delete_product/{{ $product->id }}">Delete</button>
+                                    @endif
                                 </td>
                             </tr>
                         @endif

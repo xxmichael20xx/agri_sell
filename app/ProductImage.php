@@ -12,6 +12,6 @@ class ProductImage extends Model
     protected $fillable = [ 'is_featured' ];
 
     public function product() {
-        return $this->belongsTo( Product::class, 'product_id' );
+        return $this->belongsTo( Product::class, 'product_id' )->withTrashed();
     }
 }

@@ -191,6 +191,8 @@ public function checkout()
 {
     $cartItems = \Cart::session(auth()->id())->getContent();
 
+    if ( count( $cartItems ) < 1 ) return redirect( '/home' )->withMessage( "Your cart is empty. Please add some items to proceed to checkout." );
+
     // get agcoins value
     $total_ag_coins = 0;
     $curr_ag_coins_insts = DB::table('coins_top_up')->where('user_id', Auth::id())->where('remarks', '1')->get();

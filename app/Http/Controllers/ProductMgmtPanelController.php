@@ -25,6 +25,11 @@ class ProductMgmtPanelController extends Controller
 
         } else if ( Auth::user()->role->name == 'seller' ) {
             $products = Product::where( 'shop_id', Auth::user()->shop->id )->get();
+
+            if ( isset( $_GET['with'] ) && $_GET['with'] == 'deleted' ) {
+                $products = Product::withTrashed()->where( 'shop_id', Auth::user()->shop->id )->get();
+            }
+
             $view = 'sellerPanel.products.index';
 
         } else {
@@ -69,13 +74,13 @@ class ProductMgmtPanelController extends Controller
 
     function delete($product_id) {
         $product = Product::where('id', $product_id)->delete();
-        $productCategory = ProductCategory::where('product_id', $product_id)->delete();
+        // $productCategory = ProductCategory::where('product_id', $product_id)->delete();
         // $ratingsTbl = ratingsModel::where('rateable_id', $product_id)->delete();
-        $productRatings = DB::table('ratings')->where('rateable_id', $product_id)->delete();
-        $productVariation = ProductVariation::where('product_id', $product_id)->delete();
-        $productPreOrders = PreOrderModel::where('product_id', $product_id)->delete();
-        $sub_order_items = SubOrderItem::where('product_id', $product_id)->delete();
-        $order_item = OrderItem::where('product_id', $product_id)->delete();
+        // $productRatings = DB::table('ratings')->where('rateable_id', $product_id)->delete();
+        // $productVariation = ProductVariation::where('product_id', $product_id)->delete();
+        // $productPreOrders = PreOrderModel::where('product_id', $product_id)->delete();
+        // $sub_order_items = SubOrderItem::where('product_id', $product_id)->delete();
+        // $order_item = OrderItem::where('product_id', $product_id)->delete();
         return back();
     }
 
@@ -847,7 +852,7 @@ class ProductMgmtPanelController extends Controller
     public function restoreProduct( Request $request ) {
         $product = Product::withTrashed()->find( $request->id );
 
-        if ( $product->product_user_id !== $this->userId() ) {
+        if ( $product->product_user_id !== $request->user_id ) {
             return response()->json( [
                 'success' => false,
                 'message' => "You're not authorized to restore this product!"

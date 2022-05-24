@@ -1,7 +1,7 @@
 @extends('sellerPanel.front')
 @section('content')
 <div class="content">
-    <button onclick="history.go(-1)" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</button>
+    <a href="/sellerpanel/products" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
     <div class="row">
         <div class="col col-12 col-lg-7">
             <div class="card">

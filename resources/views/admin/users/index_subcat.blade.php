@@ -36,14 +36,11 @@
                             {{$user->address}} {{$user->barangay}} {{$user->town}} {{$user->province}}
                         </td>
                         <td>
-                            <a href="/admin/manage_user/{{$user->id}}"
-                                class="btn btn-sm btn-primary text-white m-1">More info</a>
-                            <a hidden href="/admin/edit_user/{{$user->id}}"
-                                class="btn btn-sm btn-warning text-white m-1">Edit</a>
-                                @if ($user->role->name != 'admin')
-                                    <a href="/admin/delete_user/{{$user->id}}"
-                                class="btn btn-sm btn-danger text-white m-1" >Delete</a>
-                                @endif
+                            <a href="/admin/manage_user/{{$user->id}}" class="btn btn-sm btn-primary text-white m-1">More info</a>
+                            <a hidden href="/admin/edit_user/{{$user->id}}" class="btn btn-sm btn-warning text-white m-1">Edit</a>
+                            @if ($user->role->name != 'admin')
+                                <button type="button" data-text="User will deleted!" data-href="/admin/delete_user/{{$user->id}}" class="btn btn-sm btn-danger text-white m-1 btn--delete-confirm">Delete</button>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

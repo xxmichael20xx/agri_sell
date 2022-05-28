@@ -78,14 +78,22 @@
             if (total_ag_coins > total_cart_order_total) {
                 form_container_checkout_cart.submit();
             } else {
-                swal("Agri coins", "Not enough Agri Coins", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Agri coins',
+                    text: 'Not enough Agri Coins'
+                })
             }
         } else if (isUsingAgCoins == '') {
             // default agcoins
             if (total_ag_coins > total_cart_order_total) {
                 form_container_checkout_cart.submit();
             } else {
-                swal("Agri coins", "Not enough Agri Coins", "error");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Agri coins',
+                    text: 'Not enough Agri Coins'
+                })
             }
         } else if (isUsingAgCoins == 'false') {
             form_container_checkout_cart.submit();

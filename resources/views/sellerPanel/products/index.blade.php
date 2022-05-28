@@ -1,94 +1,65 @@
 @extends('sellerPanel.front')
 @section('content')
 <div class="content">
-        <div class="row">
-          <div class="col-md-12">
-             <div class="nav-tabs-navigation">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
                     <ul id="tabs" class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#crops" role="tab"
-                                aria-expanded="true">Crops</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#vegetables" role="tab"
-                                aria-expanded="false">Vegetables</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#fruits" role="tab"
-                                aria-expanded="false">Fruits</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#livestocks" role="tab"
-                                aria-expanded="false">Livestocks</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#seeds" role="tab"
-                                aria-expanded="false">Seeds</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#grains" role="tab"
-                                aria-expanded="false">Grains</a>
-                        </li>
+                        @php
+                            $tabs = array(
+                                array( 'crops', 'Crops', 1 ),
+                                array( 'vegetables', 'Vegetables', 2 ),
+                                array( 'fruits', 'Fruits', 3 ),
+                                array( 'livestocks', 'Livestocks', 4 ),
+                                array( 'seeds', 'Seeds', 5 ),
+                                array( 'grains', 'Grains', 6 ),
+                            );
+                        @endphp
+                        @foreach ( $tabs as $index => $tab )
+                            @php
+                                $active = false;
+
+                                if ( ! isset( $_GET['type'] ) && $index == 0 ) {
+                                    $active = true;
+                                }
+
+                                if ( isset( $_GET['type'] ) ) {
+                                    $type = $_GET['type'];
+
+                                    if ( $type == $tab[0] ) $active = true;
+                                }
+                            @endphp
+                            <li class="nav-item">
+                                <a class="nav-link {{ $active ? 'active' : 'false' }}" data-toggle="tab" href="#{{ $tab[0] }}">{{ $tab[1] }}</a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
             <div id="my-tab-content" class="tab-content">
+                @foreach ( $tabs as $index => $tab )
+                    @php
+                        $active = false;
 
-                <div class="tab-pane active" id="crops" role="tabpanel" aria-expanded="true">
-                    <div class="col-md-12">
-                        @php
-                        $category_id = '1';
-                        @endphp
-                        @include('sellerPanel.products.index_subcat', ['table' => 'crops', 'id' => $category_id])
-                    </div>
-                </div>
-                <div class="tab-pane" id="vegetables" role="tabpanel" aria-expanded="false">
-                <div class="col-md-12">
-                        @php
-                        $category_id = '2';
-                        @endphp
-                        @include('sellerPanel.products.index_subcat', ['table' => 'vegetables', 'id' => $category_id])
-                    </div>
-                </div>
-                <div class="tab-pane" id="fruits" role="tabpanel" aria-expanded="false">
-                  <div class="col-md-12">
-                        @php
-                        $category_id = '3';
-                        @endphp
-                        @include('sellerPanel.products.index_subcat', ['table' => 'fruits', 'id' => $category_id])
-                    </div>
-                </div>
+                        if ( ! isset( $_GET['type'] ) && $index == 0 ) $active = true;
 
-                <div class="tab-pane" id="livestocks" role="tabpanel" aria-expanded="false">
-                  <div class="col-md-12">
-                        @php
-                        $category_id = '4';
-                        @endphp
-                        @include('sellerPanel.products.index_subcat', ['table' => 'livestocks', 'id' => $category_id])
-                    </div>
-                </div>
+                        if ( isset( $_GET['type'] ) ) {
+                            $type = $_GET['type'];
 
-                <div class="tab-pane" id="seeds" role="tabpanel" aria-expanded="false">
-                  <div class="col-md-12">
-                        @php
-                        $category_id = '5';
-                        @endphp
-                        @include('sellerPanel.products.index_subcat', ['table' => 'seeds', 'id' => $category_id])
+                            if ( $type == $tab[0] ) $active = true;
+                        }
+                    @endphp
+                    <div class="tab-pane {{ $active ? 'active' : '' }}" id="{{ $tab[0] }}">
+                        <div class="col-md-12">
+                            @include('sellerPanel.products.index_subcat', ['table' => $tab[0], 'id' => $tab[2]])
+                        </div>
                     </div>
-                </div>
-                <div class="tab-pane" id="grains" role="tabpanel" aria-expanded="false">
-                  <div class="col-md-12">
-                        @php
-                        $category_id = '6';
-                        @endphp
-                        @include('sellerPanel.products.index_subcat', ['table' => 'grains', 'id' => $category_id])
-                    </div>
-                </div>
+                @endforeach
             </div>  
-            </div>
-          </div>
-      </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('custom-scripts')

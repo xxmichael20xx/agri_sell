@@ -25,10 +25,16 @@
                 <div class="tab-pane active" id="confirmed" role="tabpanel" aria-expanded="true">
                     <div class="col-md-12">
                         @php
+                            $data = [];
+                            foreach ( $refunds as $index => $refund ) {
+                                if ( $refund->status == '3' ) {
+                                    $data[] = $refund;
+                                }
+                            }
                             $inc = array(
                                 "title" => "Confirmed refunds",
                                 "index" => 0,
-                                "data" => []
+                                "data" => $data
                             );
                         @endphp
                         @include( 'sellerPanel.refunds.table', $inc )
@@ -37,10 +43,16 @@
                 <div class="tab-pane" id="rejected" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
                         @php
+                            $data = [];
+                            foreach ( $refunds as $index => $refund ) {
+                                if ( $refund->status == '4' ) {
+                                    $data[] = $refund;
+                                }
+                            }
                             $inc = array(
                                 "title" => "Rejected refunds",
                                 "index" => 1,
-                                "data" => []
+                                "data" => $data
                             );
                         @endphp
                         @include( 'sellerPanel.refunds.table', $inc )
@@ -49,10 +61,16 @@
                 <div class="tab-pane" id="requests" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
                         @php
+                            $data = [];
+                            foreach ( $refunds as $index => $refund ) {
+                                if ( $refund->status == '1' ) {
+                                    $data[] = $refund;
+                                }
+                            }
                             $inc = array(
                                 "title" => "Pending refunds",
                                 "index" => 2,
-                                "data" => $requests
+                                "data" => $data
                             );
                         @endphp
                         @include( 'sellerPanel.refunds.table', $inc )

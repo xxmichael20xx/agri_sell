@@ -116,7 +116,7 @@
 								})
 							}
 						}
-					} )
+				} )
 			} )
 
 			$( document ).on( 'click', '.btn-rider-delete', function() {

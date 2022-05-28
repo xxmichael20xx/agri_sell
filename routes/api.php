@@ -25,12 +25,11 @@ Route::group([ 'prefix' => 'notifications' ], function() {
 Route::group([ 'prefix' => 'admin' ], function() {
     Route::post( 'pending/shops', 'AdminPushNotifications@pendingShops' );
     Route::post( 'verification/ids', 'AdminPushNotifications@userIdVerification' );
-});
-
-Route::group([ 'prefix' => 'admin' ], function() {
-    Route::post('rider/verify', 'riderMgmtController@riderVerify');
+    Route::post( 'rider/verify', 'riderMgmtController@riderVerify' );
+    Route::post( 'refund/reject/{id}', 'RefundAdminController@refundReject' );
 });
 
 Route::group([ 'prefix' => 'seller' ], function() {
     Route::post( 'restore-product', 'ProductMgmtPanelController@restoreProduct' );
+    Route::post( 'delete-product/{id}', 'ProductMgmtPanelController@deleteProduct' );
 });

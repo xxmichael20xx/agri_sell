@@ -6,7 +6,7 @@
     }
 </style>
 <div class="content">
-    <a href="/admin/manage_orders/" class="btn btn-outline-dark btn-round mb-4">Go back</a>
+    <a href="/admin/manage_refunds/" class="btn btn-outline-dark btn-round mb-4">Go back</a>
 
     <div class="row">
         <div class="col-12 col-md-7">
@@ -37,11 +37,18 @@
                         <div class="col-12 mb-3">
                             <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
                         </div>
+                        @if ( $refund->status == '2' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">Reason for rejecting: {{ $refund->reason }}</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="buttom" class="btn btn-outline-info btn-round m-1 text-danger btn-action" data-action="Canceled" data-href="/admin/manage_refunds/update/{{ $id }}/2">Cancel Refund</button>
-                    <button type="buttom" class="btn btn-outline-info btn-round m-1 text-info btn-action" data-action="Confirmed" data-href="/admin/manage_refunds/update/{{ $id }}/1">Confirm Refund</button>
+                    @if ( $refund->status == '0' )
+                        <button type="buttom" class="btn btn-outline-info btn-round m-1 text-danger btn-action" data-action="rejected" data-href="/api/admin/refund/reject/{{ $id }}">Reject Refund</button>
+                        <button type="buttom" class="btn btn-outline-info btn-round m-1 text-info btn-action" data-action="confirmed" data-href="/admin/manage_refunds/update/{{ $id }}/1">Confirm Refund</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -130,17 +137,69 @@
                 $( document ).on( 'click', '.btn-action', function() {
                     const href = $( this ).data( 'href' )
                     const action = $( this ).data( 'action' )
+                    const user_id = {{ Auth::user()->id }}
 
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Are you sure?',
-                        text: `Refund will be marked as "${action}"`,
-                        showCancelButton: true,
-                        confirmButtonColor: '#219F94',
-                        confirmButtonText: 'Yes, proceed'
-                    }).then( ( result ) => {
-                        if ( result.value ) window.location.href = href
-                    })
+                    if ( action == 'rejected' ) {
+                        
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Please provide a reason for rejecting refund request',
+                            html: `<textarea id="refund--reject-reason" class="swal2-input" autocomplete="off"></textarea>`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Submit',
+                            showLoaderOnConfirm: true,
+                            preConfirm: () => {
+                                const reason = Swal.getPopup().querySelector( '#refund--reject-reason' ).value
+
+                                return fetch( href, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ reason: reason, user_id: user_id }) 
+                                }).then( response => {
+                                    if ( ! response.ok ) {
+                                        throw new Error( response.statusText )
+                                    }
+                                    return response.json()
+                                }).catch( error => {
+                                    Swal.showValidationMessage(
+                                        `Request failed: ${error}`
+                                    )
+                                } )
+                            },
+                            allowOutsideClick: () => ! Swal.isLoading()
+                            }).then( ( result ) => {
+                                if ( result.value ) {
+                                    if ( result?.value?.success ) {
+                                        Swal.fire({
+                                            icon: 'info',
+                                            title: 'Refund request has been rejected!'
+                                        }).then( () => {
+                                            window.location.reload()
+                                        } )
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'info',
+                                            title: 'Failed to reject refund request!'
+                                        })
+                                    }
+                                }
+                        } )
+                    } else {
+
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Are you sure?',
+                            text: `Refund will be marked as "${action}"`,
+                            showCancelButton: true,
+                            confirmButtonColor: '#219F94',
+                            confirmButtonText: 'Yes, proceed'
+                        }).then( ( result ) => {
+                            if ( result.value ) window.location.href = href
+                        })
+                    }
+
                 } )
 
             })

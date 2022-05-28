@@ -11,9 +11,9 @@ class RefundAdminController extends Controller
 {
     public function index() {
         $panel_name = "refunds";
-        $requests = refundModelOrder::where( 'status', 0 )->get();
+        $refunds = refundModelOrder::all();
 
-        return view( 'admin.refunds.index', compact( 'panel_name', 'requests' ) );
+        return view( 'admin.refunds.index', compact( 'panel_name', 'refunds' ) );
     }
 
     public function show( $id ) {
@@ -23,9 +23,12 @@ class RefundAdminController extends Controller
         return view( 'admin.refunds.show', compact( 'panel_name', 'refund', 'id' ) );
     }
 
-    public function update( $id, $status ) {
+    public function update( $id, $status, $reason = NULL, $admin_id = 1 ) {
         $refund = refundModelOrder::find( $id );
         $refund->status = $status;
+
+        if ( $reason ) $refund->reason = $reason;
+
         $refund->save();
 
         $action = $status == 1 ? "Confirmed" : "Canceled";
@@ -37,13 +40,25 @@ class RefundAdminController extends Controller
 
         $notification = [
             'user_id' => $refund->user_id,
-            'frm_user_id' => Auth::user()->id,
+            'frm_user_id' => Auth::user()->id ?? $admin_id,
             'notification_title' => "Refund #{$id} updated",
             'notification_txt' => $text
         ];
         $this->newNotificationWithEvent( $notification, false, [] );
 
         event( new RefundEvent( [ 'user_id' => $refund->user_id, 'type' => 'refund-update' ] ) );
+
+        if ( $reason ) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Refund request has been rejected!'
+            ]);
+        }
         return redirect( '/admin/manage_refunds' );
+    }
+
+    public function refundReject( Request $request, $id ) {
+        $status = $request->status ?? 2;
+        return $this->update( $id, $status, $request->reason, $request->user_id );
     }
 }

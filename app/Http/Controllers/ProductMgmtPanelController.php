@@ -24,10 +24,17 @@ class ProductMgmtPanelController extends Controller
             $view = 'admin.products.index';
 
         } else if ( Auth::user()->role->name == 'seller' ) {
+
             $products = Product::where( 'shop_id', Auth::user()->shop->id )->get();
 
             if ( isset( $_GET['with'] ) && $_GET['with'] == 'deleted' ) {
-                $products = Product::withTrashed()->where( 'shop_id', Auth::user()->shop->id )->get();
+                $products = Product::onlyTrashed()->where( 'shop_id', Auth::user()->shop->id )->get();
+            }
+
+            foreach ( $products as $index => $_ ) {
+                if ( $_->deleted_at !== NULL && $_->is_confirmed_deleted == TRUE ) {
+                    $products->forget( $index );
+                }
             }
 
             $view = 'sellerPanel.products.index';
@@ -866,6 +873,17 @@ class ProductMgmtPanelController extends Controller
                 'message' => "Product has been restored!"
             ] );
         }
+    }
+
+    public function deleteProduct( Request $request, $id ) {
+        $product = Product::withTrashed()->find( $id );
+        $product->is_confirmed_deleted = TRUE;
+        $product->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Product has been completely deleted!"
+        ]);
     }
  
 }

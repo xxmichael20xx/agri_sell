@@ -4,6 +4,10 @@
     </div>
 @endif
 
+@php
+    $showDeleted = isset( $_GET['with'] ) && $_GET['with'] == 'deleted';
+@endphp
+
 <div class="card">
     <div class="card-header">
         <h4 class="card-title">Products - {{ ucfirst( $table ) }}</h4>
@@ -14,7 +18,11 @@
                 <!-- Here you can write extra buttons/actions for the toolbar -->
                 <div class="text-right">
                     <a class="btn btn-success text-white text-right" href="/sellerpanel/add_new_product/regular">Add new</a>
-                    <a class="btn btn-info text-white text-right" href="?with=deleted">Show deleted</a>
+                    @if ( $showDeleted )
+                        <a class="btn btn-info text-white text-right" href="?type={{ $table }}">Hide deleted</a>
+                    @else
+                        <a class="btn btn-info text-white text-right" href="?with=deleted&type={{ $table }}">Show deleted</a>
+                    @endif
                 </div>
             </div>
             <table id="datatable-{{ $table }}" class="table " cellspacing="0" width="100%">
@@ -37,10 +45,16 @@
                 <tbody>
                     {{-- Update product should be belong to the shop  rule that shop owners should manage their own shop--}}
                     @php
-                        $products = App\Product::where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
+                        $products = App\Product::where( [ 'category_id' => $id, 'product_user_id' => Auth::user()->id ])->get();
 
-                        if ( isset( $_GET['with'] ) && $_GET['with'] == 'deleted' ) {
-                            $products = App\Product::withTrashed()->where( [ 'category_id' => $category_id, 'product_user_id' => Auth::user()->id ])->get();
+                        if ( $showDeleted ) {
+                            $products = App\Product::onlyTrashed()->where( [ 'category_id' => $id, 'product_user_id' => Auth::user()->id ])->get();
+                        }
+
+                        foreach ( $products as $index => $_ ) {
+                            if ( $_->deleted_at !== NULL && $_->is_confirmed_deleted == TRUE ) {
+                                $products->forget( $index );
+                            }
                         }
                     @endphp
                     @foreach ( $products as $product )
@@ -85,6 +99,7 @@
                                 <td>
                                     @if ( $product->deleted_at !== NULL )
                                         <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_info/{{ $product->id }}">Restore</a>
+                                        <button type="button" class="btn btn-sm btn-danger btn-round text-white m-1 btn--delete-confirm" data-action="ajax" data-text="Product will be completely deleted! This can't be irreversible!" data-href="/api/seller/delete-product/{{ $product->id }}">Delete</button>
                                     @else
                                         <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_info/{{ $product->id }}">More info</a>
                                         <a class="btn btn-sm btn-primary btn-round text-white m-1" href="/sellerpanel/product_edit/{{ $product->id }}">Edit</a>

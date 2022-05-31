@@ -12,6 +12,10 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
         Route::get( '{id}', 'RefundAdminController@show' );
         Route::get( 'update/{id}/{status}', 'RefundAdminController@update' );
     });
+    Route::group([ 'prefix' => '/admin/payout'], function() {
+        Route::get( '/', 'AdminPayoutController@index' );
+        Route::get( '{id}', 'AdminPayoutController@show' );
+    });
     Route::get('/admin/manage_orders', 'OrderMgmtPanelController@index');
     
     Route::get('/admin/manage_orders/{status_type}/{status_id}', 'OrderMgmtPanelController@show_by_cat');
@@ -86,7 +90,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
     
     // revisi march 13 2022
     Route::get('/admin/sell_reg_approved/{sell_reg_id}', 'sellRegController@sell_reg_approved');
-Route::get('/admin/sell_reg_declined/{sell_reg_id}', 'sellRegController@sell_reg_declined');
+    Route::get('/admin/sell_reg_declined/{sell_reg_id}', 'sellRegController@sell_reg_declined');
     
     // admin transaction history
     Route::get('/admin/transaction_history', 'sellRegController@admin_panel_index');

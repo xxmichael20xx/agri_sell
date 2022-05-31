@@ -11,21 +11,46 @@ class Helpers {
      * @param value Number or string
      * @return String/Number
      */
-    public static function numeric( $value ) {
+    public static function numeric( $value, $format = 0 ) {
         $data = $value;
         if ( $value && is_numeric( $value ) ) {
-            $data = number_format( $value );
+            $data = number_format( $value, $format );
         }
 
         return $data;
     }
 
+    /**
+     * Convert timestamp to human date
+     * 
+     * @param date Timestamp
+     * @return String
+     */
     public static function humanDate( $date ) {
-        return date( 'M d, y @ h:i a', strtotime( $date ) );
+        return date( 'M d, Y @ h:i a', strtotime( $date ) );
     }
 
+    /**
+     * Check if order is pickup or not
+     * 
+     * @param data Status data
+     * @param id Status id
+     * @return Boolean
+     */
     public static function filterStatus( $data, $id ) {
         if ( $data->name == 'not_pickup' ) return false;
         return true;
+    }
+
+    /**
+     * Convert the slug to words
+     * 
+     * @param string Slug to conver
+     * @return String
+     */
+    public function toWords( $string ) {
+        $string = ucwords( str_replace( "_", " ", $string ) );
+
+        return $string;
     }
 }

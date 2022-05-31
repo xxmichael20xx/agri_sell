@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
-                                        <p class="card-category">Total sales</p>
+                                        <p class="card-category">Available Total Sales</p>
                                         <p class="card-title">{{ $total_sales_deduction_diff }}<p>
                                     </div>
                                 </div>

@@ -144,29 +144,34 @@
                         Swal.fire({
                             icon: 'info',
                             title: 'Please provide a reason for rejecting refund request',
-                            html: `<textarea id="refund--reject-reason" class="swal2-input" autocomplete="off"></textarea>`,
+                            html: `<textarea id="refund--reject-reason" class="swal2-input" rows="5" autocomplete="off"></textarea>`,
                             showCancelButton: true,
                             confirmButtonText: 'Submit',
                             showLoaderOnConfirm: true,
                             preConfirm: () => {
                                 const reason = Swal.getPopup().querySelector( '#refund--reject-reason' ).value
 
-                                return fetch( href, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({ reason: reason, user_id: user_id }) 
-                                }).then( response => {
-                                    if ( ! response.ok ) {
-                                        throw new Error( response.statusText )
-                                    }
-                                    return response.json()
-                                }).catch( error => {
-                                    Swal.showValidationMessage(
-                                        `Request failed: ${error}`
-                                    )
-                                } )
+                                if ( document.getElementById( 'refund--reject-reason' ).value ) {
+                                    return fetch( href, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ reason: reason, user_id: user_id }) 
+                                    }).then( response => {
+                                        if ( ! response.ok ) {
+                                            throw new Error( response.statusText )
+                                        }
+                                        return response.json()
+                                    }).catch( error => {
+                                        Swal.showValidationMessage(
+                                            `Request failed: ${error}`
+                                        )
+                                    } )
+
+                                } else {
+                                    Swal.showValidationMessage( 'Reason is required for rejecting a refund.' )   
+                                }
                             },
                             allowOutsideClick: () => ! Swal.isLoading()
                             }).then( ( result ) => {

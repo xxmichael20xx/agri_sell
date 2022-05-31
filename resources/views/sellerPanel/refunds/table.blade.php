@@ -17,6 +17,11 @@
                         <th>
                             Reason
                         </th>
+                        @if ( $index == '1' )
+                            <th>
+                                Reject Reason
+                            </th>
+                        @endif
                         <th>
                             Actions
                         </th>
@@ -58,6 +63,11 @@
                             <td>
                                 {{ $item->refund_reason_prod_txt }}
                             </td>
+                            @if ( $index == '1' )
+                                <td>
+                                    {{ $item->reason }}
+                                </td>
+                            @endif
                             <td>
                                 <a href="/sellerpanel/refunds/{{ $item->id }}" class="btn btn-sm btn-primary text-white m-1">More info</a>
                                 {{-- <button type="button" class="btn btn-primary" onclick="Swal.fire({ icon: 'info', title: 'On Development' })">More Info</button> --}}
@@ -68,6 +78,9 @@
                             <td>No results</td>
                             <td>No results</td>
                             <td>No results</td>
+                            @if ( $index == '1' )
+                                <td>No results</td>
+                            @endif
                             <td>No results</td>
                         </tr>
                     @endforelse

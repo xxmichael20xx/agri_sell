@@ -3,70 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use Auth;
 use App\Product;
-use App\Shop;
-use App\Order;
 use App\SubOrder;
 use App\orderDeliveryStatusModel;
 use App\orderpickupStatusModel;
 class SellerPanelController extends Controller
 {
-    function index(){
+    function index() {
         $shop_title = Auth::user()->shop->name;
         $shop_description = Auth::user()->shop->description;
-        $shop_order_count = SubOrder::where('seller_id', auth()->id())->count();
+        $shop_orders = SubOrder::where('seller_id', auth()->id())->get();
         $shopProducts = Product::where('shop_id', Auth::user()->shop->id)->get();
-        $shopProductsCount = Product::where('shop_id', Auth::user()->shop->id)->count();
+        $shop_order_count = $shop_orders->count();
+        $shopProductsCount = $shopProducts->count();
 
         $sumAverageRating = 0;
         $ratings_ocurr = 0;
-        foreach($shopProducts as $shopProduct){
-            if($shopProduct->averageRating != null || $shopProduct->averageRating() != 0){
+        $shopAveRating = 0;
+
+        foreach ( $shopProducts as $shopProduct ) {
+            if ( $shopProduct->averageRating != null || $shopProduct->averageRating() != 0 ) {
                 $sumAverageRating += $shopProduct->averageRating();
                 $ratings_ocurr++;
             }
         }
-        $shopAveRating = 0;
-        if($ratings_ocurr != 0 && $sumAverageRating != 0){
-        $shopAveRating = round($sumAverageRating/$ratings_ocurr, 1);
-        }else{
-        $shopAveRating = 'Unrated';
+
+        if ( $ratings_ocurr != 0 && $sumAverageRating != 0 ) {
+            $shopAveRating = round( $sumAverageRating / $ratings_ocurr, 1 );
+
+        } else {
+            $shopAveRating = 'Unrated';
         }
         
         $total_sales = 0;
-        $order_count = SubOrder::where('seller_id', auth()->id())->count();
-        $order_items = SubOrder::where('seller_id', auth()->id())->get();
-        $order_item_price;
-        $str_order_id = "";
+        $order_items = $shop_orders;
         
-        foreach($order_items as $order_item){
-            if($order_item->status == 'completed')
-            foreach($order_item->items as $order_ent){
-                $itemprice;
-                $uniprice;
-                $itemprice = $order_ent->price;
-                if($order_ent->is_sale == 1){
-                    $itemprice = $order_ent->price - (($order_ent->sale_pct_deduction/100) * $order_ent->price);
+        foreach ( $order_items as $order_item ) {
+            if ( $order_item->status == 'completed' && ! $order_item->payout_request && count( $order_item->items ) > 0 ) {
+                foreach( $order_item->items as $item ) {
+                    $item_pivot = $item->pivot;
+
+                    /* if ( $item->is_sale == 1 ) {
+                        $itemprice = $item->price - ( ( $item->sale_pct_deduction / 100 ) * $item->price );
+                    } */
+
+                    $total_sales += $item_pivot->price * $item_pivot->quantity;
                 }
-                $uniprice = $itemprice * $order_ent->pivot->quantity;
-                $total_sales += $uniprice;
-                $str_order_id .= "\n " . $order_ent->pivot->quantity . $order_ent->name . $order_ent->price;
             }
         }
 
-        $total_commission_deduction = 10;
-        $total_sales_deduction = $total_sales - (($total_commission_deduction/100) * $total_sales);
-        $total_sales_deduction_diff = $total_sales - $total_sales_deduction;
-       
+        /* $total_commission_deduction = 10;
+        $total_sales_deduction = $total_sales - ( ( $total_commission_deduction / 100 ) * $total_sales );
+        $total_sales_deduction_diff = $total_sales - $total_sales_deduction; */
+        $total_sales_deduction_diff = $total_sales;
         
         // shop_title
         // shop_description
         // shop_order_count
         // shopAveRating
         // total_sales_deduction_diff
-        return view('sellerPanel.dashboard')->with(compact('shop_title', 'shopProductsCount','shop_description', 'shop_order_count', 'shopAveRating', 'total_sales_deduction_diff'))->with('panel_name', 'dashboard');
+        return view('sellerPanel.dashboard')->with(compact(
+            'shop_title', 
+            'shopProductsCount',
+            'shop_description', 
+            'shop_order_count', 
+            'shopAveRating', 
+            'total_sales_deduction_diff'
+        ))->with('panel_name', 'dashboard');
     }
 
 

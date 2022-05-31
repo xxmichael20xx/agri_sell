@@ -27,9 +27,19 @@ Route::group([ 'prefix' => 'admin' ], function() {
     Route::post( 'verification/ids', 'AdminPushNotifications@userIdVerification' );
     Route::post( 'rider/verify', 'riderMgmtController@riderVerify' );
     Route::post( 'refund/reject/{id}', 'RefundAdminController@refundReject' );
+
+    Route::group([ 'prefix' => 'payout' ], function() {
+        Route::post('update', 'AdminPayoutController@update');
+    });
 });
 
 Route::group([ 'prefix' => 'seller' ], function() {
     Route::post( 'restore-product', 'ProductMgmtPanelController@restoreProduct' );
     Route::post( 'delete-product/{id}', 'ProductMgmtPanelController@deleteProduct' );
+
+    Route::group([ 'prefix' => 'payout' ], function() {
+        Route::post('verify', 'SellerPayoutController@verify');
+        Route::post( 'validation', 'SellerPayoutController@validation');
+        Route::post( 'new', 'SellerPayoutController@createRequest');
+    });
 });

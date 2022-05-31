@@ -1,5 +1,7 @@
 <script>
     $(document).ready(function() {
+        $( '#datatable' ).DataTable()
+
         $( document ).on( 'click', '.btn--delete-confirm', function() {
             const text = $( this ).data( 'text' )
             const href = $( this ).data( 'href' )

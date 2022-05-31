@@ -58,6 +58,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(coinsEmployee::class, 'emp_user_id', 'id');
     }
 
+    public function payouts() {
+        return $this->hasMany( SellerPayout::class );
+    }
+
     public function isAdmin()
     {
         return ($this->role->id == '1') ? true : false;

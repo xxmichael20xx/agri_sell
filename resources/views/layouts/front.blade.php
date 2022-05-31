@@ -433,6 +433,11 @@
         if ( user_id == data.customer_id ) getNotificationCount()
     } )
 
+    channel.bind( 'payout-event', function( res ) {
+        const data = res.message
+        if ( user_id == data.user_id ) getNotificationCount()
+    } )
+
     /**
      * Get the updated notifications count via GET Request on API Routes
      * Updates the count in the header's notification content
@@ -447,6 +452,8 @@
         } catch (error) { /* silently exit */ }
     }
 </script>
+
+@yield('additional_scripts')
 
 @livewireScripts
 </body>

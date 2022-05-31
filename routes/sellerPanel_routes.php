@@ -64,6 +64,12 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
         Route::get( '{id}', 'RefundSellerController@show' );
         Route::get( 'update/{id}/{status}', 'RefundSellerController@update' );
     });
+
+    Route::group([ 'prefix' => '/sellerpanel/payout' ], function() {
+        Route::get( '/', 'SellerPayoutController@index');
+        Route::get( 'show/{id}', 'SellerPayoutController@show');
+        Route::get( 'new/{id?}', 'SellerPayoutController@new');
+    });
 });
 
  // sidebar menu

@@ -35,6 +35,10 @@
                                 </thead>
                                 <tbody>
                                     @foreach( $orders as $order )
+                                        @php
+                                            $method = $order->order->payment_method;
+                                            $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
+                                        @endphp
                                         <tr>
                                             <td>
                                                 {{ $order->order->shipping_fullname ?? 'Not available' }}
@@ -46,13 +50,17 @@
                                                 ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-info btn-round dropdown-toggle" type="button" id="dropPaid{{ $order->order->id }}" data-toggle="dropdown" aria-expanded="false">
-                                                    {{ $order->order->is_paid ? 'Paid' : 'Not Paid' }}
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropPaid{{ $order->order->id }}">
-                                                    <a class="dropdown-item" href="/rider/mark_as_paid/{{ $order->order_id }}">Paid</a>
-                                                    <a class="dropdown-item" href="/rider/mark_as_unpaid/{{ $order->order_id }}">Not Paid</a>
-                                                </div>
+                                                @if ( $isPaid )
+                                                    <span class="badge badge-success">Paid</span>
+                                                @else
+                                                    <button class="btn btn-sm btn-info btn-round dropdown-toggle" type="button" id="dropPaid{{ $order->order->id }}" data-toggle="dropdown" aria-expanded="false">
+                                                        Update Payment
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropPaid{{ $order->order->id }}">
+                                                        <a class="dropdown-item" href="/rider/mark_as_paid/{{ $order->order_id }}">Paid</a>
+                                                        <a class="dropdown-item" href="/rider/mark_as_unpaid/{{ $order->order_id }}">Not Paid</a>
+                                                    </div>
+                                                @endif
                                                 <br>
                                                 {{ $order->order->agcoins_transid }}
                                             </td>
@@ -83,23 +91,27 @@
                                                         $title = "No actions needed";
                                                         switch ( $order->status_id ) {
                                                             case 1:
-                                                                $title = "Pending";
+                                                                $title = "Pending<br>";
                                                                 break;
                                                             
                                                             case 2:
-                                                                $title = "Confirmed";
+                                                                $title = "Confirmed<br>";
                                                                 break;
 
                                                             case 3:
-                                                                $title = "Order has been picked up";
+                                                                $title = "Order has been picked up<br>";
+                                                                break;
+
+                                                            case 5:
+                                                            case 6:
+                                                                $title = "";
                                                                 break;
                                                                 
                                                             default:
                                                                 break;
                                                         }
                                                     @endphp
-                                                    {{ $title }}
-                                                    <br>
+                                                    {!! $title !!}
                                                 @endif
 
                                                 @if ( $order->status_id == 4 )

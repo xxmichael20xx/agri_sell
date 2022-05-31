@@ -13,6 +13,7 @@ use App\Product;
 use DB;
 use App\coinsTopUpModel;
 use App\Events\CoinEvent;
+use App\prod_refund_statuses;
 use App\User;
 use Carbon\Carbon;
 
@@ -22,7 +23,9 @@ class refundController extends Controller
         // $refund = new refundModelOrder();
         $order_ent = Order::where('id', $order_id)->first();
         $order_item_ent = OrderItem::where('id', $order_item_id)->first();
-        return view('orderProductRefund.refund')->with(compact('order_ent', 'order_item_ent'));
+        $choices = prod_refund_statuses::all();
+
+        return view('orderProductRefund.refund')->with(compact('order_ent', 'order_item_ent', 'choices'));
     }
 
     public function refund_index(){
@@ -40,13 +43,14 @@ class refundController extends Controller
          return view('orderProductRefund.admin_refund_mgmt_more_info')->with('panel_name', 'refund_management')->with(compact('refund_request'));
 
     }
-    public function refund_request_order_confirm(Request $req){
+    public function refund_request_order_confirm( Request $req ) {
         $refund_request = new refundModelOrder();
         $multiple_images = $req->file('images');
         $multiple_images_path = '';
         $multiple_images_counter = 1;
-        if($req->hasFile('images')){
-            foreach($multiple_images as $single_image){
+
+        if ( $req->hasFile( 'images' ) ) {
+            foreach ( $multiple_images as $single_image ) {
                 $productImage = $single_image;
                 $productImageSaveAsName = time() . uniqid() . "-product." . $productImage->getClientOriginalExtension();
                 $upload_path = 'storage/product_refunds/' . date('FY') . '/';
@@ -58,6 +62,15 @@ class refundController extends Controller
             }
         }
 
+        if ( $req->reason_prod_txt == "others" ) {
+            $reason = "Others: " . $req->other_reason_prod_txt ?? '';
+
+        } else {
+            $status = prod_refund_statuses::find( $req->reason_prod_txt );
+            $reason = $status->slug;
+
+        }
+
         $refund_request->image_proofs = $multiple_images_path;
         $refund_request->refund_ref_id = 'REFUND-' . uniqid();
         $refund_request->order_item_id = $req->order_item_id;
@@ -65,7 +78,7 @@ class refundController extends Controller
         $refund_request->order_id = $req->order_id;
         $refund_request->product_id = $req->product_id;
         $refund_request->order_item_id = $req->order_item_id;
-        $refund_request->refund_reason_prod_txt = $req->reason_prod_txt;
+        $refund_request->refund_reason_prod_txt = $reason;
         $refund_request->save();
 
         // notification entity

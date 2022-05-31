@@ -17,22 +17,27 @@
                         <th>
                             Reason
                         </th>
+                        @if ( $index == '1' )
+                            <th>
+                                Reject Reason
+                            </th>
+                        @endif
                         <th>
                             Actions
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ( $data as $index => $item )
+                    @forelse ( $data as $_index => $item )
                         <tr>
                             <td>
                                 {{ $item->customer->name }}
                             </td>
-                            <td id="refund--container-{{ $index }}">
+                            <td id="refund--container-{{ $_index }}">
                                 @if ( count( $item->expl_images ) > 0  )
-                                    <img src="/storage/{{ $item->expl_images[0] }}" class="img-fluid view-images w-50" data-id="refund--image-{{ $index }}" data-raw="{{ $index }}">
+                                    <img src="/storage/{{ $item->expl_images[0] }}" class="img-fluid view-images w-50" data-id="refund--image-{{ $_index }}" data-raw="{{ $index }}">
 
-                                    <div class="modal fade" id="refund--image-{{ $index }}">
+                                    <div class="modal fade" id="refund--image-{{ $_index }}">
                                         <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -58,6 +63,11 @@
                             <td>
                                 {{ $item->refund_reason_prod_txt }}
                             </td>
+                            @if ( $index == '1' )
+                                <td>
+                                    {{ $item->reason }}
+                                </td>
+                            @endif
                             <td>
                                 <a href="/admin/manage_refunds/{{ $item->id }}" class="btn btn-sm btn-primary text-white m-1">More info</a>
                                 {{-- <button type="button" class="btn btn-primary" onclick="Swal.fire({ icon: 'info', title: 'On Development' })">More Info</button> --}}
@@ -68,6 +78,9 @@
                             <td>No results</td>
                             <td>No results</td>
                             <td>No results</td>
+                            @if ( $index == '1' )
+                                <td>No results</td>
+                            @endif
                             <td>No results</td>
                         </tr>
                     @endforelse

@@ -19,13 +19,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($orders as $order)
+        @foreach ( $orders as $order )
             @php
-                $order_id = '';
-                $paidData = array( 'Not Paid', 'warning' );
-                
-                if ( isset($order->order->id ) ) $order_id = $order->order->id;
-                if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+                $method = $order->order->payment_method;
+                $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
             @endphp
             <tr>
                 <td>
@@ -38,8 +35,7 @@
                     {{ AppHelpers::numeric( $order->order->grand_total ) }}
                 </td>
                 <td>
-                    <span class="badge badge-{{ $paidData[1] }}">{{ $paidData[0] }}</span>
-                    {{ $order->order->agcoins_transid ?? '' }}
+                    <span class="badge badge-success">Paid</span>
                 </td>
                 <td>
                     {{ AppHelpers::humanDate( $order->updated_at ) }}

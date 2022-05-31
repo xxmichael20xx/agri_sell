@@ -160,6 +160,13 @@ Coded by www.creative-tim.com
             </a>
           </li>
 
+          <li class="{{ $panel_name == 'payout' ? 'active' : '' }}">
+            <a href="/admin/payout">
+              <i class="nc-icon nc-share-66"></i>
+              <p>Payout</p>
+            </a>
+          </li>
+
           <li class="{{($panel_name == 'orders') ? 'active' : ''}}">
             <a href="/admin/manage_orders/pickup/1">
               <i class="nc-icon nc-tile-56"></i>

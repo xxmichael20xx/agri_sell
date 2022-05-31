@@ -1,85 +1,94 @@
 @extends('admin.front')
 @section('content')
+<style>
+    .dashed-border {
+        border-style: dashed !important;
+    }
+</style>
 <div class="content">
-  <div class="row">
-    <div class="col-md-12">
-      <h4>Refund request for {{$refund_request->product->name}}</h4>
-    </div>
-    <div class="col-md-12">
-     @php
-     $images = $refund_request->image_proofs ?? 'not available';
-     $pieces = explode(",", $images);
-     @endphp
-     <p>Image proofs</p>
+    <a href="/admin/refund_management" class="btn btn-outline-dark btn-round mb-4">Go back</a>
 
-     @foreach ($pieces as $piece)
-         <div style="width: 250px;height: 250px;background-position: center;display: inline-block;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$piece}}');"></div>
-     @endforeach
-     <br>
-     <div class="card">
-       <div class="card-header">Refund request description for {{$refund_request->refund_ref_id}}</div>
-       <div class="card-body">
-        {{$refund_request->refund_reason_prod_txt}}
+    <div class="row">
+        <div class="col-12 col-md-7">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Refund request: {{ ucfirst( $refund_request->product->name ) }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-12 mb-4">
+                            <div class="refund--images">
+                                @foreach ( $refund_request->expl_images as $image)
+                                    <img src="/storage/{{ $image }}" class="img-fluid w-50">
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12 mb-3">
+                            <span class="text-muted font-weight-bold">Refund details: ID {{ $refund_request->refund_ref_id }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Reason: {{ $refund_request->refund_reason_prod_txt }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Shop: 
+                                <a href="/admin/manage_shop/{{ $refund_request->product->shop->id }}" target="_blank" class="text-decoration-none">{{ $refund_request->product->shop->name }}</a>
+                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" title="Click on name to view more details"></i>
+                            </span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Product: {{ $refund_request->product->name }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Quantity: {{ AppHelpers::numeric( $refund_request->order_item->quantity ) }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Variation: {{ $refund_request->order_item->product_variation->variation_name }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Refundable amount: ₱ {{ AppHelpers::numeric( $refund_request->order_item->price * $refund_request->order_item->quantity ) }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Date & Time: {{ AppHelpers::humanDate( $refund_request->created_at ) }}</span>
+                        </div>
+                        <div class="col-12 my-4">
+                            <div class="border border-dark dashed-border"></div>
+                        </div>
+                        <div class="col-12 mb-3 mt-3">
+                            <span class="text-muted font-weight-bold">Customer details</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Name: 
+                                <a href="/admin/manage_user/{{ $refund_request->customer->id }}" target="_blank" class="text-decoration-none">{{ $refund_request->customer->name }}</a>
+                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" title="Click on name to view more details"></i>
+                            </span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Contact Number:  {{ $refund_request->customer->mobile }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-     <div class="card">
-       <div class="card-header">Refund details for {{$refund_request->refund_ref_id}}</div>
-       <div class="card-body">
-       Shop name : {{$refund_request->product->shop->name ?? 'not available'}}<br>
-       Product name : {{$refund_request->product->name ?? 'not available'}}<br>
-        Quantity : {{$refund_request->order_item->quantity ?? 'not available'}}<br>
-        Variation: {{$refund_request->order_item->product_variation->variation_name  ?? 'not available'}}<br>
-        Refundable amount : 
-        @php
-          if(isset($refund_request->order_item->price)){
-              $price_refundable =  $refund_request->order_item->price * $refund_request->order_item->quantity;
-              echo $price_refundable;
-          }else{
-             echo 'not available';
-          }
-        @endphp
-      
+@endsection
+@section( 'admin.custom_scripts' )
+    <script>
+        (function($) {
+            $(document).ready(function() {
 
-        Time & date:  {{$refund_request->created_at}}<br>
-    </div>
-     </div>
-     <div class="card">
-       <div class="card-header">Customer and shop owner details</div>
-       <div class="card-body">
-        Customer name: {{$refund_request->customer->name ?? 'not available'}}<br>
-       Customer address: {{$refund_request->customer->address ?? 'not available'}} {{$refund_request->customer->barangay ?? 'not available'}} {{$refund_request->customer->town ?? 'not available'}}<br>
-       Customer contact number:  {{$refund_request->customer->mobile ?? 'not available'}}<br>
-       Shop contact number:  {{$refund_request->shop->owner->mobile ?? 'not available'}}
-       <br>
-       Shop owner name:  {{$refund_request->product->shop->owner->name ?? 'not available'}} <br>
-       Shop address: {{$refund_request->product->shop->owner->address ?? 'not available'}} {{$refund_request->product->shop->owner->barangay ?? 'not available'}} {{$refund_request->product->shop->owner->town}}<br>
-       Shop contact number:  {{$refund_request->shop->owner->mobile ?? 'not available'}}
-</div>
-     </div>
-     <div class="card">
-   <div class="col-md-12" style="padding-bottom: 100px;">
+                $( '.refund--images' ).slick({
+                    infinite: true,
+                    slidesToShow: 1,
+                    dots: false,
+                    prevArrow: false,
+                    nextArrow: false
+                })
 
-         @php
-           $product_refund_statuses = DB::table('prod_refund_statuses')->get();
-        @endphp
-        <form method="POST" action="/admin_set_product_refund_status">
-          @csrf
-          @method('POST')
-          <div class="card-header">Set refund status </div>
-              <input type="hidden" name="refund_id" value="{{$refund_request->id}}">
-               <select class="selectpicker w-100" data-style="btn btn-primary btn-round" title="Select product category" name="reason_id" role="dropdown" required>
-                 @foreach ($product_refund_statuses as $product_refund_status)
-                    <option value="{{$product_refund_status->id}}">{{$product_refund_status->slug}}</option>
-                 @endforeach
-              </select>
-              <input class="btn btn-primary" type="submit" value="Save">
-              </form>
-           </div>  
-  </div>
-        
-   </div>
-  
- </div>
-</div>
+            })
+        })(jQuery)
+    </script>
 @endsection

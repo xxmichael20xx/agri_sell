@@ -122,9 +122,7 @@ class OrderMgmtPanelController extends Controller
     // Delivery attempt was unsuccessful - Delivery failed
     public function markOrderDeliveryStatus($status_id, $order_id){
         $sub_order = Suborder::where('order_id', $order_id)->first();
-        // {{$order->deliverystatus->display_name}}
         $sub_order->status_id = $status_id;
-        $sub_order->save();
 
         if ( $status_id == 5 ) {
             $order = Order::find( $order_id );
@@ -133,18 +131,58 @@ class OrderMgmtPanelController extends Controller
             $order->save();
         }
 
+        if ( $status_id == 5 ) {
+            $sub_order->status = 'completed';
+        }
+        $sub_order->save();
+
         $this->checkStatuses( 'order_status', $status_id, $order_id );
         return back();
     }
 
+    public function showOrderDeliveryPickUpStatus($status_id){
+        $orders = SubOrder::all();
+        $assign_order_status_options = orderDeliveryStatusModel::all();
+        // return view('a')->with(compact('orders', 'assign_order_status_options'))->with('panel_name', 'orders');
+
+    }
+
+    // Set Pickup Order Status
+    public function markOrderPickUpStatus( $status_id, $order_id ) {
+        $seller_id = Auth::user()->id;
+        $sub_order = Suborder::where( 'order_id', $order_id )->where( 'seller_id', $seller_id )->first();
+
+        // {{$sub_order->deliverystatus->display_name}}
+        // $sub_order->status_id = $status_id;
+        $sub_order->pick_up_status_id = $status_id;
+        
+        if ( $status_id == 5 ) {
+            $sub_order->status = 'completed';
+            $sub_order->payout_request = true;
+        }
+
+        $sub_order->save();
+        
+        $this->checkStatuses( 'pickup_status', $status_id, $order_id );
+        return back();
+    }
+
+    // Set Delivery status
     public function editDeliveryStatus( Request $request ) {
+        $seller_id = Auth::user()->id;
         $order_id = $request->order_id;
         $status_id = $request->status_id;
 
-        $sub_order = Suborder::where( 'order_id', $order_id )->first();
+        $sub_order = Suborder::where( 'order_id', $order_id )->where( 'seller_id', $seller_id )->first();
         $sub_order->status_id = $status_id;
         $sub_order->pick_up_status_id = $status_id;
         $sub_order->order_notes = $request->reason;
+
+        if ( $status_id == 5 ) {
+            $sub_order->status = 'completed';
+            $sub_order->payout_request = true;
+        }
+
         $sub_order->save();
 
         if ( $status_id == 6 ) {
@@ -158,22 +196,6 @@ class OrderMgmtPanelController extends Controller
         return redirect( '/rider_dashboard' );
     }
 
-    public function showOrderDeliveryPickUpStatus($status_id){
-        $orders = SubOrder::all();
-        $assign_order_status_options = orderDeliveryStatusModel::all();
-        // return view('a')->with(compact('orders', 'assign_order_status_options'))->with('panel_name', 'orders');
-
-    }
-    public function markOrderPickUpStatus($status_id, $order_id){
-        $sub_order = Suborder::where('order_id', $order_id)->first();
-        // {{$sub_order->deliverystatus->display_name}}
-        // $sub_order->status_id = $status_id;
-        $sub_order->pick_up_status_id = $status_id;
-        $sub_order->save();
-        
-        $this->checkStatuses( 'pickup_status', $status_id, $order_id );
-        return back();
-    }
     public function assignRiderOrder($rider_id, $order_id){
         $order = Order::where('id', $order_id)->first();
         $order->rider_id = $rider_id;

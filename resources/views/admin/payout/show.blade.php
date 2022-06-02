@@ -9,6 +9,12 @@
     }
 </style>
 <div class="content">
+    @if ( \Session::has( 'proof_info' ) )
+        <div class="alert alert-info" role="alert">
+            <i class="fa fa-info-circle"></i> {{ \Session::get( 'proof_info' ) }}
+        </div>
+    @endif
+
     <a href="/admin/payout/" class="btn btn-outline-dark btn-round mb-4">Go back</a>
 
     <div class="row">
@@ -78,6 +84,42 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Proof of Payout</h5>
+                </div>
+                <div class="card-body">
+                    @if( $payout->status == 1 && ! $payout->image_proof )
+                        <form method="POST" action="{{ route('admin.payout.proof') }}" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="id" id="id" value="{{ $id }}">
+
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <span class="text-muted font-weight-bold">Upload Payout Proof</span>
+                                    <div class="custom-file h6 mt-2">
+                                        <input type="file" class="custom-file-input" name="proof" id="proof" accept="image/*" required>
+                                        <label class="custom-file-label" for="proof">Choose image</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    @elseif ( $payout->status == 1 && $payout->image_proof )
+                        <div class="form-group row">
+                            <div class="col-8">
+                                <span class="text-muted font-weight-bold">Proof of payout</span>
+                                <img src="/storage/{{ $payout->image_proof }}" class="img-fluid" />
                             </div>
                         </div>
                     @endif

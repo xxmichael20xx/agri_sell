@@ -54,4 +54,23 @@ class AdminPayoutController extends Controller
         
         return response()->json( $data );
     }
+
+    public function addProof( Request $request ) {
+        if ( $request->hasFile( 'proof' ) ) {
+            $proof = $request->proof;
+            $proofSaveAs = time() . uniqid() . "-payout-proof." . $proof->getClientOriginalExtension();
+            $upload_path = 'storage/payout/proof/' . date('FY') . '/';
+            $upload_path_url = 'payout/proof//' . date('FY') . '//';
+            $product_image_url = $upload_path_url . $proofSaveAs;
+            $proof->move( $upload_path, $proofSaveAs );
+
+            $payout = SellerPayoutRequest::find( $request->id );
+            $payout->image_proof = $product_image_url;
+            $payout->save();
+
+            return back()->with( 'proof_info', 'Proof of payout has been uploaded.' );
+        }
+
+        return back()->with( 'proof_info', 'Proof of payout is required.' );
+    }
 }

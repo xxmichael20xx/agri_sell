@@ -13,7 +13,6 @@ class SellerPayoutRequest extends Model
         'user_id',
         'gcash_name',
         'gcash_number',
-        'gcash_ref',
         'amount',
         'status',
         'metadata'

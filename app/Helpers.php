@@ -26,8 +26,10 @@ class Helpers {
      * @param date Timestamp
      * @return String
      */
-    public static function humanDate( $date ) {
-        return date( 'M d, Y @ h:i a', strtotime( $date ) );
+    public static function humanDate( $date, $hasTime = true ) {
+        $format = "M d, Y";
+        if ( $hasTime ) $format .= " @ h:i a";
+        return date( $format, strtotime( $date ) );
     }
 
     /**

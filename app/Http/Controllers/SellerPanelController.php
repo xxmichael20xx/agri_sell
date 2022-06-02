@@ -8,6 +8,9 @@ use App\Product;
 use App\SubOrder;
 use App\orderDeliveryStatusModel;
 use App\orderpickupStatusModel;
+use App\SellerPayout;
+use App\SellerPayoutRequest;
+
 class SellerPanelController extends Controller
 {
     function index() {
@@ -56,7 +59,17 @@ class SellerPanelController extends Controller
         /* $total_commission_deduction = 10;
         $total_sales_deduction = $total_sales - ( ( $total_commission_deduction / 100 ) * $total_sales );
         $total_sales_deduction_diff = $total_sales - $total_sales_deduction; */
-        $total_sales_deduction_diff = $total_sales;
+
+        $payouts = SellerPayoutRequest::where( 'user_id', auth()->user()->id )->get();
+        $payoutTotal = 0;
+
+        if ( $payouts->count() > 0 ) {
+            foreach( $payouts as $payout_index => $payout ) {
+                $payoutTotal += $payout->amount;
+            }
+        }
+
+        $total_sales_deduction_diff = $total_sales - $payoutTotal;
         
         // shop_title
         // shop_description

@@ -1,6 +1,13 @@
 @extends('sellerPanel.front')
 @section('content')
 
+<style>
+    #myTab li.nav-item .nav-link.active::before,
+    #myTab li.nav-item .nav-link.active::after {
+        bottom: 0px !important;
+    }
+</style>
+
 <div class="content">
     <div class="form-group row">
         <div class="col-12">
@@ -49,7 +56,7 @@
                                             ₱ {{ AppHelpers::numeric( $payout->amount ) }}
                                         </td>
                                         <td>
-                                            {{ AppHelpers::humanDate( $payout->payout->week_start ) }} - {{ AppHelpers::humanDate( $payout->payout->week_end ) }}
+                                            {{ AppHelpers::humanDate( $payout->payout->week_start, false ) }} - {{ AppHelpers::humanDate( $payout->payout->week_end, false ) }}
                                         </td>
                                         <td>
                                             {{ AppHelpers::humanDate( $payout->created_at ) }}
@@ -82,7 +89,7 @@
             <div class="card">
                 <div class="card-body">
                     <h6>Reminders:</h6>
-                    <ol>
+                    <ol class="pl-3">
                         <li>First Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eius.</li>
                         <li>Second Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere atque labore magnam consectetur? Neque facere nostrum consectetur molestias excepturi vel!</li>
                         <li>Third Lorem ipsum dolor sit amet.</li>
@@ -114,28 +121,35 @@
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" id="step-3-tab" data-toggle="tab" href="#step-3" role="tab" aria-controls="step-3" aria-selected="true">Step 3</a>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="step-4-tab" data-toggle="tab" href="#step-4" role="tab" aria-controls="step-4" aria-selected="true">Step 4</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <div class="col-12">
+                    <div class="form-group row py-2">
+                        <div class="col-11 mx-auto px-0">
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane active" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
-                                    Step 1 Content
+                                    <span class="text-muted font-weight-bold">Form Validation</span>
+                                    <ol class="pl-3">
+                                        <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, dolore.</li>
+                                        <li>Lorem ipsum dolor sit amet consectetur.</li>
+                                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem aperiam hic possimus libero ipsam reprehenderit dolores, sit, ullam ipsum ducimus debitis voluptatum incidunt iste laudantium?</li>
+                                    </ol>
                                 </div>
                                 <div class="tab-pane" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
-                                    Step 2 Content
+                                    <span class="text-muted font-weight-bold">Sales Check</span>
+                                    <ol class="pl-3">
+                                        <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, dolore.</li>
+                                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem aperiam hic possimus libero ipsam reprehenderit dolores, sit, ullam ipsum ducimus debitis voluptatum incidunt iste laudantium?</li>
+                                    </ol>
                                 </div>
                                 <div class="tab-pane" id="step-3" role="tabpanel" aria-labelledby="step-3-tab">
-                                    Step 3 Content
-                                </div>
-                                <div class="tab-pane" id="step-4" role="tabpanel" aria-labelledby="step-4-tab">
-                                    Step 4 Content
+                                    <span class="text-muted font-weight-bold">Admins Approval</span>
+                                    <ol class="pl-3">
+                                        <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, dolore.</li>
+                                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non at asperiores, illum quos amet itaque repellat.</li>
+                                    </ol>
 
                                     <hr>
 

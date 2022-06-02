@@ -45,7 +45,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <div class="col-2">
                                     <label for="gcash_ref" class="col-form-label">Ref. No.:</label>
                                 </div>
@@ -53,7 +53,7 @@
                                     <input type="text" name="gcash_ref" id="gcash_ref" class="form-control" placeholder="i.e. JOHN-DOE" value="{{ $payout->gcash_ref ?? '' }}" required>
                                     <small class="text-danger collapse">GCash Reference Number is required</small>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group row">
                                 <div class="col-12">
@@ -112,9 +112,9 @@
                     if ( action == 'next' ) {
                         let gname = $( '#gcash_name' )
                         let gnumber = $( '#gcash_number' )
-                        let gref = $( '#gcash_ref' )
+                        // let gref = $( '#gcash_ref' )
 
-                        let afterValidate = [ validate( gname ), validate( gnumber ), validate( gref ) ]
+                        let afterValidate = [ validate( gname ), validate( gnumber ) ]
                         let proceed = afterValidate.includes( false ) ? false : true
 
                         if ( proceed ) {
@@ -173,13 +173,13 @@
 
                 function verifyForm() {
                     const form = new FormData( $( '#payout--request-form' )[0] )
-                    const payoutRef = form.get( 'gcash_ref' )
+                    // const payoutRef = form.get( 'gcash_ref' )
                     const amount = form.get( 'amount' )
                     const password = form.get( 'payout_password' )
                     const user_id = {{ Auth::user()->id }}
                     const body = {
                         user_id: user_id,
-                        payoutRef: payoutRef,
+                        // payoutRef: payoutRef,
                         amount: amount,
                         password: password
                     }

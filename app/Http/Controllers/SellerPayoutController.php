@@ -28,7 +28,14 @@ class SellerPayoutController extends Controller
 
     public function show( $id ) {
         $panel_name = "payout";
-        $payout = SellerPayoutRequest::find( $id );
+        $payout = SellerPayoutRequest::findOrFail( $id );
+
+        if ( $payout && $payout->user_id !== auth()->user()->id ) {
+            $layout = 'sellerPanel.front';
+            $backUrl = '/sellerpanel/payout';
+            $panel_name = 'Unauthorized';
+            return view( '401' )->with( compact( 'layout', 'backUrl', 'panel_name' ) );
+        }
 
         return view( 'sellerPanel.payout.show', compact( 'panel_name', 'payout', 'id' ) );
     }
@@ -42,17 +49,20 @@ class SellerPayoutController extends Controller
         if ( count( $payouts ) < 1 ) {
             return response()->json([
                 'success' => true,
+                'message' => 'No Payout'
             ]);
         }
 
         foreach ( $payouts as $index => $payout ) {
-            $day = Carbon::parse( $payout->week_day );
+            $day = Carbon::parse( Carbon::now() );
             $start = Carbon::parse( $payout->week_start );
             $end = Carbon::parse( $payout->week_end );
 
             if ( $day->isSameDay( $start ) || $day->isSameDay( $end ) ) {
                 return response()->json([
                     'success' => false,
+                    'message' => 'Start / End has the same date today',
+                    'data' => [ $day, $start, $end ]
                 ]);
                 break;
             }
@@ -60,6 +70,7 @@ class SellerPayoutController extends Controller
             if ( $day->between( $start, $end ) ) {
                 return response()->json([
                     'success' => false,
+                    'message' => 'Between ranges'
                 ]);
                 break;
             }
@@ -91,14 +102,14 @@ class SellerPayoutController extends Controller
     public function validation( Request $request ) {
         $seller = User::find( $request->user_id );
         $passwordCheck = Hash::check( $request->password, $seller->password );
-        $refExists = SellerPayoutRequest::where( 'gcash_ref', $request->payoutRef )->get()->count();
+        /* $refExists = SellerPayoutRequest::where( 'gcash_ref', $request->payoutRef )->get()->count();
 
         if ( $refExists > 0 ) {
             return response()->json( [
                 'success' => false,
                 'message' => "GCash Reference Number has been already used!"
             ] );
-        }
+        } */
 
         if ( ! $passwordCheck ) {
             return response()->json( [
@@ -117,6 +128,17 @@ class SellerPayoutController extends Controller
                 }
             }
         }
+
+        $payouts = SellerPayoutRequest::where( 'user_id', $request->user_id )->get();
+        $payoutTotal = 0;
+
+        if ( $payouts->count() > 0 ) {
+            foreach( $payouts as $payout_index => $payout ) {
+                $payoutTotal += $payout->amount;
+            }
+        }
+
+        $total_sales = $total_sales - $payoutTotal;
 
         if ( $total_sales < $request->amount ) {
             $total_sales = "₱ " . Helper::numeric( $total_sales, 2 );
@@ -171,7 +193,7 @@ class SellerPayoutController extends Controller
 
         return response()->json( [
             'success' => true,
-            'message' => "Please for Admins approval."
+            'message' => "Please wait for Admins approval."
         ] );
     }
 
@@ -182,7 +204,7 @@ class SellerPayoutController extends Controller
         $sellerPayout = SellerPayoutRequest::find( $request->payout_request_id );
         $sellerPayout->gcash_name = $request->gcash_name;
         $sellerPayout->gcash_number = $request->gcash_number;
-        $sellerPayout->gcash_ref = $request->gcash_ref;
+        // $sellerPayout->gcash_ref = $request->gcash_ref;
         $sellerPayout->amount = $request->amount;
         $sellerPayout->reject_reason = NULL;
         $sellerPayout->status = 0;

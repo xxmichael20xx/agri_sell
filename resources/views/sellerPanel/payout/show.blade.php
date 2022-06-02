@@ -28,9 +28,9 @@
                         <div class="col-12 mb-3">
                             <span class="text-muted">GCash number: {{ $payout->gcash_number }}</span>
                         </div>
-                        <div class="col-12 mb-3">
+                        {{-- <div class="col-12 mb-3">
                             <span class="text-muted">GCash reference number: {{ $payout->gcash_ref }}</span>
-                        </div>
+                        </div> --}}
                         <div class="col-12 mb-3">
                             <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $payout->amount ) }}</span>
                         </div>
@@ -39,6 +39,25 @@
                                 <span class="text-muted">Reason for rejecting: {{ $payout->reject_reason }}</span>
                             </div>
                         @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Proof of Payout</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-12">
+                            @if( $payout->status == 1 && $payout->image_proof )
+                                <img src="/storage/{{ $payout->image_proof }}" class="img-fluid" />
+                            @else
+                                <div class="text-muted text-center">
+                                    <i class="fa fa-info-circle"></i> No proof of payout yet.
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>

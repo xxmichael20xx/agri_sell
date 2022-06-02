@@ -18,7 +18,6 @@ class CreateSellerPayoutRequestsTable extends Migration
             $table->foreignId( 'user_id' )->constrained( 'users' )->onDelete( 'cascade' );
             $table->string( 'gcash_name' );
             $table->string( 'gcash_number' );
-            $table->string( 'gcash_ref' )->unique();
             $table->float( 'amount' );
             $table->string( 'reject_reason' )->nullable();
             $table->boolean( 'status' )->default( 0 )->nullable();

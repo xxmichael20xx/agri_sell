@@ -15,6 +15,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
     Route::group([ 'prefix' => '/admin/payout'], function() {
         Route::get( '/', 'AdminPayoutController@index' );
         Route::get( '{id}', 'AdminPayoutController@show' );
+        Route::post( 'add/proof', 'AdminPayoutController@addProof' )->name( 'admin.payout.proof' );
     });
     Route::get('/admin/manage_orders', 'OrderMgmtPanelController@index');
     

@@ -70,6 +70,9 @@ class SellerPanelController extends Controller
         }
 
         $total_sales_deduction_diff = $total_sales - $payoutTotal;
+        if ( $total_sales_deduction_diff < 1 ) {
+            $total_sales_deduction_diff = 0;
+        }
         
         // shop_title
         // shop_description

@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="profile-header-container">   
                     <div class="profile-header-img-{{Auth::user()->role->name}}">
-                        <img class="img-circle-{{Auth::user()->role->name}}" src="{{env('APP_URL')}}/storage/{{Auth::user()->avatar}}" />
+                        <img class="img-circle-{{Auth::user()->role->name}}" src="/storage/{{Auth::user()->avatar}}" />
 
                         <div class="rank-label-container">
                             <span class="label label-{{Auth::user()->role->name}} rank-label text-white">{{Auth::user()->role->display_name}} </span>

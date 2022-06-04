@@ -162,7 +162,7 @@
                                     @endphp
                                     
                                     @foreach ($pieces as $piece)
-                                        <div style="width: 135px; height: 135px;display: inline-block; margin: 5px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$piece}}');" ></div>
+                                        <div style="width: 135px; height: 135px;display: inline-block; margin: 5px;background-position: center;background-size: cover;background-image: url('/storage/{{$piece}}');" ></div>
                                     @endforeach 
                        
                                 </div>

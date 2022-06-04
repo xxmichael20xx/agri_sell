@@ -9,7 +9,7 @@
                         <h5 class="card-title">Seller registration fee</h5>
                     </div>
                     <div class="card-body">
-                        <a href="{{env('APP_URL')}}/storage/{{$user->payment_proof}}">
+                        <a href="/storage/{{$user->payment_proof}}">
                            <img src="{{asset('storage/'.$user->payment_proof)}}" alt="" height="300">
                         </a>    
                        <br>

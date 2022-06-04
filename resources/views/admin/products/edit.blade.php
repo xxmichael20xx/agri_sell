@@ -52,7 +52,7 @@
                                     @endphp
                                     @foreach ($pieces as $piece)
                                  
-                                    <div class="col-md-6 mt-1"><img src="{{env('APP_URL')}}/storage/{{$piece}}"></div>
+                                    <div class="col-md-6 mt-1"><img src="/storage/{{$piece}}"></div>
                                                        
                                     @endforeach   
                             </div>

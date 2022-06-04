@@ -56,16 +56,16 @@
                                     @if ($image_counter == 1)
                                     <div class="tab-pane active show fade" id="pro-details{{$image_counter}}" role="tabpanel">
                                         <div class="">
-                                            <a href="{{env('APP_URL')}}/storage/{{$piece}}">
-                                                <div style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$piece}}');" ></div>
+                                            <a href="/storage/{{$piece}}">
+                                                <div style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('/storage/{{$piece}}');" ></div>
                                             </a>
                                         </div>
                                     </div>
                                     @else
                                     <div class="tab-pane fade" id="pro-details{{$image_counter}}" role="tabpanel">
                                         <div class="">
-                                            <a href="{{env('APP_URL')}}/storage/{{$piece}}">
-                                            <div style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$piece}}');" ></div>
+                                            <a href="/storage/{{$piece}}">
+                                            <div style="width: 600px; height: 656px;background-position: center;background-size: cover;background-image: url('/storage/{{$piece}}');" ></div>
                                             </a>
                                         </div>
                                     </div>
@@ -85,11 +85,11 @@
                                     @endphp
                                     @if ($image_counter == 1)
                                     <a class="active mr-12 mt-1" href="#pro-details{{$image_counter}}" data-toggle="tab" role="tab" aria-selected="true">
-                                        <div style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$piece}}');" ></div>
+                                        <div style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('/storage/{{$piece}}');" ></div>
                                     </a>
                                     @else
                                     <a class="mr-12 mt-1" href="#pro-details{{$image_counter}}" data-toggle="tab" role="tab" aria-selected="true">
-                                        <div style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('{{env('APP_URL')}}/storage/{{$piece}}');" ></div>
+                                        <div style="width: 141px; height: 135px;background-position: center;background-size: cover;background-image: url('/storage/{{$piece}}');" ></div>
                                     </a>
                                     @endif
                                     @endforeach 
@@ -165,7 +165,7 @@
                                     <span id ="price_list">{{$product_variation_range}}</span>
                             </span>
                         </div>
-                        <a href="{{env('APP_URL')}}/shop/catalog/{{$product->shop->id}}">{{$product->shop->name}}</a>
+                        <a href="/shop/catalog/{{$product->shop->id}}">{{$product->shop->name}}</a>
                         <br>
                         <div>   
                             <span>Sold per: </span>

@@ -108,7 +108,7 @@
                                 {{-- Get if the item has Sale or discounted price this will fix the regular price bug --}}        
                                 @php
                                     $product_variety_ent = App\ProductVariation::where('id', $item->pivot->variation_id)->first();
-                                    $item_product_pivot = App\Product::where('id', $item->id)->first();
+                                    $item_product_pivot = App\Product::withTrashed()->where('id', $item->id)->first();
                                     $item_product_pivot_price = $item_product_pivot->price;
                                     $item_product_price_proc = 0;
                                     if ( $item_product_pivot->is_sale == 1 ) {

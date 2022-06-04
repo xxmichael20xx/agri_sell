@@ -40,7 +40,8 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-                "livewire/livewire"
+                "livewire/livewire",
+                "laravel/dusk"
             ]
         }
     },

@@ -118,7 +118,6 @@
                     @elseif ( $payout->status == 1 && $payout->image_proof )
                         <div class="form-group row">
                             <div class="col-8">
-                                <span class="text-muted font-weight-bold">Proof of payout</span>
                                 <img src="/storage/{{ $payout->image_proof }}" class="img-fluid" />
                             </div>
                         </div>

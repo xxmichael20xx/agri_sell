@@ -6,6 +6,10 @@
     #myTab li.nav-item .nav-link.active::after {
         bottom: 0px !important;
     }
+
+    .border-agri {
+        border-color: #28A745 !important;
+    }
 </style>
 
 <div class="content">
@@ -88,12 +92,45 @@
 
             <div class="card">
                 <div class="card-body">
-                    <h6>Reminders:</h6>
-                    <ol class="pl-3">
-                        <li>First Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos, eius.</li>
-                        <li>Second Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere atque labore magnam consectetur? Neque facere nostrum consectetur molestias excepturi vel!</li>
-                        <li>Third Lorem ipsum dolor sit amet.</li>
-                    </ol>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <h6>Reminders:</h6>
+                            <ol class="pl-3">
+                                <li>To process your payout request, make sure that you have an existing verified account in Gcash. </li>
+                                <li>Please be advised that seller payouts will not be processed every day. Processing will resume every seven days.</li>
+                                <li>Agrisell will only be able to process payouts via Seller Total Sales. </li>
+                            </ol>
+                        </div>
+
+                        <div class="col-12">
+                            <p>
+                                Agriseller fees are charged to sellers for every successful order made. The seller fees consist of shipping fees.
+                                <br>
+                                Sample of how payouts are calculated:
+                            </p>
+
+                            <table class="table border border-agri">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            <h5>SAMPLE SELLER FEES PAYOUT CALCULATION</h5>
+                                            <h5>(TOTAL SALES AND SHIPPING FEE)</h5>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <h5>Total Sales - Shipping Fee = TOTAL PAYOUT</h5>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                        <div class="col-12">
+                            <p class="mb-0">Sample image below:</p>
+                            <img src="{{ asset( 'assets/img/payout_sample.png' ) }}" class="img-fluid">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,13 +150,13 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="step-1-tab" data-toggle="tab" href="#step-1" role="tab" aria-controls="step-1" aria-selected="true">Step 1</a>
+                                    <a class="nav-link active" id="step-1-tab" data-toggle="tab" href="#step-1" role="tab" aria-controls="step-1" aria-selected="true">STEP 1</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="step-2-tab" data-toggle="tab" href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">Step 2</a>
+                                    <a class="nav-link" id="step-2-tab" data-toggle="tab" href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">STEP 2</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="step-3-tab" data-toggle="tab" href="#step-3" role="tab" aria-controls="step-3" aria-selected="true">Step 3</a>
+                                    <a class="nav-link" id="step-3-tab" data-toggle="tab" href="#step-3" role="tab" aria-controls="step-3" aria-selected="true">STEP 3</a>
                                 </li>
                             </ul>
                         </div>
@@ -132,27 +169,25 @@
                                 <div class="tab-pane active" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
                                     <span class="text-muted font-weight-bold">Form Validation</span>
                                     <ol class="pl-3">
-                                        <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, dolore.</li>
-                                        <li>Lorem ipsum dolor sit amet consectetur.</li>
-                                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem aperiam hic possimus libero ipsam reprehenderit dolores, sit, ullam ipsum ducimus debitis voluptatum incidunt iste laudantium?</li>
+                                        <li>Double-check the recipient’s GCash name and mobile number.</li>
+                                        <li>Please ensure that all the information is correct before proceeding to submission.</li>
                                     </ol>
                                 </div>
                                 <div class="tab-pane" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
                                     <span class="text-muted font-weight-bold">Sales Check</span>
                                     <ol class="pl-3">
-                                        <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, dolore.</li>
-                                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem aperiam hic possimus libero ipsam reprehenderit dolores, sit, ullam ipsum ducimus debitis voluptatum incidunt iste laudantium?</li>
+                                        <li>Please double-check the available total sales, request payout can't exceed your total sales balance.</li>
                                     </ol>
                                 </div>
                                 <div class="tab-pane" id="step-3" role="tabpanel" aria-labelledby="step-3-tab">
                                     <span class="text-muted font-weight-bold">Admins Approval</span>
                                     <ol class="pl-3">
-                                        <li>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aut, dolore.</li>
-                                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non at asperiores, illum quos amet itaque repellat.</li>
+                                        <li>Kindly wait within 24-48 hours for the admin to process your payout that will be sent to your GCash Account.</li>
                                     </ol>
 
                                     <hr>
 
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                     <button type="button" class="btn btn-primary btn-agree">Agree</button>
                                 </div>
                             </div>

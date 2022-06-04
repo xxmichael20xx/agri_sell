@@ -78,4 +78,31 @@ class riderMgmtController extends Controller
             'data' => $data
         ] );
     }
+
+    public function edit( Request $request, $id ) {
+        if ( ! $id ) return redirect( '/admin/rider_management' );
+
+        $rider = deliveryStaffModel::find( $id );
+        $panel_name = "Update Rider";
+
+        return view( 'admin.deliveryStaff.edit', compact( 'rider', 'panel_name' ) );
+    }
+
+    public function update_rider( Request $request ) {
+        $rider = deliveryStaffModel::where( 'user_id', $request->id )->first();
+
+        if ( ! $rider ) {
+            return back()->with( 'info', "Rider data can't be found." );
+        }
+
+        $rider->vehicle_used = $request->rider_vehicle;
+        $rider->save();
+
+        $rider_user = User::find( $request->id );
+        $rider_user->name = $request->rider_name;
+        $rider_user->mobile = $request->rider_contact;
+        $rider_user->save();
+
+        return back()->with( 'success', "Rider information has been updated." );
+    }
 }

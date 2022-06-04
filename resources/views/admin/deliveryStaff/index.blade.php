@@ -53,6 +53,7 @@
 										</td>
 										<td>
 											<button type="button" class="btn btn-danger btn-rider-delete" data-href="/admin/remove_rider/{{ $delivery_staff->user_id }}">Delete</button>
+											<a href="/admin/rider_management/edit/{{ $delivery_staff->id }}" class="btn btn-secondary" data-id="{{ $delivery_staff->id }}">Edit</a>
 											<button type="button" class="btn btn-primary btn-rider-password" data-id="{{ $delivery_staff->id }}">Show Password</button>
 										</td>
 									</tr>

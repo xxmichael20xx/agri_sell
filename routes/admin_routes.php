@@ -118,9 +118,11 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
     // rider management routes
     Route::get('/admin/rider_management', 'riderMgmtController@index');
+    Route::get('/admin/rider_management/edit/{id}', 'riderMgmtController@edit');
     Route::get('admin/remove_rider/{user_id}', 'riderMgmtController@remove_rider');
 
     Route::post('/admin/rider_new_add', 'riderMgmtController@add_new')->name('rider_mgmt_add');
+    Route::post('/admin/rider_new_update', 'riderMgmtController@update_rider')->name('rider_mgmt_update');
 
     Route::get('/admin/rider_registration', 'riderMgmtController@add_new_form');
 

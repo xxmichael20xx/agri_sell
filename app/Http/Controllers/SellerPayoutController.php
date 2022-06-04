@@ -70,7 +70,8 @@ class SellerPayoutController extends Controller
             if ( $day->between( $start, $end ) ) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Between ranges'
+                    'message' => 'Between ranges',
+                    'data' => [ $day, $start, $end ]
                 ]);
                 break;
             }

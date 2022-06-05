@@ -34,7 +34,7 @@
                         @endif
                     </div>
                 
-                    <div class="card-footer">
+                    {{-- <div class="card-footer">
                         <div class="row">
                             <div class="col col-6">
                                 <div class="dropdown">
@@ -43,16 +43,13 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" style="will-change: transform; position: absolute; transform: translate3d(-25px, -173px, 0px); top: 0px; left: 0px;" x-placement="top-end">
                                         <div class="dropdown-header">Select delivery status option</div>
-                                        {{-- @foreach ($assign_order_status_options as $option)
-                                            <a class="dropdown-item" href="/admin/edit_order_status/{{$option->id}}/{{$order->order_id}}">{{$option->display_name}}</a>
-                                        @endforeach --}}
                                         @foreach ( $_order_status_list as $index => $list)
                                             <a class="dropdown-item" href="/admin/edit_order_status/{{ $index }}/{{ $order->order_id }}">{{ $list }}</a>
                                         @endforeach
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="col col-6">
+                            <div class="col col-6">
                                 <div class="dropdown">
                                     <button class="dropdown-toggle btn btn-primary btn-round btn-block " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
                                         Assign rider
@@ -64,9 +61,9 @@
                                         @endforeach
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         @else
@@ -172,7 +169,7 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
-                        {{-- <tr>
+                        <tr>
                             <td class="text-left">
                                 Shipping fee
                             </td>
@@ -183,7 +180,7 @@
                                     ₱ 0 
                                 @endif
                             </td>
-                        </tr> --}}
+                        </tr>
                         <tr>
                             <td class="text-left">
                                 Total

@@ -109,27 +109,13 @@
                                 Sample of how payouts are calculated:
                             </p>
 
-                            <table class="table border border-agri">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">
-                                            <h5>SAMPLE SELLER FEES PAYOUT CALCULATION</h5>
-                                            <h5>(TOTAL SALES AND SHIPPING FEE)</h5>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>
-                                            <h5>Total Sales - Shipping Fee = TOTAL PAYOUT</h5>
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <img src="{{ asset( 'assets/img/new_payout_sample.png' ) }}" class="img-fluid w-75">
                         </div>
 
-                        <div class="col-12">
+                        {{-- <div class="col-12">
                             <p class="mb-0">Sample image below:</p>
                             <img src="{{ asset( 'assets/img/payout_sample.png' ) }}" class="img-fluid">
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -168,22 +154,22 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
                                     <span class="text-muted font-weight-bold">Form Validation</span>
-                                    <ol class="pl-3">
+                                    <ul class="pl-3">
                                         <li>Double-check the recipient’s GCash name and mobile number.</li>
                                         <li>Please ensure that all the information is correct before proceeding to submission.</li>
-                                    </ol>
+                                    </ul>
                                 </div>
                                 <div class="tab-pane" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
                                     <span class="text-muted font-weight-bold">Sales Check</span>
-                                    <ol class="pl-3">
-                                        <li>Please double-check the available total sales, request payout can't exceed your total sales balance.</li>
-                                    </ol>
+                                    <ul class="pl-3">
+                                        <li>Check the available sales balance carefully, payout request cannot exceed the sales balance.</li>
+                                    </ul>
                                 </div>
                                 <div class="tab-pane" id="step-3" role="tabpanel" aria-labelledby="step-3-tab">
                                     <span class="text-muted font-weight-bold">Admins Approval</span>
-                                    <ol class="pl-3">
+                                    <ul class="pl-3">
                                         <li>Kindly wait within 24-48 hours for the admin to process your payout that will be sent to your GCash Account.</li>
-                                    </ol>
+                                    </ul>
 
                                     <hr>
 

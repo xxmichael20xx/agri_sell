@@ -13,10 +13,16 @@
                 <div class="nav-tabs-wrapper">
                     <ul id="tabs" class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" href="/sellerpanel/manage_orders/pickup/1">Pick up</a>
+                            <a class="nav-link font-weight-bold {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" href="/sellerpanel/manage_orders/pickup/1">
+                                Pick up
+                                <span class="badge badge-info">{{ $pendingPickup }}</span>
+                            </a>
                         </li>
                         <li class="nav-item ">
-                            <a class="nav-link font-weight-bold {{ isset( $deliverySection ) ? $deliverySection : '' }}" href="/sellerpanel/manage_orders/delivery/1">Delivery</a>
+                            <a class="nav-link font-weight-bold {{ isset( $deliverySection ) ? $deliverySection : '' }}" href="/sellerpanel/manage_orders/delivery/1">
+                                Delivery
+                                <span class="badge badge-info">{{ $pendingDelivery }}</span>
+                            </a>
                         </li> 
                     </ul>
                 </div>

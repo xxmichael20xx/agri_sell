@@ -47,7 +47,7 @@
                             </div>
                         @elseif ( $refund->status == '3' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Refund confirmed: (amount) ₱</span>
+                                <span class="text-muted">Refund confirmed: (amount) ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
                             </div>
                         @endif
                     </div>

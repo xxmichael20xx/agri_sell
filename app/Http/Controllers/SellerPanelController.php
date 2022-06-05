@@ -8,6 +8,7 @@ use App\Product;
 use App\SubOrder;
 use App\orderDeliveryStatusModel;
 use App\orderpickupStatusModel;
+use App\refundModelOrder;
 use App\SellerPayout;
 use App\SellerPayoutRequest;
 
@@ -61,6 +62,7 @@ class SellerPanelController extends Controller
         $total_sales_deduction_diff = $total_sales - $total_sales_deduction; */
 
         $payouts = SellerPayoutRequest::where( 'user_id', auth()->user()->id )->get();
+
         $payoutTotal = 0;
 
         if ( $payouts->count() > 0 ) {
@@ -115,8 +117,11 @@ class SellerPanelController extends Controller
             }
         }
 
+        $pendingPickup = SubOrder::where( 'seller_id', auth()->user()->id )->where( 'is_pick_up', 'yes' )->where( 'pick_up_status_id', 1 )->get()->count();
+        $pendingDelivery = SubOrder::where( 'seller_id', auth()->user()->id )->where( 'is_pick_up', 'no' )->where( 'status_id', 1 )->get()->count();
+
         return view( 'sellerPanel.orders.index' )
-            ->with( compact( 'orders', 'assign_order_status_options', 'is_pick_up', 'status_obj', 'category_type', 'status_id' ) )
+            ->with( compact( 'orders', 'assign_order_status_options', 'is_pick_up', 'status_obj', 'category_type', 'status_id', 'pendingPickup', 'pendingDelivery' ) )
             ->with( 'panel_name', 'orders' );
     }
 

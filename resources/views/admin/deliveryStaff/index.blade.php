@@ -9,58 +9,74 @@
 					<a  class="btn btn-success text-white text-right m-3" href="/admin/rider_registration">Add new</a>
 				</div>
 				<div class="card-body">
-					<div class="table-responsive">
-						<table id="datatable" class="table" cellspacing="0" width="100%">
-							<thead class="text-primary">
+					<table id="datatable" class="table" cellspacing="0" width="100%">
+						<thead class="text-primary">
+							<tr>
+								<th>
+									Rider name
+								</th>
+								<th>
+									Rider contact number
+								</th>
+								<th>
+									Rider email
+								</th>
+								<th>
+									Rider vehicle
+								</th>
+								<th>
+									Rider reference ID
+								</th>
+								<th>
+									Actions
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach ( $deliver_Staffs as $delivery_index => $delivery_staff )
 								<tr>
-									<th>
-										Rider name
-									</th>
-									<th>
-										Rider contact number
-									</th>
-									<th>
-										Rider email
-									</th>
-									<th>
-										Rider vehicle
-									</th>
-									<th>
-										Rider reference ID
-									</th>
-									<th>
-										Actions
-									</th>
+									<td>
+										{{ $delivery_staff->user->name ?? 'not available' }}
+									</td>
+									<td>
+										{{ $delivery_staff->user->mobile ?? 'not available' }}
+									</td>
+									<td>
+										{{ $delivery_staff->user->email ?? 'not available' }}
+									</td>
+									<td>
+										{{ $delivery_staff->vehicle_used ?? 'not available' }}
+									</td>
+									<td>
+										{{ $delivery_staff->rider_id ?? 'not available' }}
+									</td>
+									<td>
+										{{-- <div class="dropdown">
+											<button class="dropdown-toggle btn btn-info btn-round btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
+												Select action
+											</button>
+											<div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" x-placement="top-end">
+												<div class="dropdown-header">Selection an action</div>
+												<button type="button" class="btn btn-danger btn-rider-delete btn-sm" data-href="/admin/remove_rider/{{ $delivery_staff->user_id }}">Delete</button>
+												<a href="/admin/rider_management/edit/{{ $delivery_staff->id }}" class="btn btn-secondary btn-sm" data-id="{{ $delivery_staff->id }}">Edit</a>
+												<button type="button" class="btn btn-primary btn-rider-password btn-sm d-block mt-2" data-id="{{ $delivery_staff->id }}">Show Password</button>
+											</div>
+										</div> --}}
+										<div class="dropdown">
+											<button class="btn btn-sm btn-info btn-round dropdown-toggle" type="button" id="dropStatus{{ $delivery_index }}" data-toggle="dropdown" aria-expanded="false">
+												Select an action
+											</button>
+											<div class="dropdown-menu" aria-labelledby="riderAction{{ $delivery_index }}">
+												<button type="button" class="btn btn-danger btn-rider-delete dropdown-item text-white" data-href="/admin/remove_rider/{{ $delivery_staff->user_id }}">Delete</button>
+												<a href="/admin/rider_management/edit/{{ $delivery_staff->id }}" class="btn btn-secondary dropdown-item text-white mt-2" data-id="{{ $delivery_staff->id }}">Edit</a>
+												<button type="button" class="btn btn-primary btn-rider-password dropdown-item text-white mt-2" data-id="{{ $delivery_staff->id }}">Show Password</button>
+											</div>
+										</div>
+									</td>
 								</tr>
-							</thead>
-							<tbody>
-								@foreach ( $deliver_Staffs as $delivery_staff )
-									<tr>
-										<td>
-											{{ $delivery_staff->user->name ?? 'not available' }}
-										</td>
-										<td>
-											{{ $delivery_staff->user->mobile ?? 'not available' }}
-										</td>
-										<td>
-											{{ $delivery_staff->user->email ?? 'not available' }}
-										</td>
-										<td>
-											{{ $delivery_staff->vehicle_used ?? 'not available' }}
-										</td>
-										<td>
-											{{ $delivery_staff->rider_id ?? 'not available' }}
-										</td>
-										<td>
-											<button type="button" class="btn btn-danger btn-rider-delete" data-href="/admin/remove_rider/{{ $delivery_staff->user_id }}">Delete</button>
-											<a href="/admin/rider_management/edit/{{ $delivery_staff->id }}" class="btn btn-secondary" data-id="{{ $delivery_staff->id }}">Edit</a>
-											<button type="button" class="btn btn-primary btn-rider-password" data-id="{{ $delivery_staff->id }}">Show Password</button>
-										</td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
+							@endforeach
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>

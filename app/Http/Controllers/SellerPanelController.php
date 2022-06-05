@@ -62,6 +62,15 @@ class SellerPanelController extends Controller
         $total_sales_deduction_diff = $total_sales - $total_sales_deduction; */
 
         $payouts = SellerPayoutRequest::where( 'user_id', auth()->user()->id )->get();
+        $_refunds = refundModelOrder::where( 'status', 3 )->get();
+        $refundsAmount = 0;
+
+        foreach( $_refunds as $refund ) {
+            if ( $refund->product->product_user_id == auth()->user()->id ) {
+                $amount = $refund->order_item->price * $refund->order_item->quantity;
+                $refundsAmount += $amount;
+            }
+        }
 
         $payoutTotal = 0;
 
@@ -71,7 +80,7 @@ class SellerPanelController extends Controller
             }
         }
 
-        $total_sales_deduction_diff = $total_sales - $payoutTotal;
+        $total_sales_deduction_diff = $total_sales - $payoutTotal - $refundsAmount;
         if ( $total_sales_deduction_diff < 1 ) {
             $total_sales_deduction_diff = 0;
         }

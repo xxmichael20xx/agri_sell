@@ -109,7 +109,7 @@
                                 Sample of how payouts are calculated:
                             </p>
 
-                            <img src="{{ asset( 'assets/img/new_payout_sample.png' ) }}" class="img-fluid w-75">
+                            <img src="{{ asset( 'assets/img/new_payout_sample_edited.jpg' ) }}" class="img-fluid w-75">
                         </div>
 
                         {{-- <div class="col-12">

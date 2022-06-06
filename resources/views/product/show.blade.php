@@ -187,7 +187,7 @@
                             $var_count = App\ProductVariation::where('product_id', $product->id)->count();
                             $first_var_id = App\ProductVariation::where('product_id', $product->id)->pluck('id')->first();
 
-                            $variantMinQty = 1;
+                            $variantMinQty = 0;
                             $variantStocks = number_format( $first_var->variation_quantity );
                             $variantWeight = number_format( $first_var->variation_net_weight );
                             $variantWeightUnit = $first_var->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g';
@@ -202,9 +202,9 @@
                             }
                             
                             if ( $first_var->is_variation_wholesale == 'yes' ) {
-                                $variantMinQty = $first_var->variation_min_qty_wholesale;
+                                // $variantMinQty = $first_var->variation_min_qty_wholesale;
                                 $variation_wholesale_price_per = number_format( $first_var->variation_wholesale_price_per );
-                                $variantText = "Wholesale: Buy a minimum qty of {$variantMinQty} and the price will be ₱{$variation_wholesale_price_per}";
+                                $variantText = "Wholesale: Buy a minimum qty of {$first_var->variation_min_qty_wholesale} and the price will be ₱{$variation_wholesale_price_per}";
                                 $variantWholesale = 'yes';
                             }
                         @endphp
@@ -253,8 +253,8 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="{{ $variantMinQty }}" data-max="{{ $variantStocks }}" required>
-                                    <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">{{ $variantMinQty }}</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
+                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="{{ $first_var->variation_min_qty_wholesale }}" data-max="{{ $variantStocks }}" required>
+                                    <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">{{ $first_var->variation_min_qty_wholesale }}</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
                                     <small class="text-danger collapse" id="quantity--message-zero">OUT OF STOCK</small>
                                 </div>
                                 <div class="col-8">

@@ -35,17 +35,19 @@ class RefundAdminController extends Controller
         $text = "Refund request #{$id} has been {$action} by Admin.";
 
         if ( $action == "Confirmed" ) {
+            $text .= "<br> YOUR REFUND REQUEST IS CONFIRMED";
             $text .= "<br> Awaiting for Seller approval";
         }
 
         if ( $reason ) {
-            $text .= "<br> Reason:" . $reason;
+            $text .= "<br> YOUR REFUND REQUEST IS REJECTED";
+            $text .= "<br> Reason: " . $reason;
         }
 
         $notification = [
             'user_id' => $refund->user_id,
             'frm_user_id' => Auth::user()->id ?? $admin_id,
-            'notification_title' => "Refund #{$id} updated",
+            'notification_title' => "Refund #{$id} - {$action}",
             'notification_txt' => $text
         ];
         $this->newNotificationWithEvent( $notification, false, [] );

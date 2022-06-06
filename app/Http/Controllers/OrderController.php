@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\coinsTransaction;
 use App\Events\OrderEvent;
+use App\Events\PushNotification;
 use App\notification;
 use App\Product;
 use App\PreOrderModel;
@@ -284,6 +285,8 @@ class OrderController extends Controller
             $notification_ent->notification_txt = "<br>New order has been placed.</br>";
             $notification_ent->save();
         }
+
+        event( new PushNotification() );
 
         if ( request('payment_method') == 'agrisell_coins' ) {
             return redirect('/otp_validation_payment_reg/'.$order->order_number.'');

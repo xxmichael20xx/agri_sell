@@ -14,6 +14,16 @@
                         <th>
                             Image
                         </th>
+                        @if ( $index == '0' )
+                            <th>
+                                Confirmed Date
+                            </th>
+                        @endif
+                        @if ( $index == '2' )
+                            <th>
+                                Request Date
+                            </th>
+                        @endif
                         <th>
                             Reason
                         </th>
@@ -33,7 +43,7 @@
                             <td>
                                 {{ $item->customer->name }}
                             </td>
-                            <td id="refund--container-{{ $index }}">
+                            <td id="refund--container-{{ $index }}" class="w-25">
                                 @if ( count( $item->expl_images ) > 0  )
                                     <img src="/storage/{{ $item->expl_images[0] }}" class="img-fluid view-images w-50" data-id="refund--image-{{ $index }}" data-raw="{{ $index }}">
 
@@ -60,6 +70,16 @@
                                     No image(s) provided
                                 @endif
                             </td>
+                            @if ( $index == '0' )
+                                <td>
+                                    {{ AppHelpers::humanDate( $item->created_at, true ) }}
+                                </td>
+                            @endif
+                            @if ( $index == '2' )
+                                <td>
+                                    {{ AppHelpers::humanDate( $item->updated_at, true ) }}
+                                </td>
+                            @endif
                             <td>
                                 {{ $item->refund_reason_prod_txt }}
                             </td>

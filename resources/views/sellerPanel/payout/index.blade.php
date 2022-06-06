@@ -158,12 +158,22 @@
                                         <li>Double-check the recipient’s GCash name and mobile number.</li>
                                         <li>Please ensure that all the information is correct before proceeding to submission.</li>
                                     </ul>
+
+                                    <br>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-primary btn-next" data-id="#step-2-tab">Next</button>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="step-2" role="tabpanel" aria-labelledby="step-2-tab">
                                     <span class="text-muted font-weight-bold">Sales Check</span>
                                     <ul class="pl-3">
                                         <li>Check the available sales balance carefully, payout request cannot exceed the sales balance.</li>
                                     </ul>
+
+                                    <br>
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-primary btn-next" data-id="#step-3-tab">Next</button>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="step-3" role="tabpanel" aria-labelledby="step-3-tab">
                                     <span class="text-muted font-weight-bold">Admins Approval</span>
@@ -172,9 +182,11 @@
                                     </ul>
 
                                     <hr>
-
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-primary btn-agree">Agree</button>
+                                    
+                                    <div class="text-right">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary btn-agree">Agree</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,6 +249,11 @@
                     document.cookie = `payout_agree=Agree; ${expires}`
 
                     window.location.href = "/sellerpanel/payout/new"
+                } )
+
+                $( document ).on( 'click', '.btn-next', function() {
+                    const id = $( this ).data( 'id' )
+                    $( id ).trigger( 'click' )
                 } )
 
             })

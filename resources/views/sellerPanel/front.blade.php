@@ -94,7 +94,7 @@ Coded by www.creative-tim.com
           <li class="{{($panel_name == 'orders') ? 'active' : ''}}">
             <a href="/sellerpanel/manage_orders/pickup/1">
               <i class="nc-icon nc-tile-56"></i>
-              <p>Manage orders</p>
+              <p id="pending--orders">Manage orders</p>
             </a>
           </li>
           <li class="{{($panel_name == 'products') ? 'active' : ''}}">
@@ -112,7 +112,7 @@ Coded by www.creative-tim.com
           <li class="{{ $panel_name == 'payout' ? 'active' : '' }}">
             <a href="/sellerpanel/payout">
               <i class="nc-icon nc-share-66"></i>
-              <p>Payout</p>
+              <p id="pending--payout">Payout</p>
             </a>
           </li>
           {{-- <li class="{{($panel_name == 'pre_orders') ? 'active' : ''}}">
@@ -230,7 +230,48 @@ Coded by www.creative-tim.com
   <!-- Sharrre libray -->
   <script src="/paper_assets/demo/jquery.sharrre.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   @include('sellerPanel.additional_scripts')
   @yield('custom-scripts')
+
+  <script>
+    (function($) {
+      $(document).ready(function() {
+        const user_id = {{ Auth::check() ? Auth::user()->id : NULL }} 
+        let pusher = new Pusher( 'd527cc315432ec685113', {
+          cluster: 'ap1'
+        } )
+
+        getPushNotifications()
+
+        var channel = pusher.subscribe( 'my-channel' )
+        channel.bind( 'push-notifications', function( res ) {
+          // Check and update Sellers' notification count
+          getPushNotifications()
+        } )
+
+        function getPushNotifications() {
+          try {
+            $.post( `/api/seller/push/notifications`, { user_id: user_id }, function( res ) {
+              const data = res.data
+              
+              data.forEach( el => {
+                const selector = el[0]
+                const label = el[1]
+                const count = el[2]
+
+                const badge = `
+                  ${label} <span class="badge badge-primary">${count}</span>
+                `
+                $( selector ).html( badge )
+
+              } )
+            } )
+              
+          } catch (error) { /* silently exit */ }
+        }
+      })
+    })(jQuery)
+  </script>
 </body>
 </html>

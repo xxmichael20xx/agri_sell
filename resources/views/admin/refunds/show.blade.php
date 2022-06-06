@@ -19,8 +19,23 @@
                         <div class="col-12 mb-4">
                             <div class="refund--images">
                                 @foreach ( $refund->expl_images as $image)
-                                    <img src="/storage/{{ $image }}" class="img-fluid w-50">
+                                    <div class="image h-100">
+                                        <img src="/storage/{{ $image }}" class="img-fluid w-50 enlarge--image" data-src="/storage/{{ $image }}">
+                                    </div>
                                 @endforeach
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="enlarge--image-modal">
+                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <img id="enlarge--image-src" class="img-fluid w-100">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -37,16 +52,26 @@
                         <div class="col-12 mb-3">
                             <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
                         </div>
+                        @if ( $refund->status == '1' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">Date Confirmed: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
+                            </div>
+                        @endif
                         @if ( $refund->status == '2' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Reason for rejecting: (admin) {{ $refund->reason }}</span>
+                                <span class="text-muted">Date Rejected: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif
                         @if ( $refund->status == '4' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Reason for rejecting: (seller) {{ $refund->reason }}</span>
+                                <span class="text-muted">Date Confirmed: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Date Requested: {{ AppHelpers::humanDate( $refund->created_at, true ) }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -210,6 +235,13 @@
                         })
                     }
 
+                } )
+
+                $( document ).on( 'click', '.enlarge--image', function() {
+                    const src = $( this ).data( 'src' )
+                    $( '#enlarge--image-src' ).attr( 'src', src )
+
+                    $( '#enlarge--image-modal' ).modal( 'show' )
                 } )
 
             })

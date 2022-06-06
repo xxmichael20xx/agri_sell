@@ -40,7 +40,7 @@
                                     <label for="gcash_number" class="col-form-label">GCash Number:</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="number" name="gcash_number" id="gcash_number" class="form-control" placeholder="i.e. +6399151118383" value="{{ $payout->gcash_number ?? '' }}" required>
+                                    <input type="tel" name="gcash_number" id="gcash_number" class="form-control" placeholder="i.e. +6399151118383" value="{{ $payout->gcash_number ?? '' }}" required>
                                     <small class="text-danger collapse">GCash Number is required</small>
                                 </div>
                             </div>

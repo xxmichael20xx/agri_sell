@@ -34,9 +34,9 @@
                         <div class="col-12 mb-3">
                             <span class="text-muted">GCash number: {{ $payout->gcash_number }}</span>
                         </div>
-                        <div class="col-12 mb-3">
+                        {{-- <div class="col-12 mb-3">
                             <span class="text-muted">GCash reference number: {{ $payout->gcash_ref }}</span>
-                        </div>
+                        </div> --}}
                         <div class="col-12 mb-3">
                             <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $payout->amount ) }}</span>
                         </div>
@@ -90,40 +90,42 @@
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Proof of Payout</h5>
-                </div>
-                <div class="card-body">
-                    @if( $payout->status == 1 && ! $payout->image_proof )
-                        <form method="POST" action="{{ route('admin.payout.proof') }}" enctype="multipart/form-data">
-                            @csrf
-                            <input type="hidden" name="id" id="id" value="{{ $id }}">
+            @if ( $payout->status == '1' )
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Proof of Payout</h5>
+                    </div>
+                    <div class="card-body">
+                        @if( $payout->status == 1 && ! $payout->image_proof )
+                            <form method="POST" action="{{ route('admin.payout.proof') }}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id" id="id" value="{{ $id }}">
 
-                            <div class="form-group row">
-                                <div class="col-6">
-                                    <span class="text-muted font-weight-bold">Upload Payout Proof</span>
-                                    <div class="custom-file h6 mt-2">
-                                        <input type="file" class="custom-file-input" name="proof" id="proof" accept="image/*" required>
-                                        <label class="custom-file-label" for="proof">Choose image</label>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <span class="text-muted font-weight-bold">Upload Payout Proof</span>
+                                        <div class="custom-file h6 mt-2">
+                                            <input type="file" class="custom-file-input" name="proof" id="proof" accept="image/*" required>
+                                            <label class="custom-file-label" for="proof">Choose image</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="form-group row">
+                                    <div class="col-6">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        @elseif ( $payout->status == 1 && $payout->image_proof )
                             <div class="form-group row">
-                                <div class="col-6">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                <div class="col-8">
+                                    <img src="/storage/{{ $payout->image_proof }}" class="img-fluid" />
                                 </div>
                             </div>
-                        </form>
-                    @elseif ( $payout->status == 1 && $payout->image_proof )
-                        <div class="form-group row">
-                            <div class="col-8">
-                                <img src="/storage/{{ $payout->image_proof }}" class="img-fluid" />
-                            </div>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 </div>

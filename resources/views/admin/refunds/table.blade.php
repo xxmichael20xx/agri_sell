@@ -14,6 +14,16 @@
                         <th>
                             Image
                         </th>
+                        @if ( $index == '0' )
+                            <th>
+                                Confirmed Date
+                            </th>
+                        @endif
+                        @if ( $index == '2' )
+                            <th>
+                                Request Date
+                            </th>
+                        @endif
                         <th>
                             Reason
                         </th>
@@ -60,6 +70,16 @@
                                     No image(s) provided
                                 @endif
                             </td>
+                            @if ( $index == '0' )
+                                <td>
+                                    {{ AppHelpers::humanDate( $item->created_at, true ) }}
+                                </td>
+                            @endif
+                            @if ( $index == '2' )
+                                <td>
+                                    {{ AppHelpers::humanDate( $item->updated_at, true ) }}
+                                </td>
+                            @endif
                             <td>
                                 {{ $item->refund_reason_prod_txt }}
                             </td>

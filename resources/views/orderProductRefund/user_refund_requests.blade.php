@@ -15,8 +15,10 @@
                         <div class="card-body">
                             Product name: {!! $refund_req->product->name !!}<br>
                             Product quantity: {!! $refund_req->order_item->quantity !!}<br>
-                            Refundable price: {!! $refund_req->order_item->price * $refund_req->order_item->quantity !!}<br>
+                            Refundable amount: {!! $refund_req->order_item->price * $refund_req->order_item->quantity !!}<br>
                             Refund status: {{ $status->slug ?? '' }}<br>
+                            <br>
+                            <p class="text-muted font-weight-bold">Note: 50% OF THE REFUND AMOUNT WILL BE DEDUCTED FROM THE SUBTOTAL OF EACH ORDER ITEM.</p>
                         </div>
                         <div class="card-footer">
                             {{ $refund_req->created_at }}

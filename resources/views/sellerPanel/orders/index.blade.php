@@ -1,10 +1,5 @@
 @extends('sellerPanel.front')
 @section('content')
-<style>
-    .badge.badge-secondary {
-        color: #dc3545 !important;
-    }
-</style>
 @php
     if ( isset( $category_type ) ) {
         $pickupSection = $category_type == 'pickup' ? 'active show' : '';
@@ -20,13 +15,13 @@
                         <li class="nav-item">
                             <a class="nav-link font-weight-bold {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" href="/sellerpanel/manage_orders/pickup/1">
                                 Pick up
-                                <span class="badge badge-secondary">{{ $pendingPickup }}</span>
+                                <span class="badge badge-info">{{ $pendingPickup }}</span>
                             </a>
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link font-weight-bold {{ isset( $deliverySection ) ? $deliverySection : '' }}" href="/sellerpanel/manage_orders/delivery/1">
                                 Delivery
-                                <span class="badge badge-secondary">{{ $pendingDelivery }}</span>
+                                <span class="badge badge-info">{{ $pendingDelivery }}</span>
                             </a>
                         </li> 
                     </ul>

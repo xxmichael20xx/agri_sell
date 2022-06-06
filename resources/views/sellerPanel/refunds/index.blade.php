@@ -1,10 +1,5 @@
 @extends('sellerPanel.front')
 @section('content')
-<style>
-    .badge.badge-secondary {
-        color: #dc3545 !important;
-    }
-</style>
 <div class="content">
     <div class="row">
         <div class="col-md-12">
@@ -22,7 +17,7 @@
                          <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#requests" role="tab" aria-expanded="false">
                                 Requests
-                                <span class="badge badge-secondary">{{ $pendingRefunds }}</span>
+                                <span class="badge badge-info">{{ $pendingRefunds }}</span>
                             </a>
                         </li>
                     </ul>

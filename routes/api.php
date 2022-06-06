@@ -35,6 +35,7 @@ Route::group([ 'prefix' => 'admin' ], function() {
 });
 
 Route::group([ 'prefix' => 'seller' ], function() {
+    Route::post( 'push/notifications', 'SellerPushNotificationsController@getCounters' );
     Route::post( 'restore-product', 'ProductMgmtPanelController@restoreProduct' );
     Route::post( 'delete-product/{id}', 'ProductMgmtPanelController@deleteProduct' );
 

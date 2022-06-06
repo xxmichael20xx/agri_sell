@@ -86,22 +86,31 @@ class refundController extends Controller
         $notification_ent->user_id = Auth::user()->id;
         $notification_ent->frm_user_id = Auth::user()->id;
         $notification_ent->notification_title = 'Refund request for ' . Order::where('id', $req->order_item_id)->first()->order_number;
-        $notification_ent->notification_txt = 'Your refund process for : ' . Product::where('id', $req->product_id)->first()->name . 'is on progress<br>You can check your refund request in the <a href="/user_refund_requests"/ class="/btn btn-light"/> My refund requests section</a>';                ;
+        $notification_ent->notification_txt = 'Your refund process for : ' . Product::where('id', $req->product_id)->first()->name . ' is on progress<br>You can check your refund request in the <a href="/user_refund_requests"/ class="/btn btn-light"/> My refund requests section</a>';                ;
         $notification_ent->save();
 
         $coinUser = User::where( 'email', 'coins@agrisell.com' )->first();
+        $adminUser = User::where( 'email', 'agrisell2077@gmail.com' )->first();
         $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
         $status_messages = "Date created: {$currentTime}";
 
         if ( $coinUser ) {
             $notification_ent = new notification();
             $notification_ent->user_id = $coinUser->id;
-            $notification_ent->frm_user_id = Auth::user()->id;
+            $notification_ent->frm_user_id = auth()->user()->id;
+            $notification_ent->notification_title = 'Refund request for ' . $refund_request->refund_ref_id;
+            $notification_ent->notification_txt = $status_messages;
+            $notification_ent->save();
+
+            $notification_ent = new notification();
+            $notification_ent->user_id = $adminUser->id;
+            $notification_ent->frm_user_id = auth()->user()->id;
             $notification_ent->notification_title = 'Refund request for ' . $refund_request->refund_ref_id;
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
 
             event( new CoinEvent( [ 'user_id' => $coinUser->id, 'type' => 'refund-top-up' ] ) );
+            event( new CoinEvent( [ 'user_id' => $adminUser->id, 'type' => 'refund-top-up' ] ) );
         }
 
         // end of notification entity

@@ -38,6 +38,10 @@ class RefundAdminController extends Controller
             $text .= "<br> Awaiting for Seller approval";
         }
 
+        if ( $reason ) {
+            $text .= "<br> Reason:" . $reason;
+        }
+
         $notification = [
             'user_id' => $refund->user_id,
             'frm_user_id' => Auth::user()->id ?? $admin_id,

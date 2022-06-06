@@ -25,6 +25,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        @php
+                            $amount = $refund->order_item->price * $refund->order_item->quantity;
+                        @endphp
                         <div class="col-12 mb-3">
                             <span class="text-muted">Name of buyer: {{ $refund->customer->name }}</span>
                         </div>
@@ -35,7 +38,7 @@
                             <span class="text-muted">Reason: {{ $refund->refund_reason_prod_txt }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
+                            <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $amount ) }}</span>
                         </div>
                         @if ( $refund->status == '2' )
                             <div class="col-12 mb-3">
@@ -47,7 +50,7 @@
                             </div>
                         @elseif ( $refund->status == '3' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Refund confirmed: (amount) ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
+                                <span class="text-muted">Refund confirmed: (amount) ₱ {{ AppHelpers::numeric( $amount / 2 ) }}</span>
                             </div>
                         @endif
                     </div>

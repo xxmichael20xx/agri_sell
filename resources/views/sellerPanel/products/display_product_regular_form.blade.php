@@ -141,27 +141,28 @@
             </div>
         </div>
 
-        <div class="form-group row d-none wholesale--input">
-            <label class="col-md-12 col-form-label font-weight-bold">Wholesale</label>
-            <label class="col-md-3 col-form-label">Price</label>
+        <div class="form-group row d-none wholesale--input border-top pt-2">
+            <label class="col-md-3 col-form-label font-weight-bold">Wholesale</label>
             <div class="col-md-9">
-                <div class="form-group"> 
-                    <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
-                    @if ( $errors->has( 'wholesale_price' ) )
-                        <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row d-none wholesale--input">
-            <label class="col-md-3 col-form-label">Minimum quantity</label>
-            <div class="col-md-9">
-                <div class="form-group"> 
-                    <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
-                    @if ( $errors->has( 'wholesale_min_qty' ) )
-                        <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
-                    @endif
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="col-form-label">Price</label>
+                        <div class="form-group"> 
+                            <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
+                            @if ( $errors->has( 'wholesale_price' ) )
+                                <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label">Minimum quantity</label>
+                        <div class="form-group"> 
+                            <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
+                            @if ( $errors->has( 'wholesale_min_qty' ) )
+                                <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

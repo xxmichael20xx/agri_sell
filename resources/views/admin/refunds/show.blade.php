@@ -39,7 +39,12 @@
                         </div>
                         @if ( $refund->status == '2' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Reason for rejecting: {{ $refund->reason }}</span>
+                                <span class="text-muted">Reason for rejecting: (admin) {{ $refund->reason }}</span>
+                            </div>
+                        @endif
+                        @if ( $refund->status == '4' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">Reason for rejecting: (seller) {{ $refund->reason }}</span>
                             </div>
                         @endif
                     </div>

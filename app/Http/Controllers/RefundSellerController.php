@@ -13,8 +13,9 @@ class RefundSellerController extends Controller
     public function index() {
         $panel_name = "refunds";
         $refunds = refundModelOrder::all();
+        $pendingRefunds = refundModelOrder::where( 'status', '1' )->get()->count();
 
-        return view( 'sellerPanel.refunds.index', compact( 'panel_name', 'refunds' ) );
+        return view( 'sellerPanel.refunds.index', compact( 'panel_name', 'refunds', 'pendingRefunds' ) );
     }
 
     public function show( $id ) {

@@ -25,6 +25,7 @@ Route::group([ 'prefix' => 'notifications' ], function() {
 Route::group([ 'prefix' => 'admin' ], function() {
     Route::post( 'pending/shops', 'AdminPushNotifications@pendingShops' );
     Route::post( 'verification/ids', 'AdminPushNotifications@userIdVerification' );
+    Route::post( 'pending/refunds', 'AdminPushNotifications@pendingRefunds' );
     Route::post( 'rider/verify', 'riderMgmtController@riderVerify' );
     Route::post( 'refund/reject/{id}', 'RefundAdminController@refundReject' );
 

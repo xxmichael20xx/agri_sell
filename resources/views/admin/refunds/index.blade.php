@@ -45,7 +45,7 @@
                         @php
                             $data = [];
                             foreach ( $refunds as $index => $refund ) {
-                                if ( $refund->status == '2' ) {
+                                if ( $refund->status == '2' || $refund->status == '3' ) {
                                     $data[] = $refund;
                                 }
                             }

@@ -156,7 +156,7 @@ Coded by www.creative-tim.com
           <li  class="{{($panel_name == 'refunds') ? 'active' : ''}}">
             <a href="/admin/manage_refunds">
               <i class="nc-icon nc-money-coins"></i>
-              <p>Refunds</p>
+              <p id="pending--refunds">Refunds</p>
             </a>
           </li>
 
@@ -374,6 +374,7 @@ Coded by www.creative-tim.com
         } )
         getPendingShopCount()
         getValidIdsForVerification()
+        getPendingRefunds()
 
         var channel = pusher.subscribe( 'my-channel' )
         channel.bind( 'shop-event', function( res ) {
@@ -422,6 +423,29 @@ Coded by www.creative-tim.com
 
               } else {
                 $( selector ).html( `User valid ids` )
+              }
+            } )
+              
+          } catch (error) { /* silently exit */ }
+        }
+
+        /**
+        * Get the updated notifications count via GET Request on API Routes
+        * Updates the count in the header's notification content
+        */
+        function getPendingRefunds() {
+          try {
+            const selector = `#pending--refunds`
+            $.post( `/api/admin/pending/refunds`, { user_id: user_id }, function( res ) {
+              if ( res.success ) {
+                const count = res.data
+                const badge = `
+                  Refunds <span class="badge badge-primary">${count}</span>
+                `
+                $( selector ).html( badge )
+
+              } else {
+                $( selector ).html( `Refunds` )
               }
             } )
               

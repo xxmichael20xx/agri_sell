@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\refundModelOrder;
 use App\seller_reg_fee;
 use App\Shop;
 use App\UserValidId;
@@ -50,6 +51,21 @@ class AdminPushNotifications extends Controller
         return response()->json( [
             'success' => true,
             'data' => $forVerification
+        ] );
+    }
+
+    /**
+     * Get the count of the pending refunds
+     * 
+     * @return Array
+     */
+    public function pendingRefunds( Request $request ) {
+        $this->hasAccess( $request );
+        
+        $refunds = refundModelOrder::where( 'status', 0 )->get()->count();
+        return response()->json( [
+            'success' => true,
+            'data' => $refunds
         ] );
     }
 }

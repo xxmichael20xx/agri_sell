@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\refundModelOrder;
 use App\SellerPayoutRequest;
 use App\SubOrder;
 use Illuminate\Http\Request;
@@ -16,10 +17,13 @@ class SellerPushNotificationsController extends Controller
         $pendingOrders = $pendingPickup + $pendingDelivery;
 
         $pendingPayout = SellerPayoutRequest::where( 'user_id', $request->user_id )->get()->count();
+
+        $pendingRefunds = refundModelOrder::where( 'status', '1' )->get()->count();
         
         $data = array(
             array( '#pending--orders', 'Manage Orders', $pendingOrders ),
-            array( '#pending--payout', 'Payouts', $pendingPayout )
+            array( '#pending--payout', 'Payouts', $pendingPayout ),
+            array( '#pending--refunds', 'Refunds', $pendingRefunds ),
         );
 
         return response()->json( [

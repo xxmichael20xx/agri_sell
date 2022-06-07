@@ -38,16 +38,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ( $data as $index => $item )
+                    @forelse ( $data as $_index => $item )
                         <tr>
                             <td>
                                 {{ $item->customer->name }}
                             </td>
-                            <td id="refund--container-{{ $index }}" class="w-25">
+                            <td id="refund--container-{{ $_index }}" class="w-25">
                                 @if ( count( $item->expl_images ) > 0  )
-                                    <img src="/storage/{{ $item->expl_images[0] }}" class="img-fluid view-images w-50" data-id="refund--image-{{ $index }}" data-raw="{{ $index }}">
+                                    <img src="/storage/{{ $item->expl_images[0] }}" class="img-fluid view-images w-50" data-id="refund--image-{{ $_index }}" data-raw="{{ $index }}">
 
-                                    <div class="modal fade" id="refund--image-{{ $index }}">
+                                    <div class="modal fade" id="refund--image-{{ $_index }}">
                                         <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                             <div class="modal-content">
                                                 <div class="modal-header">

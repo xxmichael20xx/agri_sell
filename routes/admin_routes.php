@@ -1,6 +1,9 @@
 <?php
 Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
+    Route::get( '/admin/profile', 'AdminPanelController@profileIndex' );
+    Route::post( '/admin/profile/update', 'AdminPanelController@profileUpdate' )->name('admin.profile.update');
+
     // sidebar menu
     Route::get('/admin', 'AdminPanelController@dashboard');
     Route::get('/admin/valid_ids', 'ValidIdAdminController@index');

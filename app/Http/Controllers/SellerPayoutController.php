@@ -119,6 +119,15 @@ class SellerPayoutController extends Controller
             ] );
         }
 
+        $isPhoneValid = preg_match( '/^[0-9]{11}+$/', $request->number );
+        if ( ! $isPhoneValid ) {
+            return response()->json( [
+                'success' => false,
+                'message' => "Please enter a valid Phone Number",
+                'validation' => $request->number
+            ] );
+        }
+
         $total_sales = 0;
         $subOrders = SubOrder::where('seller_id', $request->user_id )->get();
         foreach ( $subOrders as $order ) {

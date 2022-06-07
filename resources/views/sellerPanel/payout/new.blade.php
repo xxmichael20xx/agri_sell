@@ -176,12 +176,14 @@
                     // const payoutRef = form.get( 'gcash_ref' )
                     const amount = form.get( 'amount' )
                     const password = form.get( 'payout_password' )
+                    const number = form.get( 'gcash_number' )
                     const user_id = {{ Auth::user()->id }}
                     const body = {
                         user_id: user_id,
                         // payoutRef: payoutRef,
                         amount: amount,
-                        password: password
+                        password: password,
+                        number: number
                     }
 
                     const loading = Swal.fire({

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Events\MyEvent;
+use App\User;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -38,6 +39,26 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        dd( event( new MyEvent( 'hello world' ) ) );
+        $users = User::all();
+
+        foreach ( $users as $user ) {
+            if ( ! $user->barangay ) {
+                $user->barangay = "Amamperez";
+            }
+
+            if ( ! $user->town ) {
+                $user->town = "Villasis";
+            }
+
+            if ( ! $user->province ) {
+                $user->province = "Pangasinan";
+            }
+
+            if ( $user->address == 'not defined' ) {
+                $user->address = 'Purok 6';
+            }
+
+            $user->save();
+        }
     }
 }

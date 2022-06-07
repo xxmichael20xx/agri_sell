@@ -106,7 +106,7 @@ Coded by www.creative-tim.com
           <li class="{{ ( $panel_name == 'refunds' || $panel_name == 'refund details' ) ? 'active' : '' }}">
             <a href="/sellerpanel/refunds">
               <i class="nc-icon nc-money-coins"></i>
-              <p>Refunds</p>
+              <p id="pending--refunds">Refunds</p>
             </a>
           </li>
           <li class="{{ $panel_name == 'payout' ? 'active' : '' }}">

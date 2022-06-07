@@ -44,7 +44,7 @@ class riderMgmtController extends Controller
         $user->password = bcrypt( $request->rider_password );
         $user->mobile = $request->rider_contact;
         $user->email_verified_at = NOW();
-        $user->address = 'not defined';
+        $user->address = 'Purok 6';
         $user->barangay = 'Amamperez';
         $user->town = 'Villasis';
         $user->province = 'Pangasinan';

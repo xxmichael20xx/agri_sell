@@ -20,7 +20,7 @@
                         @php
                             $order_items = App\OrderItem::where( 'order_id', '=', $order->order->id )->latest()->get();
                         @endphp
-                        @foreach($order_items as $order_item)
+                        @foreach($order_items as $order_item_index => $order_item)
                             @php
                                 $product_item = App\Product::where('id', '=',$order_item->product_id)->first();
                             @endphp
@@ -39,7 +39,7 @@
                                         <a href="{{ url('products/' . $product_item->id) }}">
                                         @if ($status_id == '5')
                                             @php
-                                                $prid = $product_item->id;
+                                                $prid = $product_item->id . ":" . $order_item_index;
                                             @endphp
                                             @livewireStyles
                                                 <livewire:orders-product-ratings :prid="$prid"  />

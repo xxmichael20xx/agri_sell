@@ -4,8 +4,55 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\adminNotifModel;
+use App\Rules\BdayRule;
+use App\User;
+
 class AdminPanelController extends Controller
 {
+    public function profileIndex() {
+        $panel_name = 'Profile';
+        $admin = auth()->user();
+
+        return view( 'admin.profile', compact( 'panel_name', 'admin' ) );
+    }
+
+    public function profileUpdate( Request $request ) {
+        if ( ! $request->province ) $request->merge( [ 'province' => 1 ] );
+
+        $this->validate( $request, [
+            'address' => ['required'],
+            'mobile' => ['required', 'regex:/^[0-9]{11}+$/'],
+            'bday' => ['required', new BdayRule],
+            'province' => ['required'],
+            'town' => ['required'],
+            'barangay' => ['required'],
+        ] );
+        
+        $location_path = public_path() . '/province_municipality_barangay.json';
+        $location = json_decode( file_get_contents( $location_path ), true);
+
+        $province = "Pangasinan";
+        $town = "";
+        $barangay = "";
+
+        foreach ( $location as $_location ) {
+            if ( $_location['id'] == $request->town && ! $town ) $town = $_location['name'];
+            if ( $_location['id'] == $request->barangay && ! $barangay ) $barangay = $_location['name'];
+        }
+
+        $user_id = auth()->user()->id;
+        $user = User::find( $user_id );
+        $user->address = $request->address;
+        $user->mobile = $request->mobile;
+        $user->bday = $request->bday;
+        $user->province = trim( $province );
+        $user->town = trim( $town );
+        $user->barangay = trim( $barangay );
+        $user->save();
+
+        return back()->with( 'info', 'Profile has been updated.' );
+    }
+
     function dashboard(){
          $notifs = adminNotifModel::latest()->get();
         $total_order_qty = DB::table('orders')->count();

@@ -41,8 +41,7 @@
                         <p>{{$shop_entity_obj->owner->mobile ?? 'not available'}}</p>
                         <label>Email</label>
                         <p>{{$shop_entity_obj->owner->email ?? 'not available'}}</p>
-                        <label>Please take screenshot of the shop seller details </label>
-                        
+                        <label>Note: Please take screenshot of the shop seller details </label>
                         </div>
                         </div>    
                       </div>

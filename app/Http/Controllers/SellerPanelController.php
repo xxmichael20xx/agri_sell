@@ -44,7 +44,7 @@ class SellerPanelController extends Controller
         $order_items = $shop_orders;
         
         foreach ( $order_items as $order_item ) {
-            if ( $order_item->status == 'completed' && ! $order_item->payout_request && count( $order_item->items ) > 0 ) {
+            if ( $order_item->status == 'completed' && $order_item->payout_request && count( $order_item->items ) > 0 ) {
                 foreach( $order_item->items as $item ) {
                     $item_pivot = $item->pivot;
 
@@ -63,16 +63,15 @@ class SellerPanelController extends Controller
 
         $payouts = SellerPayoutRequest::where( 'user_id', auth()->user()->id )->get();
         $_refunds = refundModelOrder::where( 'status', 3 )->get();
+        $payoutTotal = 0;
         $refundsAmount = 0;
 
         foreach( $_refunds as $refund ) {
             if ( $refund->product->product_user_id == auth()->user()->id ) {
-                $amount = $refund->order_item->price * $refund->order_item->quantity;
+                $amount = ( $refund->order_item->price * $refund->order_item->quantity / 2 );
                 $refundsAmount += $amount;
             }
         }
-
-        $payoutTotal = 0;
 
         if ( $payouts->count() > 0 ) {
             foreach( $payouts as $payout_index => $payout ) {

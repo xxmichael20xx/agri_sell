@@ -253,7 +253,7 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="{{ $first_var->variation_min_qty_wholesale }}" data-max="{{ $variantStocks }}" required>
+                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="{{ $first_var->variation_min_qty_wholesale }}" data-max="{{ intval( str_replace( ',' , '', $variantStocks ) ) }}" required>
                                     <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">{{ $first_var->variation_min_qty_wholesale }}</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
                                     <small class="text-danger collapse" id="quantity--message-zero">OUT OF STOCK</small>
                                 </div>

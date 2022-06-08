@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers as Helper;
 use App\notification;
+use App\refundModelOrder;
 use App\SellerPayout;
 use App\SellerPayoutRequest;
 
@@ -131,7 +132,7 @@ class SellerPayoutController extends Controller
         $total_sales = 0;
         $subOrders = SubOrder::where('seller_id', $request->user_id )->get();
         foreach ( $subOrders as $order ) {
-            if ( $order->status == 'completed' && ! $order->payout_request && count( $order->items ) > 0 ) {
+            if ( $order->status == 'completed' && $order->payout_request && count( $order->items ) > 0 ) {
                 foreach( $order->items as $item ) {
                     $item_pivot = $item->pivot;
                     $total_sales += $item_pivot->price * $item_pivot->quantity;
@@ -140,7 +141,9 @@ class SellerPayoutController extends Controller
         }
 
         $payouts = SellerPayoutRequest::where( 'user_id', $request->user_id )->get();
+        $_refunds = refundModelOrder::where( 'status', 3 )->get();
         $payoutTotal = 0;
+        $refundsAmount = 0;
 
         if ( $payouts->count() > 0 ) {
             foreach( $payouts as $payout_index => $payout ) {
@@ -148,7 +151,14 @@ class SellerPayoutController extends Controller
             }
         }
 
-        $total_sales = $total_sales - $payoutTotal;
+        foreach( $_refunds as $refund ) {
+            if ( $refund->product->product_user_id == $request->user_id ) {
+                $amount = ( $refund->order_item->price * $refund->order_item->quantity / 2 );
+                $refundsAmount += $amount;
+            }
+        }
+
+        $total_sales = $total_sales - $payoutTotal - $refundsAmount;
 
         if ( $total_sales < $request->amount ) {
             $total_sales = "₱ " . Helper::numeric( $total_sales, 2 );

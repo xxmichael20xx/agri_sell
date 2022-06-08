@@ -14,7 +14,7 @@ class AddPayoutRequestToSubOrdersTable extends Migration
     public function up()
     {
         Schema::table('sub_orders', function (Blueprint $table) {
-            $table->boolean( 'payout_request' )->default( false )->nullable();
+            $table->boolean( 'payout_request' )->default( true )->nullable();
         });
     }
 

@@ -23,7 +23,7 @@ class agcoins
         }
 
         if($total_ag_coins < 0){
-            $total_ag_coins = 'invalid';
+            $total_ag_coins = 0;
         }
         return $total_ag_coins;
     }

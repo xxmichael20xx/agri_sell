@@ -244,7 +244,7 @@
 
                 $( document ).on( 'click', '.btn-agree', function() {
                     let date = new Date()
-                    date.setTime( date.getTime() + ( 5 * 60 * 1000 ) )
+                    date.setTime( date.getTime() + ( 10 * 60 * 1000 ) )
                     let expires = "; expires="+date.toGMTString()
                     document.cookie = `payout_agree=Agree; ${expires}`
 

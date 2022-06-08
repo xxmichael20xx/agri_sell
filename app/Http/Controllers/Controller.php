@@ -54,4 +54,20 @@ class Controller extends BaseController
         
         return $user->role_id == $role ? true : false;
     }
+
+    /**
+     * Show a page template for Web Errors / Information pages
+     * 
+     * @param data Array containing data for the page template
+     * @return View
+     */
+    public function showWebPages( Array $data ) {
+        $layout = $data['layout'];
+        $backUrl = $data['backUrl'];
+        $panel_name = $data['panel_name'];
+        $view = $data['view'];
+        $title = $data['title'] ?? false;
+
+        return view( $view )->with( compact( 'layout', 'backUrl', 'title', 'panel_name' ) );
+    }
 }

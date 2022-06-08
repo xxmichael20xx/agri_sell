@@ -33,6 +33,10 @@ class refundModelOrder extends Model
         return $this->belongsTo(prod_refund_statuses::class, 'prod_refund_status_id', 'id');
     }
 
+    public function ref_status(){
+        return $this->belongsTo(prod_refund_statuses::class, 'prod_refund_status_id', 'id');
+    }
+
     public function getExplImagesAttribute() {
         return explode( ",", rtrim( $this->image_proofs, "," ) );
     }

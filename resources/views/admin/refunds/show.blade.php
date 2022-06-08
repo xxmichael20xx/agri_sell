@@ -52,7 +52,7 @@
                         <div class="col-12 mb-3">
                             <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
                         </div>
-                        @if ( $refund->status == '1' )
+                        @if ( $refund->status == '1' || $refund->status == '3' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Date Confirmed: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
@@ -60,12 +60,16 @@
                         @if ( $refund->status == '2' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Reason for rejecting: (admin) {{ $refund->reason }}</span>
+                            </div>
+                            <div class="col-12 mb-3">
                                 <span class="text-muted">Date Rejected: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif
                         @if ( $refund->status == '4' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Reason for rejecting: (seller) {{ $refund->reason }}</span>
+                            </div>
+                            <div class="col-12 mb-3">
                                 <span class="text-muted">Date Confirmed: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif

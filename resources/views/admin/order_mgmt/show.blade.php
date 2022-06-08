@@ -153,7 +153,7 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
-                        {{-- <tr>
+                        <tr>
                             <td class="text-left">
                                 Shipping fee
                             </td>
@@ -162,7 +162,7 @@
                                     ₱ {{ AppHelpers::numeric( $order->order->shipping_fee ) }}
                                 @endif
                             </td>
-                        </tr> --}}
+                        </tr>
                         <tr>
                             <td class="text-left">Total</td>
                             <td class="text-right">

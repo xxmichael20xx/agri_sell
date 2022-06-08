@@ -22,7 +22,7 @@
                         @php
                             $order_items = App\SubOrderItem::where( 'sub_order_id', $order->order->id )->get();
                         @endphp
-                        @foreach ( $order_items as $order_item )
+                        @foreach ( $order_items as $order_item_index => $order_item )
                             <tr>
                                 @php
                                     $product_item = App\Product::where( 'id', $order_item->product_id )->first();
@@ -40,14 +40,12 @@
                                     <a href="{{ url('products/' . $product_item->id) }}">
                                         @if ($pickup_status_id == '5')
                                             @php
-                                                $prid = $product_item->id;
+                                                $prid = $product_item->id . ":" . rand( 1, 100000 );
                                             @endphp
                                             @livewireStyles
                                                 <livewire:orders-product-ratings :prid="$prid"  />
                                             @livewireScripts    
                                         @endif
-                                
-                                        {{ $product_item->name }}
                                         
                                         @if($product_item->is_sale == 1)
                                             <s>₱ {{ $order_item->product_variation->variation_price_per }} </s> x {{ $order_item->quantity }} 
@@ -57,7 +55,7 @@
                                         @endif  
                                     </a>
                                     <br>
-                                    {{ $product_item->shop->name }} 
+                                    {{ $product_item->shop->name }} -- {{ $prid }}
                                     <br>              
                                 </td>
                             </tr>

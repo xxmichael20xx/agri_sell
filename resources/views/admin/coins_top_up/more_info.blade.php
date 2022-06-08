@@ -22,7 +22,6 @@
                     <span class="text-muted">Amount: {{$user->value}}</span>
                     <br>
                     <span class="text-muted">Transaction id: {{$user->trans_id}}</span>
-                    <br>
                     @php
                         $trans_code_existence = App\TransactionCode::trans_code_duplicate_check_display($user->trans_id);
                     @endphp
@@ -32,6 +31,8 @@
                         <span class="text-muted">Verication status: Not Approved </span>
                     @elseif ($user->remarks == '1')
                         <span class="text-muted">Verication status: Approved </span>
+                        <br>
+                        <span class="text-muted">Date approved: {{ AppHelpers::humanDate( $user->updated_at, true ) }}</span>
                     @elseif ($user->remarks == '2')
                         <span class="text-muted">Verication status: For verification</span>
                     @endif
@@ -45,9 +46,10 @@
                     <br>
 
                     @if ( $user->remarks == '0' )
-                    <button class="btn btn-danger btn-round m-1 btn-action" data-href="/coinsEmp/delete_coins_top_up/{{ $user->id }}">Delete request</button>
-
-                    @else
+                        <button class="btn btn-danger btn-round m-1 btn-action" data-href="/coinsEmp/delete_coins_top_up/{{ $user->id }}">Delete request</button>
+                    @endif
+                    
+                    @if ( $user->remarks == '2')
                         <a href="/unset_as_verified_coins_top_up/{{ $user->id }}" class="btn btn-danger btn-round m-1" data-toggle="modal" data-target="#notVerifyReason">Mark as not approved</a>
                         <div class="modal fade" id="notVerifyReason" tabindex="-1" role="dialog" aria-labelledby="notVerifyReasonLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -83,10 +85,7 @@
                         <br>
                 
                         <a href="/set_as_verified_coins_top_up/{{$user->id}}" class="btn btn-success btn-round m-1">Mark as Approved</a>
-            
-                        @if($user->remarks != '1' && $user->remarks != '0')
-                            @include('admin.coins_top_up.edit_coins_top_up_amount_modal')
-                        @endif
+                        @include('admin.coins_top_up.edit_coins_top_up_amount_modal')
                     @endif
                 </div>
             </div>

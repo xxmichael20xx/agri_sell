@@ -20,6 +20,7 @@
                 </div>
                 <div class="card-body">
                     Product description: {!! $product->description !!}
+                    <br>
                     Sold by: {{$product->shop->owner->name ?? ''}}
                     <br>
                 </div>

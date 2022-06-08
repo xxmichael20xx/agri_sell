@@ -15,6 +15,20 @@ use App\SellerPayoutRequest;
 class SellerPanelController extends Controller
 {
     function index() {
+        if ( ! Auth::user()->shop ) {
+            $data = [
+                'layout' => 'sellerPanel.front',
+                'backUrl' => '/',
+                'panel_name' => 'Panel Errors',
+                'title' => '<h2>
+                    Panel content failed to load.<br>
+                    Please try again later.
+                </h2>',
+                'view' => 'info'
+            ];
+            return $this->showWebPages( $data );
+        }
+
         $shop_title = Auth::user()->shop->name;
         $shop_description = Auth::user()->shop->description;
         $shop_orders = SubOrder::where('seller_id', auth()->id())->get();

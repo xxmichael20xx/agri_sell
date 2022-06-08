@@ -58,7 +58,7 @@ class otpAgricoinsController extends Controller
         // dd($verify);
         $verify_otp = DB::table('otps')->where('token', $otp_inputted)->where('identifier', $order_num_requested)->first();
 
-        if($verify_otp != NULL){
+        if ( $verify_otp ) {
             // on hold
             // perform some suborder tables
             // plan to deduct the agricoins
@@ -74,23 +74,23 @@ class otpAgricoinsController extends Controller
             $coins_trans->transaction_type = 'Item orders';
             $coins_trans->save();
 
-                // notification entity
-                $notification_ent = new notification();
-                $notification_ent->user_id = $sell_reg_inst->owner->id ?? 'not available';
-                $notification_ent->frm_user_id = Auth::user()->id;
-                $notification_ent->notification_title = 'OTP agricoins verification';
-                $notification_ent->notification_txt = 'You spend: ' . $coins_trans->value = $order_obj->grand_total . 'in your agricoins wallet';                ;
-                $notification_ent->save();
-                // end of notification entity
-
+            // notification entity
+            $notification_ent = new notification();
+            $notification_ent->user_id = $sell_reg_inst->owner->id ?? 'not available';
+            $notification_ent->frm_user_id = Auth::user()->id;
+            $notification_ent->notification_title = 'OTP agricoins verification';
+            $notification_ent->notification_txt = 'You spend: ' . $coins_trans->value = $order_obj->grand_total . 'in your agricoins wallet';                ;
+            $notification_ent->save();
+            // end of notification entity
 
             $otp_verification = 'true';
             $order_obj->agrisell_coins_payment_status = 'approved';
             $order_obj->save();
-        }else {
-                        // perform some suborder unverifed columns
-                        // plan to not deduct the agricoins
-                        // do not perform coins transaction  
+
+        } else {
+            // perform some suborder unverifed columns
+            // plan to not deduct the agricoins
+            // do not perform coins transaction  
             $order_obj = Order::where('order_number', $request->order_num)->first();
             $order_obj->agrisell_coins_payment_status = 'denied';
 
@@ -99,7 +99,7 @@ class otpAgricoinsController extends Controller
             $notification_ent->user_id = Auth::user()->id;
             $notification_ent->frm_user_id = Auth::user()->id;
             $notification_ent->notification_title = 'OTP agricoins verification for ' . $order_obj->order_number;
-            $notification_ent->notification_txt = 'Agri coins payment denied';
+            $notification_ent->notification_txt = "Agri coins payment denied <br> OTP Code is invalid/incorrect.<br>Click <a href='/otp_validation_view/{$order_num_requested}' style='color: #28A745;'>here</a>";
             $notification_ent->save();
             // end of notification entity
 

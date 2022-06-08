@@ -27,11 +27,19 @@
                         <div id="first-fields">
                             <div class="form-group row">
                                 <div class="col-2">
-                                    <label for="gcash_name" class="col-form-label">GCash Name:</label>
+                                    <label class="col-form-label">GCash Name:</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="text" name="gcash_name" id="gcash_name" class="form-control" placeholder="i.e. John Doe" value="{{ $payout->gcash_name ?? '' }}" required>
-                                    <small class="text-danger collapse">GCash Name is required</small>
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <input type="text" name="gcash_first_name" id="gcash_first_name" class="form-control" placeholder="First name: i.e. John" value="{{ $payout->gcash_first_name ?? '' }}" required>
+                                            <small class="text-danger collapse">First name is required</small>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" name="gcash_last_name" id="gcash_last_name" class="form-control" placeholder="Last nae: i.e. Doe" value="{{ $payout->gcash_last_name ?? '' }}" required>
+                                            <small class="text-danger collapse">Last name is required</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -110,14 +118,27 @@
                     let proceed = false
 
                     if ( action == 'next' ) {
-                        let gname = $( '#gcash_name' )
+                        let firstName = $( '#gcash_first_name' )
+                        let lastName = $( '#gcash_last_name' )
                         let gnumber = $( '#gcash_number' )
                         // let gref = $( '#gcash_ref' )
 
-                        let afterValidate = [ validate( gname ), validate( gnumber ) ]
+                        let afterValidate = [ validate( firstName ), validate( lastName ), validate( gnumber ) ]
                         let proceed = afterValidate.includes( false ) ? false : true
 
                         if ( proceed ) {
+                            const reg = new RegExp( /^09[0-9]{9,9}$/i )
+                            const isValid = reg.test( gnumber.val() )
+
+                            if ( ! isValid ) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Opps, there seems to be a problem',
+                                    html: 'Please enter a valid Phone Number'
+                                })
+                                return false
+                            }
+
                             first.hide()
                             second.show()
                         }

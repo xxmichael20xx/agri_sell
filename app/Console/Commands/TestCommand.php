@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Events\MyEvent;
 use App\User;
+use App\UserValidId;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -39,26 +40,8 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $users = User::all();
-
-        foreach ( $users as $user ) {
-            if ( ! $user->barangay ) {
-                $user->barangay = "Amamperez";
-            }
-
-            if ( ! $user->town ) {
-                $user->town = "Villasis";
-            }
-
-            if ( ! $user->province ) {
-                $user->province = "Pangasinan";
-            }
-
-            if ( $user->address == 'not defined' ) {
-                $user->address = 'Purok 6';
-            }
-
-            $user->save();
-        }
+        $this->info( "Deleting Valid IDs except for Seller" );
+        UserValidId::where( 'id', '!=', 3 )->delete();
+        $this->info( "Valid IDs deleted except for Seller" );
     }
 }

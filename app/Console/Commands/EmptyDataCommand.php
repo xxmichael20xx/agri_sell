@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\UserValidId;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -64,14 +65,19 @@ class EmptyDataCommand extends Command
             'sub_orders',
             'sub_order_items',
             'transactions',
-            'user_valid_ids',
         );
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         foreach ( $tables as $table ) {
             DB::table( $table )->truncate();
             $this->info( "Table: {$table}" );
         }
+
+        $this->info( "Deleting Valid IDs except for Seller" );
+        UserValidId::where( 'id', '!=', 3 )->delete();
+        $this->info( "Valid IDs deleted except for Seller" );
+
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->info( 'Data has been emptied.' );

@@ -163,9 +163,12 @@ class OrderController extends Controller
             $order->billing_zipcode = $request->input('billing_zipcode');
         }
 
-        $order->grand_total = \Cart::session(auth()->id())->getTotal();
-        $order->shipping_fee = \Cart::session(auth()->id())->getShippingFee();
-        $order->item_count = \Cart::session(auth()->id())->getContent()->count();
+        $_is_pickup = $order->is_pick_up == 'yes' ? TRUE : FALSE;
+        $cart_session = \Cart::session(auth()->id());
+
+        $order->grand_total = $cart_session->getTotal( $_is_pickup );
+        $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee() + number_format( $cart_session->getTotalnetweightShippingAdditionals() );
+        $order->item_count = $cart_session->getContent()->count();
 
         $order_ref_amount = $order->grand_total;
         $order->user_id = auth()->id();
@@ -187,7 +190,7 @@ class OrderController extends Controller
 
         // Create a variable to store the seller data of each items 
         $sellerNotifs = [];
-        $cartItems = \Cart::session(auth()->id())->getContent();
+        $cartItems = $cart_session->getContent();
         // looping of cart items
         foreach ($cartItems as $item) {
             // get product instance
@@ -252,7 +255,7 @@ class OrderController extends Controller
         $trans->amount = $order_ref_amount;
         $trans->save();
 
-        \Cart::session(auth()->id())->clear();
+        $cart_session->clear();
 
         if ( count( $sellerNotifs ) > 0 ) {
 

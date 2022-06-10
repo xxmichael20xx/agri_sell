@@ -5,15 +5,16 @@
             $param1 = [ 'status_id', $status_id ];
             $param2 = [ 'is_pick_up', 'no' ];
             $orders = App\SubOrder::userOrder( $param1, $param2 )->latest()->get();
+            foreach ( $orders as $_index => $_order ) {
+                if ( ! $_order->has_items ) $orders->forget( $_index );
+            }
         @endphp
 
         @forelse( $orders as $order )
             <div class="card mt-1 border-0">
-                <div class="card-header bg-light border-0">
-                    @if ( $status_id != '5' )
-                        <span class="text-left">{{ $order->order->order_number}} </span>
-                    @endif
-                    <span style="float:right;">{{ $order->order->created_at }} </span>
+                <div class="card-header bg-light border-0 d-flex justify-content-between">
+                    <span>{{ $order->order->order_number }}</span>
+                    <span>{{ $order->order->created_at }}</span>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -66,6 +67,11 @@
                                             </a>
                                         <br>
                                         {{ $product_item->shop->name }}
+                                        @if ( $pickup_status_id == 3 )
+                                            <br>
+                                            <p class="mb-0">Calcelation Reason: {{ $order->order_notes }}</p>
+                                            <p class="mb-0">Calcelation date: {{ AppHelpers::humanDate( $order->updated_at, true ) }}</p>
+                                        @endif{{ $product_item->shop->name }}
                                     </td>
                                 </tr>
                             @endif

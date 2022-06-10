@@ -11,11 +11,9 @@
         @endphp
         @forelse($orders as $order)
             <div class="card mt-1 border-0">
-                <div class="card-header bg-light border-0">
-                    @if ($status_id != '5')
-                    <span class="text-left">{{ $order->order->order_number ?? 'not available'}} </span>
-                    @endif
-                    <span style="float:right;">{{ $order->order->created_at ?? 'not available'}}  </span>
+                <div class="card-header bg-light border-0 d-flex justify-content-between">
+                    <span>{{ $order->order->order_number }}</span>
+                    <span>{{ $order->order->created_at }}</span>
                 </div>
                 <div class="card-body">
                     <table class="table">
@@ -43,7 +41,7 @@
                                                 $prid = $product_item->id . ":" . rand( 1, 100000 );
                                             @endphp
                                             @livewireStyles
-                                                <livewire:orders-product-ratings :prid="$prid"  />
+                                                <livewire:orders-product-ratings :prid="$prid" />
                                             @livewireScripts    
                                         @endif
                                         
@@ -55,8 +53,12 @@
                                         @endif  
                                     </a>
                                     <br>
-                                    {{ $product_item->shop->name }} -- {{ $prid }}
-                                    <br>              
+                                    {{ $product_item->shop->name }}
+                                    @if ( $pickup_status_id == 3 )
+                                        <br>
+                                        <p class="mb-0">Calcelation Reason: {{ $order->order_notes }}</p>
+                                        <p class="mb-0">Calcelation date: {{ AppHelpers::humanDate( $order->updated_at, true ) }}</p>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

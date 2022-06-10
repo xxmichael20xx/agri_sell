@@ -30,47 +30,31 @@
 
     <div class="tab-content">
         <div class="tab-pane active show fade" id="pending" role="tabpanel">
-            <div class="row">
-                @php
-                    $status_id = '8';
-                    $pickup_status_id = '1';
-                @endphp
-                @include('userdash.order_by_status.pickup_order_status_cards')
-            </div>
-        </div>
-        <div class="tab-pane fade" id="confirmed" role="tabpanel">
-            <div class="row">
-                @php
-                    $status_id = '2';
-                    $pickup_status_id = '6';
-                @endphp
-                @include('userdash.order_by_status.pickup_order_status_cards')
-            </div>
-        </div>
-        <div class="tab-pane fade" id="ready_to_pickup" role="tabpanel">
             @php
-                $status_id = '8';
-                $pickup_status_id = '2';
+                $pickup_status_id = '1';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
-        <div class="tab-pane fade" id="cancelled" role="tabpanel">
+        <div class="tab-pane fade" id="confirmed" role="tabpanel">
             @php
-                $status_id = '8';
+                $pickup_status_id = '6';
+            @endphp
+            @include('userdash.order_by_status.pickup_order_status_cards')
+        </div>
+        <div class="tab-pane fade" id="ready_to_pickup" role="tabpanel">
+            @php
                 $pickup_status_id = '2';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
         <div class="tab-pane fade" id="pickup_to_rate" role="tabpanel">
             @php
-                $status_id = '8';
                 $pickup_status_id = '5';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
         <div class="tab-pane fade" id="cancelled" role="tabpanel">
             @php
-                $status_id = '8';
                 $pickup_status_id = '3';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')

@@ -5,7 +5,7 @@
                 Customer name
             </th>
             <th>
-                Grand total
+                Total
             </th>
             <th>
                 Is Order Paid?
@@ -26,6 +26,9 @@
                 
                 if ( isset($order->order->id ) ) $order_id = $order->order->id;
                 if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+
+                $total = $order->order->grand_total;
+                if ( $order->order->is_pick_up == 'yes' ) $total = $total - $order->order->shipping_fee;
             @endphp
             <tr>
                 <td>
@@ -35,7 +38,7 @@
                     @endif
                 </td>
                 <td>
-                    {{ AppHelpers::numeric( $order->order->grand_total ) }}
+                    ₱ {{ AppHelpers::numeric( $total ) }}
                 </td>
                 <td>
                     <span class="badge badge-{{ $paidData[1] }}">{{ $paidData[0] }}</span>

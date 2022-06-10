@@ -5,7 +5,7 @@
                 Customer name
             </th>
             <th>
-                Grand total
+                Total
             </th>
             <th>
                 Is Order Paid?
@@ -23,6 +23,9 @@
             @php
                 $method = $order->order->payment_method;
                 $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
+
+                $total = $order->order->grand_total;
+                if ( $order->order->is_pick_up == 'yes' ) $total = $total - $order->order->shipping_fee;
             @endphp
             <tr>
                 <td>
@@ -32,7 +35,7 @@
                     @endif
                 </td>
                 <td>
-                    {{ AppHelpers::numeric( $order->order->grand_total ) }}
+                    ₱ {{ AppHelpers::numeric( $total ) }}
                 </td>
                 <td>
                     <span class="badge badge-success">Paid</span>

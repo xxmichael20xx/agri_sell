@@ -65,6 +65,7 @@ class RefundAdminController extends Controller
 
     public function refundReject( Request $request, $id ) {
         $status = $request->status ?? 2;
-        return $this->update( $id, $status, $request->reason, $request->user_id );
+        $reason = $request->reject_reason == 'Others' ? 'Others: ' . $request->reject_reason_others : $request->reject_reason;
+        return $this->update( $id, $status, $reason, $request->user_id );
     }
 }

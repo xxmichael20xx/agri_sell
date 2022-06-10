@@ -181,6 +181,7 @@ class SellerPayoutController extends Controller
         $now = Carbon::now();
         $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
         $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
+        $request->request->add( [ 'gcash_name' => $request->gcash_first_name . " " . $request->gcash_last_name ] );
 
         if ( $request->payout_request_id ) return $this->updateRequest( $request );
 

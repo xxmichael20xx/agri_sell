@@ -5,7 +5,7 @@
                 Customer name
             </th>
             <th>
-                Grand total
+                Total
             </th>
             <th>
                 Is Order Paid?
@@ -31,6 +31,9 @@
                 if ( $status_id == 1 ) $inIds = array( $inIds, 3 );
                 if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
                 $assign_order_pickup_status_options = App\orderpickupStatusModel::whereIn( 'status_id', $inIds )->get();
+                
+                $total = $order->order->grand_total;
+                if ( $order->order->is_pick_up == 'yes' ) $total = $total - $order->order->shipping_fee;
             @endphp
             <tr>
                 <td>
@@ -40,7 +43,7 @@
                     @endif
                 </td>
                 <td>
-                    {{ AppHelpers::numeric( $order->order->grand_total ) }}
+                    ₱ {{ AppHelpers::numeric( $total ) }}
                 </td>
                 <td>
                     <span class="badge badge-{{ $paidData[1] }}">{{ $paidData[0] }}</span>

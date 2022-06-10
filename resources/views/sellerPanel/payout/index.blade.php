@@ -136,13 +136,13 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="step-1-tab" data-toggle="tab" href="#step-1" role="tab" aria-controls="step-1" aria-selected="true">STEP 1</a>
+                                    <a class="nav-link active" id="step-1-tab" data-href="#step-1" role="tab" aria-controls="step-1" aria-selected="true">STEP 1</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="step-2-tab" data-toggle="tab" href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">STEP 2</a>
+                                    <a class="nav-link" id="step-2-tab" data-href="#step-2" role="tab" aria-controls="step-2" aria-selected="true">STEP 2</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="step-3-tab" data-toggle="tab" href="#step-3" role="tab" aria-controls="step-3" aria-selected="true">STEP 3</a>
+                                    <a class="nav-link" id="step-3-tab" data-href="#step-3" role="tab" aria-controls="step-3" aria-selected="true">STEP 3</a>
                                 </li>
                             </ul>
                         </div>
@@ -184,7 +184,7 @@
                                     <hr>
                                     
                                     <div class="text-right">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-secondary btn-dismiss" data-dismiss="modal">Cancel</button>
                                         <button type="button" class="btn btn-primary btn-agree">Agree</button>
                                     </div>
                                 </div>
@@ -201,6 +201,8 @@
     <script>
         (function($) {
             $(document).ready(function() {
+
+                let next = false
 
                 $( '#seller--payout-table' ).DataTable()
 
@@ -251,10 +253,26 @@
                     window.location.href = "/sellerpanel/payout/new"
                 } )
 
+                $( document ).on( 'click', '.btn-dismiss', function() {
+                    const id = '#step-1-tab'
+                    triggerTab( id )
+                } )
+
                 $( document ).on( 'click', '.btn-next', function() {
                     const id = $( this ).data( 'id' )
-                    $( id ).trigger( 'click' )
+                    triggerTab( id )
                 } )
+
+                function triggerTab( id ) {
+                    const tab = $( id )
+                    const href = tab.data( 'href' )
+                    tab.attr( 'href', href )
+                    tab.attr( 'data-toggle', 'tab' )
+                    tab.trigger( 'click' )
+                    tab.removeAttr( 'data-toggle' )
+                    tab.removeAttr( 'href' )
+                    tab.attr( 'data-href', href )
+                }
 
             })
         })(jQuery)

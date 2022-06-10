@@ -5,7 +5,7 @@
                 Customer name
             </th>
             <th>
-                Grand total
+                Total
             </th>
             <th>
                 Is Order Paid?
@@ -35,7 +35,7 @@
                     @endif
                 </td>
                 <td>
-                    {{ AppHelpers::numeric( $order->order->grand_total ) }}
+                    ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
                 </td>
                 <td>
                     <span class="badge badge-{{ $paidData[1] }}">{{ $paidData[0] }}</span>

@@ -33,7 +33,7 @@
                         @endif
                     </div>
 
-                    <div class="card-footer">
+                    {{-- <div class="card-footer">
                         <div class="row">
                             <div class="col col-6">
 
@@ -58,7 +58,7 @@
                             </div>
 
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

@@ -258,20 +258,19 @@ class OrderMgmtPanelController extends Controller
      * @param order_id Order Id
      * @return Void
      */
-    public function checkStatuses( $config_key, $status_id, $order_id ) {
+    public function checkStatuses( $config_key, $status_id, $order_id, $request = NULL ) {
         $statuses = config( $config_key );
         $order = Order::find( $order_id );
         $subOrder = SubOrder::where( 'order_id', $order_id )->first();
         $sub_ids = SubOrderItem::where( 'sub_order_id', $subOrder->id )->get();
-        $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
-
-        \Log::info( json_encode( [ $sub_ids->count() ] ) );
+        // $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
 
         foreach ( $statuses as $key => $status ) {
             if ( $key == $status_id && $order ) {
                 $title = "Your order has been marked as <span style='color: #28A745;'>'{$status}'</span>";
-                $title .= "<br> Date notified: {$currentTime}<br><br>";
-
+                if ( ( $config_key == 'pickup_status' && $status_id == 3 ) || ( $config_key == 'order_status' && $status_id == 7 ) ) {
+                    $title .= "<br>Cancelation reason: " . $request->cancel_reason;
+                }
                 $notifData = [
                     'user_id' => $order->user_id,
                     'frm_user_id' => $this->userId(),
@@ -315,7 +314,7 @@ class OrderMgmtPanelController extends Controller
         
         // order_status or pickup_status
         $_status = $is_delivery ? 'order_status' : 'pickup_status';
-        $this->checkStatuses( $_status, $status_id, $order_id );
+        $this->checkStatuses( $_status, $status_id, $order_id, $request );
         return back();
     }
 }

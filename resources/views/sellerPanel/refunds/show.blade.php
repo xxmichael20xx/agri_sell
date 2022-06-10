@@ -58,11 +58,15 @@
                         @if ( $refund->status == '2' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Reason for rejecting: (admin) {{ $refund->reason }}</span>
+                            </div>
+                            <div class="col-12 mb-3">
                                 <span class="text-muted">Date Rejected: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @elseif ( $refund->status == '4' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Reason for rejecting: (seller) {{ $refund->reason }}</span>
+                            </div>
+                            <div class="col-12 mb-3">
                                 <span class="text-muted">Date Rejected: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @elseif ( $refund->status == '3' )
@@ -80,8 +84,44 @@
                 </div>
                 <div class="card-footer">
                     @if ( $refund->status == '1' )
-                        <button type="buttom" class="btn btn-outline-info btn-round m-1 text-danger btn-action" data-action="rejected" data-href="/api/admin/refund/reject/{{ $id }}">Reject Refund</button>
+                        {{-- <button type="buttom" class="btn btn-outline-info btn-round m-1 text-danger btn-action" data-action="rejected" data-href="/api/admin/refund/reject/{{ $id }}">Reject Refund</button> --}}
+                        <button type="buttom" class="btn btn-outline-info btn-round m-1 text-danger" data-toggle="modal" data-target="#rejectModal">Reject Refund</button>
                         <button type="buttom" class="btn btn-outline-info btn-round m-1 text-info btn-action" data-action="confirmed" data-href="/sellerpanel/refunds/update/{{ $id }}/3">Confirm Refund</button>
+
+                        <div class="modal fade" id="rejectModal">
+                            <div class="modal-dialog">
+                                <form method="POST" id="rejectForm">
+                                    @csrf
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                Reject Refund
+                                            </h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group row">
+                                                <div class="col-12">
+                                                    <label for="reject_reason">Select a reason:</label>
+                                                    <select class="custom-select" name="reject_reason" id="reject_reason" required>
+                                                        <option value="" selected disabled>Select an option</option>
+                                                        <option value="Invalid Reason">Invalid Reason</option>
+                                                        <option value="Reason doesn't match the provided image">Reason doesn't match the provided image</option>
+                                                        <option value="Insufficient details">Insufficient details</option>
+                                                        <option value="Others">Others</option>
+                                                    </select>
+                                                    <textarea class="form-control mt-2 collapse" name="reject_reason_others" id="reject_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="hidden" name="user_id" id="user_id" value="{{ auth()->user()->id }}">
+                                            <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -240,6 +280,53 @@
                     $( '#enlarge--image-src' ).attr( 'src', src )
 
                     $( '#enlarge--image-modal' ).modal( 'show' )
+                } )
+
+                $( document ).on( 'change', '#reject_reason', function() {
+                    const val = $( this ).val()
+                    const others = $( '#reject_reason_others' )
+
+                    if ( val == "Others" ) {
+                        others.removeClass( 'collapse' )
+                        others.attr( 'required', true )
+
+                    } else {
+                        others.val( '' )
+                        others.addClass( 'collapse' )
+                        others.attr( 'required', false )
+                    }
+                } )
+
+                $( document ).on( 'submit', '#rejectForm', function( e ) {
+                    e.preventDefault()
+                    const formData = new FormData( $( '#rejectForm' )[0] )
+                    const data = {
+                        user_id: formData.get( 'user_id' ),
+                        reject_reason: formData.get( 'reject_reason' ),
+                        reject_reason_others: formData.get( 'reject_reason_others' )
+                    }
+
+                    fetch( `/api/admin/refund/reject/{{ $id }}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify( data )
+                    } ).then( r => r.json() ).then( result => {
+                        if ( result?.success ) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Refund request has been rejected!'
+                            }).then( () => {
+                                window.location.reload()
+                            } )
+                        } else {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Failed to reject refund request!'
+                            })
+                        }
+                    } )
                 } )
 
             })

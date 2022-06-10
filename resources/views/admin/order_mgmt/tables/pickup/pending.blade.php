@@ -29,7 +29,7 @@
                 
                 if ( isset($order->order->id ) ) $order_id = $order->order->id;
                 if ( $status_id == 1 ) $inIds = array( $inIds, 3 );
-                if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+                if ( $order->order->is_paid || $order->order->payment_method == 'agrisell_coins' ) $paidData = array( 'Paid', 'success' );
                 $assign_order_pickup_status_options = App\orderpickupStatusModel::whereIn( 'status_id', $inIds )->get();
             @endphp
             <tr>

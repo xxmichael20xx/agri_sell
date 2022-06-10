@@ -1,7 +1,7 @@
 @extends('admin.front')
 @section('content')
 <div class="content">
-    <button onclick="history.go(-1)" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</button>
+    <a href="/admin/manage_products" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
     <div class="row">
         <div class="col col-12 col-lg-7">
             <div class="card">
@@ -14,32 +14,33 @@
                 @endphp
             <div style="width: 100%; height: 320px;background-position: center;background-size: cover;background-image: url('/storage/{{$product->featured_image}}');"></div>
                 <div class="card-header">
-                    <h4>{{$product->name}}</h4>
+                    <h4>{{ $product->name }}</h4>
                     <h5>{!! $product_variation_range !!}</h5>
                 </div>
                 <div class="card-body">
-                    Product description:  {!! $product->description !!}
-                    Sold by: {{$product->shop->owner->name}}
-                    <br>
+                    <div class="form-group row">
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Product description:  {!! $product->description !!}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-muted">Sold by: {{ $product->shop->owner->name }}</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer">
                     @if ($product->is_sale == '1')
-                    <span class="badge badge-pill badge-danger">
-                        Sale %{{$product->sale_pct_deduction}}
-                      </span>
+                        <span class="badge badge-pill badge-danger">
+                            Sale %{{$product->sale_pct_deduction}}
+                        </span>
                     @endif
                     @if ($product->is_whole_sale == '1')
-                    <span class="badge badge-pill badge-danger">
-                        Wholesale %{{$product->sale_pct_deduction}}
-                      </span>
+                        <span class="badge badge-pill badge-danger">
+                            Wholesale %{{$product->sale_pct_deduction}}
+                        </span>
                     @endif
-                    <a hidden class="btn btn-warning btn-round" href="/admin_seller/product_edit/{{$product->id}}">Edit</a>
-                    <a hidden class="btn btn-danger btn-round text-white" href="/seller/delete_product/{{$product->id}}">Delete</a>
-                    <a hidden href="/seller/hide_product/{{$product->id}}" class="btn btn-danger">Hide</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 @endsection

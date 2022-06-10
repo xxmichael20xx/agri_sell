@@ -28,7 +28,7 @@
                 $paidData = array( 'Not Paid', 'warning' );
                 
                 if ( isset($order->order->id ) ) $order_id = $order->order->id;
-                if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+                if ( $order->order->is_paid || $order->order->payment_method == 'agrisell_coins' ) $paidData = array( 'Paid', 'success' );
                 $assign_order_delivery_status_options = App\orderDeliveryStatusModel::whereIn( 'status_id', $inIds )->get();
             @endphp
             <tr>
@@ -66,13 +66,20 @@
                                                 <div class="form-group row">
                                                     <div class="col-12">
                                                         <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
-                                                        <textarea class="form-control" name="cancel_reason" id="cancel_reason" rows="5" required></textarea>
+                                                        <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
+                                                            <option value="" selected disabled>Select a reason</option>
+                                                            <option value="Incorrect details">Incorrect details</option>
+                                                            <option value="Order quantity can't be fulfilled">Order quantity can't be fulfilled</option>
+                                                            <option value="Possible fraud">Possible fraud</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        <textarea class="form-control mt-2 collapse" name="cancel_reason_others" id="cancel_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-success">Cancel order</button>
+                                                <button type="submit" class="btn btn-danger">Cancel order</button>
                                             </div>
                                         </div>
                                     </form>

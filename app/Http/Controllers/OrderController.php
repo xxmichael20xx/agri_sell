@@ -271,7 +271,7 @@ class OrderController extends Controller
                     $notification_ent->user_id = $sellerId;
                     $notification_ent->frm_user_id = $this->userId();
                     $notification_ent->notification_title = "New {$title_partial} - #{$order->id}";
-                    $notification_ent->notification_txt = "New {$text_partial} has been placed. Item `{$sellerNotif['item_name']} x{$item_qty}`<br><br>";
+                    $notification_ent->notification_txt = "New {$text_partial} has been placed. Item `{$sellerNotif['item_name']} x{$item_qty}`";
                     
                     if ( $notification_ent->save() ) {
                         event( new OrderEvent( [ 'seller_id' => $sellerId, 'type' => 'new-order' ] ) );
@@ -285,7 +285,7 @@ class OrderController extends Controller
             $notification_ent->user_id = $this->userId();
             $notification_ent->frm_user_id = 1;
             $notification_ent->notification_title = 'Order ' . $order->id;
-            $notification_ent->notification_txt = "<br>New order has been placed.</br>";
+            $notification_ent->notification_txt = "<br>New order has been placed.";
             $notification_ent->save();
         }
 

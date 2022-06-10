@@ -29,7 +29,7 @@
                 
                 if ( isset($order->order->id ) ) $order_id = $order->order->id;
                 if ( $status_id == 1 ) $inIds = array( $inIds, 3 );
-                if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+                if ( $order->order->is_paid || $order->order->payment_method == 'agrisell_coins' ) $paidData = array( 'Paid', 'success' );
                 $assign_order_pickup_status_options = App\orderpickupStatusModel::whereIn( 'status_id', $inIds )->get();
                 
                 $total = $order->order->grand_total;
@@ -69,7 +69,14 @@
                                                 <div class="form-group row">
                                                     <div class="col-12">
                                                         <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
-                                                        <textarea class="form-control" name="cancel_reason" id="cancel_reason" rows="5" required></textarea>
+                                                        <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
+                                                            <option value="" selected disabled>Select a reason</option>
+                                                            <option value="Incorrect details">Incorrect details</option>
+                                                            <option value="Order quantity can't be fulfilled">Order quantity can't be fulfilled</option>
+                                                            <option value="Possible fraud">Possible fraud</option>
+                                                            <option value="Others">Others</option>
+                                                        </select>
+                                                        <textarea class="form-control mt-2 collapse" name="cancel_reason_others" id="cancel_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
                                                     </div>
                                                 </div>
                                             </div>

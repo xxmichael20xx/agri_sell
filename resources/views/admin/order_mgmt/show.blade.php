@@ -153,16 +153,16 @@
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
-                        <tr>
-                            <td class="text-left">
-                                Shipping fee
-                            </td>
-                            <td class="text-right">
-                                @if ($order->order->is_pick_up != 'yes')
+                        @if ($order->order->is_pick_up != 'yes')
+                            <tr>
+                                <td class="text-left">
+                                    Shipping fee
+                                </td>
+                                <td class="text-right">
                                     ₱ {{ AppHelpers::numeric( $order->order->shipping_fee ) }}
-                                @endif
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        @endif
                         <tr>
                             <td class="text-left">Total</td>
                             <td class="text-right">

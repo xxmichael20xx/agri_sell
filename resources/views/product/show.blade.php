@@ -403,6 +403,16 @@
                         text: 'Selected product / variant is out of stock.'
                     })
                 }
+
+                const qtyInput = $( '#variation_max_stock' ).val()
+                if ( qtyInput == '' || qtyInput < 1 ) {
+                    e.preventDefault()
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Cart Info',
+                        text: 'Product quantity must be have at least 1 quantity.'
+                    })
+                }
             } )
 
             /**

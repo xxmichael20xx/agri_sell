@@ -106,7 +106,7 @@
                                         <span class="text-muted font-weight-bold">Upload Payout Proof</span>
                                         <div class="custom-file h6 mt-2">
                                             <input type="file" class="custom-file-input" name="proof" id="proof" accept="image/*" required>
-                                            <label class="custom-file-label" id="proof--label" for="proof">Choose image</label>
+                                            <label class="custom-file-label font-weight-bold text-capitalize text-muted" id="proof--label" for="proof" style="font-size: 15px;">Choose image</label>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
 
                 $( document ).on( 'change', '#proof', function( e ) {
                     const fileName = e.target.files[0].name
-                    $( '#proof--label' ).text( `Image selected: ${fileName}` )
+                    $( '#proof--label' ).text( `${fileName}` )
                 } )
 
                 $( document ).on( 'change', '#reject_reason', function() {

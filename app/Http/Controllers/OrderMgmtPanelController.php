@@ -299,10 +299,12 @@ class OrderMgmtPanelController extends Controller
         $status_id = $request->status_id;
         $is_delivery = isset( $request->type );
 
+        $reason = ( $request->cancel_reason == 'Others' ) ? "Others: " . $request->cancel_reason_others : $request->cancel_reason;
+
         $sub_order = Suborder::where( 'order_id', $order_id )->first();
         $sub_order->status_id = $status_id;
         $sub_order->pick_up_status_id = $status_id;
-        $sub_order->order_notes = $request->cancel_reason;
+        $sub_order->order_notes = $reason;
         $sub_order->save();
 
         if ( in_array( $status_id, [ 6, 7 ] ) ) {

@@ -25,7 +25,7 @@
                 $paidData = array( 'Not Paid', 'warning' );
                 
                 if ( isset($order->order->id ) ) $order_id = $order->order->id;
-                if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+                if ( $order->order->is_paid || $order->order->payment_method == 'agrisell_coins' ) $paidData = array( 'Paid', 'success' );
 
                 $total = $order->order->grand_total;
                 if ( $order->order->is_pick_up == 'yes' ) $total = $total - $order->order->shipping_fee;
@@ -62,7 +62,13 @@
                                         <div class="form-group row">
                                             <div class="col-12">
                                                 <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
-                                                <textarea class="form-control" name="cancel_reason" id="cancel_reason" rows="5" required></textarea>
+                                                <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
+                                                    <option value="" selected disabled>Select a reason</option>
+                                                    <option value="Seller can't ship the item.">Seller can't ship the item.</option>
+                                                    <option value="Rider din't pick up the item.">Rider din't pick up the item.</option>
+                                                    <option value="Others">Others</option>
+                                                </select>
+                                                <textarea class="form-control mt-2 collapse" name="cancel_reason_others" id="cancel_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
                                             </div>
                                         </div>
                                     </div>

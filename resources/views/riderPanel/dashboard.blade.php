@@ -53,13 +53,17 @@
                                                 @if ( $isPaid )
                                                     <span class="badge badge-success">Paid</span>
                                                 @else
-                                                    <button class="btn btn-sm btn-info btn-round dropdown-toggle" type="button" id="dropPaid{{ $order->order->id }}" data-toggle="dropdown" aria-expanded="false">
-                                                        Update Payment
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropPaid{{ $order->order->id }}">
-                                                        <a class="dropdown-item" href="/rider/mark_as_paid/{{ $order->order_id }}">Paid</a>
-                                                        <a class="dropdown-item" href="/rider/mark_as_unpaid/{{ $order->order_id }}">Not Paid</a>
-                                                    </div>
+                                                    @if ( in_array( $order->status_id, array( 4, 5 ) ) )
+                                                        <button class="btn btn-sm btn-info btn-round dropdown-toggle" type="button" id="dropPaid{{ $order->order->id }}" data-toggle="dropdown" aria-expanded="false">
+                                                            Update Payment
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropPaid{{ $order->order->id }}">
+                                                            <a class="dropdown-item" href="/rider/mark_as_paid/{{ $order->order_id }}">Paid</a>
+                                                            <a class="dropdown-item" href="/rider/mark_as_unpaid/{{ $order->order_id }}">Not Paid</a>
+                                                        </div>
+                                                    @else
+                                                        <span class="badge badge-warning">Unpaid</span>
+                                                    @endif
                                                 @endif
                                                 <br>
                                                 {{ $order->order->agcoins_transid }}

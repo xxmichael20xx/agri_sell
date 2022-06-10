@@ -43,11 +43,27 @@
                         @php
                             $amount = $refund->order_item->price * $refund->order_item->quantity;
                         @endphp
-                        <div class="col-12 mb-3">
-                            <span class="text-muted">Name of buyer: {{ $refund->customer->name }}</span>
+                        <div class="col-12 mb-3 mt-3">
+                            <span class="text-muted font-weight-bold">Customer details</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Shop name: {{ $refund->product->shop->name }}</span>
+                            <span class="text-dark">Name: 
+                                <a href="/admin/manage_user/{{ $refund->customer->id }}" target="_blank" class="text-decoration-none">{{ $refund->customer->name }}</a>
+                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" title="Click on name to view more details"></i>
+                            </span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-dark">Contact Number:  {{ $refund->customer->mobile }}</span>
+                        </div>
+                        
+                        <div class="col-12 my-3">
+                            <span class="text-muted font-weight-bold">Refund details: ID {{ $refund->refund_ref_id }}</span>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <span class="text-dark">Shop: 
+                                <a href="/admin/manage_shop/{{ $refund->product->shop->id }}" target="_blank" class="text-decoration-none">{{ $refund->product->shop->name }}</a>
+                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" title="Click on name to view more details"></i>
+                            </span>
                         </div>
                         <div class="col-12 mb-3">
                             <span class="text-muted">Reason: {{ $refund->refund_reason_prod_txt }}</span>

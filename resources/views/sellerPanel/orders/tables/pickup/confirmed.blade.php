@@ -25,7 +25,7 @@
                 $paidData = array( 'Not Paid', 'warning' );
                 
                 if ( isset($order->order->id ) ) $order_id = $order->order->id;
-                if ( $order->order->is_paid ) $paidData = array( 'Paid', 'success' );
+                if ( $order->order->is_paid || $order->order->payment_method == 'agrisell_coins' ) $paidData = array( 'Paid', 'success' );
 
                 $total = $order->order->grand_total;
                 if ( $order->order->is_pick_up == 'yes' ) $total = $total - $order->order->shipping_fee;

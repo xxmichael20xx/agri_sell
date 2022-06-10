@@ -67,6 +67,21 @@
                         }
                     } )
                 } )
+
+                $( document ).on( 'change', '#cancel_reason', function() {
+                    const val = $( this ).val()
+                    const others = $( '#cancel_reason_others' )
+
+                    if ( val == 'Others' ) {
+                        others.attr( 'required', true )
+                        others.removeClass( 'collapse' )
+
+                    } else {
+                        others.attr( 'required', false )
+                        others.addClass( 'collapse' )
+                        others.val( '' )
+                    }
+                } )
             })
         })(jQuery)
     </script>

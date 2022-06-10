@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\refundModelOrder;
 use App\seller_reg_fee;
+use App\SellerPayoutRequest;
 use App\Shop;
 use App\UserValidId;
 use Illuminate\Http\Request;
@@ -66,6 +67,21 @@ class AdminPushNotifications extends Controller
         return response()->json( [
             'success' => true,
             'data' => $refunds
+        ] );
+    }
+
+    /**
+     * Get the count of the pending payouts
+     * 
+     * @return Array
+     */
+    public function pendingPayouts( Request $request ) {
+        $this->hasAccess( $request );
+        
+        $payouts = SellerPayoutRequest::where( 'status', 0 )->get()->count();
+        return response()->json( [
+            'success' => true,
+            'data' => $payouts
         ] );
     }
 }

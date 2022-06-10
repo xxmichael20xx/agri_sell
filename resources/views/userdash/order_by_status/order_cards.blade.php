@@ -67,7 +67,7 @@
                                             </a>
                                         <br>
                                         {{ $product_item->shop->name }}
-                                        @if ( $pickup_status_id == 3 )
+                                        @if ( $status_id == 3 )
                                             <br>
                                             <p class="mb-0">Calcelation Reason: {{ $order->order_notes }}</p>
                                             <p class="mb-0">Calcelation date: {{ AppHelpers::humanDate( $order->updated_at, true ) }}</p>

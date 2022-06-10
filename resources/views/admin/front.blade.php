@@ -163,7 +163,7 @@ Coded by www.creative-tim.com
           <li class="{{ $panel_name == 'payout' ? 'active' : '' }}">
             <a href="/admin/payout">
               <i class="nc-icon nc-share-66"></i>
-              <p>Payout</p>
+              <p id="pending--payouts">Payout</p>
             </a>
           </li>
 
@@ -376,14 +376,9 @@ Coded by www.creative-tim.com
         getPendingShopCount()
         getValidIdsForVerification()
         getPendingRefunds()
+        getPendingPayouts()
 
         var channel = pusher.subscribe( 'my-channel' )
-        channel.bind( 'shop-event', function( res ) {
-          const data = res.message
-
-          // Check and update Sellers' notification count
-          if ( data.type == 'new-pending-shop' ) getPendingShopCount()
-        } )
 
         /**
         * Get the updated notifications count via GET Request on API Routes
@@ -447,6 +442,29 @@ Coded by www.creative-tim.com
 
               } else {
                 $( selector ).html( `Refunds` )
+              }
+            } )
+              
+          } catch (error) { /* silently exit */ }
+        }
+
+        /**
+        * Get the updated notifications count via GET Request on API Routes
+        * Updates the count in the header's notification content
+        */
+        function getPendingPayouts() {
+          try {
+            const selector = `#pending--payouts`
+            $.post( `/api/admin/pending/payouts`, { user_id: user_id }, function( res ) {
+              if ( res.success ) {
+                const count = res.data
+                const badge = `
+                  Payout <span class="badge badge-primary">${count}</span>
+                `
+                $( selector ).html( badge )
+
+              } else {
+                $( selector ).html( `Payout` )
               }
             } )
               

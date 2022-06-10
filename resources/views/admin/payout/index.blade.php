@@ -1,5 +1,13 @@
 @extends('admin.front')
 @section('content')
+@php
+    $pendingCount = 0;
+    foreach ( $payouts as $index => $payout ) {
+        if ( $payout->status == '0' ) {
+            $pendingCount++;
+        }
+    }
+@endphp
 
 <div class="content">
     <div class="row">
@@ -16,7 +24,10 @@
                         </li>
                         
                          <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#requests" role="tab" aria-expanded="false">Requests</a>
+                            <a class="nav-link" data-toggle="tab" href="#requests" role="tab" aria-expanded="false">
+                                Requests
+                                <span class="badge badge-info">{{ $pendingCount }}</span>
+                            </a>
                         </li>
                     </ul>
                 </div>

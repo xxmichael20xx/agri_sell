@@ -38,16 +38,18 @@
                     @php
                         $productAveRating = $product->averageRating();
                         $productAveRating = round($productAveRating);
+
+                        $productRating = $product->product_ratings_avg;
                     @endphp
 
                     <div  class="rating-number">
                         <div class="quick-view-rating">
-                            {{$productAveRating}}
-                            <a href=""> <span class="fa fa-star {{(floatval($productAveRating) >= 1) ? 'checked' : '' }}" ></span></a>
-                            <a href=""> <span class="fa fa-star {{(floatval($productAveRating) >= 2) ? 'checked' : '' }}" ></span></a>
-                            <a href=""> <span class="fa fa-star {{(floatval($productAveRating) >= 3) ? 'checked' : '' }}" ></span></a>
-                            <a href=""> <span class="fa fa-star {{(floatval($productAveRating) >= 4) ? 'checked' : '' }}" ></span></a>
-                            <a href=""> <span class="fa fa-star {{(floatval($productAveRating) >= 5) ? 'checked' : '' }}" ></span></a>
+                            {{$productRating}}
+                            <a href=""> <span class="fa fa-star {{(floatval($productRating) >= 1) ? 'checked' : '' }}" ></span></a>
+                            <a href=""> <span class="fa fa-star {{(floatval($productRating) >= 2) ? 'checked' : '' }}" ></span></a>
+                            <a href=""> <span class="fa fa-star {{(floatval($productRating) >= 3) ? 'checked' : '' }}" ></span></a>
+                            <a href=""> <span class="fa fa-star {{(floatval($productRating) >= 4) ? 'checked' : '' }}" ></span></a>
+                            <a href=""> <span class="fa fa-star {{(floatval($productRating) >= 5) ? 'checked' : '' }}" ></span></a>
                            
                         </div>
                         

@@ -46,3 +46,5 @@ Route::group([ 'prefix' => 'seller' ], function() {
         Route::post( 'new', 'SellerPayoutController@createRequest');
     });
 });
+
+Route::post( '/products/rate', 'GlobalProductController@rate' );

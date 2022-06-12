@@ -21,7 +21,8 @@ class Product extends Model
         'images',
         'images_data',
         'has_variants',
-        'featured_image'
+        'featured_image',
+        'product_ratings_avg',
     ];
 
     protected static function booted()
@@ -85,6 +86,12 @@ class Product extends Model
     public function getFeaturedImageAttribute() {
         $image = ProductImage::where( [ 'product_id' => $this->id, 'is_featured' => true ] )->first();
         return $image->image ?? '';
+    }
+
+    public function getProductRatingsAvgAttribute() {
+        $ratings = ProductRating::where( 'product_id', $this->id )->avg( 'rating' );
+
+        return ( $ratings > 0 ) ? round( $ratings ) : 0;
     }
 
     /**

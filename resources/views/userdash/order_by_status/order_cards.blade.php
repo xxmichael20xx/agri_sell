@@ -40,11 +40,15 @@
                                         <a href="{{ url('products/' . $product_item->id) }}">
                                         @if ($status_id == '5')
                                             @php
-                                                $prid = $product_item->id . ":" . $order_item_index;
+                                                $productRating = App\ProductRating::where( [ 'order_id' => $order->id, 'product_id' => $product_item->id, 'user_id' => auth()->user()->id ] )->first();
+                                                $inc = [
+                                                    'rating' => $productRating->rating ?? 0,
+                                                    'order_id' => $order->id,
+                                                    'product_id' => $product_item->id,
+                                                    'user_id' => auth()->user()->id
+                                                ];
                                             @endphp
-                                            @livewireStyles
-                                                <livewire:orders-product-ratings :prid="$prid"  />
-                                            @livewireScripts   
+                                            @include( 'product._rating', $inc )
                                             <br>
                                             @php
                                                 $refund_ent = App\refundModelOrder::where('order_item_id', $order_item->id)->first();

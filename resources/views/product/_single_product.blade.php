@@ -11,19 +11,21 @@
         
         <div class="product-fruit-content text-center">
         <div class="product-rating-4 mb-2" >
-                    @php
-                    $productAveRating = $product->averageRating();
-                    $productAveRating = round($productAveRating);
-                    @endphp
-                    @if ($productAveRating != 0 || $productAveRating != NULL)
-                    <i class="icofont icofont-star {{(floatval($productAveRating) >= 1) ? 'yellow' : '' }}"></i>
-                    <i class="icofont icofont-star {{(floatval($productAveRating) >= 2) ? 'yellow' : '' }}"></i>
-                    <i class="icofont icofont-star {{(floatval($productAveRating) >= 3) ? 'yellow' : '' }}"></i>
-                    <i class="icofont icofont-star {{(floatval($productAveRating) >= 4) ? 'yellow' : '' }}"></i>
-                    <i class="icofont icofont-star {{(floatval($productAveRating) >= 5) ? 'yellow' : '' }}"></i>
-                    @else
-                        <span>Unrated</span>
-                    @endif
+            @php
+                $productAveRating = $product->averageRating();
+                $productAveRating = round($productAveRating);
+
+                $productRating = $product->product_ratings_avg;
+            @endphp
+            @if ( $productRating )
+                <i class="icofont icofont-star {{(floatval($productRating) >= 1) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 2) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 3) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 4) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 5) ? 'yellow' : '' }}"></i>
+            @else
+                <span>Unrated</span>
+            @endif
             </div>
             <h4><a href="{{route('products.show', $product)}}">{{$product->name}}</a></h4>
             <span>

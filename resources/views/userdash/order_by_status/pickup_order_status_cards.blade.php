@@ -38,11 +38,15 @@
                                     <a href="{{ url('products/' . $product_item->id) }}">
                                         @if ($pickup_status_id == '5')
                                             @php
-                                                $prid = $product_item->id . ":" . rand( 1, 100000 );
+                                                $productRating = App\ProductRating::where( [ 'order_id' => $order->id, 'product_id' => $product_item->id, 'user_id' => auth()->user()->id ] )->first();
+                                                $inc = [
+                                                    'rating' => $productRating->rating ?? 0,
+                                                    'order_id' => $order->id,
+                                                    'product_id' => $product_item->id,
+                                                    'user_id' => auth()->user()->id
+                                                ];
                                             @endphp
-                                            @livewireStyles
-                                                <livewire:orders-product-ratings :prid="$prid" />
-                                            @livewireScripts    
+                                            @include( 'product._rating', $inc )  
                                         @endif
                                         
                                         @if($product_item->is_sale == 1)

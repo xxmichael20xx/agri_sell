@@ -75,6 +75,8 @@
                         @php
                             $productAveRating = $product->averageRating();
                             $productAveRating = round($productAveRating);
+
+                            $productRating = $product->product_ratings_avg;
                             
                             $tagClass = $product->is_whole_sale ? 'wholesale' : 'retail';
                             $tagTitle = $product->is_whole_sale ? 'Wholesale' : 'Retail';
@@ -83,29 +85,24 @@
                         <a href="javascript:void(0)" class="tag tag-{{ $tagClass }}">{{ $tagTitle }}</a>
                         <div class="d-block"></div>
 
-                        @if ($productAveRating != '0' || $productAveRating != null)
+                        @if ( $productRating )
                             <div class="rating-number">
                                 <div class="quick-view-rating">
-                                    {{ $productAveRating }}
+                                    {{ $productRating }}
                                     <a href="">
-                                        <span
-                                            class="fa fa-star {{ floatval($productAveRating) >= 1 ? 'checked' : '' }}"></span>
+                                        <span class="fa fa-star {{ floatval($productRating) >= 1 ? 'checked' : '' }}"></span>
                                     </a>
                                     <a href="">
-                                        <span
-                                            class="fa fa-star {{ floatval($productAveRating) >= 2 ? 'checked' : '' }}"></span>
+                                        <span class="fa fa-star {{ floatval($productRating) >= 2 ? 'checked' : '' }}"></span>
                                     </a>
                                     <a href="">
-                                        <span
-                                            class="fa fa-star {{ floatval($productAveRating) >= 3 ? 'checked' : '' }}"></span>
+                                        <span class="fa fa-star {{ floatval($productRating) >= 3 ? 'checked' : '' }}"></span>
                                     </a>
                                     <a href="">
-                                        <span
-                                            class="fa fa-star {{ floatval($productAveRating) >= 4 ? 'checked' : '' }}"></span>
+                                        <span class="fa fa-star {{ floatval($productRating) >= 4 ? 'checked' : '' }}"></span>
                                     </a>
                                     <a href="">
-                                        <span
-                                            class="fa fa-star {{ floatval($productAveRating) >= 5 ? 'checked' : '' }}"></span>
+                                        <span class="fa fa-star {{ floatval($productRating) >= 5 ? 'checked' : '' }}"></span>
                                     </a>
                                 </div>
                             </div>

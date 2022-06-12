@@ -21,20 +21,22 @@
                 $shopAveRating = 'Unrated';
             }
 
+            $productRating = $product->product_ratings_avg;
+
         @endphp
 <div class="breadcrumb-area pt-205 breadcrumb-padding pb-210 bg-success"
    style="background-image: url('https://hbr.org/resources/images/article_assets/2021/08/Sep21_02_1176415931.jpg');background-size:cover;" >
     <div class="container-fluid">
         <div class="breadcrumb-content text-center">
             <h2>{{$shop->name}}</h2>
-            @if ($shopAveRating != 'Unrated')
+            @if ( $productRating )
             <div class="product-rating-4" >
                 <!-- <span class="text-white">{{$shopAveRating}}</span> -->
-                <i class="icofont icofont-star {{(floatval($shopAveRating) >= 1) ? 'yellow' : '' }}"></i>
-                <i class="icofont icofont-star {{(floatval($shopAveRating) >= 2) ? 'yellow' : '' }}"></i>
-                <i class="icofont icofont-star {{(floatval($shopAveRating) >= 3) ? 'yellow' : '' }}"></i>
-                <i class="icofont icofont-star {{(floatval($shopAveRating) >= 4) ? 'yellow' : '' }}"></i>
-                <i class="icofont icofont-star {{(floatval($shopAveRating) >= 5) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 1) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 2) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 3) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 4) ? 'yellow' : '' }}"></i>
+                <i class="icofont icofont-star {{(floatval($productRating) >= 5) ? 'yellow' : '' }}"></i>
             </div>
             @else
                 <span class="text-white">Unrated</span>

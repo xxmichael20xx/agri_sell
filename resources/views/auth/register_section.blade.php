@@ -38,7 +38,7 @@
                     <label for="first_name"
                         class=" col-form-label text-md-right">{{ __('First Name') }}</label>
                         <div class="input-group has-validation">
-                    <input id="first_name" type="text" class="form-control" onchange="setName()" name="first_name" required>
+                    <input id="first_name" type="text" class="form-control" onchange="setName()" name="first_name" value="{{ old( 'first_name' ) }}" required>
 
                     <div class="invalid-feedback">
                     Please input your first name
@@ -50,7 +50,7 @@
                 <label for="last_name"
                        class=" col-form-label text-md-right">{{ __('Last Name') }}</label>
                 <div class="input-group has-validation">
-                <input id="last_name" onchange="" type="text" onchange="setName()" class="form-control" name="last_name" required>
+                <input id="last_name" onchange="" type="text" onchange="setName()" class="form-control" name="last_name" value="{{ old( 'last_name' ) }}" required>
                 <div class="invalid-feedback">
                     Please enter your last name
                 </div>
@@ -60,7 +60,7 @@
             <div class="col-md-3">
                 <label for="first_name"
                        class=" col-form-label text-md-right">{{ __('Middle Initial') }}</label>
-                <input id="middle_initial" type="text" class="form-control" onchange="setName()" name="middle_initial" >
+                <input id="middle_initial" type="text" class="form-control" onchange="setName()" name="middle_initial" value="{{ old( 'middle_initial' ) }}">
             </div>
         </div>
 
@@ -147,7 +147,7 @@
             <div class="col-md-6">
                 <label for="b-day"
                        class="col-form-label text-md-right">{{ __('Birthday') }}</label>
-                <input type="date" name="bday" class="form-control" required/>
+                <input type="date" name="bday" class="form-control" value="{{ old( 'bday' ) }}" required/>
             </div>
             <input type="hidden" id="brgyval" name="barangay">
             <input type="hidden" id="townval" name="town">

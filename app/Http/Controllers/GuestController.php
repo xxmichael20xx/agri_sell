@@ -9,10 +9,14 @@ class GuestController extends Controller
 {
     public function registerValidate( Request $request ) {
         $validator = Validator::make( $request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'middle_initial' => ['required', 'string', 'max:1'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'mobile' => ['required', 'regex:/^[0-9]{11}+$/'],
+            'address' => ['required', 'string', 'max:255'],
+            'bday' => ['required'],
         ] );
 
         if ( $validator->fails() ) {

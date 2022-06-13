@@ -60,7 +60,10 @@
             <div class="col-md-3">
                 <label for="first_name"
                        class=" col-form-label text-md-right">{{ __('Middle Initial') }}</label>
-                <input id="middle_initial" type="text" class="form-control" onchange="setName()" name="middle_initial" value="{{ old( 'middle_initial' ) }}">
+                <input id="middle_initial" type="text" class="form-control" onchange="setName()" name="middle_initial" value="{{ old( 'middle_initial' ) }}" required>
+                <div class="invalid-feedback">
+                    Please enter your middle initial
+                </div>
             </div>
         </div>
 
@@ -148,6 +151,9 @@
                 <label for="b-day"
                        class="col-form-label text-md-right">{{ __('Birthday') }}</label>
                 <input type="date" name="bday" class="form-control" value="{{ old( 'bday' ) }}" required/>
+                <div class="invalid-feedback">
+                    Please select birth date
+                </div>
             </div>
             <input type="hidden" id="brgyval" name="barangay">
             <input type="hidden" id="townval" name="town">

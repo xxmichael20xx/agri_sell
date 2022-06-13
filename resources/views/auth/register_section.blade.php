@@ -166,9 +166,8 @@
                 @include('auth.valid_id_upload_reg')
             </div>
             <div class="col-md-6 text-right">
-                <button type="submit" onclick="checkvalidations()" class="btn btn-success">
-                    {{ __('Register') }}
-                </button>
+                <button type="submit" onclick="checkvalidations()" class="btn btn-success">{{ __('Register') }}</button>
+                {{-- <button type="submit" class="btn btn-success">{{ __('Register') }}</button> --}}
             </div>
         </div>
     </div>

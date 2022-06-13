@@ -83,7 +83,6 @@ class sellRegController extends Controller
     }
 
     function invalidSellRegStatusNotif(Request $request){
-        dd($request);
         $sell_reg_fee_inst = seller_reg_fee::where('id', $request->sell_reg_id)->first();
         $sell_reg_fee_inst->status = '2';
         $sell_reg_fee_inst->save();
@@ -95,14 +94,15 @@ class sellRegController extends Controller
         $user = User::where('id', $sell_reg_fee_inst->user_id)->first();
         $user->role_id = '2';
         $user->save();
-        
-        dd($request->invalid_sell_reg_status);
+
+        $reason = ucwords( str_replace( '_', ' ', $request->invalid_sell_reg_status ) );
+
         // notification entity of sell reg declined
         $notification_ent = new notification();
         $notification_ent->user_id =  $sell_reg_fee_inst->user_id;
-        $notification_ent->frm_user_id = Auth::user()->id;
+        $notification_ent->frm_user_id = auth()->user()->id;
         $notification_ent->notification_title = 'Seller registration fee status';
-        $notification_ent->notification_txt = 'Invalid seller amount please register your shop again <br>Reason: ' . $request->invalid_sell_reg_status;
+        $notification_ent->notification_txt = 'Invalid seller amount please register your shop again <br>Reason: ' . $reason;
         $notification_ent->save();
 
         return back();

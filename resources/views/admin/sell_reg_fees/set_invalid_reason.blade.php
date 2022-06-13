@@ -11,26 +11,25 @@
         </button>
       </div>
       <div class="modal-body">
-      <div class="row">
-        <form method="POST" id="set_invalid_reason_form{{$user->id}}" action="/invalid_sell_reg_status_remarks">
-          @csrf
-          @method('POST')
-          <input type="hidden" name="sell_reg_id" value="{{$user->id}}">
-          <select class="selectpicker" data-style="btn btn-primary btn-round w-100" name="invalid_sell_reg_status" form="change_seller_verification_status">
-                            @php
-                            $option_list = DB::table('invalid_sell_reg_reasons')->get();
-                            $option_list_counter = 1;
-                            @endphp
-                            @foreach($option_list as $inst_options)
-                            @if ($inst_options->name != 'not_init')
-                            <option value="{{$inst_options->name}}">{{$inst_options->slug}}</option>
-                            @endif
-                            $option_list_counter++;
-                            @endforeach          
+        <div class="form-group row py-4">
+          <form method="POST" id="set_invalid_reason_form{{$user->id}}" action="/invalid_sell_reg_status_remarks" class="col-12">
+            @csrf
+            @method('POST')
+            <input type="hidden" name="sell_reg_id" value="{{$user->id}}">
+            <select name="invalid_sell_reg_status" id="invalid_sell_reg_status" class="custom-select" required>
+              <option value="" selected disabled>Select an option</option>
+              @php
+                $option_list = DB::table( 'invalid_sell_reg_reasons' )->get();
+              @endphp
+              @foreach($option_list as $inst_options)
+                @if ( $inst_options->name != 'not_init' )
+                  <option value="{{ $inst_options->name }}">{{ $inst_options->slug }}</option>
+                @endif
+              @endforeach
             </select>
           </form>
+        </div>
       </div>
-</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" form="set_invalid_reason_form{{$user->id}}" class="btn btn-primary">Save changes</button>

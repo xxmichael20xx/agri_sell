@@ -38,7 +38,7 @@
                                     <li><a href="cart">My Basket</a></li>
                                     <li><a href="user_coins_top_up">Coins top up </a></li>
                                     <li><a href="user_orders">My orders </a></li>
-                                    <li><a href="user_pre_orders">Pre sale orders </a></li>
+                                    {{-- <li><a href="user_pre_orders">Pre sale orders </a></li> --}}
                                     <li><a href="notifications">My notifications </a></li>
                                     <li><a href="user_refund_requests">My refund requests </a></li>
                                     <li hidden><a href="otp_request_orders">Agricoins OTP requests</a></li>

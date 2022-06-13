@@ -180,6 +180,7 @@ include 'coinsTopUpEmp_routes.php';
 include 'cust_routes.php';
 // Registration Routes...
 Route::post('register', 'Auth\RegisterController@register');
+Route::post( '/validate/register', 'GuestController@registerValidate' );
 
 Route::get('change-password', 'ChangePasswordController@index');
 Route::post('change-password', 'ChangePasswordController@store')->name('change.password');

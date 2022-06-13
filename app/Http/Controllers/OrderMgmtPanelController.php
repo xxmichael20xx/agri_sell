@@ -169,11 +169,17 @@ class OrderMgmtPanelController extends Controller
 
     // Set Delivery status
     public function editDeliveryStatus( Request $request ) {
-        $seller_id = Auth::user()->id;
+        $seller_id = auth()->user()->id;
         $order_id = $request->order_id;
         $status_id = $request->status_id;
 
-        $sub_order = Suborder::where( 'order_id', $order_id )->where( 'seller_id', $seller_id )->first();
+        $temp_sub_order = Suborder::where( 'order_id', $order_id );
+
+        if ( auth()->user()->email !== 'rider@agrisell.com' ) {
+            $temp_sub_order->where( 'seller_id', $seller_id );
+        }
+
+        $sub_order = $temp_sub_order->first();
         $sub_order->status_id = $status_id;
         $sub_order->pick_up_status_id = $status_id;
         $sub_order->order_notes = $request->reason;

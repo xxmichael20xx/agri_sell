@@ -68,7 +68,6 @@
                                                         <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
                                                         <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
                                                             <option value="" selected disabled>Select a reason</option>
-                                                            <option value="Incorrect details">Incorrect details</option>
                                                             <option value="Order quantity can't be fulfilled">Order quantity can't be fulfilled</option>
                                                             <option value="Possible fraud">Possible fraud</option>
                                                             <option value="Others">Others</option>

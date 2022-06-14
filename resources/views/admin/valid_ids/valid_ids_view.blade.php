@@ -17,7 +17,20 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-6 mx-auto">
-                            <img src="{{ asset('storage/'.$valid_id_user->valid_id_path ) }}" class="img-fluid w-100">
+                            <img src="{{ asset('storage/'.$valid_id_user->valid_id_path ) }}" class="img-fluid w-100" data-toggle="modal" data-target="#imageModal">
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="imageModal">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <img src="{{ asset('storage/'.$valid_id_user->valid_id_path ) }}" class="img-fluid w-100">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -64,7 +77,9 @@
                                                                 $invalid_reasons = DB::table('invalid_id_reasons')->get();
                                                             @endphp
                                                             @foreach ($invalid_reasons as $invalid_reason)
-                                                                <option value="{{$invalid_reason->id}}">{{$invalid_reason->display_name}}</option>
+                                                                @if ( $invalid_reason->id !== 1 )
+                                                                    <option value="{{$invalid_reason->id}}">{{$invalid_reason->display_name}}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>

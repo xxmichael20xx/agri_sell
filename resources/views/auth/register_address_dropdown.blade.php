@@ -3,21 +3,21 @@
     <div class="col col-lg-4">
         <label>Province</label>
     <select id="province" class="form-control" disabled="disabled" onload="setProvince()">
-        <option>Select province</option>
+        <option value="" disabled>Select province</option>
 
     </select>
     </div>
     <div class="col col-lg-4">
     <label>Municipality/City</label>
         <select id="municipality" class="form-control" onchange="setTown()">
-            <option value="">Select municipality</option>
+            <option value="" selected disabled>Select municipality</option>
 
         </select>
     </div>
     <div class="col col-lg-4">
         <label>Barangay</label>
         <select id="barangay" class="form-control input-lg"  onchange="setBarangay()">
-            <option value="">Select barangay</option>
+            <option value="" disabled selected>Select barangay</option>
         </select>
     </div>
 </div>
@@ -32,10 +32,16 @@
 
     function setProvince() {
         $("#provval").val($("#province option:selected").text());
+        $( '#barangay' ).trigger( 'change' )
     }
     $(document).ready(function () {
 
         load_json_data('province');
+
+        setTimeout(() => {
+            $( '#municipality' ).trigger( 'change' )
+            $( '#barangay' ).trigger( 'change' )
+        }, 2000);
 
         function load_json_data(id, parent_id) {
             var html_code = '';
@@ -49,7 +55,7 @@
                         }
                     } else {
                         if (value.parent_id == parent_id) {
-                            html_code += '<option value="' + value.id + '" selected>' + value.name +
+                            html_code += '<option value="' + value.id + '">' + value.name +
                                 '</option>';
                         }
                     }
@@ -65,8 +71,8 @@
             if (province_id != '') {
                 load_json_data('municipality', province_id);
             } else {
-                $('#municipality').html('<option value="">Select municipality</option>');
-                $('#barangay').html('<option value="">Select barangay</option>');
+                $('#municipality').html('<option value="" disabled selected>Select municipality</option>');
+                $('#barangay').html('<option value="" disabled selected>Select barangay</option>');
             }
         });
         $(document).on('load', '#province', function () {
@@ -75,8 +81,8 @@
             if (province_id != '') {
                 load_json_data('municipality', province_id);
             } else {
-                $('#municipality').html('<option value="">Select municipality</option>');
-                $('#barangay').html('<option value="">Select barangay</option>');
+                $('#municipality').html('<option value="" disabled selected>Select municipality</option>');
+                $('#barangay').html('<option value="" disabled selected>Select barangay</option>');
             }
         });
         $(document).on('change', '#municipality', function () {
@@ -85,7 +91,7 @@
             if (municipality_id != '') {
                 load_json_data('barangay', municipality_id);
             } else {
-                $('#barangay').html('<option value="">Select barangay</option>');
+                $('#barangay').html('<option value="" disabled selected>Select barangay</option>');
             }
 
 

@@ -155,9 +155,9 @@
                     Please select birth date
                 </div>
             </div>
-            <input type="hidden" id="brgyval" name="barangay">
-            <input type="hidden" id="townval" name="town">
-            <input type="hidden" id="provval" name="province">
+            <input type="hidden" id="brgyval" name="barangay" value="Amamperez">
+            <input type="hidden" id="townval" name="town" value="Villasis">
+            <input type="hidden" id="provval" name="province" value="Pangasinan">
         </div>
         
         <div class="form-group row">            

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\User;
 use App\UserValidId;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -77,6 +78,10 @@ class EmptyDataCommand extends Command
         $this->info( "Deleting Valid IDs except for Seller" );
         UserValidId::where( 'id', '!=', 3 )->delete();
         $this->info( "Valid IDs deleted except for Seller" );
+
+        $this->info( "Deleting users that aren't main accounts." );
+        User::whereNotIn( 'email', array( 'agrisell2077@gmail.com', 'sellersamp@agrisell.com', 'coins@agrisell.com', 'rider@agrisell.com', 'cacherogenryv@gmail.com', 'test.test@mailinator.com' ) )->delete();
+        $this->info( "Users that aren't main accounts." );
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 

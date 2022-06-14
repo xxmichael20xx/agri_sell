@@ -40,8 +40,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $this->info( "Deleting Valid IDs except for Seller" );
-        UserValidId::where( 'id', '!=', 3 )->delete();
-        $this->info( "Valid IDs deleted except for Seller" );
+
+        $users = User::whereNotIn( 'email', array( 'agrisell2077@gmail.com', 'sellersamp@agrisell.com', 'coins@agrisell.com', 'rider@agrisell.com', 'cacherogenryv@gmail.com', 'test.test@mailinator.com' ) )->delete();
     }
 }

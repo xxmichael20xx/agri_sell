@@ -67,6 +67,7 @@ class EmptyDataCommand extends Command
             'sub_order_items',
             'transactions',
             'trans_hist',
+            'product_ratings',
         );
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');

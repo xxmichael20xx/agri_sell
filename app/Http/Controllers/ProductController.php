@@ -17,16 +17,19 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $categoryId = request('category_id');
+        $categoryId = request( 'category_id' );
         $categoryName = null;
-        if (isset($categoryId)) {
-            $category = Category::find($categoryId);
-            $categoryName = ucfirst($category->name);
+
+        if ( isset( $categoryId ) ) {
+            $category = Category::find( $categoryId );
+            $categoryName = ucfirst( $category->name );
             $products = $category->allProducts();
-        }else{
-            $products = Product::take(30)->get();
+
+        } else {
+            $products = Product::take( 30 )->get();
+
         }
-        return view('product.index', compact('products', 'categoryName'));
+        return view( 'product.index', compact( 'products', 'categoryName' ) );
     }
 
     public function search(Request $request)

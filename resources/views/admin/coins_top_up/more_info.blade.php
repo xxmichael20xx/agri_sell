@@ -68,10 +68,10 @@
                                         <input type="hidden" form="coins_top_up" name="coins_top_uid" value="{{$user->id}}">
                                         <select class="selectpicker" form="coins_top_up" name="coins_top_up_invalid"
                                             data-style="btn btn-primary btn-round" title="Single Select" tabindex="-98">
-                                            <option value="wrong information">Wrong Information
-                                            </option>
+                                            <option value="not valid">Not Valid</option>
+                                            <option value="wrong information">Wrong Information</option>
                                             <option value="wrong details">Wrong details</option>
-                                            <option value="incorrect reference num">Incorrect reference number</option>
+                                            <option value="incorrect reference number">Incorrect reference number</option>
                                             <option value="incorrect amount">Incorrect amount</option>
                                         </select>
                                     </div>

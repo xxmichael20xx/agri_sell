@@ -103,7 +103,7 @@
                                         @endphp
                                         @if ($variation_ent->is_variation_wholesale == 'yes')
                                             <span class="mt-2">Wholesale</span><br>
-                                            <span>Buy more than {{ $variation_ent->variation_min_qty_wholesale }} then the price will be &#8369; {{ AppHelpers::numeric( $variation_ent->variation_wholesale_price_per ) }} </span>
+                                            <span>BUY MORE THAN OR EQUAL TO {{ $variation_ent->variation_min_qty_wholesale }} then the price will be ₱ {{ AppHelpers::numeric( $variation_ent->variation_wholesale_price_per ) }} </span>
                                         @else
                                             <span class="mt-2">No wholesale price</span>
                                         @endif

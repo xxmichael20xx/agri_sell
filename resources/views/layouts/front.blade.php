@@ -307,7 +307,14 @@
 
 
 @if(session('message'))
-    <div class="alert alert-success text-center" role="alert">
+    @php
+        $type = 'success';
+
+        if ( session('message') == 'REFERENCE NUMBER IS ALREADY TAKEN/INVALID.' ) {
+            $type = 'danger';
+        }
+    @endphp
+    <div class="alert alert-{{ $type }} text-center" role="alert">
         <strong>{{ session('message') }}</strong>
     </div>
 @endif

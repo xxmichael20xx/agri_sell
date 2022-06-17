@@ -117,16 +117,15 @@ class CartController extends Controller
 
 
         // delclare a product variation obj in cart
-        $productVariationObj = ProductVariation::find($req->variation_id);
+        $variant = ProductVariation::find($req->variation_id);
+        $isWholesale = $variant->is_variation_wholesale_only;
+        $product_final_price_tmp = $isWholesale == 'yes' ? $variant->variation_wholesale_price_per : $variant->variation_price_per;
+        $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
 
-        $product_final_price_tmp = 0;
-        if ($productVariationObj->is_variation_wholesale_only == 'yes') {
-        $product_final_price_tmp = $productVariationObj->variation_wholesale_price_per;
-        }else{
-        $product_final_price_tmp = $productVariationObj->variation_price_per;
+        if ( $variant ) {
+            $variant->variation_quantity = $variant->variation_quantity - $req->quantity;
+            $variant->save();
         }
-        
-        $wholeSaleMinQty = $productVariationObj->variation_min_qty_wholesale;
 
 
         // add the product to cart
@@ -164,10 +163,23 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems'));
     }
 
-    public function destroy($itemId)
-    {
+    public function destroy( $itemId )
+    {   
+        $session = \Cart::session( auth()->id() );
+        $items = $session->getContent();
 
-     \Cart::session(auth()->id())->remove($itemId);
+        foreach ( $items as $item ) {
+            if ( $item->id == $itemId ) {
+                $variant = ProductVariation::find( $item->id );
+
+                if ( $variant ) {
+                    $variant->variation_quantity = $variant->variation_quantity + $item->quantity;
+                    $variant->save();
+                }
+            }
+        }
+
+        $session->remove( $itemId );
 
      return back();
  }

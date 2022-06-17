@@ -16,7 +16,8 @@ class coinsTopUp extends Controller
 {
     function submitTopUp(Request $request){
         $is_trans_code_existed = TransactionCode::trans_code_duplicate_check_display($request->transaction_id);
-        if($is_trans_code_existed == 'no'){
+
+        if ( $is_trans_code_existed == 'no' ) {
             $proofCoinsTopUpPaymentImage = $request->file('proofTopUpPayment');
             if($proofCoinsTopUpPaymentImage == NULL || $proofCoinsTopUpPaymentImage == ''){
                 return redirect('user_coins_top_up')->withMessage('Please insert image proof of top up payment  ');     
@@ -72,8 +73,9 @@ class coinsTopUp extends Controller
             }
 
             return redirect('user_home')->withMessage('PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.');
-        }else{
-            return redirect('user_coins_top_up')->withMessage('PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.');
+
+        } else {
+            return back()->withMessage( 'REFERENCE NUMBER IS ALREADY TAKEN/INVALID.' );
         }
 
     }
@@ -85,14 +87,22 @@ class coinsTopUp extends Controller
         $coinsTopUpModel->approved_by_user_id = '';
         $coinsTopUpModel->save();
 
-         // notification entity for orders
-         $notification_ent = new notification();
-         $notification_ent->user_id = $coinsTopUpModel->user_id;
-         $notification_ent->frm_user_id = '2';
-         $notification_ent->notification_title = 'Coins top up for ' . $coinsTopUpModel->reference_id;
-         $status_messages = '<br>Your coins top up for failed invalid reason: </br>' . $request->coins_top_up_invalid;
-         $notification_ent->notification_txt = $status_messages;
-         $notification_ent->save();
+        // notification entity for orders
+        $notification_ent = new notification();
+        $notification_ent->user_id = $coinsTopUpModel->user_id;
+        $notification_ent->frm_user_id = '2';
+        $notification_ent->notification_title = 'Coins top up for ' . $coinsTopUpModel->reference_id;
+        $status_messages = '<br>Coins top up request has been declined. <br>Reason: ' . ucwords( $request->coins_top_up_invalid );
+
+        if ( $request->coins_top_up_invalid == 'not valid' ) {
+            $status_messages .= '<br><a href="/user_coins_top_up" style="color: #28A745;">Try Again</a>';
+        }
+
+        $notification_ent->notification_txt = $status_messages;
+        $notification_ent->save();
+
+        event( new CoinEvent( [ 'user_id' => $coinsTopUpModel->user_id, 'type' => 'update-top-up' ] ) );
+        
         return back();
     }
 }

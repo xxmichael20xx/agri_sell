@@ -14,7 +14,6 @@ use App\OrderItem;
 use App\adminNotifModel;
 use App\ProductImage;
 use DB;
-use Illuminate\Support\Facades\Storage;
 
 class ProductMgmtPanelController extends Controller
 {

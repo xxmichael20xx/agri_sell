@@ -202,12 +202,12 @@ Coded by www.creative-tim.com
             </a>
           </li>
 
-          {{-- <li  class="{{($panel_name == 'refund_management') ? 'active' : ''}}">
+          <li  class="{{($panel_name == 'refund_management') ? 'active' : ''}}">
             <a href="/admin/refund_management">
               <i class="nc-icon nc-basket"></i>
               <p>Refund management</p>
             </a>
-          </li> --}}
+          </li>
         </ul>
       </div>
     </div>

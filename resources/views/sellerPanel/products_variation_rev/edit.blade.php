@@ -48,8 +48,11 @@
                                     <div class="row mb-2">
                                         <label class="col-md-3 col-form-label">Product images</label>
                                         <div class="col-md-9">
-                                            <input type="file" class="form-control" id="images" name="images[]" onchange="preview_images();" multiple />
-                                            <small class="text-secondary">Note: Click on a image to set it as the featured imaged</small>
+                                            <div class="custom-file h6 mt-2">
+                                                <input type="file" class="custom-file-input" id="images" name="images[]" accept="image/*" multiple required>
+                                                <label class="custom-file-label text-muted" id="images--label" for="images">Choose an images</label>
+                                            </div>
+                                            <small class="text-secondary">Note: Click on a image to set it as the featured image</small>
                                             @if ( $errors->has( 'images' ) )
                                                 <span class="text-danger d-block">{{ $errors->first( 'images' ) }}</span>
                                             @endif
@@ -460,6 +463,7 @@
             newFiles.splice( index, 1 )
             document.getElementById( "images" ).files = new FileListItems( newFiles )
             $( `#image--${index}` ).remove()
+            $( `#addl--images-${index}` ).remove()
 
             if ( index == indexInput.val() ) indexInput.val( '' )
             if ( isOldImages ) setRemovedIds( index, 'removed_images' )
@@ -488,6 +492,43 @@
                 })
             }
         } )
+
+        $( document ).on( 'change', '#images', function() {
+            load_photos( this, 'div.preview' )
+        } )
+
+        function load_photos( input, ImagePreview ) {
+            let files = input.files
+            let filesArr = Array.prototype.slice.call( files )
+
+            if ( files.length == 1 && $( '#featured_index' ).val() == '' ) {
+                $( '#featured_index' ).val( 0 )
+                is_featured = ' is-featured'
+            }
+
+            filesArr.forEach( function( f, i ) {
+                if ( ! f.type.match( "image.*" ) ) {
+                    return
+                }
+
+                let reader = new FileReader()
+                reader.onload = function(e) {
+                    appendImageView( i, e.target.result )
+                    $( $.parseHTML( `<input type="hidden" name="addl_images[]" id="addl--images-${i}">` ) ).attr( 'value', e.target.result ).appendTo( $ ( '#image_preview' ) )
+                };
+                reader.readAsDataURL( f )
+            } )
+        }
+    }
+
+    function appendImageView( i, file ) {
+        const image = `
+            <div class="col-md-3" id="image--${i}">
+                <img class="img-fluid clickable image--featured" data-index="${i}" src="${file}">
+                <label class="d-block text-right clickable file--image-remove" data-index="${i}">Remove</label>
+            </div>
+        `
+        $( '#image_preview' ).append( image )
     }
 
     function setRemovedIds( index, id ) {

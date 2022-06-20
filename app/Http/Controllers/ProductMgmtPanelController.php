@@ -7,13 +7,11 @@ use App\Product;
 use App\Shop;
 use Illuminate\Support\Facades\Auth;
 use App\ProductCategory;
-use App\PreOrderModel;
 use App\ProductVariation;
-use App\SubOrderItem;
-use App\OrderItem;
 use App\adminNotifModel;
 use App\ProductImage;
 use DB;
+
 class ProductMgmtPanelController extends Controller
 {
 
@@ -382,8 +380,18 @@ class ProductMgmtPanelController extends Controller
         
         $product->is_whole_sale = $is_wholesale;
         $product->product_user_id = $this->userId() ?? NULL; // add the user id of the current user
+
+        if ( $request->addl_images ) {
+            $multiple_images = true;
+
+            foreach ( $request->addl_images as $index => $addl_images ) {
+                $movedImage = $this->uploadImagesV2( $addl_images );
+                $is_featured = ( $request->featured_index == $index ) ? true : false;
+                $images[] = array( $movedImage[2], $is_featured );
+            }
+        }
         
-        if ( $request->hasFile( 'images' ) ) {
+        /* if ( $request->hasFile( 'images' ) ) {
             $multiple_images = $request->file( 'images' );
             $images = array();
 
@@ -393,7 +401,7 @@ class ProductMgmtPanelController extends Controller
                 $is_featured = ( $request->featured_index == $index ) ? true : false;
                 $images[] = array( $image[2], $is_featured );
             }
-        }
+        } */
 
         if ( Auth::user()->role->name == 'admin' ) {
             $product->shop_id = $request->shop_id;
@@ -697,6 +705,21 @@ class ProductMgmtPanelController extends Controller
         return [ $upload_path, $productImageSaveAsName, $product_image_url ];
     }
 
+    public function uploadImagesV2( $image ) {
+        $base64_str = substr( $image, strpos( $image, "," ) + 1 );
+        $image_decoded = base64_decode( $base64_str );
+
+        $extension = explode( '/', mime_content_type( $image ) )[1];
+        $productImageSaveAsName = time() . uniqid() . "-product." . $extension;
+        $upload_path = 'storage/products/' . date( 'FY' ) . '/';
+        $upload_path_url = 'products/' . date( 'FY' ) . '/';
+        $product_image_url = $upload_path_url . $productImageSaveAsName;
+
+        file_put_contents( public_path() . "/" . $upload_path . $productImageSaveAsName , $image_decoded );
+
+        return [ $upload_path, $productImageSaveAsName, $product_image_url ];
+    }
+
     public function update_product_v2( Request $request ) {
         $this->validate( $request, [
             'product_name' => 'required',
@@ -722,8 +745,18 @@ class ProductMgmtPanelController extends Controller
         $product->is_pre_sale = 0;
         $product->sale_pct_deduction = 0;
         $product->is_whole_sale = $is_wholesale;
+
+        if ( $request->addl_images ) {
+            $multiple_images = true;
+
+            foreach ( $request->addl_images as $index => $addl_images ) {
+                $movedImage = $this->uploadImagesV2( $addl_images );
+                $is_featured = ( $request->featured_index == $index ) ? true : false;
+                $images[] = array( $movedImage[2], $is_featured );
+            }
+        }
         
-        if ( $request->hasFile( 'images' ) ) {
+        /* if ( $request->hasFile( 'images' ) ) {
             $multiple_images = $request->file( 'images' );
             $images = array();
 
@@ -737,7 +770,7 @@ class ProductMgmtPanelController extends Controller
                 }
                 $images[] = array( $image[2], $is_featured );
             }
-        }
+        } */
 
         if ( Auth::user()->role->name == 'admin' ) {
             $product->shop_id = $request->shop_id;

@@ -131,7 +131,13 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
     // Report Generation Routes
     Route::group( [ 'prefix' => 'export/csv' ], function() {
+        // Activity Logs
         Route::get( 'activity-logs', 'ReportGenerationCsvController@activityLogs' );
+
+        // Refunds
+        Route::group( [ 'prefix' => 'refunds' ], function() {
+            Route::get( '{type}/{interval}', 'ReportGenerationCsvController@refunds' );
+        } );
     } );
 
     Route::group( [ 'prefix' => 'export/pdf' ], function() {

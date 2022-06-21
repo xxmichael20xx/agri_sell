@@ -39,10 +39,22 @@
                                     $data[] = $refund;
                                 }
                             }
+                            $exports = [
+                                [
+                                    'href' => '/export/csv/refunds/confirmed/full',
+                                    'label' => 'CSV - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/csv/refunds/confirmed/current',
+                                    'label' => 'CSV - Current Month'
+                                ]
+                            ];
+
                             $inc = array(
                                 "title" => "Confirmed refunds",
                                 "index" => 0,
-                                "data" => $data
+                                "data" => $data,
+                                "exports" => $exports
                             );
                         @endphp
                         @include( 'admin.refunds.table', $inc )
@@ -57,10 +69,21 @@
                                     $data[] = $refund;
                                 }
                             }
+                            $exports = [
+                                [
+                                    'href' => '/export/csv/refunds/rejected/full',
+                                    'label' => 'CSV - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/csv/refunds/rejected/current',
+                                    'label' => 'CSV - Current Month'
+                                ]
+                            ];
                             $inc = array(
                                 "title" => "Rejected refunds",
                                 "index" => 1,
-                                "data" => $data
+                                "data" => $data,
+                                "exports" => $exports
                             );
                         @endphp
                         @include( 'admin.refunds.table', $inc )
@@ -75,10 +98,21 @@
                                     $data[] = $refund;
                                 }
                             }
+                            $exports = [
+                                [
+                                    'href' => '/export/csv/refunds/requests/full',
+                                    'label' => 'CSV - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/csv/refunds/requests/current',
+                                    'label' => 'CSV - Current Month'
+                                ]
+                            ];
                             $inc = array(
                                 "title" => "Pending refunds",
                                 "index" => 2,
-                                "data" => $data
+                                "data" => $data,
+                                "exports" => $exports
                             );
                         @endphp
                         @include( 'admin.refunds.table', $inc )

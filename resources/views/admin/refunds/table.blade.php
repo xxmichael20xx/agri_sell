@@ -1,6 +1,16 @@
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between">
         <h4 class="card-title">{{ $title }}</h4>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Report Generation
+            </button>
+            <div class="dropdown-menu" aria-labelledby="report--activity-logs">
+                @foreach ( $exports as $export )
+                    <a class="dropdown-item" href="{{ $export['href'] }}" target="_blank">{{ $export['label'] }}</a>
+                @endforeach
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">

@@ -165,9 +165,8 @@ class OrderController extends Controller
 
         $_is_pickup = $order->is_pick_up == 'yes' ? TRUE : FALSE;
         $cart_session = \Cart::session(auth()->id());
-
         $order->grand_total = $cart_session->getTotal( $_is_pickup );
-        $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee() + number_format( $cart_session->getTotalnetweightShippingAdditionals() );
+        $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee() + $cart_session->getTotalnetweightShippingAdditionals();
         $order->item_count = $cart_session->getContent()->count();
 
         $order_ref_amount = $cart_session->getTotal( $_is_pickup );

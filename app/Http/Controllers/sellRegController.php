@@ -19,7 +19,8 @@ class sellRegController extends Controller
     // 2 invalid 
     // 4 for verification
     function admin_panel_index(){
-        $users = seller_reg_fee::where( 'status', 0 )->get();
+        $users = seller_reg_fee::where( 'status', 0 )->where( 'trans_id', '!=', '' )->where( 'payment_proof', '!=', '' )->get();
+
         $panel_name = "- Seller Registration";
         return view('admin.sell_reg_fees.index')->with(compact('users', 'panel_name'));
     }
@@ -100,13 +101,18 @@ class sellRegController extends Controller
         if ( $request->invalid_sell_reg_status == 'Others' ) {
             $reason = "Others: " . $request->invalid_sell_reg_status_others;
         }
+        
+        $reason .= "
+            <br>
+            <a href='/seller_center' style='color: #28A745;'>Try Again</a>
+        ";
 
         // notification entity of sell reg declined
         $notification_ent = new notification();
         $notification_ent->user_id =  $sell_reg_fee_inst->user_id;
         $notification_ent->frm_user_id = auth()->user()->id;
         $notification_ent->notification_title = 'Seller registration fee status';
-        $notification_ent->notification_txt = 'Invalid seller amount please register your shop again <br>Reason: ' . $reason;
+        $notification_ent->notification_txt = 'Invalid seller amount. Please register your payment again. <br>Reason: ' . $reason;
         $notification_ent->save();
 
         return redirect( '/admin/sell_reg_fees' )->with( 'info', "Seller Registration #{$request->sell_reg_id} has been marked as invalid." );

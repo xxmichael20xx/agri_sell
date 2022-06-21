@@ -33,7 +33,7 @@ class AdminPushNotifications extends Controller
     public function pendingShops( Request $request ) {
         $this->hasAccess( $request );
         
-        $shops = seller_reg_fee::where( 'status', 0 )->get()->count();
+        $shops = seller_reg_fee::where( 'status', 0 )->where( 'trans_id', '!=', '' )->where( 'payment_proof', '!=', '' )->get()->count();
         return response()->json( [
             'success' => true,
             'data' => $shops

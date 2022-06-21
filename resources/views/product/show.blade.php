@@ -250,8 +250,8 @@
                             @endif
                             <div class="form-group row">
                                 <div class="col-4">
-                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="{{ $first_var->variation_min_qty_wholesale }}" data-max="{{ intval( str_replace( ',' , '', $variantStocks ) ) }}" required>
-                                    <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">{{ $first_var->variation_min_qty_wholesale }}</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
+                                    <input class="input-form" name="quantity" type="number" value="{{ $variantMinQty }}" id="variation_max_stock" data-min="1" data-max="{{ intval( str_replace( ',' , '', $variantStocks ) ) }}" required>
+                                    <small class="text-danger collapse" id="quantity--message">Quantity must be between <span id="quantity--min">1</span> - <span id="quantity--max">{{ $variantStocks }}</span></small>
                                     <small class="text-danger collapse" id="quantity--message-zero">OUT OF STOCK</small>
                                 </div>
                                 <div class="col-8">
@@ -309,24 +309,24 @@
                     $( '#variation_id_setter' ).val( id )
                     $( checkIcon ).insertAfter( iconPlaceholder )
 
-                    const variantStock = Number( data.variation_quantity ).toLocaleString()
+                    const variantStock = Number( data.variation_quantity )
                     const variantWeight = data.variation_net_weight
                     const variantWeightUnit = data.variation_net_weight_unit == 'kilogram' ? 'kg' : 'g'
                     const variantPrice = Number( data.variation_price_per ).toLocaleString()
                     const variantWholeSaleMinQty = data.variation_min_qty_wholesale
                     const variantSoldFor = data.variation_sold_per
 
-                    $( '#variant--stock' ).text( variantStock )
+                    $( '#variant--stock' ).text( variantStock.toLocaleString() )
                     $( '#variant--weight' ).text( variantWeight )
                     $( '#variant--weight-unit' ).text( variantWeightUnit )
                     $( '#price_list' ).text( `₱ ${variantPrice}` )
                     $( '#variation_max_stock' ).attr( 'data-max', variantStock )
-                    $( '#quantity--max' ).text( variantStock )
+                    $( '#quantity--max' ).text( variantStock.toLocaleString() )
                     $( '#variant--sold-for' ).text( variantSoldFor )
 
                     if ( data.is_variation_wholesale == 'yes' ) {
-                        $( '#variation_max_stock' ).attr( 'data-min', variantWholeSaleMinQty )
-                        $( '#quantity--min' ).text( variantWholeSaleMinQty )
+                        $( '#variation_max_stock' ).attr( 'data-min', 1 )
+                        $( '#quantity--min' ).text( 1 )
                         $( '#variant--additional-text' ).text( `Wholesale: Buy a minimum qty of ${variantWholeSaleMinQty} and the price will be ₱${variantPrice}` )
 
                     } else {

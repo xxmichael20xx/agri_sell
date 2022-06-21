@@ -121,7 +121,7 @@ Coded by www.creative-tim.com
           <li class="{{($panel_name == 'user_valid_ids') ? 'active' : ''}} ">
             <a href="/admin/valid_ids">
               <i class="nc-icon nc-badge"></i>
-              <p id="verification--valid-ids">User Validation</p>
+              <p id="verification--valid-ids">User Verification</p>
             </a>
           </li>
 
@@ -413,12 +413,12 @@ Coded by www.creative-tim.com
               if ( res.success ) {
                 const count = res.data
                 const badge = `
-                  User Validation <span class="badge badge-primary">${count}</span>
+                  User Verification <span class="badge badge-primary">${count}</span>
                 `
                 $( selector ).html( badge )
 
               } else {
-                $( selector ).html( `User Validation` )
+                $( selector ).html( `User Verification` )
               }
             } )
               

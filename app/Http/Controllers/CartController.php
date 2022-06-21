@@ -8,6 +8,7 @@ use Cart;
 use DB;
 use Auth;
 use App\ProductVariation;
+use App\User;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -101,9 +102,15 @@ class CartController extends Controller
            return redirect( '/login' );
         }
 
-        $is_valid = auth()->user()->is_valid;
-        if ( ! $is_valid ) {
-            return redirect( '/home' )->withError( "Your ID is still not yet verified by the Admin." );
+        $excludeIds = [
+            'sellersamp@agrisell.com', 'agrisell2077@gmail.com', 'coins@agrisell.com'
+        ];
+        $_user = User::find( auth()->user()->id );
+        
+        if ( ! in_array( auth()->user()->email, $excludeIds ) ) {
+            if ( ! $_user->is_valid ) {
+                return redirect( '/home' )->withError( "Your ID is still not yet verified by the Admin." );
+            }
         }
 
         $sale_pct_deduct = '-'.$product['sale_pct_deduction'] . '%';

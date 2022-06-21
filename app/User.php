@@ -89,9 +89,9 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function getIsValidAttribute() {
-        $isValid = UserValidId::where( 'user_id', auth()->user()->id )->first();
+        $validId = UserValidId::where( 'user_id', $this->id )->first();
 
-        if ( ! $isValid ) return false;
-        return $isValid->status == 1 ? true : false;
+        if ( ! $validId ) return false;
+        return ( $validId->is_valid == 1 || $validId->is_valid == '1' ) ? true : false;
     }
 }

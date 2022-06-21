@@ -57,10 +57,8 @@
                                     @if (($hours < 1 && $minutes < 59) || $user->is_seen == 'no')
                                         <b> {{$user->shop->name ?? '' }}
                                         {{ $user->owner->name ?? '' }}</b>
-                                        <span class="badge badge-primary">New</span>
                                     @else
-                                        {{ $user->shop->name ?? '' }}
-                                        {{ $user->owner->name ?? '' }}
+                                        
                                     @endif                           
                                 </td>
                                 <td>
@@ -71,7 +69,6 @@
                                 <td>
                                 @if ( ( $hours < 1 && $minutes < 59 ) || $user->is_seen == 'no' )
                                         <b> {{ $user->trans_id ?? '' }} </b>
-                                        <span class="badge badge-primary">New</span>
                                     @else
                                         {{ $user->trans_id ?? '' }}
                                     @endif    

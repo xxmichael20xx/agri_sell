@@ -100,9 +100,12 @@
                                                                 <option value="" selected disabled>Select an option</option>
                                                                 @php
                                                                     $option_list = DB::table( 'invalid_sell_reg_reasons' )->get();
+                                                                    $exclude = [
+                                                                        'not_init', 'not_payment_form', 'fake_payment_form'
+                                                                    ];
                                                                 @endphp
                                                                 @foreach( $option_list as $inst_options )
-                                                                    @if ( $inst_options->name != 'not_init' )
+                                                                    @if ( ! in_array( $inst_options->name, $exclude ) )
                                                                         <option value="{{ $inst_options->name }}">{{ $inst_options->slug }}</option>
                                                                     @endif
                                                                 @endforeach

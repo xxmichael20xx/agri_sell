@@ -227,7 +227,6 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="report--activity-logs">
                         <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">Excel</a>
-                        <button type="button" class="dropdown-item" onclick="Swal.fire({ icon: 'info', title: 'Development in progress' });">PDF</button>
                     </div>
                 </div>
               </div>

@@ -4,32 +4,29 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <div class="toolbar">
-                <!--        Here you can write extra buttons/actions for the toolbar              -->
-            </div>
             <table id="datatable{{$datatable_index}}" class="table " cellspacing="0" width="100%">
                 <thead class="text-primary">
                     <tr>
                         <th>Name</th>
-                        <th>Image</th>
-                        <th>Is valid</th>
+                        <th>Users' ID</th>
+                        <th>Status</th>
                         <th class="text-right">Actions</th>
                     </tr>
                 </thead>
             <tbody>
-                @foreach ($users as $user)
+                @foreach ( $users as $user )
                     <tr>
                         <td>
-                            {{$user->owner->name ?? 'Not available'}}
+                            {{ $user->owner->name }}
                         </td>
                         <td>
-                            <img src="{{asset('storage/'.$user->valid_id_path)}}" height="100" alt="">
+                            <img src="{{ asset( 'storage/'.$user->valid_id_path ) }}" height="100" alt="">
                         </td>
                         <td>
                             @if ($user->is_valid == '1')
-                                <span>Valid</span>
+                                <span>Confirmed</span>
                             @elseif ($user->is_valid == '0')
-                                <span>Invalid </span>
+                                <span>Denied</span>
                             @elseif ($user->is_valid == '2')
                                 <span>Pending</span>
                             @endif

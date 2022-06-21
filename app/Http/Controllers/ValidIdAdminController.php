@@ -15,17 +15,18 @@ class ValidIdAdminController extends Controller
     function index(){
 //        $users = DB::table('user_valid_ids')->join('users', 'user_valid_ids.user_email', '=', 'users.email')->get();
         $users = UserValidId::all();
-        return view('admin.valid_ids.index')->with('users', $users)->with('panel_name', 'user_valid_ids');
+        return view('admin.valid_ids.index')->with('users', $users)->with('panel_name', 'Users Validation');
     }
 
     function validIdView($validId_id){
         $user_get_email = DB::table('users')->where('id', $validId_id)->pluck('email')->first();
         $valid_id_user = UserValidId::find($validId_id);
-        return view('admin.valid_ids.valid_ids_view')->with(compact('valid_id_user', 'user_get_email'))->with('panel_name', 'user_valid_ids');
+        return view('admin.valid_ids.valid_ids_view')->with(compact('valid_id_user', 'user_get_email'))->with('panel_name', 'Users Validation');
     }
-    function setValidId($validId_id){
+    function setValidId( $validId_id ) {
         $user_valid_id = UserValidId::find($validId_id);
         $user_valid_id->is_valid = '1';
+        
         $trans = new TransHistModel();
         $trans->user_id_master = $user_valid_id->user_id;
         $trans->user_id_slave = $user_valid_id->user_id;
@@ -33,12 +34,13 @@ class ValidIdAdminController extends Controller
         $trans->trans_type = 'Valid IDs';
         $trans->trans_ref_id = 'VALID_IDs-' . uniqid();
         $trans->amount = 'not applicable';
+
         // set a notification table
         $notification_ent = new notification();
-        $notification_ent->user_id = $user_valid_id->owner->id ?? 'not available';
+        $notification_ent->user_id = $user_valid_id->owner->id ?? 0;
         $notification_ent->frm_user_id = Auth::user()->id;
-        $notification_ent->notification_title = 'Valid id notification';
-        $notification_ent->notification_txt = 'Your ID is valid';
+        $notification_ent->notification_title = 'Valid ID Update';
+        $notification_ent->notification_txt = 'Your ID has been confirmed. You may now able to fully use the platform.';
         $notification_ent->save();
         $user_valid_id->save();
         $trans->save();
@@ -51,10 +53,19 @@ class ValidIdAdminController extends Controller
 
         return back();
     }
-    function unsetValidId(Request $req, $validId_id){
+
+    function unsetValidId( Request $request, $validId_id ) {
+        $reason = $request->invalid_id_reason;
+        $isOthers = false;
+
+        if ( $reason == 'Others' ) {
+            $isOthers = true;
+            $reason .= ": {$request->invalid_id_reason_others}";
+        }
+
         $user_valid_id = UserValidId::find($validId_id);
         $user_valid_id->is_valid = '0';
-        $user_valid_id->invalid_reason_id = $req->invalid_id_reason;
+        $user_valid_id->invalid_reason_id = $request->invalid_id_reason;
         $user_valid_id->save();
 
         $trans = new TransHistModel();
@@ -66,9 +77,13 @@ class ValidIdAdminController extends Controller
         $trans->amount = 'not applicable';
         $trans->save();
 
-        $tbl_invalid_reasons = DB::table('invalid_id_reasons')->where('id', $req->invalid_id_reason)->first();
+        if ( ! $isOthers ) {
+            $reason = DB::table('invalid_id_reasons')->where('id', $request->invalid_id_reason)->first();
+            $reason = $reason->description;
+        }
+
         $notification_txt = "
-            {$tbl_invalid_reasons->description}
+            {$reason}
             <br>
             <a href='/valid-id/{$user_valid_id->id}' class='text-success font-weight-bold'>Click here to re-upload ID.</a>
         ";
@@ -77,7 +92,7 @@ class ValidIdAdminController extends Controller
         $notification_ent = new notification();
         $notification_ent->user_id = $user_valid_id->owner->id ?? 'not available';
         $notification_ent->frm_user_id = Auth::user()->id;
-        $notification_ent->notification_title =  'Your ID is ' . $tbl_invalid_reasons->display_name;
+        $notification_ent->notification_title =  'Your ID is `' . $reason . '`';
         $notification_ent->notification_txt = $notification_txt;
         $notification_ent->save();
 
@@ -90,7 +105,7 @@ class ValidIdAdminController extends Controller
         $user_get_email = DB::table('users')->where('id', $validId_id)->pluck('email')->first();
         $valid_id_user = DB::table('user_valid_ids')->where('user_email', $user_get_email)->first();
         $user = DB::table('users')->where('id', $validId_id)->first();
-        return view('admin.valid_ids.edit_valid_id')->with(compact('valid_id_user', 'user'))->with('panel_name', 'user_valid_ids');
+        return view('admin.valid_ids.edit_valid_id')->with(compact('valid_id_user', 'user'))->with('panel_name', 'Users Validation');
     }
 
 

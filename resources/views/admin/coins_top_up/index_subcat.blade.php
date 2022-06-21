@@ -40,9 +40,9 @@
                         </td>
                         <td>
                             @if ($user->remarks == '1')
-                                <span>Verified</span>
+                                <span>Confirmed</span>
                             @elseif ($user->remarks == '0')
-                                <span>Not Verified </span>
+                                <span>Denied</span>
                             @endif
                         </td>
                         <td class="text-right">

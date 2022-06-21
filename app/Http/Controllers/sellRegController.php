@@ -19,8 +19,8 @@ class sellRegController extends Controller
     // 2 invalid 
     // 4 for verification
     function admin_panel_index(){
-        $users = seller_reg_fee::where( 'status', '4' )->get();
-        $panel_name = "seller_reg_fee";
+        $users = seller_reg_fee::where( 'status', 0 )->get();
+        $panel_name = "- Seller Registration";
         return view('admin.sell_reg_fees.index')->with(compact('users', 'panel_name'));
     }
 
@@ -82,20 +82,24 @@ class sellRegController extends Controller
         return back();
     }
 
-    function invalidSellRegStatusNotif(Request $request){
-        $sell_reg_fee_inst = seller_reg_fee::where('id', $request->sell_reg_id)->first();
+    function invalidSellRegStatusNotif( Request $request ) {
+        $sell_reg_fee_inst = seller_reg_fee::find( $request->sell_reg_id );
         $sell_reg_fee_inst->status = '2';
         $sell_reg_fee_inst->save();
 
         // then update shop
-        Shop::where('user_id', $sell_reg_fee_inst->user_id)->delete();
+        // Shop::where( 'user_id', $sell_reg_fee_inst->user_id )->delete();
         
         // set to regular user
-        $user = User::where('id', $sell_reg_fee_inst->user_id)->first();
+        $user = User::find( $sell_reg_fee_inst->user_id );
         $user->role_id = '2';
         $user->save();
 
         $reason = ucwords( str_replace( '_', ' ', $request->invalid_sell_reg_status ) );
+
+        if ( $request->invalid_sell_reg_status == 'Others' ) {
+            $reason = "Others: " . $request->invalid_sell_reg_status_others;
+        }
 
         // notification entity of sell reg declined
         $notification_ent = new notification();
@@ -105,7 +109,7 @@ class sellRegController extends Controller
         $notification_ent->notification_txt = 'Invalid seller amount please register your shop again <br>Reason: ' . $reason;
         $notification_ent->save();
 
-        return back();
+        return redirect( '/admin/sell_reg_fees' )->with( 'info', "Seller Registration #{$request->sell_reg_id} has been marked as invalid." );
     }
 
    function change_verification_status(Request $request){
@@ -141,10 +145,11 @@ class sellRegController extends Controller
         return back();
     }
 
-    function admin_panel_more_info($sell_reg_id){
-        $user = seller_reg_fee::where('id', $sell_reg_id)->first();
-        $panel_name = "seller_reg_fee";
-        return view('admin.sell_reg_fees.more_info')->with(compact('user', 'panel_name'));
+    function admin_panel_more_info( $sell_reg_id ) {
+        $user = seller_reg_fee::find( $sell_reg_id );
+        $panel_name = "- Seller Registration Information";
+
+        return view( 'admin.sell_reg_fees.more_info' )->with( compact( 'user', 'panel_name' ) );
     }
     
     function save_new_vendor(Request $req)
@@ -159,16 +164,16 @@ class sellRegController extends Controller
         $shop->save();
 
         // updating user role
-        $user = User::find(Auth::user()->id);
+        $user = User::find( Auth::user()->id );
         // set the registration role to not yet seller first
-        $user->role_id = '4';
+        $user->role_id = 4;
         $user->save();
 
         $seller_reg_fee = new seller_reg_fee;
         $seller_reg_fee->user_id = Auth::user()->id;
         $seller_reg_fee->trans_id = ''; 
         $seller_reg_fee->payment_proof = '';
-        $seller_reg_fee->status = '4';
+        $seller_reg_fee->status = 0;
         $seller_reg_fee->save();
 
         event( new ShopEvent( [ 'type' => 'new-pending-shop' ] ) );
@@ -191,7 +196,7 @@ class sellRegController extends Controller
         $seller_reg_fee = seller_reg_fee::where('user_id', Auth::user()->id)->first();
         $seller_reg_fee->payment_proof = $proof_image_url;
         $seller_reg_fee->trans_id = $request->trans_code;
-        $seller_reg_fee->status = '4';
+        $seller_reg_fee->status = 0;
         $seller_reg_fee->save();
 
         $trans = new TransHistModel();
@@ -238,10 +243,16 @@ class sellRegController extends Controller
     }
 
 
-    function admin_panel_deleted($sell_reg_id){
-        $seller_reg_fee = seller_reg_fee::find($sell_reg_id);
-        $seller_reg_fee->delete();
-        return back();
+    function admin_panel_deleted( $sell_reg_id ) {
+        $seller = seller_reg_fee::find( $sell_reg_id) ;
+        $user_id = $seller->user_id;
+        $seller->delete();
+
+        $user = User::find( $user_id );
+        $user->role_id = 2;
+        $user->save();
+
+        return back()->with( 'info', "Seller Registration of User #{$user_id} has been deleted!" );
     }
 
 }

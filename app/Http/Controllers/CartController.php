@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use Barryvdh\Debugbar\Facade as DebugBar;
 
 use App\Coupon;
 use App\Product;
@@ -10,22 +9,20 @@ use DB;
 use Auth;
 use App\ProductVariation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
     public function add(Product $product)
     {
         $sale_pct_deduct = '-'.$product['sale_pct_deduction'] . '%';
-        // identify if the item object is sale or not
-           $saleCondition = new \Darryldecode\Cart\CartCondition(array(
+        $saleCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'SALE 5%',
             'type' => 'tax',
             'value' => $sale_pct_deduct
         ));
-           $wholeSale_discount = '-' . $product['whole_sale_pct_deduction'] . '%';
-
-   $wholeSaleCondition = new \Darryldecode\Cart\CartCondition(array(
+        
+        $wholeSale_discount = '-' . $product['whole_sale_pct_deduction'] . '%';
+        $wholeSaleCondition = new \Darryldecode\Cart\CartCondition(array(
             'name' => 'SALE 5%',
             'type' => 'tax',
             'value' => $sale_pct_deduct
@@ -100,6 +97,15 @@ class CartController extends Controller
     // default entity
     public function addWquantityVariation(Product $product, Request $req)
     {
+        if ( ! Auth::check() ) {
+           return redirect( '/login' );
+        }
+
+        $is_valid = auth()->user()->is_valid;
+        if ( ! $is_valid ) {
+            return redirect( '/home' )->withError( "Your ID is still not yet verified by the Admin." );
+        }
+
         $sale_pct_deduct = '-'.$product['sale_pct_deduction'] . '%';
         // identify if the item object is sale or not
            $saleCondition = new \Darryldecode\Cart\CartCondition(array(

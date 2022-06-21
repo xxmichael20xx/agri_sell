@@ -40,6 +40,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'is_valid'
+    ];
+
 
     public function shop()
     {
@@ -82,5 +86,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isRegularUser()
     {
         return ($this->role->id == '2') ? true : false;
+    }
+
+    public function getIsValidAttribute() {
+        $isValid = UserValidId::where( 'user_id', auth()->user()->id )->first();
+
+        if ( ! $isValid ) return false;
+        return $isValid->status == 1 ? true : false;
     }
 }

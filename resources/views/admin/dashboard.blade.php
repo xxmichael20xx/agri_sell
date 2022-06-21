@@ -219,14 +219,20 @@
 <div class="row">
   <div class="col-12">
     <div class="card">
-              <div class="card-header">
+              <div class="card-header d-flex justify-content-between">
                 <h4 class="card-title">Activity Logs</h4>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Report Generation
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="report--activity-logs">
+                        <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">Excel</a>
+                        <button type="button" class="dropdown-item" onclick="Swal.fire({ icon: 'info', title: 'Development in progress' });">PDF</button>
+                    </div>
+                </div>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                <div class="toolbar">
-                  <!--        Here you can write extra buttons/actions for the toolbar              -->
-                </div>
                 <table id="datatable1" class="table " cellspacing="0" width="100%">
                     <thead class=" text-primary">
                       <tr><th>
@@ -289,4 +295,17 @@
         </div>
     </div>
 </div>
+@endsection
+@section('admin.custom_scripts')
+<script>
+    (function($) {
+        $(document).ready(function() {
+            $( document ).on( 'click', '.btn-report', function() {
+                const type = $( this ).data( 'type' )
+
+
+            } )
+        })
+    })(jQuery)
+</script>
 @endsection

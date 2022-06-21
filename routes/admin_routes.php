@@ -129,5 +129,12 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
     Route::get('/admin/rider_registration', 'riderMgmtController@add_new_form');
 
-    
+    // Report Generation Routes
+    Route::group( [ 'prefix' => 'export/csv' ], function() {
+        Route::get( 'activity-logs', 'ReportGenerationCsvController@activityLogs' );
+    } );
+
+    Route::group( [ 'prefix' => 'export/pdf' ], function() {
+        Route::get( 'activity-logs', 'ReportGenerationPdfController@activityLogs' );
+    } );
 });

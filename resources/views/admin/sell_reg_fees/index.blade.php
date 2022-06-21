@@ -58,7 +58,8 @@
                                         <b> {{$user->shop->name ?? '' }}
                                         {{ $user->owner->name ?? '' }}</b>
                                     @else
-                                        
+                                        {{ $user->shop->name ?? '' }}
+                                        {{ $user->owner->name ?? '' }}
                                     @endif                           
                                 </td>
                                 <td>

@@ -139,8 +139,24 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
             Route::get( '{type}/{interval}', 'ReportGenerationCsvController@refunds' );
         } );
 
+        // Shops
         Route::group( [ 'prefix' => 'shops' ], function() {
             Route::get( '{interval}/{type}', 'ReportGenerationCsvController@shops' );
+        } );
+
+        // Users
+        Route::group( [ 'prefix' => 'users' ], function() {
+            Route::get( '{interval}/{role_id}', 'ReportGenerationCsvController@users' );
+        } );
+
+        // Users
+        Route::group( [ 'prefix' => 'payouts' ], function() {
+            Route::get( '{status_id}/{interval}', 'ReportGenerationCsvController@payouts' );
+        } );
+
+        // Users
+        Route::group( [ 'prefix' => 'orders' ], function() {
+            Route::get( '{type}/{interval}', 'ReportGenerationCsvController@orders' );
         } );
     } );
 

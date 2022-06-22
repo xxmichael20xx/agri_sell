@@ -31,6 +31,7 @@
                         $users = App\User::where('role_id', '2')->get();      
                         $datatable_index = "";
                         $title = "Regular user";
+                        $role_id = 2;
                     @endphp
                     @include('admin.users.index_subcat')
                     </div>
@@ -41,6 +42,7 @@
                             $users = App\User::where('role_id', '1')->get();        
                             $datatable_index = "2";
                             $title = "Admin";
+                            $role_id = 1;
                         @endphp
                         @include('admin.users.index_subcat')
                     </div>
@@ -50,7 +52,8 @@
                         @php
                             $users = App\User::where('role_id', '5')->get();   
                             $datatable_index = "3";
-                            $title = "Seller";
+                            $title = "Rider";
+                            $role_id = 5;
                         @endphp
                         @include('admin.users.index_subcat')
                     </div>
@@ -60,7 +63,8 @@
                         @php
                             $users = App\User::where('role_id', '3')->get();     
                             $datatable_index = "4";
-                            $title = "Rider";
+                            $title = "Seller";
+                            $role_id = 3;
                         @endphp
                         @include('admin.users.index_subcat')
                     </div>
@@ -72,6 +76,7 @@
                             $users = App\User::where('role_id', '6')->get();     
                             $datatable_index = "6";
                             $title = "Coins top up employee";
+                            $role_id = 6;
                         @endphp
                         @include('admin.users.index_subcat')
                     </div>

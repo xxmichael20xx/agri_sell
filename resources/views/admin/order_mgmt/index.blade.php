@@ -6,19 +6,42 @@
         $deliverySection = $category_type == 'delivery' ? 'active show' : '';
     }
 @endphp
+<style>
+    .custom--dropdown-menu {
+        left: unset !important;
+        right: 0 !important;
+    }
+</style>
 <div class="content">
     <div class="row">
         <div class="col-md-12">
-            <div class="nav-tabs-navigation">
-                <div class="nav-tabs-wrapper">
-                    <ul id="tabs" class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link font-weight-bold {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" href="/admin/manage_orders/pickup/1">Pick up</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link font-weight-bold {{ isset( $deliverySection ) ? $deliverySection : '' }}" href="/admin/manage_orders/delivery/1">Delivery</a>
-                        </li> 
-                    </ul>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4 mx-auto text-center">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ul id="tabs" class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link font-weight-bold {{ isset( $pickupSection ) ? $pickupSection : 'active' }}" href="/admin/manage_orders/pickup/1">Pick up</a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link font-weight-bold {{ isset( $deliverySection ) ? $deliverySection : '' }}" href="/admin/manage_orders/delivery/1">Delivery</a>
+                                </li> 
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Report Generation
+                        </button>
+                        <div class="dropdown-menu custom--dropdown-menu" style="right: 0 !important; left: unset !important;">
+                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/full" target="_blank">Full Orders</a>
+                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/current" target="_blank">Current Month</a>
+                            {{-- <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/top" target="_blank">Top Ordered Product</a> --}}
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="my-tab-content" class="tab-content">
@@ -29,7 +52,7 @@
                 </div>
                 <div class="tab-pane {{ isset( $deliverySection ) ? $deliverySection : 'active' }}" id="Delivery" role="tabpanel" aria-expanded="false">
                     <div class="col-md-12">
-                    @include('admin.order_mgmt.index_subcat_parent_delivery')
+                        @include('admin.order_mgmt.index_subcat_parent_delivery')
                     </div>
                 </div>
             </div>

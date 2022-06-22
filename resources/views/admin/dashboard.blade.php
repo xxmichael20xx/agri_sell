@@ -225,7 +225,7 @@
                     <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Report Generation
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="report--activity-logs">
+                    <div class="dropdown-menu">
                         <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">Excel</a>
                     </div>
                 </div>

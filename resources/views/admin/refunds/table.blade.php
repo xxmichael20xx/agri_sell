@@ -5,7 +5,7 @@
             <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Report Generation
             </button>
-            <div class="dropdown-menu" aria-labelledby="report--activity-logs">
+            <div class="dropdown-menu">
                 @foreach ( $exports as $export )
                     <a class="dropdown-item" href="{{ $export['href'] }}" target="_blank">{{ $export['label'] }}</a>
                 @endforeach
@@ -108,7 +108,13 @@
                             <td>No results</td>
                             <td>No results</td>
                             <td>No results</td>
+                            @if ( $index == '0' )
+                                <td>No results</td>
+                            @endif
                             @if ( $index == '1' )
+                                <td>No results</td>
+                            @endif
+                            @if ( $index == '2' )
                                 <td>No results</td>
                             @endif
                             <td>No results</td>

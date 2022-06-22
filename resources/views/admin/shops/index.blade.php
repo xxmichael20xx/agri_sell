@@ -10,7 +10,7 @@
                             <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Report Generation
                             </button>
-                            <div class="dropdown-menu" aria-labelledby="report--activity-logs">
+                            <div class="dropdown-menu">
                                 <a class="dropdown-item" href="/export/csv/shops/full/default" target="_blank">CSV - Full Approved</a>
                                 <a class="dropdown-item" href="/export/csv/shops/current/default" target="_blank">CSV - Current Month</a>
                                 <a class="dropdown-item" href="/export/csv/shops/full/top" target="_blank">CSV - Top Performing</a>

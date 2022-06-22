@@ -42,10 +42,21 @@
                                     $data[] = $payout;
                                 }
                             }
+                            $exports = [
+                                [
+                                    'href' => '/export/csv/payouts/1/full',
+                                    'label' => 'CSV - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/csv/payouts/1/current',
+                                    'label' => 'CSV - Current Month'
+                                ]
+                            ];
                             $inc = array(
                                 "title" => "Confirmed payouts",
                                 "index" => 0,
-                                "data" => $data
+                                "data" => $data,
+                                "exports" => $exports
                             );
                         @endphp
                         @include( 'admin.payout.table', $inc )
@@ -60,10 +71,21 @@
                                     $data[] = $payout;
                                 }
                             }
+                            $exports = [
+                                [
+                                    'href' => '/export/csv/payouts/2/full',
+                                    'label' => 'CSV - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/csv/payouts/2/current',
+                                    'label' => 'CSV - Current Month'
+                                ]
+                            ];
                             $inc = array(
                                 "title" => "Rejected payouts",
                                 "index" => 1,
-                                "data" => $data
+                                "data" => $data,
+                                "exports" => $exports
                             );
                         @endphp
                         @include( 'admin.payout.table', $inc )
@@ -78,10 +100,21 @@
                                     $data[] = $payout;
                                 }
                             }
+                            $exports = [
+                                [
+                                    'href' => '/export/csv/payouts/0/full',
+                                    'label' => 'CSV - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/csv/payouts/0/current',
+                                    'label' => 'CSV - Current Month'
+                                ]
+                            ];
                             $inc = array(
                                 "title" => "Pending payouts",
                                 "index" => 2,
-                                "data" => $data
+                                "data" => $data,
+                                "exports" => $exports
                             );
                         @endphp
                         @include( 'admin.payout.table', $inc )

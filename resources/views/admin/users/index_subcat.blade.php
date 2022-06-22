@@ -1,6 +1,15 @@
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between">
         <h4 class="card-title">{{ $title ?? 'Users' }}</h4>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Report Generation
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/export/csv/users/full/{{ $role_id }}" target="_blank">CSV - Full List</a>
+                <a class="dropdown-item" href="/export/csv/users/current/{{ $role_id }}" target="_blank">CSV - Current Month</a>
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">

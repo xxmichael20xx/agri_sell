@@ -25,9 +25,6 @@
                     <p>Product new weight: {{ $product_variants[0]->variation_net_weight }}{{ $product_variants[0]->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g' }}</p>
                     <p>Product type: {{ $product_variants[0]->is_variation_wholesale ? 'Wholesale' : 'Retail' }}</p>
                     <p>Product description: {!! $product->description !!}</p>
-                    @if ( $product_variants->count() > 1 )
-                        <p class="border-top pt-3">Note: Only the first variant information is displayed, click on "Edit" to view all variants.</p>
-                    @endif
                 </div>
                 <div class="card-footer">
                     @if ( $product->is_sale == '1' )

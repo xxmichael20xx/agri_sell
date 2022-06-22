@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ActivityLogs;
 use App\Exports\Refunds;
+use App\Exports\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -22,5 +23,10 @@ class ReportGenerationCsvController extends Controller
     public function refunds( Request $request, $type, $interval ) {
         $fileName = $this->time() . "_Refunds_" . ucwords( $type ) . ".csv";
         return \Excel::download( new Refunds( $type, $interval ), $fileName );
+    }
+
+    public function shops( Request $request, $interval, $type ) {
+        $fileName = $this->time() . "_Approved_Shops_" . ucwords( $type ) . ".csv";
+        return \Excel::download( new Shop( $interval, $type ), $fileName );
     }
 }

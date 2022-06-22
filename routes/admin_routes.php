@@ -138,6 +138,10 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
         Route::group( [ 'prefix' => 'refunds' ], function() {
             Route::get( '{type}/{interval}', 'ReportGenerationCsvController@refunds' );
         } );
+
+        Route::group( [ 'prefix' => 'shops' ], function() {
+            Route::get( '{interval}/{type}', 'ReportGenerationCsvController@shops' );
+        } );
     } );
 
     Route::group( [ 'prefix' => 'export/pdf' ], function() {

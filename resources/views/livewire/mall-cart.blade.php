@@ -111,12 +111,13 @@
 
                                     <td class="product-price-cart">
                                         <span class="amount">
-                                             @if( $item['isSale'] == 1 )
+                                            {{-- @if( $item['isSale'] == 1 )
                                                 <s>₱ {{ AppHelpers::numeric( $item['price'] ) }}</s><br>
                                                 <span>₱ {{ AppHelpers::numeric( $item['price'] - (($item['salePct'] / 100) * $item['price']) ) }}</span>
                                             @else
                                                 <span>₱ {{ AppHelpers::numeric( $item['price'] ) }}</span>
-                                            @endif
+                                            @endif --}}
+                                            <span>₱ {{ AppHelpers::numeric( $item['price'] ) }}</span>
                                         </span>
                                     </td>
                                     

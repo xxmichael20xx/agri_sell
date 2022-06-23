@@ -132,7 +132,8 @@ class CartController extends Controller
         // delclare a product variation obj in cart
         $variant = ProductVariation::find($req->variation_id);
         $isWholesale = $variant->is_variation_wholesale_only;
-        $product_final_price_tmp = $isWholesale == 'yes' ? $variant->variation_wholesale_price_per : $variant->variation_price_per;
+        // $product_final_price_tmp = $isWholesale == 'yes' ? $variant->variation_wholesale_price_per : $variant->variation_price_per;
+        $product_final_price_tmp = $variant->variation_price_per;
         $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
 
         if ( $variant ) {

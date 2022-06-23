@@ -90,11 +90,12 @@
                 </div>
                 <div class="order-button-payment">
                     {{-- Place order validation agcoins not sufficient --}}
-                    @if ( ! $hasInvIssues )
+                    {{-- @if ( ! $hasInvIssues )
                         <input type="button" onclick="validateIfAgcoinsEnough()" form="billingDetails" value="Place order">
                     @else
                         <input type="button" onclick="inventoryIssue()" value="Place order">
-                    @endif
+                    @endif --}}
+                    <input type="button" onclick="validateIfAgcoinsEnough()" form="billingDetails" value="Place order">
                 </div>
                 <script type="text/javascript">
                     function inventoryIssue() {

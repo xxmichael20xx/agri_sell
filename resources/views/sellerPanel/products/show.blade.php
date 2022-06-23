@@ -1,5 +1,11 @@
 @extends('sellerPanel.front')
 @section('content')
+<style>
+    .text-focus {
+        color: #64BCB4;
+        font-weight: bold;
+    }
+</style>
 <div class="content">
     <a href="/sellerpanel/products" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
     <div class="row">
@@ -19,7 +25,7 @@
                 <div class="card-body">
                     <p class="h4">{{ $product->name }}</p>
                     <p class="h5"> {!! $product_variation_range !!}</p>
-                    <p>{{ $product->shop->owner->name ?? '' }}</p>
+                    <p class="text-focus">{{ $product->shop->owner->name ?? '' }}</p>
                     <p>Sold per: {{ $product_variants[0]->variation_sold_per }}</p>
                     <p>Available stocks: {{ $product_variants[0]->variation_quantity }}</p>
                     <p>Product new weight: {{ $product_variants[0]->variation_net_weight }}{{ $product_variants[0]->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g' }}</p>

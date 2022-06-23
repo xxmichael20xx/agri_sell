@@ -252,7 +252,8 @@
 </form>
 
 <script>
-    let temp_files = []
+    let _temp_files = [],
+        _selected_files = 0
 
     window.onload = () => {
         $( document ).on( 'change', '#wholesale_sold_per', function() {
@@ -348,6 +349,8 @@
             document.getElementById( "images" ).files = new FileListItems( newFiles )
             $( `#image--${index}` ).remove()
             $( `#addl--images-${index}` ).remove()
+            _selected_files = _selected_files - 1
+            updateFilesCount()
 
             if ( index == indexInput.val() ) {
                 indexInput.val( '' )
@@ -381,6 +384,8 @@
         function load_photos( input, ImagePreview ) {
             let files = input.files
             let filesArr = Array.prototype.slice.call( files )
+            _selected_files = _selected_files + files.length
+            updateFilesCount()
 
             if ( files.length == 1 && $( '#featured_index' ).val() == '' ) {
                 $( '#featured_index' ).val( 0 )
@@ -399,6 +404,11 @@
                 };
                 reader.readAsDataURL( f )
             } )
+        }
+
+        function updateFilesCount() {
+            let count = $( '#images--label' )
+            count.text( `Selected ${_selected_files} images` )
         }
     }
     
@@ -421,13 +431,13 @@
         let files = document.getElementById( "images" ).files
         let is_featured = ''
 
-        if ( temp_files.length > 0) {
+        if ( _temp_files.length > 0) {
             addlImages( files )
             return false
         }
 
         for ( let i = 0; i < files.length; i++ ) {
-            temp_files.push( files[i] )
+            _temp_files.push( files[i] )
             if ( files.length == 1 && $( '#featured_index' ).val() == '' ) {
                 $( '#featured_index' ).val( i )
                 is_featured = ' is-featured'
@@ -439,7 +449,7 @@
     function addlImages( files ) {
         let temp_array = []
         for ( let i = 0; i < files.length; i++ ) {
-            temp_files.push( files[i] )
+            _temp_files.push( files[i] )
             appendImageView( i, files[i] )
 
             let newFiles = Array.from( files )

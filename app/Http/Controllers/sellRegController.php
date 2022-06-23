@@ -189,8 +189,7 @@ class sellRegController extends Controller
     }
 
     // when user click submit payment in seller registration
-    function confirm_registration_fee(Request $request){
-        
+    function confirm_registration_fee( Request $request ) {
         $proofSellRegPaymentImage = $request->file('proofSellRegPayment');
         $proofImageSaveAsName = time() . uniqid() . "-paymentSellReg." . $proofSellRegPaymentImage->getClientOriginalExtension();
         
@@ -199,14 +198,17 @@ class sellRegController extends Controller
         $proof_image_url = 'seller-registration-fee\\' . date('FY') . '\\' . $proofImageSaveAsName;
         $success = $proofSellRegPaymentImage->move($upload_path, $proofImageSaveAsName);
 
-        $seller_reg_fee = seller_reg_fee::where('user_id', Auth::user()->id)->first();
+        $seller_reg_fee = seller_reg_fee::where('user_id', auth()->user()->id)->first();
+        $_payment_proof = $seller_reg_fee->payment_proof;
+        $_trans_id = $seller_reg_fee->trans_id;
+
         $seller_reg_fee->payment_proof = $proof_image_url;
         $seller_reg_fee->trans_id = $request->trans_code;
         $seller_reg_fee->status = 0;
         $seller_reg_fee->save();
 
         $trans = new TransHistModel();
-        $trans->user_id_master = Auth::id();
+        $trans->user_id_master = auth()->user()->id;
         $trans->user_id_slave = '1';
         $trans->remarks = 'The user registers to be a';
         $trans->trans_type = 'Seller Registration';
@@ -214,18 +216,17 @@ class sellRegController extends Controller
         $trans->amount = '100';
         $trans->save();
 
-//        $request = request();
-//
-//        $valid_idImage = $request->file('valid_id');
-//        $valid_idImageSaveAsName = time() . uniqid() . "-valid_id." . $valid_idImage->getClientOriginalExtension();
-//
-//        $upload_path_url = 'user-valid-ids\\' . date('FY') . '\\';
-//        $valid_id_image_url = $upload_path_url . $valid_idImageSaveAsName;
-//
-//        $success = $valid_idImage->move($upload_path, $valid_idImageSaveAsName);
+        /* $request = request();
 
-   // set a notification table
-  
+        $valid_idImage = $request->file('valid_id');
+        $valid_idImageSaveAsName = time() . uniqid() . "-valid_id." . $valid_idImage->getClientOriginalExtension();
+
+        $upload_path_url = 'user-valid-ids\\' . date('FY') . '\\';
+        $valid_id_image_url = $upload_path_url . $valid_idImageSaveAsName;
+
+        $success = $valid_idImage->move($upload_path, $valid_idImageSaveAsName); */
+       
+        // set a notification table
         // notify admin that the user registers
         // in accordance to suggestion 
         $adminnotif_ent = new adminNotifModel();
@@ -233,7 +234,25 @@ class sellRegController extends Controller
         $adminnotif_ent->user_id = Auth::user()->id;
         $adminnotif_message = Auth::user()->name . ' registers a shop confirm the seller registration fee in the admin panel <a class="btn btn-light" href="/admin/sell_reg_more_info/' . $seller_reg_fee->id . '">More info</a>';
         $adminnotif_ent->action_description = $adminnotif_message; 
-        $adminnotif_ent->save();  
+        $adminnotif_ent->save();
+
+        $admin = User::where( 'email', 'agrisell2077@gmail.com' )->first();
+        $notification_ent = new notification();
+        $notification_ent->user_id = $admin->id;
+        $notification_ent->frm_user_id = auth()->user()->id;
+
+        if ( ! $_payment_proof || empty( $_payment_proof ) ) {
+            $this->adminPushNotifications( [
+                'title' => "New Shop Registration",
+                'message' => $adminnotif_message
+            ] );
+
+        } else {
+            $this->adminPushNotifications( [
+                'title' => "Shop Registration - Payment Update",
+                'message' => Auth::user()->name . ' changes the payment for their shop registration. Click the button for more information <a class="btn btn-light" href="/admin/sell_reg_more_info/' . $seller_reg_fee->id . '">More info</a>'
+            ] );
+        }
 
         return redirect('home');
     }

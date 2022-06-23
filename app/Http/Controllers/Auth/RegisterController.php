@@ -100,7 +100,12 @@ class RegisterController extends Controller
         $adminnotif_ent->action_type = 'User regisration';
         $adminnotif_ent->user_id = $getLastInsertedUserId;
         $adminnotif_ent->action_description = $data['name'] . 'register a new account with an email:' . $data['email'];
-        $adminnotif_ent->save();  
+        $adminnotif_ent->save();
+
+        $this->adminPushNotifications( [
+            'title' => 'New User regisration',
+            'message' => $data['name'] . 'register a new account with an email:' . $data['email']
+        ] );
 
         return User::create([
             'name' => $data['name'],
@@ -115,13 +120,8 @@ class RegisterController extends Controller
             'barangay' => $data['barangay'],
             'bday' => $data['bday'],
             'town' => $data['town'],
-            // 'valid_id' => $valid_id_image_url,
-
         ]);
 
-        
-
-//        return redirect()->route('home')->withMessage('Please login to your account');
-           return view('auth.verify');
+        return view('auth.verify');
     }
 }

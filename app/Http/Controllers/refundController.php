@@ -13,6 +13,7 @@ use App\Product;
 use DB;
 use App\coinsTopUpModel;
 use App\Events\CoinEvent;
+use App\Events\ShopEvent;
 use App\prod_refund_statuses;
 use App\User;
 use Carbon\Carbon;
@@ -102,15 +103,17 @@ class refundController extends Controller
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
 
+            event( new ShopEvent( [ 'customer_id' => $coinUser->id ] ) );
+        }
+
+        if ( $adminUser ) {
             $notification_ent = new notification();
             $notification_ent->user_id = $adminUser->id;
             $notification_ent->frm_user_id = auth()->user()->id;
             $notification_ent->notification_title = 'Refund request for ' . $refund_request->refund_ref_id;
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
-
-            event( new CoinEvent( [ 'user_id' => $coinUser->id, 'type' => 'refund-top-up' ] ) );
-            event( new CoinEvent( [ 'user_id' => $adminUser->id, 'type' => 'refund-top-up' ] ) );
+            event( new ShopEvent( [ 'customer_id' => $adminUser->id ] ) );
         }
 
         // end of notification entity

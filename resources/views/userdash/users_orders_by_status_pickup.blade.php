@@ -7,53 +7,53 @@
 </style>
 <div class="custom-container-fluid">
     <div class="product-tab-list text-center mb-65 nav" role="tablist">
-        <a class="active" href="#pending" data-toggle="tab" role="tab" aria-selected="true">
+        <a class="active" href="#pending-pickup" data-toggle="tab" role="tab" aria-selected="true">
             <h4 style="text-transform: initial;">Pending</h4>
         </a>
 
-        <a href="#confirmed" data-toggle="tab" role="tab">
+        <a href="#confirmed--pickup" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Confirmed</h4>
         </a>
 
-        <a href="#ready_to_pickup" data-toggle="tab" role="tab">
+        <a href="#ready_to_pickup-pickup" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Ready to pickup</h4>
         </a>
 
-        <a href="#pickup_to_rate" data-toggle="tab" role="tab">
+        <a href="#pickup_to_rate--pickup" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">To rate</h4>
         </a>
 
-        <a href="#cancelled" data-toggle="tab" role="tab">
+        <a href="#cancelled-pickup" data-toggle="tab" role="tab">
             <h4 style="text-transform: initial;">Cancelled</h4>
         </a>
     </div>
 
     <div class="tab-content">
-        <div class="tab-pane active show fade" id="pending" role="tabpanel">
+        <div class="tab-pane active show fade" id="pending-pickup" role="tabpanel">
             @php
                 $pickup_status_id = '1';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
-        <div class="tab-pane fade" id="confirmed" role="tabpanel">
+        <div class="tab-pane fade" id="confirmed--pickup" role="tabpanel">
             @php
                 $pickup_status_id = '6';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
-        <div class="tab-pane fade" id="ready_to_pickup" role="tabpanel">
+        <div class="tab-pane fade" id="ready_to_pickup-pickup" role="tabpanel">
             @php
                 $pickup_status_id = '2';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
-        <div class="tab-pane fade" id="pickup_to_rate" role="tabpanel">
+        <div class="tab-pane fade" id="pickup_to_rate--pickup" role="tabpanel">
             @php
                 $pickup_status_id = '5';
             @endphp
             @include('userdash.order_by_status.pickup_order_status_cards')
         </div>
-        <div class="tab-pane fade" id="cancelled" role="tabpanel">
+        <div class="tab-pane fade" id="cancelled-pickup" role="tabpanel">
             @php
                 $pickup_status_id = '3';
             @endphp

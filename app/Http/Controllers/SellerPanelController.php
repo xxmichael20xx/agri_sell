@@ -38,7 +38,23 @@ class SellerPanelController extends Controller
 
         $sumAverageRating = 0;
         $ratings_ocurr = 0;
-        $shopAveRating = 0;
+
+        foreach( $shopProducts as $shopProduct ) {
+            $_[] = $shopProduct->product_ratings_avg;
+            $sumAverageRating += $shopProduct->product_ratings_avg;
+            if ( $shopProduct->product_ratings_avg ){
+                $ratings_ocurr++;     
+            }
+        }
+
+        $shopAveRating = 'Unrated';
+        if ( $ratings_ocurr && $sumAverageRating ) {
+            $shopAveRating = round( $sumAverageRating / $ratings_ocurr, 1 );
+        }
+
+        /* $sumAverageRating = 0;
+        $ratings_ocurr = 0;
+        $shopAveRating = "Unrared";
 
         foreach ( $shopProducts as $shopProduct ) {
             if ( $shopProduct->averageRating != null || $shopProduct->averageRating() != 0 ) {
@@ -52,7 +68,7 @@ class SellerPanelController extends Controller
 
         } else {
             $shopAveRating = 'Unrated';
-        }
+        } */
         
         $total_sales = 0;
         $order_items = $shop_orders;

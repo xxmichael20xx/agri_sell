@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\OrderEvent;
+use App\Events\ShopEvent;
 use App\notification;
 use App\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -39,6 +40,22 @@ class Controller extends BaseController
         $notification_ent->save();
 
         if ( $hasEvent ) event( new OrderEvent( $eventData ) );
+    }
+
+    /**
+     * Creates a new notification and trigger an event for admin
+     * @param notificationData Array data for new notification
+     */
+    public function adminPushNotifications( $notificationData ) {
+        $admin = User::where( 'email', 'agrisell2077@gmail.com' )->first();
+        $notification_ent = new notification();
+        $notification_ent->user_id = $admin->id;
+        $notification_ent->frm_user_id = auth()->user()->id ?? 0;
+        $notification_ent->notification_title = $notificationData['title'];
+        $notification_ent->notification_txt = $notificationData['message'];
+        $notification_ent->save();
+
+        event( new ShopEvent( [ 'customer_id' => $admin->id ] ) );
     }
 
     /**

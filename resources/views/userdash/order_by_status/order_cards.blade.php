@@ -5,9 +5,9 @@
             $param1 = [ 'status_id', $status_id ];
             $param2 = [ 'is_pick_up', 'no' ];
             $orders = App\SubOrder::userOrder( $param1, $param2 )->latest()->get();
-            foreach ( $orders as $_index => $_order ) {
+            /* foreach ( $orders as $_index => $_order ) {
                 if ( ! $_order->has_items ) $orders->forget( $_index );
-            }
+            } */
         @endphp
 
         @forelse( $orders as $order )
@@ -59,7 +59,7 @@
                                             <br>
                                         @endif
                                         {{ $product_item->name }}
-                                        @if( $product_item->is_sale == 1 )
+                                        {{-- @if( $product_item->is_sale == 1 )
                                             <s>₱ {{ $order_item->product_variation->price }}</s>
                                             <h5>
                                                 ₱
@@ -67,11 +67,12 @@
                                                 x {{ $order_item->product_variation->variation_price_per }} </h5>
                                         @else
                                             <h5>₱ {{ $order_item->product_variation->variation_price_per }}</h5>
-                                        @endif
+                                        @endif --}}
+                                        <h5>₱ {{ $order_item->product_variation->variation_price_per }}</h5>
                                             </a>
                                         <br>
                                         {{ $product_item->shop->name }}
-                                        @if ( $status_id == 3 )
+                                        @if ( $status_id == 7 )
                                             <br>
                                             <p class="mb-0">Calcelation Reason: {{ $order->order_notes }}</p>
                                             <p class="mb-0">Calcelation date: {{ AppHelpers::humanDate( $order->updated_at, true ) }}</p>

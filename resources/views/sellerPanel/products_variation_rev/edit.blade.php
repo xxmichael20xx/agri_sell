@@ -360,6 +360,9 @@
 
 @section('custom-scripts')
 <script>
+    let _temp_files = [],
+        _selected_files = 0
+
     window.onload = () => {
         $( document ).on( 'change', '#wholesale_sold_per', function() {
             const val = $( this ).val()
@@ -464,6 +467,8 @@
             document.getElementById( "images" ).files = new FileListItems( newFiles )
             $( `#image--${index}` ).remove()
             $( `#addl--images-${index}` ).remove()
+            _selected_files = _selected_files - 1
+            updateFilesCount()
 
             if ( index == indexInput.val() ) indexInput.val( '' )
             if ( isOldImages ) setRemovedIds( index, 'removed_images' )
@@ -500,6 +505,8 @@
         function load_photos( input, ImagePreview ) {
             let files = input.files
             let filesArr = Array.prototype.slice.call( files )
+            _selected_files = _selected_files + files.length
+            updateFilesCount()
 
             if ( files.length == 1 && $( '#featured_index' ).val() == '' ) {
                 $( '#featured_index' ).val( 0 )
@@ -518,6 +525,11 @@
                 };
                 reader.readAsDataURL( f )
             } )
+        }
+
+        function updateFilesCount() {
+            let count = $( '#images--label' )
+            count.text( `Selected ${_selected_files} images` )
         }
     }
 

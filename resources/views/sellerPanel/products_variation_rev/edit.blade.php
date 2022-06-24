@@ -467,8 +467,10 @@
             document.getElementById( "images" ).files = new FileListItems( newFiles )
             $( `#image--${index}` ).remove()
             $( `#addl--images-${index}` ).remove()
-            _selected_files = _selected_files - 1
-            updateFilesCount()
+            if ( _selected_files > 0 ) {
+                _selected_files = _selected_files - 1
+                updateFilesCount()
+            }
 
             if ( index == indexInput.val() ) indexInput.val( '' )
             if ( isOldImages ) setRemovedIds( index, 'removed_images' )

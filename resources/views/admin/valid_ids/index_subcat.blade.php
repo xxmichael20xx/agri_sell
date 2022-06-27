@@ -15,7 +15,7 @@
                 </thead>
                 <tbody>
                     @foreach ( $users as $user )
-                        @if ( $user->owner->name )
+                        @if ( $user->owner )
                             <tr>
                                 <td>
                                     {{ $user->owner->name }}

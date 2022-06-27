@@ -70,6 +70,12 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
         Route::get( 'show/{id}', 'SellerPayoutController@show');
         Route::get( 'new/{id?}', 'SellerPayoutController@new');
     });
+
+    // Report Generation Routes
+    Route::group( [ 'prefix' => '/export/csv' ], function() {
+        // Products
+        Route::get( 'products/{type}/{interval}', 'ReportGenerationCsvController@sellerProducts' );
+    });
 });
 
  // sidebar menu

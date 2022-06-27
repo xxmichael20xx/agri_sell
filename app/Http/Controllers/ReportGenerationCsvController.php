@@ -6,13 +6,16 @@ use App\Exports\ActivityLogs;
 use App\Exports\Orders;
 use App\Exports\Payouts;
 use App\Exports\Refunds;
+use App\Exports\SellerProducts;
 use App\Exports\Shop;
+use App\Exports\TransactionHistory;
 use App\Exports\Users;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportGenerationCsvController extends Controller
 {
+    // Admin Report Generation
     public function time() {
         $time = Carbon::parse( time() )->format( 'M_d_Y_h_i_s' );
 
@@ -99,5 +102,16 @@ class ReportGenerationCsvController extends Controller
     public function orders( Request $request, $type, $interval ) {
         $fileName = $this->time() . "_" . ucwords( $type ) . "_Orders_" . ucwords( $interval ) . ".csv";
         return \Excel::download( new Orders( $type, $interval ), $fileName );
+    }
+
+    public function transactions( Request $request, $interval ) {
+        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Transaction_History.csv";
+        return \Excel::download( new TransactionHistory( $interval ), $fileName );
+    }
+
+    // Seller Report Generation
+    public function sellerProducts( Request $request, $type, $interval ) {
+        $fileName = $this->time() . "_" . ucwords( $type ) . "_Products_" .  ucwords( $interval ) . ".csv";
+        return \Excel::download( new SellerProducts( $type, $interval ), $fileName );
     }
 }

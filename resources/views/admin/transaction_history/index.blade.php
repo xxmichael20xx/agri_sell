@@ -4,8 +4,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between">
                         <h4 class="card-title">Transaction history</h4>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Report Generation
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/export/csv/transactions/full" target="_blank">CSV - Full List</a>
+                                <a class="dropdown-item" href="/export/csv/transactions/current" target="_blank">CSV - Current Month</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">

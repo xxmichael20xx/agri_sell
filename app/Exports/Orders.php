@@ -103,30 +103,62 @@ class Orders implements FromCollection, WithHeadings
 
                     $isPaid = $order->order->is_paid || $order->order->payment_method == 'agrisell_coins' ? "Paid" : "Not Paid";
                     $method = $this->helpers->toWords( $order->order->payment_method );
-                    $item = $order->order->items[0];
+                    $items = $order->order->items;
 
-                    $product_variety_ent = ProductVariation::where( 'id', $item->pivot->variation_id )->first();
-                    $item_product_price_proc = $product_variety_ent->variation_price_per;
-    
-                    $_data = [
-                        "#" . $order->order->id,
-                        $order->order->shipping_fullname,
-                        "Peso " . Helpers::numeric( $order->order->grand_total ),
-                        $isPaid . ", Method: {$method}",
-                        $order_status,
-                        $item->name,
-                        Helpers::numeric( $item->pivot->quantity ),
-                        $product_variety_ent->variation_name,
-                        "Peso " . Helpers::numeric( $item_product_price_proc ),
-                        "Peso " . Helpers::numeric( $item->pivot->quantity * $item->pivot->price )
-                    ];
-    
-                    $data = ( object ) $_data;
-                    $collection->push( $data );
+                    if ( count( $items ) < 2 ) {
+                        $item = $items[0];
+
+                        $product_variety_ent = ProductVariation::where( 'id', $item->pivot->variation_id )->first();
+                        $item_product_price_proc = $product_variety_ent->variation_price_per;
+        
+                        $_data = [
+                            "#" . $order->order->id,
+                            $order->order->shipping_fullname,
+                            "Peso " . Helpers::numeric( $order->order->grand_total ),
+                            $isPaid . ", Method: {$method}",
+                            $order_status,
+                            $item->name,
+                            Helpers::numeric( $item->pivot->quantity ),
+                            $product_variety_ent->variation_name,
+                            "Peso " . Helpers::numeric( $item_product_price_proc ),
+                            "Peso " . Helpers::numeric( $item->pivot->quantity * $item->pivot->price )
+                        ];
+        
+                        $data = ( object ) $_data;
+                        $collection->push( $data );
+
+                    } else {
+                        foreach ( $items as $item_index => $item ) {
+                            $product_variety_ent = ProductVariation::where( 'id', $item->pivot->variation_id )->first();
+                            $item_product_price_proc = $product_variety_ent->variation_price_per;
+                            
+                            $_data_head_empty = [ '', '', '', '', '' ];
+                            $_data_head = [
+                                "#" . $order->order->id,
+                                $order->order->shipping_fullname,
+                                "Peso " . Helpers::numeric( $order->order->grand_total ),
+                                $isPaid . ", Method: {$method}",
+                                $order_status
+                            ];
+
+                            $_data_body = [
+                                $item->name,
+                                Helpers::numeric( $item->pivot->quantity ),
+                                $product_variety_ent->variation_name,
+                                "Peso " . Helpers::numeric( $item_product_price_proc ),
+                                "Peso " . Helpers::numeric( $item->pivot->quantity * $item->pivot->price ) 
+                            ];
+
+                            $which_head = $item_index == 0 ? $_data_head : $_data_head_empty;
+                            $_data = array_merge( $which_head, $_data_body );
+            
+                            $data = ( object ) $_data;
+                            $collection->push( $data );
+                        }
+                    }
+
                 }
             }
-
-        } else {
 
         }
 

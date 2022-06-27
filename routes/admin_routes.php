@@ -158,6 +158,11 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
         Route::group( [ 'prefix' => 'orders' ], function() {
             Route::get( '{type}/{interval}', 'ReportGenerationCsvController@orders' );
         } );
+
+        // Transaction History
+        Route::group( [ 'prefix' => 'transactions' ], function() {
+            Route::get( '{interval}', 'ReportGenerationCsvController@transactions' );
+        } );
     } );
 
     Route::group( [ 'prefix' => 'export/pdf' ], function() {

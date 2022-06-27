@@ -141,8 +141,19 @@
     <div class="row">
         <div class="col-12 col-md-12">
             <div class="card">
-                <div class="card-header">
-                    Ordered products by qty
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Ordered products by qty</h4>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Report Generation
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/export/csv/products/list/full" target="_blank">CSV - Products List</a>
+                            <a class="dropdown-item" href="/export/csv/products/history/full" target="_blank">CSV - Orders History Full</a>
+                            <a class="dropdown-item" href="/export/csv/products/history/current" target="_blank">CSV - Orders History Current Month</a>
+                            <a class="dropdown-item" href="/export/csv/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     @include('sellerPanel.charts.sales_by_seller')
@@ -152,3 +163,4 @@
     </div>
 </div>
 @endsection
+

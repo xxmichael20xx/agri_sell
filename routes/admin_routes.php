@@ -141,7 +141,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Shops
         Route::group( [ 'prefix' => 'shops' ], function() {
-            Route::get( '{interval}/{type}', 'ReportGenerationCsvController@shops' );
+            Route::get( '{interval}/{type}/{month?}', 'ReportGenerationCsvController@shops' );
         } );
 
         // Users
@@ -166,6 +166,37 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
     } );
 
     Route::group( [ 'prefix' => 'export/pdf' ], function() {
+        // Activity Logs
         Route::get( 'activity-logs', 'ReportGenerationPdfController@activityLogs' );
+
+        // Refunds
+        Route::group( [ 'prefix' => 'refunds' ], function() {
+            Route::get( '{type}/{interval}', 'ReportGenerationPdfController@refunds' );
+        } );
+
+        // Shops
+        Route::group( [ 'prefix' => 'shops' ], function() {
+            Route::get( '{interval}/{type}/{month?}', 'ReportGenerationPdfController@shops' );
+        } );
+
+        // Users
+        Route::group( [ 'prefix' => 'users' ], function() {
+            Route::get( '{interval}/{role_id}', 'ReportGenerationPdfController@users' );
+        } );
+
+        // Users
+        Route::group( [ 'prefix' => 'payouts' ], function() {
+            Route::get( '{status_id}/{interval}', 'ReportGenerationPdfController@payouts' );
+        } );
+
+        // Users
+        Route::group( [ 'prefix' => 'orders' ], function() {
+            Route::get( '{type}/{interval}', 'ReportGenerationPdfController@orders' );
+        } );
+
+        // Transaction History
+        Route::group( [ 'prefix' => 'transactions' ], function() {
+            Route::get( '{interval}', 'ReportGenerationPdfController@transactions' );
+        } );
     } );
 });

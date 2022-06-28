@@ -216,61 +216,64 @@
             </div>
         </div>
     </div>
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-              <div class="card-header d-flex justify-content-between">
-                <h4 class="card-title">Activity Logs</h4>
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Report Generation
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">Excel</a>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Activity Logs</h4>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Report Generation
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">Excel</a>
+                            <a class="dropdown-item" href="/export/pdf/activity-logs" target="_blank">PDF</a>
+                        </div>
                     </div>
                 </div>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                <table id="datatable1" class="table " cellspacing="0" width="100%">
-                    <thead class=" text-primary">
-                      <tr><th>
-                        Action type
-                      </th>
-                      <th>
-                        Decription
-                      </th>
-                      <th>
-                        User account name
-                      </th>
-                      <th>
-                        Created at
-                      </th>
-                    </tr></thead>
-                    <tbody>
-                        @foreach ($notifs as $notif)
-                        <tr>
-                        <td>
-                        {{$notif->action_type }}
-                        </td>
-                        <td>
-                        {!! $notif->action_description !!}
-                        </td>
-                        <td>
-                        {{$notif->user->name ?? 'not available'}}
-                        </td>
-                        <td>
-                        {{$notif->created_at}}
-                        </td>
-                      </tr>
-                        @endforeach
-                    </tbody>
-                  </table>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="datatable1" class="table " cellspacing="0" width="100%">
+                            <thead class=" text-primary">
+                                <tr>
+                                    <th>
+                                    Action type
+                                    </th>
+                                    <th>
+                                        Decription
+                                    </th>
+                                    <th>
+                                        User account name
+                                    </th>
+                                    <th>
+                                        Created at
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($notifs as $notif)
+                                    <tr>
+                                        <td>
+                                            {{$notif->action_type }}
+                                        </td>
+                                        <td>
+                                            {!! $notif->action_description !!}
+                                        </td>
+                                        <td>
+                                            {{$notif->user->name ?? 'not available'}}
+                                        </td>
+                                        <td>
+                                            {{$notif->created_at}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-              </div>
             </div>
-</div>
-</div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12 col-md-6">
             <div class="card">
@@ -278,7 +281,7 @@
                     Orders by date
                 </div>
                 <div class="card-body">
-                        @include('admin.charts.orders_qty_chart')
+                    @include('admin.charts.orders_qty_chart')
                 </div>
             </div>
         </div>
@@ -288,7 +291,19 @@
                     Products by category
                 </div>
                 <div class="card-body">
-                @include('admin.charts.products_by_category')
+                    @include('admin.charts.products_by_category')
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Top-Bottom Shops
+                </div>
+                <div class="card-body">
+                    @include('admin.charts.top_bottom_shops')
                 </div>
             </div>
         </div>

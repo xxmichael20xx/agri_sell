@@ -23,6 +23,7 @@ class ReportGenerationCsvController extends Controller
 
         return $time;
     }
+    
     public function activityLogs( Request $request ) {
         $fileName = $this->time() . "_Activity_Logs.csv";
         return \Excel::download( new ActivityLogs, $fileName );
@@ -33,9 +34,12 @@ class ReportGenerationCsvController extends Controller
         return \Excel::download( new Refunds( $type, $interval ), $fileName );
     }
 
-    public function shops( Request $request, $interval, $type ) {
+    public function shops( Request $request, $interval, $type, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_" . ucwords( $interval ) . "_Approved_Shops_" . ucwords( $type ) . ".csv";
-        return \Excel::download( new Shop( $interval, $type ), $fileName );
+        return \Excel::download( new Shop( $interval, $type, $month ), $fileName );
     }
 
     public function users( Request $request, $interval, $role_id ) {

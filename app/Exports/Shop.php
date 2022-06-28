@@ -11,17 +11,18 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Shop implements FromCollection, WithHeadings
 {
-    protected $interval, $type;
+    protected $interval, $type, $month;
 
-    public function __construct( $interval, $type )
+    public function __construct( $interval, $type, $month )
     {
         $this->interval = $interval;
         $this->type = $type;
+        $this->month = $month;
     }
 
     public function headings(): array
     {
-        $headers = [ "Shop Number", "Shop Name", "Description", "Approved Date", "Shop Owner", "Owner Email", "Owner Mobile Number", "Total Orders" ];
+        $headers = [ "Shop Name", "Description", "Approved Date", "Shop Owner", "Owner Email", "Owner Mobile Number", "Total Orders" ];
         return $headers;
     }
 
@@ -37,13 +38,13 @@ class Shop implements FromCollection, WithHeadings
             $shops = $shops->get();
 
         } else {
-            $shops = $shops->whereMonth( 'date_approved', Carbon::now()->month )->get();
+            $shops = $shops->whereMonth( 'date_approved', $this->month )->get();
         }
 
         foreach ( $shops as $shop_index => $shop ) {
-            $order_count = SubOrder::where('seller_id', $shop->owner->id)->count();
+            if ( ! $shop->owner ) continue;
+            $order_count = SubOrder::where( 'seller_id', $shop->owner->id )->count();
             $_data = [
-                'id' => "#" . $shop->id,
                 'name' => $shop->name,
                 'description' => $shop->description,
                 'date_approved' => $shop->date_approved,

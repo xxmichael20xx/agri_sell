@@ -88,6 +88,24 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
             Route::get( '{interval}', 'ReportGenerationCsvController@sellerPayouts' );
         } );
     });
+
+    // Report Generation Routes
+    Route::group( [ 'prefix' => '/export/pdf/seller' ], function() {
+        // Products
+        Route::group( [ 'prefix' => 'products' ], function() {
+            Route::get( '{type}/{interval}', 'ReportGenerationPdfController@sellerProducts' );
+        } );
+
+        // Refunds
+        Route::group( [ 'prefix' => 'refunds' ], function() {
+            Route::get( '{interval}', 'ReportGenerationPdfController@sellerRefunds' );
+        } );
+
+        // Refunds
+        Route::group( [ 'prefix' => 'payouts' ], function() {
+            Route::get( '{interval}', 'ReportGenerationPdfController@sellerPayouts' );
+        } );
+    });
 });
 
  // sidebar menu

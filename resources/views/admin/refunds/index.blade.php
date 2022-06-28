@@ -45,8 +45,16 @@
                                     'label' => 'CSV - Full Report'
                                 ],
                                 [
+                                    'href' => '/export/pdf/refunds/confirmed/full',
+                                    'label' => 'PDF - Full Report'
+                                ],
+                                [
                                     'href' => '/export/csv/refunds/confirmed/current',
                                     'label' => 'CSV - Current Month'
+                                ],
+                                [
+                                    'href' => '/export/pdf/refunds/confirmed/current',
+                                    'label' => 'PDF - Current Month'
                                 ]
                             ];
 
@@ -77,7 +85,15 @@
                                 [
                                     'href' => '/export/csv/refunds/rejected/current',
                                     'label' => 'CSV - Current Month'
-                                ]
+                                ],
+                                [
+                                    'href' => '/export/pdf/refunds/rejected/full',
+                                    'label' => 'PDF - Full Report'
+                                ],
+                                [
+                                    'href' => '/export/pdf/refunds/rejected/current',
+                                    'label' => 'PDF - Current Month'
+                                ],
                             ];
                             $inc = array(
                                 "title" => "Rejected refunds",
@@ -104,9 +120,17 @@
                                     'label' => 'CSV - Full Report'
                                 ],
                                 [
+                                    'href' => '/export/pdf/refunds/rejected/full',
+                                    'label' => 'PDF - Full Report'
+                                ],
+                                [
                                     'href' => '/export/csv/refunds/requests/current',
                                     'label' => 'CSV - Current Month'
-                                ]
+                                ],
+                                [
+                                    'href' => '/export/pdf/refunds/rejected/current',
+                                    'label' => 'PDF - Current Month'
+                                ],
                             ];
                             $inc = array(
                                 "title" => "Pending refunds",

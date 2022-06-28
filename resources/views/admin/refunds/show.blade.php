@@ -118,7 +118,7 @@
                                                         <option value="" selected disabled>Select an option</option>
                                                         <option value="Invalid Reason">Invalid Reason</option>
                                                         <option value="Reason doesn't match the provided image">Reason doesn't match the provided image</option>
-                                                        <option value="Insufficient details">Insufficient details</option>
+                                                        {{-- <option value="Insufficient details">Insufficient details</option> --}}
                                                         <option value="Others">Others</option>
                                                     </select>
                                                     <textarea class="form-control mt-2 collapse" name="reject_reason_others" id="reject_reason_others" rows="5" placeholder="Please provide a reason"></textarea>

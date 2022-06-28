@@ -48,9 +48,17 @@
                                     'label' => 'CSV - Full Report'
                                 ],
                                 [
+                                    'href' => '/export/pdf/payouts/1/full',
+                                    'label' => 'PDF - Full Report'
+                                ],
+                                [
                                     'href' => '/export/csv/payouts/1/current',
                                     'label' => 'CSV - Current Month'
-                                ]
+                                ],
+                                [
+                                    'href' => '/export/pdf/payouts/1/current',
+                                    'label' => 'PDF - Current Month'
+                                ],
                             ];
                             $inc = array(
                                 "title" => "Confirmed payouts",
@@ -77,9 +85,17 @@
                                     'label' => 'CSV - Full Report'
                                 ],
                                 [
+                                    'href' => '/export/pdf/payouts/2/full',
+                                    'label' => 'PDF - Full Report'
+                                ],
+                                [
                                     'href' => '/export/csv/payouts/2/current',
                                     'label' => 'CSV - Current Month'
-                                ]
+                                ],
+                                [
+                                    'href' => '/export/pdf/payouts/2/current',
+                                    'label' => 'PDF - Current Month'
+                                ],
                             ];
                             $inc = array(
                                 "title" => "Rejected payouts",
@@ -106,9 +122,17 @@
                                     'label' => 'CSV - Full Report'
                                 ],
                                 [
+                                    'href' => '/export/pdf/payouts/0/full',
+                                    'label' => 'PDF - Full Report'
+                                ],
+                                [
                                     'href' => '/export/csv/payouts/0/current',
                                     'label' => 'CSV - Current Month'
-                                ]
+                                ],
+                                [
+                                    'href' => '/export/pdf/payouts/0/current',
+                                    'label' => 'PDF - Current Month'
+                                ],
                             ];
                             $inc = array(
                                 "title" => "Pending payouts",

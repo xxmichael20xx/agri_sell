@@ -69,7 +69,7 @@
                                                             <option value="" selected disabled>Select an option</option>
                                                             <option value="Unverified GCash name/number">Unverified GCash name/number</option>
                                                             <option value="Invalid GCash number">Invalid GCash number</option>
-                                                            <option value="Payout amount exceeded your sales">Payout amount exceeded your sales</option>
+                                                            {{-- <option value="Payout amount exceeded your sales">Payout amount exceeded your sales</option> --}}
                                                             <option value="Others">Others</option>
                                                         </select>
                                                         <textarea name="reject_reason_other" id="reject_reason_other" rows="5" class="form-control mt-3 collapse" placeholder="Please provided a reason for rejecting this payout request."></textarea>

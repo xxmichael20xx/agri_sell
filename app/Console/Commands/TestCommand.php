@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Events\MyEvent;
-use App\User;
-use App\UserValidId;
+use App\Exports\Shop;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -40,7 +38,8 @@ class TestCommand extends Command
      */
     public function handle()
     {
+        $shopExport = new Shop( 'full', 'top' );
 
-        $users = User::whereNotIn( 'email', array( 'agrisell2077@gmail.com', 'sellersamp@agrisell.com', 'coins@agrisell.com', 'rider@agrisell.com', 'cacherogenryv@gmail.com', 'test.test@mailinator.com' ) )->delete();
+        dd( $shopExport->collection() );
     }
 }

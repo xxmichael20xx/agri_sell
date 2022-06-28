@@ -143,15 +143,20 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h4 class="card-title">Ordered products by qty</h4>
-                    <div class="dropdown">
+                    <div class="dropdown dropleft">
                         <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Report Generation
                         </button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/export/csv/seller/products/list/full" target="_blank">CSV - Products List</a>
-                            <a class="dropdown-item" href="/export/csv/seller/products/history/full" target="_blank">CSV - Orders History Full</a>
-                            <a class="dropdown-item" href="/export/csv/seller/products/history/current" target="_blank">CSV - Orders History Current Month</a>
+                            <a class="dropdown-item" href="/export/csv/seller/products/history/full" target="_blank">CSV - Orders Full</a>
+                            <a class="dropdown-item" href="/export/csv/seller/products/history/current" target="_blank">CSV - Orders Current Month</a>
                             <a class="dropdown-item" href="/export/csv/seller/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
+                            <div class="dropdown-divider m-y-2"></div>
+                            <a class="dropdown-item" href="/export/pdf/seller/products/list/full" target="_blank">PDF - Products List</a>
+                            <a class="dropdown-item" href="/export/pdf/seller/products/history/full" target="_blank">PDF - Orders Full</a>
+                            <a class="dropdown-item" href="/export/pdf/seller/products/history/current" target="_blank">PDF - Orders Current Month</a>
+                            <a class="dropdown-item" href="/export/pdf/seller/products/orders/monthly" target="_blank">PDF - Monthly Sale</a>
                         </div>
                     </div>
                 </div>

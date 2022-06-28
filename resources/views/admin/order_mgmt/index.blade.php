@@ -37,8 +37,11 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu custom--dropdown-menu" style="right: 0 !important; left: unset !important;">
-                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/full" target="_blank">Full Orders</a>
-                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/current" target="_blank">Current Month</a>
+                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/full" target="_blank">CSV - Full Orders</a>
+                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/current" target="_blank">CSV - Current Month</a>
+                            <div class="dropdown-divider m-y-2"></div>
+                            <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/full" target="_blank">PDF - Full Orders</a>
+                            <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/current" target="_blank">PDF - Current Month</a>
                             {{-- <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/top" target="_blank">Top Ordered Product</a> --}}
                         </div>
                     </div>

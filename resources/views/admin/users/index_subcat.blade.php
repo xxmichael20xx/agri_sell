@@ -8,6 +8,9 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/export/csv/users/full/{{ $role_id }}" target="_blank">CSV - Full List</a>
                 <a class="dropdown-item" href="/export/csv/users/current/{{ $role_id }}" target="_blank">CSV - Current Month</a>
+                <div class="dropdown-divider m-y-2"></div>
+                <a class="dropdown-item" href="/export/pdf/users/current/{{ $role_id }}" target="_blank">PDF - Current Month</a>
+                <a class="dropdown-item" href="/export/pdf/users/full/{{ $role_id }}" target="_blank">PDF - Full List</a>
             </div>
         </div>
     </div>

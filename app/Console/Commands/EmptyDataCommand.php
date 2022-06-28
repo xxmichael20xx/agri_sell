@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Shop;
 use App\User;
 use App\UserValidId;
 use Illuminate\Console\Command;
@@ -63,6 +64,7 @@ class EmptyDataCommand extends Command
             'refund_request_products',
             'seller_payouts',
             'seller_payout_requests',
+            'seller_registration_fee',
             'sub_orders',
             'sub_order_items',
             'transactions',
@@ -84,6 +86,10 @@ class EmptyDataCommand extends Command
         $this->info( "Deleting users that aren't main accounts." );
         User::whereNotIn( 'email', array( 'agrisell2077@gmail.com', 'sellersamp@agrisell.com', 'coins@agrisell.com', 'rider@agrisell.com', 'cacherogenryv@gmail.com', 'test.test@mailinator.com' ) )->delete();
         $this->info( "Users that aren't main accounts." );
+
+        $this->info( "Deleting Shops Except for SellerAmp" );
+        $shops = Shop::where( 'user_id', '!=', 2 )->delete();
+        $this->info( "Shops Deleted" );
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 

@@ -29,7 +29,18 @@
                 <div class="card-header d-flex justify-content-between">
                     <h4 class="card-title">Payouts</h4>
 
-                    <button type="button" class="btn btn-primary request-payout" data-user-id="{{ Auth::user()->id }}">Request Payout</button>
+                    <div class="d-flex">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Report Generation
+                            </button>
+                            <div class="dropdown-menu dropdown--right">
+                                <a class="dropdown-item" href="/export/csv/seller/payouts/full" target="_blank">CSV - Full List</a>
+                                <a class="dropdown-item" href="/export/csv/seller/payouts/current" target="_blank">CSV - Current Month</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary request-payout" data-user-id="{{ Auth::user()->id }}">Request Payout</button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

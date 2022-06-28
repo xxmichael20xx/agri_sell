@@ -98,7 +98,13 @@
                             <td>No results</td>
                             <td>No results</td>
                             <td>No results</td>
+                            @if ( $index == '0' )
+                                <td>No results</td>
+                            @endif
                             @if ( $index == '1' )
+                                <td>No results</td>
+                            @endif
+                            @if ( $index == '2' )
                                 <td>No results</td>
                             @endif
                             <td>No results</td>

@@ -148,10 +148,10 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/export/csv/products/list/full" target="_blank">CSV - Products List</a>
-                            <a class="dropdown-item" href="/export/csv/products/history/full" target="_blank">CSV - Orders History Full</a>
-                            <a class="dropdown-item" href="/export/csv/products/history/current" target="_blank">CSV - Orders History Current Month</a>
-                            <a class="dropdown-item" href="/export/csv/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
+                            <a class="dropdown-item" href="/export/csv/seller/products/list/full" target="_blank">CSV - Products List</a>
+                            <a class="dropdown-item" href="/export/csv/seller/products/history/full" target="_blank">CSV - Orders History Full</a>
+                            <a class="dropdown-item" href="/export/csv/seller/products/history/current" target="_blank">CSV - Orders History Current Month</a>
+                            <a class="dropdown-item" href="/export/csv/seller/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
                         </div>
                     </div>
                 </div>

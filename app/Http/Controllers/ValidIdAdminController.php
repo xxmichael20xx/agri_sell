@@ -27,13 +27,14 @@ class ValidIdAdminController extends Controller
         $user_valid_id = UserValidId::find($validId_id);
         $user_valid_id->is_valid = '1';
         
-        $trans = new TransHistModel();
+        /* $trans = new TransHistModel();
         $trans->user_id_master = $user_valid_id->user_id;
         $trans->user_id_slave = $user_valid_id->user_id;
         $trans->remarks = 'Admin set as valid ID';
         $trans->trans_type = 'Valid IDs';
         $trans->trans_ref_id = 'VALID_IDs-' . uniqid();
         $trans->amount = 'not applicable';
+        $trans->save(); */
 
         // set a notification table
         $notification_ent = new notification();
@@ -43,7 +44,6 @@ class ValidIdAdminController extends Controller
         $notification_ent->notification_txt = 'Your ID has been confirmed. You may now able to fully use the platform.';
         $notification_ent->save();
         $user_valid_id->save();
-        $trans->save();
 
         // $adminnotif_ent = new adminNotifModel();
         // $adminnotif_ent->action_type = 'Product addition';
@@ -68,14 +68,14 @@ class ValidIdAdminController extends Controller
         $user_valid_id->invalid_reason_id = $request->invalid_id_reason;
         $user_valid_id->save();
 
-        $trans = new TransHistModel();
+        /* $trans = new TransHistModel();
         $trans->user_id_master = $user_valid_id->user_id;
         $trans->user_id_slave = $user_valid_id->user_id;
         $trans->remarks = 'Admin set as invalid ID';
         $trans->trans_type = 'Valid IDs';
         $trans->trans_ref_id = 'VALID_IDs-' . uniqid();
         $trans->amount = 'not applicable';
-        $trans->save();
+        $trans->save(); */
 
         if ( ! $isOthers ) {
             $reason = DB::table('invalid_id_reasons')->where('id', $request->invalid_id_reason)->first();

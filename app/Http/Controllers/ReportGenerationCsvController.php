@@ -6,7 +6,9 @@ use App\Exports\ActivityLogs;
 use App\Exports\Orders;
 use App\Exports\Payouts;
 use App\Exports\Refunds;
+use App\Exports\SellerPayouts;
 use App\Exports\SellerProducts;
+use App\Exports\SellerRefunds;
 use App\Exports\Shop;
 use App\Exports\TransactionHistory;
 use App\Exports\Users;
@@ -113,5 +115,15 @@ class ReportGenerationCsvController extends Controller
     public function sellerProducts( Request $request, $type, $interval ) {
         $fileName = $this->time() . "_" . ucwords( $type ) . "_Products_" .  ucwords( $interval ) . ".csv";
         return \Excel::download( new SellerProducts( $type, $interval ), $fileName );
+    }
+
+    public function sellerRefunds( Request $request, $interval ) {
+        $fileName = $this->time() . "_Refunds_" .  ucwords( $interval ) . ".csv";
+        return \Excel::download( new SellerRefunds( $interval ), $fileName );
+    }
+
+    public function sellerPayouts( Request $request, $interval ) {
+        $fileName = $this->time() . "_Payouts_" .  ucwords( $interval ) . ".csv";
+        return \Excel::download( new SellerPayouts( $interval ), $fileName );
     }
 }

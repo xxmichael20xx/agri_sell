@@ -84,7 +84,7 @@
                                 @foreach( $items as $index => $item )
                                     @php
                                         $product_variety_ent = App\ProductVariation::where('id', $item->pivot->variation_id)->first();
-                                        $item_product_pivot = App\Product::where('id', $item->id)->first();
+                                        /* $item_product_pivot = App\Product::where('id', $item->id)->first();
                                         $item_product_pivot_price = $item_product_pivot->price;
                                         $item_product_price_proc = 0;
                                         if ( $item_product_pivot->is_sale == 1 ) {
@@ -92,8 +92,9 @@
 
                                         } else {
                                             $item_product_price_proc = $product_variety_ent->variation_price_per;
-                                        }
+                                        } */
 
+                                        $item_product_price_proc = $product_variety_ent->variation_price_per;
                                         $item_id = $item->id;
                                         if ( isset( $sub_ids[$index] ) ) {
                                             $item_id = $sub_ids[$index]->id;
@@ -117,11 +118,12 @@
                                             {{ $product_variety_ent->variation_net_weight ?? '' }}
                                         </td>
                                         <td>
-                                            @if ( $item_product_pivot->is_sale == 1 )
+                                            {{-- @if ( $item_product_pivot->is_sale == 1 )
                                                 ₱ {{ $product_variety_ent->variation_price_per ?? '' }}
                                             @else
                                                 ₱ {{ AppHelpers::numeric( $item_product_price_proc ) }}
-                                            @endif 
+                                            @endif  --}}
+                                            ₱ {{ AppHelpers::numeric( $item_product_price_proc ) }}
                                         </td>
                                         <td>
                                             ₱ {{ AppHelpers::numeric( $item->pivot->quantity * $item->pivot->price ) }}

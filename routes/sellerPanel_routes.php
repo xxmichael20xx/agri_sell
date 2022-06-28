@@ -72,9 +72,21 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
     });
 
     // Report Generation Routes
-    Route::group( [ 'prefix' => '/export/csv' ], function() {
+    Route::group( [ 'prefix' => '/export/csv/seller' ], function() {
         // Products
-        Route::get( 'products/{type}/{interval}', 'ReportGenerationCsvController@sellerProducts' );
+        Route::group( [ 'prefix' => 'products' ], function() {
+            Route::get( '{type}/{interval}', 'ReportGenerationCsvController@sellerProducts' );
+        } );
+
+        // Refunds
+        Route::group( [ 'prefix' => 'refunds' ], function() {
+            Route::get( '{interval}', 'ReportGenerationCsvController@sellerRefunds' );
+        } );
+
+        // Refunds
+        Route::group( [ 'prefix' => 'payouts' ], function() {
+            Route::get( '{interval}', 'ReportGenerationCsvController@sellerPayouts' );
+        } );
     });
 });
 

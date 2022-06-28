@@ -19,7 +19,7 @@ class SellerPayoutController extends Controller
 {
     public function index( Request $request ) {
         $payouts = SellerPayoutRequest::where( 'user_id', Auth::user()->id )->get();
-        $panel_name = 'payout';
+        $panel_name = '- Payout';
 
         return view( 'sellerPanel.payout.index', compact(
             'panel_name',

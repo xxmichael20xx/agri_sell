@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class RefundSellerController extends Controller
 {
     public function index() {
-        $panel_name = "refunds";
+        $panel_name = "- Refunds";
         $refunds = refundModelOrder::all();
         $pendingRefunds = refundModelOrder::where( 'status', '1' )->get()->count();
 

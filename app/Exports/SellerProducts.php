@@ -134,7 +134,7 @@ class SellerProducts implements FromCollection, WithHeadings
             $orders = $orders->get();
 
         } else {
-            $orders = $orders->whereMonth( Carbon::parse( now() )->month )->get();
+            $orders = $orders->whereMonth( 'created_at', Carbon::parse( now() )->month )->get();
         }
 
         foreach ( $orders as $order_index => $order ) {

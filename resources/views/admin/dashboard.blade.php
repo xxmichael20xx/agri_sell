@@ -60,7 +60,7 @@
             </div>
         </div> --}}
         <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
+            <div class="card card-stats card--links clickable" data-href="/admin/manage_shops">
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-5 col-md-4">
@@ -86,7 +86,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
+            <div class="card card-stats card--links clickable" data-href="/admin/manage_users">
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-5 col-md-4">
@@ -112,7 +112,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
+            <div class="card card-stats card--links clickable" data-href="/admin/rider_management">
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-5 col-md-4">
@@ -164,7 +164,7 @@
             </div>
         </div> --}}
         <div class="col-lg-3 col-md-6 col-sm-6">
-            <div class="card card-stats">
+            <div class="card card-stats card--links clickable" data-href="/admin/manage_products">
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-5 col-md-4">
@@ -298,7 +298,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card clickable card--links" data-href="/admin/manage_shops">
                 <div class="card-header">
                     Top-Bottom Shops
                 </div>
@@ -314,10 +314,10 @@
 <script>
     (function($) {
         $(document).ready(function() {
-            $( document ).on( 'click', '.btn-report', function() {
-                const type = $( this ).data( 'type' )
+            $( document ).on( 'click', '.card--links', function() {
+                const href = $( this ).data( 'href' )
 
-
+                window.location.href = href
             } )
         })
     })(jQuery)

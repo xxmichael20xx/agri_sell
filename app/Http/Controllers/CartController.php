@@ -136,10 +136,10 @@ class CartController extends Controller
         $product_final_price_tmp = $variant->variation_price_per;
         $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
 
-        if ( $variant ) {
+        /* if ( $variant ) {
             $variant->variation_quantity = $variant->variation_quantity - $req->quantity;
             $variant->save();
-        }
+        } */
 
 
         // add the product to cart

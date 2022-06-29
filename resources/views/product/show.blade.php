@@ -175,7 +175,7 @@
                         <div class="my-5"></div>
 
                         <div class="fb-share-button mb-3" data-layout="button" data-size="large">
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" class="fb-xfbml-parse-ignore">Share</a>
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}&locale=en_US" class="fb-xfbml-parse-ignore">Share</a>
                         </div>
 
                         @php

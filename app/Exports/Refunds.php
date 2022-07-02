@@ -11,12 +11,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Refunds implements FromCollection, WithHeadings
 {
-    protected $type, $interval;
+    protected $type, $interval, $month;
 
-    public function __construct( $type, $interval )
+    public function __construct( $type, $interval, $month )
     {
         $this->type = $type;
         $this->interval = $interval;
+        $this->month = $month;
     }
 
     public function headings(): array
@@ -52,7 +53,7 @@ class Refunds implements FromCollection, WithHeadings
             $refunds = $refunds->get();
 
         } else {
-            $refunds = $refunds->whereMonth( 'created_at', Carbon::now()->month )->get();
+            $refunds = $refunds->whereMonth( 'created_at', $this->month )->get();
         }
 
         foreach ( $refunds as $index => $refund ) {

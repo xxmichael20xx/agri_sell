@@ -136,7 +136,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Refunds
         Route::group( [ 'prefix' => 'refunds' ], function() {
-            Route::get( '{type}/{interval}', 'ReportGenerationCsvController@refunds' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationCsvController@refunds' );
         } );
 
         // Shops
@@ -151,17 +151,17 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Users
         Route::group( [ 'prefix' => 'payouts' ], function() {
-            Route::get( '{status_id}/{interval}', 'ReportGenerationCsvController@payouts' );
+            Route::get( '{status_id}/{interval}/{month?}', 'ReportGenerationCsvController@payouts' );
         } );
 
         // Users
         Route::group( [ 'prefix' => 'orders' ], function() {
-            Route::get( '{type}/{interval}', 'ReportGenerationCsvController@orders' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationCsvController@orders' );
         } );
 
         // Transaction History
         Route::group( [ 'prefix' => 'transactions' ], function() {
-            Route::get( '{interval}', 'ReportGenerationCsvController@transactions' );
+            Route::get( '{interval}/{month?}', 'ReportGenerationCsvController@transactions' );
         } );
     } );
 
@@ -171,7 +171,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Refunds
         Route::group( [ 'prefix' => 'refunds' ], function() {
-            Route::get( '{type}/{interval}', 'ReportGenerationPdfController@refunds' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationPdfController@refunds' );
         } );
 
         // Shops
@@ -186,17 +186,17 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Users
         Route::group( [ 'prefix' => 'payouts' ], function() {
-            Route::get( '{status_id}/{interval}', 'ReportGenerationPdfController@payouts' );
+            Route::get( '{status_id}/{interval}/{month?}', 'ReportGenerationPdfController@payouts' );
         } );
 
         // Users
         Route::group( [ 'prefix' => 'orders' ], function() {
-            Route::get( '{type}/{interval}', 'ReportGenerationPdfController@orders' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationPdfController@orders' );
         } );
 
         // Transaction History
         Route::group( [ 'prefix' => 'transactions' ], function() {
-            Route::get( '{interval}', 'ReportGenerationPdfController@transactions' );
+            Route::get( '{interval}/{month?}', 'ReportGenerationPdfController@transactions' );
         } );
     } );
 });

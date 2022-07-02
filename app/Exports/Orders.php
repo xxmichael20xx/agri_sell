@@ -13,12 +13,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Orders implements FromCollection, WithHeadings
 {
-    protected $type, $interval, $helpers;
+    protected $type, $interval, $helpers, $month;
 
-    public function __construct( $type, $interval )
+    public function __construct( $type, $interval, $month )
     {
         $this->type = $type;
         $this->interval = $interval;
+        $this->month = $month;
         $this->helpers = new Helpers;
     }
 

@@ -51,20 +51,26 @@
                                     'href' => '/export/pdf/payouts/1/full',
                                     'label' => 'PDF - Full Report'
                                 ],
-                                [
+                                /* [
                                     'href' => '/export/csv/payouts/1/current',
                                     'label' => 'CSV - Current Month'
                                 ],
                                 [
                                     'href' => '/export/pdf/payouts/1/current',
                                     'label' => 'PDF - Current Month'
-                                ],
+                                ], */
+                            ];
+                            $addl = [
+                                'csv_url' => '/export/csv/payouts/1/current',
+                                'pdf_url' => '/export/pdf/payouts/1/current',
+                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Confirmed payouts",
                                 "index" => 0,
                                 "data" => $data,
-                                "exports" => $exports
+                                "exports" => $exports,
+                                "inc" => $addl
                             );
                         @endphp
                         @include( 'admin.payout.table', $inc )
@@ -88,20 +94,26 @@
                                     'href' => '/export/pdf/payouts/2/full',
                                     'label' => 'PDF - Full Report'
                                 ],
-                                [
+                                /* [
                                     'href' => '/export/csv/payouts/2/current',
                                     'label' => 'CSV - Current Month'
                                 ],
                                 [
                                     'href' => '/export/pdf/payouts/2/current',
                                     'label' => 'PDF - Current Month'
-                                ],
+                                ], */
+                            ];
+                            $addl = [
+                                'csv_url' => '/export/csv/payouts/2/current',
+                                'pdf_url' => '/export/pdf/payouts/2/current',
+                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Rejected payouts",
                                 "index" => 1,
                                 "data" => $data,
-                                "exports" => $exports
+                                "exports" => $exports,
+                                "inc" => $addl
                             );
                         @endphp
                         @include( 'admin.payout.table', $inc )
@@ -125,20 +137,26 @@
                                     'href' => '/export/pdf/payouts/0/full',
                                     'label' => 'PDF - Full Report'
                                 ],
-                                [
+                                /* [
                                     'href' => '/export/csv/payouts/0/current',
                                     'label' => 'CSV - Current Month'
                                 ],
                                 [
                                     'href' => '/export/pdf/payouts/0/current',
                                     'label' => 'PDF - Current Month'
-                                ],
+                                ], */
+                            ];
+                            $addl = [
+                                'csv_url' => '/export/csv/payouts/0/current',
+                                'pdf_url' => '/export/pdf/payouts/0/current',
+                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Pending payouts",
                                 "index" => 2,
                                 "data" => $data,
-                                "exports" => $exports
+                                "exports" => $exports,
+                                "inc" => $addl
                             );
                         @endphp
                         @include( 'admin.payout.table', $inc )

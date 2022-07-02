@@ -9,6 +9,7 @@
                 @foreach ( $exports as $export )
                     <a class="dropdown-item" href="{{ $export['href'] }}" target="_blank">{{ $export['label'] }}</a>
                 @endforeach
+                @include( 'admin.export.months_trigger', $inc )
             </div>
         </div>
     </div>
@@ -62,3 +63,4 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.months_modal', $inc )

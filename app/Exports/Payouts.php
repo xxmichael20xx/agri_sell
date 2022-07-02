@@ -11,13 +11,14 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Payouts implements FromCollection, WithHeadings
 {
-    protected $status_id, $interval, $columns;
+    protected $status_id, $interval, $columns, $month;
 
-    public function __construct( $status_id, $interval, $columns )
+    public function __construct( $status_id, $interval, $columns, $month )
     {
         $this->status_id = $status_id;
         $this->interval = $interval;
         $this->columns = $columns;
+        $this->month = $month;
     }
 
     public function headings(): array
@@ -43,7 +44,7 @@ class Payouts implements FromCollection, WithHeadings
             $payouts = $payouts->get();
 
         } else {
-            $payouts = $payouts->whereMonth( $this->columns['column'], Carbon::now()->month )->get();
+            $payouts = $payouts->whereMonth( $this->columns['column'], $this->month )->get();
         }
 
         foreach ( $payouts as $payout_index => $payout ) {

@@ -4,19 +4,20 @@ namespace App\Exports;
 
 use App\Helpers;
 use App\TransHistModel;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class TransactionHistory implements FromCollection, WithHeadings
 {
-    protected $interval, $helpers;
+    protected $collection, $interval, $helpers, $month;
 
-    public function __construct( $interval )
+    public function __construct( $interval, $month )
     {
         $this->interval = $interval;
+        $this->month = $month;
         $this->helpers = new Helpers;
+        $this->collection = new Collection();
     }
 
     public function headings(): array
@@ -30,13 +31,12 @@ class TransactionHistory implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
         $transactions = TransHistModel::orderByDesc('created_at');
 
         if ( $this->interval == "full" ) {
             $transactions = $transactions->get();
         } else {
-            $transactions = $transactions->whereMonth( "created_at", Carbon::now()->month )->get();
+            $transactions = $transactions->whereMonth( "created_at", $this->month )->get();
         }
 
         foreach ( $transactions as $transaction_index => $transaction ) {
@@ -56,10 +56,10 @@ class TransactionHistory implements FromCollection, WithHeadings
                 ];
 
                 $data = (object) $_data;
-                $collection->push( $data );
+                $this->collection->push( $data );
             }
         }
 
-        return $collection;
+        return $this->collection;
     }
 }

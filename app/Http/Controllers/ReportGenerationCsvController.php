@@ -29,9 +29,12 @@ class ReportGenerationCsvController extends Controller
         return \Excel::download( new ActivityLogs, $fileName );
     }
 
-    public function refunds( Request $request, $type, $interval ) {
+    public function refunds( Request $request, $type, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_" . ucwords( $interval ) . "_Refunds_" . ucwords( $type ) . ".csv";
-        return \Excel::download( new Refunds( $type, $interval ), $fileName );
+        return \Excel::download( new Refunds( $type, $interval, $month ), $fileName );
     }
 
     public function shops( Request $request, $interval, $type, $month = NULL ) {
@@ -46,7 +49,6 @@ class ReportGenerationCsvController extends Controller
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $roleType = "";
 
         switch ( $role_id ) {
             case '2':
@@ -74,10 +76,10 @@ class ReportGenerationCsvController extends Controller
         return \Excel::download( new Users( $interval, $role_id, $month ), $fileName );
     }
 
-    public function payouts( Request $request, $status_id, $interval ) {
-        $type = "";
-        $columns = null;
-
+    public function payouts( Request $request, $status_id, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         switch ( $status_id ) {
             case 1:
                 $columns = [
@@ -105,32 +107,47 @@ class ReportGenerationCsvController extends Controller
         }
 
         $fileName = $this->time() . "_" . $columns['type'] . "_" . ucwords( $interval ) . "_Payout" . ".csv";
-        return \Excel::download( new Payouts( $status_id, $interval, $columns ), $fileName );
+        return \Excel::download( new Payouts( $status_id, $interval, $columns, $month ), $fileName );
     }
 
-    public function orders( Request $request, $type, $interval ) {
+    public function orders( Request $request, $type, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_" . ucwords( $type ) . "_Orders_" . ucwords( $interval ) . ".csv";
-        return \Excel::download( new Orders( $type, $interval ), $fileName );
+        return \Excel::download( new Orders( $type, $interval, $month ), $fileName );
     }
 
-    public function transactions( Request $request, $interval ) {
+    public function transactions( Request $request, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_" . ucwords( $interval ) . "_Transaction_History.csv";
-        return \Excel::download( new TransactionHistory( $interval ), $fileName );
+        return \Excel::download( new TransactionHistory( $interval, $month ), $fileName );
     }
 
     // Seller Report Generation
-    public function sellerProducts( Request $request, $type, $interval ) {
+    public function sellerProducts( Request $request, $type, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_" . ucwords( $type ) . "_Products_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerProducts( $type, $interval ), $fileName );
+        return \Excel::download( new SellerProducts( $type, $interval, $month ), $fileName );
     }
 
-    public function sellerRefunds( Request $request, $interval ) {
+    public function sellerRefunds( Request $request, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_Refunds_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerRefunds( $interval ), $fileName );
+        return \Excel::download( new SellerRefunds( $interval, $month ), $fileName );
     }
 
-    public function sellerPayouts( Request $request, $interval ) {
+    public function sellerPayouts( Request $request, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $fileName = $this->time() . "_Payouts_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerPayouts( $interval ), $fileName );
+        return \Excel::download( new SellerPayouts( $interval, $month ), $fileName );
     }
 }

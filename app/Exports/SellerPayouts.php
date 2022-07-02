@@ -12,11 +12,12 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class SellerPayouts implements FromCollection, WithHeadings
 {
-    protected  $interval, $helpers, $collection;
+    protected  $interval, $helpers, $collection, $month;
 
-    public function __construct( $interval )
+    public function __construct( $interval, $month )
     {
         $this->interval = $interval;
+        $this->month = $month;
         $this->collection = new Collection();
         $this->helpers = new Helpers;
     }
@@ -38,7 +39,7 @@ class SellerPayouts implements FromCollection, WithHeadings
             $payouts = $payouts->get();
 
         } else {
-            $payouts = $payouts->whereMonth( 'created_at', Carbon::parse( now() )->month )->get();
+            $payouts = $payouts->whereMonth( 'created_at', $this->month )->get();
         }
 
         foreach ( $payouts as $payout_index => $payout ) {

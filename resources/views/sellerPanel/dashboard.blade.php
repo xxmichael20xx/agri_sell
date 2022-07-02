@@ -1,11 +1,13 @@
 @extends('sellerPanel.front')
 @section('content')
-
-<!-- // shop_title
-// shop_description
-// shop_order_count
-// shopAveRating
-// total_sales_deduction_diff -->
+@php
+    $inc = [
+        'csv_url' => '/export/csv/seller/products/history/current',
+        'pdf_url' => '/export/pdf/seller/products/orders/monthly',
+        'key' => rand( 50, 1000 ),
+        'is_seller' => true
+    ];
+@endphp
 <div class="content">
     <div class="row">
         <div class="col-lg-5 col-md-6 col-sm-12">
@@ -150,13 +152,14 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/export/csv/seller/products/list/full" target="_blank">CSV - Products List</a>
                             <a class="dropdown-item" href="/export/csv/seller/products/history/full" target="_blank">CSV - Orders Full</a>
-                            <a class="dropdown-item" href="/export/csv/seller/products/history/current" target="_blank">CSV - Orders Current Month</a>
+                            {{-- <a class="dropdown-item" href="/export/csv/seller/products/history/current" target="_blank">CSV - Orders Current Month</a> --}}
                             <a class="dropdown-item" href="/export/csv/seller/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
                             <div class="dropdown-divider m-y-2"></div>
                             <a class="dropdown-item" href="/export/pdf/seller/products/list/full" target="_blank">PDF - Products List</a>
                             <a class="dropdown-item" href="/export/pdf/seller/products/history/full" target="_blank">PDF - Orders Full</a>
                             <a class="dropdown-item" href="/export/pdf/seller/products/history/current" target="_blank">PDF - Orders Current Month</a>
-                            <a class="dropdown-item" href="/export/pdf/seller/products/orders/monthly" target="_blank">PDF - Monthly Sale</a>
+                            {{-- <a class="dropdown-item" href="/export/pdf/seller/products/orders/monthly" target="_blank">PDF - Monthly Sale</a> --}}
+                            @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
                 </div>
@@ -167,5 +170,5 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.months_modal', $inc )
 @endsection
-

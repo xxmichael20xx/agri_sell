@@ -11,11 +11,12 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class SellerRefunds implements FromCollection, WithHeadings
 {
-    protected  $interval, $helpers, $collection;
+    protected  $interval, $helpers, $collection, $month;
 
-    public function __construct( $interval )
+    public function __construct( $interval, $month )
     {
         $this->interval = $interval;
+        $this->month = $month;
         $this->collection = new Collection();
         $this->helpers = new Helpers;
     }
@@ -37,7 +38,7 @@ class SellerRefunds implements FromCollection, WithHeadings
             $refunds = $refunds->get();
 
         } else {
-            $refunds = $refunds->whereMonth( 'created_at', Carbon::parse( now() )->month )->get();
+            $refunds = $refunds->whereMonth( 'created_at', $this->month )->get();
         }
 
         foreach ( $refunds as $refund_index => $refund ) {

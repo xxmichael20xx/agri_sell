@@ -48,21 +48,26 @@
                                     'href' => '/export/pdf/refunds/confirmed/full',
                                     'label' => 'PDF - Full Report'
                                 ],
-                                [
+                                /* [
                                     'href' => '/export/csv/refunds/confirmed/current',
                                     'label' => 'CSV - Current Month'
                                 ],
                                 [
                                     'href' => '/export/pdf/refunds/confirmed/current',
                                     'label' => 'PDF - Current Month'
-                                ]
+                                ] */
                             ];
-
+                            $addl = [
+                                'csv_url' => '/export/csv/refunds/confirmed/current',
+                                'pdf_url' => '/export/pdf/refunds/confirmed/current',
+                                'key' => rand( 50, 1000 )
+                            ];
                             $inc = array(
                                 "title" => "Confirmed refunds",
                                 "index" => 0,
                                 "data" => $data,
-                                "exports" => $exports
+                                "exports" => $exports,
+                                "inc" => $addl
                             );
                         @endphp
                         @include( 'admin.refunds.table', $inc )
@@ -86,20 +91,26 @@
                                     'href' => '/export/csv/refunds/rejected/current',
                                     'label' => 'CSV - Current Month'
                                 ],
-                                [
+                                /* [
                                     'href' => '/export/pdf/refunds/rejected/full',
                                     'label' => 'PDF - Full Report'
                                 ],
                                 [
                                     'href' => '/export/pdf/refunds/rejected/current',
                                     'label' => 'PDF - Current Month'
-                                ],
+                                ], */
+                            ];
+                            $addl = [
+                                'csv_url' => '/export/csv/refunds/rejected/current',
+                                'pdf_url' => '/export/pdf/refunds/rejected/current',
+                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Rejected refunds",
                                 "index" => 1,
                                 "data" => $data,
-                                "exports" => $exports
+                                "exports" => $exports,
+                                "inc" => $addl
                             );
                         @endphp
                         @include( 'admin.refunds.table', $inc )
@@ -123,20 +134,26 @@
                                     'href' => '/export/pdf/refunds/rejected/full',
                                     'label' => 'PDF - Full Report'
                                 ],
-                                [
+                                /* [
                                     'href' => '/export/csv/refunds/requests/current',
                                     'label' => 'CSV - Current Month'
                                 ],
                                 [
                                     'href' => '/export/pdf/refunds/rejected/current',
                                     'label' => 'PDF - Current Month'
-                                ],
+                                ], */
+                            ];
+                            $addl = [
+                                'csv_url' => '/export/csv/refunds/requests/current',
+                                'pdf_url' => '/export/pdf/refunds/requests/current',
+                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Pending refunds",
                                 "index" => 2,
                                 "data" => $data,
-                                "exports" => $exports
+                                "exports" => $exports,
+                                "inc" => $addl
                             );
                         @endphp
                         @include( 'admin.refunds.table', $inc )

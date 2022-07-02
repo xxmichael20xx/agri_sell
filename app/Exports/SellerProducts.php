@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use App\Helpers;
 use App\Product;
-use App\ProductCategory;
 use App\ProductVariation;
 use App\SubOrder;
 use App\SubOrderItem;
@@ -15,20 +14,19 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class SellerProducts implements FromCollection, WithHeadings
 {
-    protected $collection, $type, $interval, $helpers;
+    protected $collection, $type, $interval, $helpers, $month;
 
-    public function __construct( $type, $interval )
+    public function __construct( $type, $interval, $month )
     {
-        $this->collection = new Collection();
         $this->type = $type;
         $this->interval = $interval;
+        $this->month = $month;
+        $this->collection = new Collection();
         $this->helpers = new Helpers;
     }
 
     public function headings(): array
     {
-        $headers = [];
-
         switch ( $this->type ) {
             case 'list':
                 $headers = [
@@ -134,7 +132,7 @@ class SellerProducts implements FromCollection, WithHeadings
             $orders = $orders->get();
 
         } else {
-            $orders = $orders->whereMonth( 'created_at', Carbon::parse( now() )->month )->get();
+            $orders = $orders->whereMonth( 'created_at', $this->month )->get();
         }
 
         foreach ( $orders as $order_index => $order ) {

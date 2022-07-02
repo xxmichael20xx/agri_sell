@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\adminNotifModel;
 use App\Exports\ActivityLogs;
 use App\Exports\Orders;
 use App\Exports\Payouts;
@@ -14,7 +13,6 @@ use App\Exports\Shop;
 use App\Exports\TransactionHistory;
 use App\Exports\Users;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class ReportGenerationPdfController extends Controller
@@ -34,8 +32,11 @@ class ReportGenerationPdfController extends Controller
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function refunds( Request $request, $type, $interval ) {
-        $export = new Refunds( $type, $interval );
+    public function refunds( Request $request, $type, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new Refunds( $type, $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 
@@ -65,7 +66,10 @@ class ReportGenerationPdfController extends Controller
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function payouts( Request $request, $status_id, $interval ) {
+    public function payouts( Request $request, $status_id, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         switch ( $status_id ) {
             case 1:
                 $columns = [
@@ -92,23 +96,29 @@ class ReportGenerationPdfController extends Controller
                 break;
         }
 
-        $export = new Payouts( $status_id, $interval, $columns );
+        $export = new Payouts( $status_id, $interval, $columns, $month );
         $headers = $export->headings();
         $data = $export->collection();
 
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function orders( Request $request, $type, $interval ) {
-        $export = new Orders( $type, $interval );
+    public function orders( Request $request, $type, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new Orders( $type, $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function transactions( Request $request, $interval ) {
-        $export = new TransactionHistory( $interval );
+    public function transactions( Request $request, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new TransactionHistory( $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 
@@ -116,24 +126,33 @@ class ReportGenerationPdfController extends Controller
     }
 
     // Seller Report Generation
-    public function sellerProducts( Request $request, $type, $interval ) {
-        $export = new SellerProducts( $type, $interval );
+    public function sellerProducts( Request $request, $type, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new SellerProducts( $type, $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function sellerRefunds( Request $request, $interval ) {
-        $export = new SellerRefunds( $interval );
+    public function sellerRefunds( Request $request, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new SellerRefunds( $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function sellerPayouts( Request $request, $interval ) {
-        $export = new youts( $interval );
+    public function sellerPayouts( Request $request, $interval, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new SellerPayouts( $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 

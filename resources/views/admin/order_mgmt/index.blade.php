@@ -5,6 +5,11 @@
         $pickupSection = $category_type == 'pickup' ? 'active show' : '';
         $deliverySection = $category_type == 'delivery' ? 'active show' : '';
     }
+    $inc = [
+        'csv_url' => "/export/csv/orders/{$category_type}/current",
+        'pdf_url' => "/export/pdf/orders/{$category_type}/current",
+        'key' => rand( 50, 1000 )
+    ];
 @endphp
 <style>
     .custom--dropdown-menu {
@@ -38,11 +43,11 @@
                         </button>
                         <div class="dropdown-menu custom--dropdown-menu" style="right: 0 !important; left: unset !important;">
                             <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/full" target="_blank">CSV - Full Orders</a>
-                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/current" target="_blank">CSV - Current Month</a>
-                            <div class="dropdown-divider m-y-2"></div>
+                            {{-- <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/current" target="_blank">CSV - Current Month</a> --}}
                             <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/full" target="_blank">PDF - Full Orders</a>
-                            <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/current" target="_blank">PDF - Current Month</a>
+                            {{-- <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/current" target="_blank">PDF - Current Month</a> --}}
                             {{-- <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/top" target="_blank">Top Ordered Product</a> --}}
+                            @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
                 </div>
@@ -64,8 +69,8 @@
     </div>
     @include('admin.order_mgmt.index_stock_table')
 </div>
+@include( 'admin.export.months_modal', $inc )
 @endsection
-
 @section('admin.custom_scripts')
     <script>
         (function($) {

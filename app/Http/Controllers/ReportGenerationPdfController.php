@@ -54,8 +54,11 @@ class ReportGenerationPdfController extends Controller
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function users( Request $request, $interval, $role_id ) {
-        $export = new Users( $interval, $role_id );
+    public function users( Request $request, $interval, $role_id, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new Users( $interval, $role_id, $month );
         $headers = $export->headings();
         $data = $export->collection();
 

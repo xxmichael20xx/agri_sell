@@ -1,3 +1,10 @@
+@php
+$inc = [
+    'csv_url' => '/export/csv/users/current/' . $role_id,
+    'pdf_url' => '/export/pdf/users/current/' . $role_id,
+    'key' => rand( 50, 1000 )
+];
+@endphp
 <div class="card">
     <div class="card-header d-flex justify-content-between">
         <h4 class="card-title">{{ $title ?? 'Users' }}</h4>
@@ -7,10 +14,11 @@
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/export/csv/users/full/{{ $role_id }}" target="_blank">CSV - Full List</a>
-                <a class="dropdown-item" href="/export/csv/users/current/{{ $role_id }}" target="_blank">CSV - Current Month</a>
+                {{-- <a class="dropdown-item" href="/export/csv/users/current/{{ $role_id }}" target="_blank">CSV - Current Month</a> --}}
                 <div class="dropdown-divider m-y-2"></div>
-                <a class="dropdown-item" href="/export/pdf/users/current/{{ $role_id }}" target="_blank">PDF - Current Month</a>
+                {{-- <a class="dropdown-item" href="/export/pdf/users/current/{{ $role_id }}" target="_blank">PDF - Current Month</a> --}}
                 <a class="dropdown-item" href="/export/pdf/users/full/{{ $role_id }}" target="_blank">PDF - Full List</a>
+                @include( 'admin.export.months_trigger', $inc )
             </div>
         </div>
     </div>
@@ -58,6 +66,7 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
     </div>
 </div>
-</div>
+@include( 'admin.export.months_modal', $inc )

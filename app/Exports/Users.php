@@ -10,12 +10,13 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Users implements FromCollection, WithHeadings
 {
-    protected $interval, $role_id;
+    protected $interval, $role_id, $month;
 
-    public function __construct( $interval, $role_id )
+    public function __construct( $interval, $role_id, $month )
     {
         $this->interval = $interval;
         $this->role_id = $role_id;
+        $this->month = $month;
     }
 
     public function headings(): array
@@ -36,7 +37,7 @@ class Users implements FromCollection, WithHeadings
             $users = $users->get();
 
         } else {
-            $users = $users->whereMonth( 'created_at', Carbon::now()->month )->get();
+            $users = $users->whereMonth( 'created_at', $this->month )->get();
         }
 
         foreach ( $users as $user_index => $user ) {

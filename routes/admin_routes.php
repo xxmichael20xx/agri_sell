@@ -146,7 +146,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Users
         Route::group( [ 'prefix' => 'users' ], function() {
-            Route::get( '{interval}/{role_id}', 'ReportGenerationCsvController@users' );
+            Route::get( '{interval}/{role_id}/{month?}', 'ReportGenerationCsvController@users' );
         } );
 
         // Users
@@ -181,7 +181,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
 
         // Users
         Route::group( [ 'prefix' => 'users' ], function() {
-            Route::get( '{interval}/{role_id}', 'ReportGenerationPdfController@users' );
+            Route::get( '{interval}/{role_id}/{month?}', 'ReportGenerationPdfController@users' );
         } );
 
         // Users

@@ -21,7 +21,7 @@
         $collection->push( $data );
     }
 
-    $_collections = $collection->sortByDesc( 'value' )->take( 5 )->toArray();
+    $_collections = $collection->sortByDesc( 'value' )->take( 10 )->toArray();
     $data = [];
 
     foreach ( $_collections as $_collection ) {

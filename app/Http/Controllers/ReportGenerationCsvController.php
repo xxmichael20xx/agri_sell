@@ -42,7 +42,10 @@ class ReportGenerationCsvController extends Controller
         return \Excel::download( new Shop( $interval, $type, $month ), $fileName );
     }
 
-    public function users( Request $request, $interval, $role_id ) {
+    public function users( Request $request, $interval, $role_id, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
         $roleType = "";
 
         switch ( $role_id ) {
@@ -68,7 +71,7 @@ class ReportGenerationCsvController extends Controller
         }
 
         $fileName = $this->time() . "_" . ucwords( $interval ) . "_Users_" . $roleType . ".csv";
-        return \Excel::download( new Users( $interval, $role_id ), $fileName );
+        return \Excel::download( new Users( $interval, $role_id, $month ), $fileName );
     }
 
     public function payouts( Request $request, $status_id, $interval ) {

@@ -296,18 +296,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card clickable card--links" data-href="/admin/manage_shops">
-                <div class="card-header">
-                    Top-Bottom Shops
-                </div>
-                <div class="card-body">
-                    @include('admin.charts.top_bottom_shops')
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 @section('admin.custom_scripts')

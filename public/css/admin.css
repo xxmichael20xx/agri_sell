@@ -34,3 +34,9 @@
     margin-top: .5rem !important;
     margin-bottom: .5rem !important;
 }
+
+.card--links:hover .stats,
+.card--links:hover .stats * {
+    color: #219F94 !important;
+    font-weight: bold;
+}

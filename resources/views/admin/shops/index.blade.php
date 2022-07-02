@@ -1,20 +1,11 @@
 @extends('admin.front')
 @section('content')
 @php
-    $months = array(
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July ',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-    );
+    $inc = [
+        'csv_url' => '/export/csv/shops/current/default',
+        'pdf_url' => '/export/pdf/shops/current/default',
+        'key' => rand( 50, 1000 )
+    ];
 @endphp
 <style>
     .dropdown--scroll {
@@ -34,11 +25,11 @@
                         </button>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/export/csv/shops/full/default" target="_blank">CSV - Full Approved</a>
-                            <a class="dropdown-item clickable" data-href="/export/csv/shops/current/default" data-toggle="modal" data-target="#csvMonths">CSV/PDF - Months Report</a>
                             <a class="dropdown-item" href="/export/csv/shops/full/top" target="_blank">CSV - Top Performing</a>
                             <div class="dropdown-divider m-y-2"></div>
                             <a class="dropdown-item" href="/export/pdf/shops/full/default" target="_blank">PDF - Full Approved</a>
                             <a class="dropdown-item" href="/export/pdf/shops/full/top" target="_blank">PDF - Top Performing</a>
+                            @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
                 </div>
@@ -95,82 +86,19 @@
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="csvMonths">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Months Report</h5>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="form-group row">
-                        <div class="col-12">
-                            <label for="select-type" class="col-form-label">Report Type</label>
-                            <select name="select-type" id="select-type" class="custom-select">
-                                <option value="" selected disabled>Select an option</option>
-                                <option value="csv">CSV</option>
-                                <option value="pdf">PDF</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row collapse" id="report-csv">
-                        <div class="col-12">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Select Month
-                                </button>
-                                <div class="dropdown-menu w-100 dropdown--scroll">
-                                    @foreach ( $months as $month_index => $month )
-                                        <a class="dropdown-item" href="/export/csv/shops/current/default/{{ $month_index + 1 }}" target="_blank">{{ $month }}</a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row collapse" id="report-pdf">
-                        <div class="col-12">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle w-100" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Select Month
-                                </button>
-                                <div class="dropdown-menu w-100 dropdown--scroll">
-                                    @foreach ( $months as $month_index => $month )
-                                        <a class="dropdown-item" href="/export/pdf/shops/current/default/{{ $month_index + 1 }}" target="_blank">{{ $month }}</a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title font-weight-bold">Top-Bottom Shops</h5>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <div class="card-body">
+                    @include('admin.charts.top_bottom_shops')
+                </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
-@section('admin.custom_scripts')
-    <script>
-        (function($) {
-            window.onload = () => {
-
-                $( document ).on( 'change', '#select-type', function() {
-                    const val = $( this ).val()
-
-                    if ( val == 'csv' ) {
-                        $( '#report-csv' ).removeClass( 'collapse' )
-                        $( '#report-pdf' ).addClass( 'collapse' )
-
-                    } else {
-                        $( '#report-csv' ).addClass( 'collapse' )
-                        $( '#report-pdf' ).removeClass( 'collapse' )
-                    }
-                } )
-
-            }
-        })(jQuery)
-    </script>
+@include( 'admin.export.months_modal', $inc )
 @endsection

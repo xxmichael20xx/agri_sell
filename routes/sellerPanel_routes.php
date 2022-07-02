@@ -75,17 +75,17 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
     Route::group( [ 'prefix' => '/export/csv/seller' ], function() {
         // Products
         Route::group( [ 'prefix' => 'products' ], function() {
-            Route::get( '{type}/{interval}', 'ReportGenerationCsvController@sellerProducts' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationCsvController@sellerProducts' );
         } );
 
         // Refunds
         Route::group( [ 'prefix' => 'refunds' ], function() {
-            Route::get( '{interval}', 'ReportGenerationCsvController@sellerRefunds' );
+            Route::get( '{interval}/{month?}', 'ReportGenerationCsvController@sellerRefunds' );
         } );
 
         // Refunds
         Route::group( [ 'prefix' => 'payouts' ], function() {
-            Route::get( '{interval}', 'ReportGenerationCsvController@sellerPayouts' );
+            Route::get( '{interval}/{month?}', 'ReportGenerationCsvController@sellerPayouts' );
         } );
     });
 
@@ -93,17 +93,17 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
     Route::group( [ 'prefix' => '/export/pdf/seller' ], function() {
         // Products
         Route::group( [ 'prefix' => 'products' ], function() {
-            Route::get( '{type}/{interval}', 'ReportGenerationPdfController@sellerProducts' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationPdfController@sellerProducts' );
         } );
 
         // Refunds
         Route::group( [ 'prefix' => 'refunds' ], function() {
-            Route::get( '{interval}', 'ReportGenerationPdfController@sellerRefunds' );
+            Route::get( '{interval}/{month?}', 'ReportGenerationPdfController@sellerRefunds' );
         } );
 
         // Refunds
         Route::group( [ 'prefix' => 'payouts' ], function() {
-            Route::get( '{interval}', 'ReportGenerationPdfController@sellerPayouts' );
+            Route::get( '{interval}/{month?}', 'ReportGenerationPdfController@sellerPayouts' );
         } );
     });
 });

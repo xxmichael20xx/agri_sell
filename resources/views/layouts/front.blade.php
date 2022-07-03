@@ -101,7 +101,6 @@
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v13.0" nonce="uaEMGe7E"></script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v13.0" nonce="G5Hm7oPd"></script>
 
-<div id="fb-root"></div>
 <!-- Messenger Chat plugin Code -->
 <div id="fb-root"></div>
 
@@ -113,11 +112,14 @@
   var chatbox = document.getElementById('fb-customer-chat');
   chatbox.setAttribute("page_id", "113303357799567");
   chatbox.setAttribute("attribution", "biz_inbox");
+</script>
 
+<!-- Your SDK code -->
+<script>
   window.fbAsyncInit = function() {
     FB.init({
       xfbml            : true,
-      version          : 'v12.0'
+      version          : 'v14.0'
     });
   };
 

@@ -2,21 +2,21 @@
 <div class="row">
     <div class="col col-lg-4">
         <label>Province</label>
-    <select id="province" class="form-control" disabled="disabled" onload="setProvince()">
+    <select id="province" class="form-control" disabled="disabled" onload="setProvince()" required>
         <option value="" disabled>Select province</option>
 
     </select>
     </div>
     <div class="col col-lg-4">
     <label>Municipality/City</label>
-        <select id="municipality" class="form-control" onchange="setTown()">
+        <select id="municipality" class="form-control" onchange="setTown()" required>
             <option value="" selected disabled>Select municipality</option>
 
         </select>
     </div>
     <div class="col col-lg-4">
         <label>Barangay</label>
-        <select id="barangay" class="form-control input-lg"  onchange="setBarangay()">
+        <select id="barangay" class="form-control input-lg"  onchange="setBarangay()" required>
             <option value="" disabled selected>Select barangay</option>
         </select>
     </div>

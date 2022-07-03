@@ -226,7 +226,7 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">Excel</a>
+                            <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">CSV</a>
                             <a class="dropdown-item" href="/export/pdf/activity-logs" target="_blank">PDF</a>
                         </div>
                     </div>

@@ -59,7 +59,8 @@ class AdminPanelController extends Controller
         $total_revenue_by_shipping_fee = DB::table('orders')->sum('shipping_fee');
         $ag_coins_spends_total = DB::table('coins_transaction')->sum('value');
         $shop_count = DB::table('shops')->count();
-        $buyer_acc_count = DB::table('users')->where('role_id', '!=', '1')->where('role_id', '!=', '5')->count();
+        // $buyer_acc_count = DB::table('users')->where('role_id', '!=', '1')->where('role_id', '!=', '5')->count();
+        $buyer_acc_count = DB::table( 'users' )->where( 'role_id', '2' )->count();
         $rider_acc_count = DB::table('users')->where('role_id', '5')->count();
         $product_count = DB::table('products')->count();
         $order_qty_total = DB::table('orders')->sum('item_count');

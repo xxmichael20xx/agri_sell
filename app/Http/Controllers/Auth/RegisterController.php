@@ -99,12 +99,12 @@ class RegisterController extends Controller
         $adminnotif_ent = new adminNotifModel();
         $adminnotif_ent->action_type = 'User regisration';
         $adminnotif_ent->user_id = $getLastInsertedUserId;
-        $adminnotif_ent->action_description = $data['name'] . 'register a new account with an email:' . $data['email'];
+        $adminnotif_ent->action_description = $data['name'] . ' register a new account with an email:' . $data['email'];
         $adminnotif_ent->save();
 
         $this->adminPushNotifications( [
             'title' => 'New User regisration',
-            'message' => $data['name'] . 'register a new account with an email:' . $data['email']
+            'message' => $data['name'] . ' register a new account with an email:' . $data['email']
         ] );
 
         return User::create([

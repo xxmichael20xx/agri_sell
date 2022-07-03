@@ -12,6 +12,11 @@ class ShopsAdminController extends Controller
 {
     function index(){
         $shops = Shop::where('is_active', 1)->get();
+
+        foreach ( $shops as $shop_index => $shop ) {
+            if ( ! $shop->owner ) $shops->forget( $shop_index );
+        }
+
         return view('admin.shops.index')->with('shops', $shops)->with('panel_name', 'shops');
     }
 

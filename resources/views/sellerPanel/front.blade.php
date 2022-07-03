@@ -233,6 +233,7 @@ Coded by www.creative-tim.com
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   @include('sellerPanel.additional_scripts')
   @yield('custom-scripts')
+  @yield('custom-scripts-addl')
 
   <script>
     (function($) {

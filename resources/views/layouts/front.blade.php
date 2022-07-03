@@ -402,8 +402,12 @@
 <script src="/assets/js/plugins.js"></script>
 <script src="/assets/js/main.js"></script>
 
+@php
+    $user_id = auth()->user() ? auth()->user()->id : 0;
+@endphp
+
 <script>
-    const user_id = {{ Auth::check() ? Auth::user()->id : NULL }} 
+    const user_id = {{ $user_id }} 
     let pusher = new Pusher( 'd527cc315432ec685113', {
         cluster: 'ap1'
     } )

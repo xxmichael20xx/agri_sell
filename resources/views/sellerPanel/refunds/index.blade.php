@@ -50,7 +50,7 @@
                         <div class="dropdown-menu dropdown--right">
                             <a class="dropdown-item" href="/export/csv/seller/refunds/full" target="_blank">CSV - Full List</a>
                             {{-- <a class="dropdown-item" href="/export/csv/seller/refunds/current" target="_blank">CSV - Current Month</a> --}}
-                            <div class="dropdown-divider m-y-2"></div>
+                            {{-- <div class="dropdown-divider m-y-2"></div> --}}
                             <a class="dropdown-item" href="/export/pdf/seller/refunds/full" target="_blank">PDF - Full List</a>
                             {{-- <a class="dropdown-item" href="/export/pdf/seller/refunds/current" target="_blank">PDF - Current Month</a> --}}
                             @include( 'admin.export.months_trigger', $_inc )

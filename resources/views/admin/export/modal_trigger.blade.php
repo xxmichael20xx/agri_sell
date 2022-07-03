@@ -1,0 +1,1 @@
+<a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $key }}">{{ $dropLabel }}</a>

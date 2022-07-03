@@ -219,7 +219,7 @@
 </div>
 @include( 'admin.export.months_modal', $inc )
 @endsection
-@section( 'custom-scripts' )
+@section( 'custom-scripts-addl' )
     <script>
         (function($) {
             $(document).ready(function() {

@@ -50,7 +50,7 @@
                     @endif
                     
                     @if ( $user->remarks == '2')
-                        <a href="/unset_as_verified_coins_top_up/{{ $user->id }}" class="btn btn-danger btn-round m-1" data-toggle="modal" data-target="#notVerifyReason">Mark as not approved</a>
+                        <a href="/unset_as_verified_coins_top_up/{{ $user->id }}" class="btn btn-danger btn-round m-1" data-toggle="modal" data-target="#notVerifyReason">Reject</a>
                         <div class="modal fade" id="notVerifyReason" tabindex="-1" role="dialog" aria-labelledby="notVerifyReasonLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -68,8 +68,8 @@
                                         <input type="hidden" form="coins_top_up" name="coins_top_uid" value="{{$user->id}}">
                                         <select class="selectpicker" form="coins_top_up" name="coins_top_up_invalid"
                                             data-style="btn btn-primary btn-round" title="Single Select" tabindex="-98">
-                                            <option value="not valid">Not Valid</option>
-                                            <option value="wrong information">Wrong Information</option>
+                                            {{-- <option value="not valid">Not Valid</option> --}}
+                                            {{-- <option value="wrong information">Wrong Information</option> --}}
                                             <option value="wrong details">Wrong details</option>
                                             <option value="incorrect reference number">Incorrect reference number</option>
                                             <option value="incorrect amount">Incorrect amount</option>
@@ -84,7 +84,7 @@
                         </div>
                         <br>
                 
-                        <a href="/set_as_verified_coins_top_up/{{$user->id}}" class="btn btn-success btn-round m-1">Mark as Approved</a>
+                        <a href="/set_as_verified_coins_top_up/{{$user->id}}" class="btn btn-success btn-round m-1">Confirm</a>
                         @include('admin.coins_top_up.edit_coins_top_up_amount_modal')
                     @endif
                 </div>

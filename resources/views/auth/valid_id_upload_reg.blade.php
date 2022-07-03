@@ -1,17 +1,15 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function checkvalidations(){
-        if(document.getElementById("valid_id").value.length == 0){
+    function checkvalidations() {
+        if ( document.getElementById( "valid_id" ).value.length == 0 ) {
             Swal.fire(
-    'Registration error',
-    'Please insert valid id image',
-    'error'
-    )
+                'Registration error',
+                'Please insert valid id image',
+                'error'
+            )
         }
     }
-
- 
-    </script>
+</script>
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-light" data-toggle="modal" data-target="#uploadValidIdModal">
    Upload Valid id
@@ -37,20 +35,26 @@
                 </div>
                 <div class="modal-text">
                     <label for="valid_id" class="form-group">Upload Valid id below</label>
-                    <input id="valid_id" type="file"
-                           class="form-control-file @error('valid_id') is-invalid @enderror" name="valid_id"
-                           value="{{ old('valid_id') }}" required autocomplete="valid_id">
+                    <input 
+                        id="valid_id" 
+                        type="file"
+                        class="form-control-file @error('valid_id') is-invalid @enderror"
+                        name="valid_id"
+                        value="{{ old('valid_id') }}" 
+                        required
+                        autocomplete="valid_id"
+                    >
 
                     @error('valid_id')
-                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
                     @enderror
                 </div>
 
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Okay</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Update</button>
             </div>
         </div>
     </div>

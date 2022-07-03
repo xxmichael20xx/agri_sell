@@ -150,15 +150,56 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/export/csv/seller/products/list/full" target="_blank">CSV - Products List</a>
+                            @php
+                                $reportsCsv = [
+                                    'key' => 'products--csv-' . rand( 50, 1000 ),
+                                    'dropLabel' => 'CSV',
+                                    'modalTitle' => 'CSV - Reports options',
+                                    'reports' => [
+                                        [
+                                            'url' => '/export/csv/seller/products/list/full',
+                                            'label' => 'Products List'
+                                        ],
+                                        [
+                                            'url' => '/export/csv/seller/products/history/full',
+                                            'label' => 'Orders Full'
+                                        ],
+                                        [
+                                            'url' => '/export/csv/seller/products/orders/monthly',
+                                            'label' => 'Monthly Sale'
+                                        ],
+                                    ]
+                                ];
+
+                                $reportsPdf = [
+                                    'key' => 'products--pdf-' . rand( 50, 1000 ),
+                                    'dropLabel' => 'PDF',
+                                    'modalTitle' => 'PDF - Reports options',
+                                    'reports' => [
+                                        [
+                                            'url' => '/export/pdf/seller/products/list/full',
+                                            'label' => 'Products List'
+                                        ],
+                                        [
+                                            'url' => '/export/pdf/seller/products/history/full',
+                                            'label' => 'Orders Full'
+                                        ],
+                                        [
+                                            'url' => '/export/pdf/seller/products/orders/monthly',
+                                            'label' => 'Monthly Sale'
+                                        ],
+                                    ]
+                                ];
+                            @endphp
+                            {{-- <a class="dropdown-item" href="/export/csv/seller/products/list/full" target="_blank">CSV - Products List</a>
                             <a class="dropdown-item" href="/export/csv/seller/products/history/full" target="_blank">CSV - Orders Full</a>
-                            {{-- <a class="dropdown-item" href="/export/csv/seller/products/history/current" target="_blank">CSV - Orders Current Month</a> --}}
                             <a class="dropdown-item" href="/export/csv/seller/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
                             <div class="dropdown-divider m-y-2"></div>
                             <a class="dropdown-item" href="/export/pdf/seller/products/list/full" target="_blank">PDF - Products List</a>
                             <a class="dropdown-item" href="/export/pdf/seller/products/history/full" target="_blank">PDF - Orders Full</a>
-                            <a class="dropdown-item" href="/export/pdf/seller/products/history/current" target="_blank">PDF - Orders Current Month</a>
-                            {{-- <a class="dropdown-item" href="/export/pdf/seller/products/orders/monthly" target="_blank">PDF - Monthly Sale</a> --}}
+                            <a class="dropdown-item" href="/export/pdf/seller/products/history/current" target="_blank">PDF - Orders Current Month</a> --}}
+                            @include( 'admin.export.modal_trigger', $reportsCsv )
+                            @include( 'admin.export.modal_trigger', $reportsPdf )
                             @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
@@ -170,5 +211,7 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.modal_content', $reportsCsv )
+@include( 'admin.export.modal_content', $reportsPdf )
 @include( 'admin.export.months_modal', $inc )
 @endsection

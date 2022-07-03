@@ -1,7 +1,8 @@
 @extends('admin.front')
 @section('content')
 @php
-    $user_obj = App\User::find( $user->user_id );
+    use App\User;
+    $user_obj = User::find( $user->user_id );
     $badgeType = "info";
     $badgeText = "Pending";
 

@@ -40,3 +40,8 @@
     color: #219F94 !important;
     font-weight: bold;
 }
+
+.dropdown--scroll {
+    height: 250px;
+    overflow-y: auto;
+}

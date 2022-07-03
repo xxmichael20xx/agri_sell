@@ -42,7 +42,6 @@
     <script src="/assets/js/vendor/modernizr-2.8.3.min.js"></script>
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <div id="fb-root"></div>
 </head>
 <style>
     .categories-search-wrapper {
@@ -98,15 +97,11 @@
 
 <body>
 
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v13.0" nonce="uaEMGe7E"></script>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v13.0" nonce="G5Hm7oPd"></script>
-
 <!-- Messenger Chat plugin Code -->
 <div id="fb-root"></div>
 
 <!-- Your Chat plugin code -->
-<div id="fb-customer-chat" class="fb-customerchat">
-</div>
+<div id="fb-customer-chat" class="fb-customerchat"></div>
 
 <script>
   var chatbox = document.getElementById('fb-customer-chat');

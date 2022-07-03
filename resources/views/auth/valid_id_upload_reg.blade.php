@@ -54,7 +54,7 @@
 
             </div>
             <div class="modal-footer border-top-0">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Update</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Upload</button>
             </div>
         </div>
     </div>

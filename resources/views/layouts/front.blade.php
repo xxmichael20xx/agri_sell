@@ -403,7 +403,6 @@
 <script src="/assets/js/owl.carousel.min.js"></script>
 <script src="/assets/js/plugins.js"></script>
 <script src="/assets/js/main.js"></script>
-<script src="/paper_assets/demo/jquery.sharrre.js"></script>
 
 @php
     $user_id = auth()->user() ? auth()->user()->id : 0;

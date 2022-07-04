@@ -1,4 +1,9 @@
 @php
+$reportInc = [
+    'type' => 'admin_users',
+    'key' => 'admin_users_' . $role_id,
+    'role_id' => $role_id
+];
 $inc = [
     'csv_url' => '/export/csv/users/current/' . $role_id,
     'pdf_url' => '/export/pdf/users/current/' . $role_id,
@@ -13,10 +18,7 @@ $inc = [
                 Report Generation
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="/export/csv/users/full/{{ $role_id }}" target="_blank">CSV - Full List</a>
-                {{-- <a class="dropdown-item" href="/export/csv/users/current/{{ $role_id }}" target="_blank">CSV - Current Month</a> --}}
-                {{-- <a class="dropdown-item" href="/export/pdf/users/current/{{ $role_id }}" target="_blank">PDF - Current Month</a> --}}
-                <a class="dropdown-item" href="/export/pdf/users/full/{{ $role_id }}" target="_blank">PDF - Full List</a>
+                @include( 'admin.export.modal_trigger', $reportInc )
                 @include( 'admin.export.months_trigger', $inc )
             </div>
         </div>
@@ -68,4 +70,5 @@ $inc = [
         </div>
     </div>
 </div>
+@include( 'admin.export.modal_content', $reportInc )
 @include( 'admin.export.months_modal', $inc )

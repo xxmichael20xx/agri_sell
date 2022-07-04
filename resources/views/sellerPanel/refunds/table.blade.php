@@ -1,6 +1,15 @@
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between">
         <h4 class="card-title">{{ $title }}</h4>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="report--activity-logs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Report Generation
+            </button>
+            <div class="dropdown-menu">
+                @include( 'admin.export.modal_trigger', $inc )
+                @include( 'admin.export.months_trigger', $inc )
+            </div>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -115,3 +124,5 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.modal_content', $inc )
+@include( 'admin.export.months_modal', $inc )

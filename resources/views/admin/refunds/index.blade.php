@@ -42,25 +42,19 @@
                             $exports = [
                                 [
                                     'href' => '/export/csv/refunds/confirmed/full',
-                                    'label' => 'CSV - Full Report'
+                                    'label' => 'CSV'
                                 ],
                                 [
                                     'href' => '/export/pdf/refunds/confirmed/full',
-                                    'label' => 'PDF - Full Report'
+                                    'label' => 'PDF'
                                 ],
-                                /* [
-                                    'href' => '/export/csv/refunds/confirmed/current',
-                                    'label' => 'CSV - Current Month'
-                                ],
-                                [
-                                    'href' => '/export/pdf/refunds/confirmed/current',
-                                    'label' => 'PDF - Current Month'
-                                ] */
                             ];
                             $addl = [
+                                'type' => 'admin_refunds',
+                                'key' => 'admin_refunds' . rand( 50, 1000 ) . '-confirmed',
+                                'reports' => $exports,
                                 'csv_url' => '/export/csv/refunds/confirmed/current',
                                 'pdf_url' => '/export/pdf/refunds/confirmed/current',
-                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Confirmed refunds",
@@ -85,25 +79,19 @@
                             $exports = [
                                 [
                                     'href' => '/export/csv/refunds/rejected/full',
-                                    'label' => 'CSV - Full Report'
+                                    'label' => 'CSV'
                                 ],
                                 [
-                                    'href' => '/export/csv/refunds/rejected/current',
-                                    'label' => 'CSV - Current Month'
-                                ],
-                                /* [
                                     'href' => '/export/pdf/refunds/rejected/full',
-                                    'label' => 'PDF - Full Report'
+                                    'label' => 'PDF'
                                 ],
-                                [
-                                    'href' => '/export/pdf/refunds/rejected/current',
-                                    'label' => 'PDF - Current Month'
-                                ], */
                             ];
                             $addl = [
+                                'type' => 'admin_refunds',
+                                'key' => 'admin_refunds' . rand( 50, 1000 ) . '-rejected',
+                                'reports' => $exports,
                                 'csv_url' => '/export/csv/refunds/rejected/current',
                                 'pdf_url' => '/export/pdf/refunds/rejected/current',
-                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Rejected refunds",
@@ -128,25 +116,19 @@
                             $exports = [
                                 [
                                     'href' => '/export/csv/refunds/requests/full',
-                                    'label' => 'CSV - Full Report'
+                                    'label' => 'CSV'
                                 ],
                                 [
-                                    'href' => '/export/pdf/refunds/rejected/full',
-                                    'label' => 'PDF - Full Report'
+                                    'href' => '/export/pdf/refunds/requests/full',
+                                    'label' => 'PDF'
                                 ],
-                                /* [
-                                    'href' => '/export/csv/refunds/requests/current',
-                                    'label' => 'CSV - Current Month'
-                                ],
-                                [
-                                    'href' => '/export/pdf/refunds/rejected/current',
-                                    'label' => 'PDF - Current Month'
-                                ], */
                             ];
                             $addl = [
+                                'type' => 'admin_refunds',
+                                'key' => 'admin_refunds' . rand( 50, 1000 ) . '-requests',
+                                'reports' => $exports,
                                 'csv_url' => '/export/csv/refunds/requests/current',
                                 'pdf_url' => '/export/pdf/refunds/requests/current',
-                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Pending refunds",

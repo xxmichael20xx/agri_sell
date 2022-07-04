@@ -135,12 +135,12 @@ class ReportGenerationCsvController extends Controller
         return \Excel::download( new SellerProducts( $type, $interval, $month ), $fileName );
     }
 
-    public function sellerRefunds( Request $request, $interval, $month = NULL ) {
+    public function sellerRefunds( Request $request, $type, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
         $fileName = $this->time() . "_Refunds_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerRefunds( $interval, $month ), $fileName );
+        return \Excel::download( new SellerRefunds( $type, $interval, $month ), $fileName );
     }
 
     public function sellerPayouts( Request $request, $interval, $month = NULL ) {

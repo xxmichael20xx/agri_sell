@@ -5,10 +5,22 @@
         $pickupSection = $category_type == 'pickup' ? 'active show' : '';
         $deliverySection = $category_type == 'delivery' ? 'active show' : '';
     }
+    $exports = [
+        [
+            'href' => "/export/csv/orders/{$category_type}/full",
+            'label' => 'CSV'
+        ],
+        [
+            'href' => "/export/pdf/orders/{$category_type}/full",
+            'label' => 'PDF'
+        ]
+    ];
     $inc = [
+        'type' => 'admin_orders',
+        'key' => 'admin_orders_' . $category_type . '-' . rand( 50, 1000 ),
+        'reports' => $exports,
         'csv_url' => "/export/csv/orders/{$category_type}/current",
         'pdf_url' => "/export/pdf/orders/{$category_type}/current",
-        'key' => rand( 50, 1000 )
     ];
 @endphp
 <style>
@@ -42,11 +54,7 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu custom--dropdown-menu" style="right: 0 !important; left: unset !important;">
-                            <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/full" target="_blank">CSV - Full Orders</a>
-                            {{-- <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/current" target="_blank">CSV - Current Month</a> --}}
-                            <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/full" target="_blank">PDF - Full Orders</a>
-                            {{-- <a class="dropdown-item" href="/export/pdf/orders/{{ $category_type }}/current" target="_blank">PDF - Current Month</a> --}}
-                            {{-- <a class="dropdown-item" href="/export/csv/orders/{{ $category_type }}/top" target="_blank">Top Ordered Product</a> --}}
+                            @include( 'admin.export.modal_trigger', $inc )
                             @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
@@ -69,6 +77,7 @@
     </div>
     @include('admin.order_mgmt.index_stock_table')
 </div>
+@include( 'admin.export.modal_content', $inc )
 @include( 'admin.export.months_modal', $inc )
 @endsection
 @section('admin.custom_scripts')

@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
 
         // Refunds
         Route::group( [ 'prefix' => 'refunds' ], function() {
-            Route::get( '{interval}/{month?}', 'ReportGenerationCsvController@sellerRefunds' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationCsvController@sellerRefunds' );
         } );
 
         // Refunds
@@ -98,7 +98,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'seller'], function () {
 
         // Refunds
         Route::group( [ 'prefix' => 'refunds' ], function() {
-            Route::get( '{interval}/{month?}', 'ReportGenerationPdfController@sellerRefunds' );
+            Route::get( '{type}/{interval}/{month?}', 'ReportGenerationPdfController@sellerRefunds' );
         } );
 
         // Refunds

@@ -11,10 +11,11 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class SellerRefunds implements FromCollection, WithHeadings
 {
-    protected  $interval, $helpers, $collection, $month;
+    protected  $type, $interval, $helpers, $collection, $month;
 
-    public function __construct( $interval, $month )
+    public function __construct( $type, $interval, $month )
     {
+        $this->type = $type;
         $this->interval = $interval;
         $this->month = $month;
         $this->collection = new Collection();
@@ -44,36 +45,43 @@ class SellerRefunds implements FromCollection, WithHeadings
         foreach ( $refunds as $refund_index => $refund ) {
             $dateStatus = [];
 
-            switch ( $refund->status ) {
-                case '3':
-                    $amount = $refund->order_item->price * $refund->order_item->quantity;
-                    $dateStatus = [
-                        "Confirmed: " . $this->helpers->humanDate( $refund->created_at, true ),
-                        "Refund has been confirmed with an amount of: Peso" . $this->helpers->numeric( $amount / 2 )
-                    ];
+            switch ( $this->type ) {
+                case 'confirmed':
+                    if ( $refund->status == '3' ) {
+                        $amount = $refund->order_item->price * $refund->order_item->quantity;
+                        $dateStatus = [
+                            "Confirmed: " . $this->helpers->humanDate( $refund->created_at, true ),
+                            "Refund has been confirmed with an amount of: Peso " . $this->helpers->numeric( $amount / 2 )
+                        ];
+                    }
                     break;
 
-                case '4':
+                case 'rejected':
+                    if ( $refund->status == '4' ) {
                         $dateStatus = [
                             "Rejected: " . $this->helpers->humanDate( $refund->updated_at, true ),
                             "Reason: " . $refund->reason
                         ];
-                        break;
+                    }
+                    break;
                 
                 default:
-                    $dateStatus = [
-                        "Requested @ " . $this->helpers->humanDate( $refund->created_at, true ),
-                        "Pending Request"
-                    ];
+                    if ( $refund->status == '1' ) {
+                        $dateStatus = [
+                            "Requested @ " . $this->helpers->humanDate( $refund->created_at, true ),
+                            "Pending Request"
+                        ];
+                    }
                     break;
             }
 
+            if ( ! $dateStatus ) continue;
             $_data = [
                 '#' . $refund->id,
                 $refund->customer->name,
                 $refund->refund_reason_prod_txt,
-                $dateStatus[0],
-                $dateStatus[1],
+                $dateStatus[0] ?? '',
+                $dateStatus[1] ?? '',
             ];
 
             $data = (object) $_data;

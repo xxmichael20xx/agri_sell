@@ -137,11 +137,11 @@ class ReportGenerationPdfController extends Controller
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function sellerRefunds( Request $request, $interval, $month = NULL ) {
+    public function sellerRefunds( Request $request, $type, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $export = new SellerRefunds( $interval, $month );
+        $export = new SellerRefunds( $type, $interval, $month );
         $headers = $export->headings();
         $data = $export->collection();
 

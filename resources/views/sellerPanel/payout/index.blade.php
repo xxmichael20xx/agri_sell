@@ -1,13 +1,5 @@
 @extends('sellerPanel.front')
 @section('content')
-@php
-    $inc = [
-        'csv_url' => '/export/csv/seller/payouts/current',
-        'pdf_url' => '/export/pdf/seller/payouts/current',
-        'key' => rand( 50, 1000 ),
-        'is_seller' => true
-    ];
-@endphp
 <style>
     #myTab li.nav-item .nav-link.active::before,
     #myTab li.nav-item .nav-link.active::after {
@@ -41,11 +33,26 @@
                                 Report Generation
                             </button>
                             <div class="dropdown-menu dropdown--right">
-                                <a class="dropdown-item" href="/export/csv/seller/payouts/full" target="_blank">CSV - Full List</a>
-                                {{-- <a class="dropdown-item" href="/export/csv/seller/payouts/current" target="_blank">CSV - Current Month</a> --}}
-                                {{-- <div class="dropdown-divider m-y-2"></div> --}}
-                                <a class="dropdown-item" href="/export/pdf/seller/payouts/full" target="_blank">PDF - Full List</a>
-                                {{-- <a class="dropdown-item" href="/export/pdf/seller/payouts/current" target="_blank">PDF - Current Month</a> --}}
+                                @php
+                                    $exports = [
+                                        [
+                                            'href' => '/export/csv/seller/payouts/full',
+                                            'label' => 'CSV'
+                                        ],
+                                        [
+                                            'href' => '/export/pdf/seller/payouts/full',
+                                            'label' => 'PDF'
+                                        ],
+                                    ];
+                                    $inc = [
+                                        'type' => 'seller_payout',
+                                        'key' => 'seller_payout' . rand( 50, 1000 ),
+                                        'reports' => $exports,
+                                        'csv_url' => '/export/csv/seller/payouts/current',
+                                        'pdf_url' => '/export/pdf/seller/payouts/current',
+                                    ];
+                                @endphp
+                                @include( 'admin.export.modal_trigger', $inc )
                                 @include( 'admin.export.months_trigger', $inc )
                             </div>
                         </div>
@@ -217,6 +224,7 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.modal_content', $inc )
 @include( 'admin.export.months_modal', $inc )
 @endsection
 @section( 'custom-scripts-addl' )

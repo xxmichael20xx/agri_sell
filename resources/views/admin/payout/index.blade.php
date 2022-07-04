@@ -45,25 +45,19 @@
                             $exports = [
                                 [
                                     'href' => '/export/csv/payouts/1/full',
-                                    'label' => 'CSV - Full Report'
+                                    'label' => 'CSV'
                                 ],
                                 [
                                     'href' => '/export/pdf/payouts/1/full',
-                                    'label' => 'PDF - Full Report'
+                                    'label' => 'PDF'
                                 ],
-                                /* [
-                                    'href' => '/export/csv/payouts/1/current',
-                                    'label' => 'CSV - Current Month'
-                                ],
-                                [
-                                    'href' => '/export/pdf/payouts/1/current',
-                                    'label' => 'PDF - Current Month'
-                                ], */
                             ];
                             $addl = [
+                                'type' => 'admin_payout',
+                                'key' => 'admin_payout' . rand( 50, 1000 ) . '-confirmed',
+                                'reports' => $exports,
                                 'csv_url' => '/export/csv/payouts/1/current',
                                 'pdf_url' => '/export/pdf/payouts/1/current',
-                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Confirmed payouts",
@@ -88,25 +82,19 @@
                             $exports = [
                                 [
                                     'href' => '/export/csv/payouts/2/full',
-                                    'label' => 'CSV - Full Report'
+                                    'label' => 'CSV'
                                 ],
                                 [
                                     'href' => '/export/pdf/payouts/2/full',
-                                    'label' => 'PDF - Full Report'
+                                    'label' => 'PDF'
                                 ],
-                                /* [
-                                    'href' => '/export/csv/payouts/2/current',
-                                    'label' => 'CSV - Current Month'
-                                ],
-                                [
-                                    'href' => '/export/pdf/payouts/2/current',
-                                    'label' => 'PDF - Current Month'
-                                ], */
                             ];
                             $addl = [
+                                'type' => 'admin_payout',
+                                'key' => 'admin_payout' . rand( 50, 1000 ) . '-rejected',
+                                'reports' => $exports,
                                 'csv_url' => '/export/csv/payouts/2/current',
                                 'pdf_url' => '/export/pdf/payouts/2/current',
-                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Rejected payouts",
@@ -131,25 +119,19 @@
                             $exports = [
                                 [
                                     'href' => '/export/csv/payouts/0/full',
-                                    'label' => 'CSV - Full Report'
+                                    'label' => 'CSV'
                                 ],
                                 [
                                     'href' => '/export/pdf/payouts/0/full',
-                                    'label' => 'PDF - Full Report'
+                                    'label' => 'PDF'
                                 ],
-                                /* [
-                                    'href' => '/export/csv/payouts/0/current',
-                                    'label' => 'CSV - Current Month'
-                                ],
-                                [
-                                    'href' => '/export/pdf/payouts/0/current',
-                                    'label' => 'PDF - Current Month'
-                                ], */
                             ];
                             $addl = [
+                                'type' => 'admin_payout',
+                                'key' => 'admin_payout' . rand( 50, 1000 ) . '-pending',
+                                'reports' => $exports,
                                 'csv_url' => '/export/csv/payouts/0/current',
                                 'pdf_url' => '/export/pdf/payouts/0/current',
-                                'key' => rand( 50, 1000 )
                             ];
                             $inc = array(
                                 "title" => "Pending payouts",

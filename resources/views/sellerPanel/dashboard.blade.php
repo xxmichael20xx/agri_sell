@@ -2,10 +2,11 @@
 @section('content')
 @php
     $inc = [
+        'type' => 'seller_dashboard',
         'csv_url' => '/export/csv/seller/products/history/current',
         'pdf_url' => '/export/pdf/seller/products/orders/monthly',
-        'key' => rand( 50, 1000 ),
-        'is_seller' => true
+        'is_seller' => true,
+        'key' => rand( 50, 1000 )
     ];
 @endphp
 <div class="content">
@@ -151,55 +152,53 @@
                         </button>
                         <div class="dropdown-menu">
                             @php
-                                $reportsCsv = [
-                                    'key' => 'products--csv-' . rand( 50, 1000 ),
-                                    'dropLabel' => 'CSV',
-                                    'modalTitle' => 'CSV - Reports options',
+                                $reportProducts = [
+                                    'type' => 'seller_dashboard',
+                                    'key' => 'seller_dashboard-products-list',
+                                    'title' => 'Products List',
                                     'reports' => [
                                         [
-                                            'url' => '/export/csv/seller/products/list/full',
-                                            'label' => 'Products List'
+                                            'href' => '/export/csv/seller/products/list/full',
+                                            'label' => 'CSV'
                                         ],
                                         [
-                                            'url' => '/export/csv/seller/products/history/full',
-                                            'label' => 'Orders Full'
-                                        ],
-                                        [
-                                            'url' => '/export/csv/seller/products/orders/monthly',
-                                            'label' => 'Monthly Sale'
+                                            'href' => '/export/pdf/seller/products/list/full',
+                                            'label' => 'PDF'
                                         ],
                                     ]
                                 ];
-
-                                $reportsPdf = [
-                                    'key' => 'products--pdf-' . rand( 50, 1000 ),
-                                    'dropLabel' => 'PDF',
-                                    'modalTitle' => 'PDF - Reports options',
+                                $reportOrders = [
+                                    'type' => 'seller_dashboard',
+                                    'key' => 'seller_dashboard-orders-full',
+                                    'title' => 'Orders Full',
                                     'reports' => [
                                         [
-                                            'url' => '/export/pdf/seller/products/list/full',
-                                            'label' => 'Products List'
+                                            'href' => '/export/csv/seller/products/history/full',
+                                            'label' => 'CSV'
                                         ],
                                         [
-                                            'url' => '/export/pdf/seller/products/history/full',
-                                            'label' => 'Orders Full'
+                                            'href' => '/export/pdf/seller/products/history/full',
+                                            'label' => 'PDF'
+                                        ],
+                                    ]
+                                ];
+                                $reportMonthlySales = [
+                                    'type' => 'seller_dashboard',
+                                    'key' => 'seller_dashboard-monthly-sale',
+                                    'title' => 'Monthly Sale',
+                                    'reports' => [
+                                        [
+                                            'href' => '/export/csv/seller/products/orders/monthly',
+                                            'label' => 'CSV'
                                         ],
                                         [
-                                            'url' => '/export/pdf/seller/products/orders/monthly',
-                                            'label' => 'Monthly Sale'
+                                            'href' => '/export/pdf/seller/products/orders/monthly',
+                                            'label' => 'PDF'
                                         ],
                                     ]
                                 ];
                             @endphp
-                            {{-- <a class="dropdown-item" href="/export/csv/seller/products/list/full" target="_blank">CSV - Products List</a>
-                            <a class="dropdown-item" href="/export/csv/seller/products/history/full" target="_blank">CSV - Orders Full</a>
-                            <a class="dropdown-item" href="/export/csv/seller/products/orders/monthly" target="_blank">CSV - Monthly Sale</a>
-                            <div class="dropdown-divider m-y-2"></div>
-                            <a class="dropdown-item" href="/export/pdf/seller/products/list/full" target="_blank">PDF - Products List</a>
-                            <a class="dropdown-item" href="/export/pdf/seller/products/history/full" target="_blank">PDF - Orders Full</a>
-                            <a class="dropdown-item" href="/export/pdf/seller/products/history/current" target="_blank">PDF - Orders Current Month</a> --}}
-                            @include( 'admin.export.modal_trigger', $reportsCsv )
-                            @include( 'admin.export.modal_trigger', $reportsPdf )
+                            @include( 'admin.export.modal_trigger', $inc )
                             @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
@@ -211,7 +210,8 @@
         </div>
     </div>
 </div>
-@include( 'admin.export.modal_content', $reportsCsv )
-@include( 'admin.export.modal_content', $reportsPdf )
+@include( 'admin.export.modal_content', $reportProducts )
+@include( 'admin.export.modal_content', $reportOrders )
+@include( 'admin.export.modal_content', $reportMonthlySales )
 @include( 'admin.export.months_modal', $inc )
 @endsection

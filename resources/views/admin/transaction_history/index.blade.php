@@ -1,10 +1,22 @@
 @extends('admin.front')
 @section('content')
 @php
+    $exports = [
+        [
+            'href' => "/export/csv/transactions/full",
+            'label' => 'CSV'
+        ],
+        [
+            'href' => "/export/pdf/transactions/full",
+            'label' => 'PDF'
+        ]
+    ];
     $inc = [
+        'type' => 'admin_transactions',
+        'key' => 'admin_transactions' . rand( 50, 1000 ),
+        'reports' => $exports,
         'csv_url' => '/export/csv/transactions/current',
         'pdf_url' => '/export/pdf/transactions/current',
-        'key' => rand( 50, 1000 )
     ];
 @endphp
 <div class="content">
@@ -18,11 +30,7 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/export/csv/transactions/full" target="_blank">CSV - Full List</a>
-                            {{-- <a class="dropdown-item" href="/export/csv/transactions/current" target="_blank">CSV - Current Month</a> --}}
-                            {{-- <div class="dropdown-divider m-y-2"></div> --}}
-                            <a class="dropdown-item" href="/export/pdf/transactions/full" target="_blank">PDF - Full List</a>
-                            {{-- <a class="dropdown-item" href="/export/pdf/transactions/current" target="_blank">PDF - Current Month</a> --}}
+                            @include( 'admin.export.modal_trigger', $inc )
                             @include( 'admin.export.months_trigger', $inc )
                         </div>
                     </div>
@@ -83,5 +91,6 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.modal_content', $inc )
 @include( 'admin.export.months_modal', $inc )
 @endsection

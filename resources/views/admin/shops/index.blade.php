@@ -19,46 +19,13 @@
                         </button>
                         <div class="dropdown-menu">
                             @php
-                                $reportsCsv = [
-                                    'key' => 'shops--csv-' . rand( 50, 1000 ),
-                                    'dropLabel' => 'CSV',
-                                    'modalTitle' => 'CSV - Reports options',
-                                    'reports' => [
-                                        [
-                                            'url' => '/export/csv/shops/full/default',
-                                            'label' => 'Full Approved'
-                                        ],
-                                        [
-                                            'url' => '/export/csv/shops/full/top',
-                                            'label' => 'Top Performing'
-                                        ],
-                                    ]
-                                ];
-
-                                $reportsPdf = [
-                                    'key' => 'shops--pdf-' . rand( 50, 1000 ),
-                                    'dropLabel' => 'PDF',
-                                    'modalTitle' => 'PDF - Reports options',
-                                    'reports' => [
-                                        [
-                                            'url' => '/export/pdf/shops/full/default',
-                                            'label' => 'Full Approved'
-                                        ],
-                                        [
-                                            'url' => '/export/pdf/shops/full/top',
-                                            'label' => 'Top Performing'
-                                        ],
-                                    ]
+                                $reportInc = [
+                                    'type' => 'admin_shops',
+                                    'key' => 'admin_shops_' . rand( 50, 1000 )
                                 ];
                             @endphp
-                            @include( 'admin.export.modal_trigger', $reportsCsv )
-                            @include( 'admin.export.modal_trigger', $reportsPdf )
+                            @include( 'admin.export.modal_trigger', $reportInc )
                             @include( 'admin.export.months_trigger', $inc )
-                            {{-- <a class="dropdown-item" href="/export/csv/shops/full/default" target="_blank">CSV - Full Approved</a>
-                            <a class="dropdown-item" href="/export/csv/shops/full/top" target="_blank">CSV - Top Performing</a>
-                            <div class="dropdown-divider m-y-2"></div>
-                            <a class="dropdown-item" href="/export/pdf/shops/full/default" target="_blank">PDF - Full Approved</a>
-                            <a class="dropdown-item" href="/export/pdf/shops/full/top" target="_blank">PDF - Top Performing</a> --}}
                         </div>
                     </div>
                 </div>
@@ -129,7 +96,6 @@
         </div>
     </div>
 </div>
-@include( 'admin.export.modal_content', $reportsCsv )
-@include( 'admin.export.modal_content', $reportsPdf )
+@include( 'admin.export.modal_content', $reportInc )
 @include( 'admin.export.months_modal', $inc )
 @endsection

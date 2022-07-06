@@ -293,7 +293,7 @@
                                                 if ( $action == 'User regisration' && $tempUser ) {
                                                     echo $tempUser->name;
                                                 } else {
-                                                    $notif->user->name ?? '';
+                                                    echo $notif->user->name ?? '';
                                                 }
                                             @endphp
                                         </td>

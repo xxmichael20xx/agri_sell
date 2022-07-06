@@ -24,7 +24,7 @@ class Shop implements FromCollection, WithHeadings
     {
         $headers = [ "Shop Name", "Description", "Approved Date", "Shop Owner", "Owner Email", "Owner Mobile Number", "Total Orders" ];
 
-        if ( $this->hasTotalOrders() ) {
+        if ( $this->isPDFFull() ) {
             unset( $headers[6] );
             array_values( $headers );
         }
@@ -37,8 +37,8 @@ class Shop implements FromCollection, WithHeadings
         return [ [ "List of Approved Shops" ], $headers ];
     }
 
-    public function hasTotalOrders() {
-        $boolean = $this->validateKey( 'has_total_orders', false ) && $this->validateKey( 'type', 'pdf' ) && $this->interval == 'full';
+    public function isPDFFull() {
+        $boolean = $this->validateKey( 'type', 'pdf' ) && $this->type == 'full';
         return $boolean;
     }
 
@@ -70,7 +70,7 @@ class Shop implements FromCollection, WithHeadings
                 'order' => $order_count ?? 0
             ];
 
-            if ( $this->hasTotalOrders() ) {
+            if ( $this->isPDFFull() ) {
                 unset( $_data['order'] );
                 array_values( $_data );
             }

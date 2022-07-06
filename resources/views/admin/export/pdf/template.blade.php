@@ -1,6 +1,9 @@
 @extends('layouts.report')
 @section('content')
 <div class="form-group row">
+    <div class="col-12 mb-3">
+        <p class="h5">{{ $headers[0][0] }}</p>
+    </div>
     <div class="col-12 table-responsive">
         <table class="table">
             <thead>

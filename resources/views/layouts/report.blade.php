@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 </head>
-<body onload="print(); close();">
+<body class="bg-white">
     <div class="container-fluid">
         @yield('content')
     </div>

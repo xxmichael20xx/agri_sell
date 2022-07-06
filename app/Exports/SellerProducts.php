@@ -29,25 +29,28 @@ class SellerProducts implements FromCollection, WithHeadings
     {
         switch ( $this->type ) {
             case 'list':
+                $headerTitle = "List of Products";
                 $headers = [
                     "Product #", "Name", "Category", "Type", "Price", "Wholesale Price", "Weight", "Stocks", "Has Variants", "Variant Name", "Variant Price", "Variant Weight", "Variant Stock"
                 ];
                 break;
 
             case 'history':
+                $headerTitle = "List of Orders";
                 $headers = [
                     "Order Number", "Customer Name", "Total", "Is Order Paid?", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total"
                 ];
                 break;
             
             default:
+                $headerTitle = "List of Monthly Products Orders";
                 $headers = [
                     "Product #", "Name", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
                 ];
                 break;
         }
 
-        return $headers;
+        return [ [ $headerTitle ], $headers ];
     }
 
     /**

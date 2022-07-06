@@ -21,7 +21,7 @@ class Users implements FromCollection, WithHeadings
     public function headings(): array
     {
         $headers = [ "User number", "Name", "Email", "Mobile Number", "Birthday", "Address" ];
-        return $headers;
+        return [ [ "List of Users" ], $headers ];
     }
 
     /**

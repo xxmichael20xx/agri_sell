@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Helpers;
 use App\TransHistModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -23,7 +24,7 @@ class TransactionHistory implements FromCollection, WithHeadings
     public function headings(): array
     {
         $headers = [ "Transaction #", "Name", "Transaction type", "Amount", "Transaction Reference ID", "Date" ];
-        return $headers;
+        return [ [ "List of Transactions" ], $headers ];
     }
 
     /**
@@ -52,7 +53,7 @@ class TransactionHistory implements FromCollection, WithHeadings
                     $transaction->trans_type,
                     $amount,
                     $transaction->trans_ref_id,
-                    $transaction->created_at
+                    Carbon::parse( $transaction->created_at )->format( 'M d, Y h:iA' )
                 ];
 
                 $data = (object) $_data;

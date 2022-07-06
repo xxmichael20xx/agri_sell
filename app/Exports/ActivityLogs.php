@@ -3,15 +3,25 @@
 namespace App\Exports;
 
 use App\adminNotifModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class ActivityLogs implements FromCollection, WithHeadings
+class ActivityLogs implements FromCollection, WithHeadings, WithStrictNullComparison
 {
+    protected $collection;
+
+    public function __construct()
+    {
+        $this->collection = new Collection();
+    }
+
     public function headings(): array
     {
-        return [ "ID", "Action type", "Decription", "User account name", "Created at" ];
+        $headers = [ "Action type", "Decription", "User account name", "Created at" ];
+        return [ [ "List of Activity Logs" ], $headers ];
     }
 
     /**
@@ -19,21 +29,19 @@ class ActivityLogs implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
         $notifs = adminNotifModel::latest()->get();
         $regex = '/<[^>]*>[^<]*<[^>]*>/';
 
         foreach ( $notifs as $notif ) {
             $data = (object) [
-                "#" . $notif->id,
                 $notif->action_type,
                 preg_replace( $regex, '', $notif->action_description ),
-                $notif->user->name ?? '',
-                $notif->created_at
+                $notif->user->name ?? 'User has been removed',
+                Carbon::parse( $notif->created_at )->format( 'M d, Y h:iA' )
             ];
-            $collection->push( $data );
+            $this->collection->push( $data );
         }
 
-        return $collection;
+        return $this->collection;
     }
 }

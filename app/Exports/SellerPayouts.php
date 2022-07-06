@@ -25,7 +25,7 @@ class SellerPayouts implements FromCollection, WithHeadings
     public function headings(): array
     {
         $headers = [ "Payout #", "Amount", "Week Range", "Date Requested", "Status" ];
-        return $headers;
+        return [ [ "List of Seller Payout" ], $headers ];
     }
 
     /**

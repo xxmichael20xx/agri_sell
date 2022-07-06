@@ -10,19 +10,36 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Shop implements FromCollection, WithHeadings
 {
-    protected $interval, $type, $month;
+    protected $interval, $type, $month, $props;
 
-    public function __construct( $interval, $type, $month )
+    public function __construct( $interval, $type, $month, $props = [] )
     {
         $this->interval = $interval;
         $this->type = $type;
         $this->month = $month;
+        $this->props = $props;
     }
 
     public function headings(): array
     {
         $headers = [ "Shop Name", "Description", "Approved Date", "Shop Owner", "Owner Email", "Owner Mobile Number", "Total Orders" ];
-        return $headers;
+
+        if ( $this->hasTotalOrders() ) {
+            unset( $headers[6] );
+            array_values( $headers );
+        }
+
+        if ( $this->validateKey( 'type', 'pdf' ) && $this->type == 'top' ) {
+            unset( $headers[5] );
+            array_values( $headers );
+        }
+
+        return [ [ "List of Approved Shops" ], $headers ];
+    }
+
+    public function hasTotalOrders() {
+        $boolean = $this->validateKey( 'has_total_orders', false ) && $this->validateKey( 'type', 'pdf' ) && $this->interval == 'full';
+        return $boolean;
     }
 
     /**
@@ -53,6 +70,16 @@ class Shop implements FromCollection, WithHeadings
                 'order' => $order_count ?? 0
             ];
 
+            if ( $this->hasTotalOrders() ) {
+                unset( $_data['order'] );
+                array_values( $_data );
+            }
+
+            if ( $this->validateKey( 'type', 'pdf' ) && $this->type == 'top' ) {
+                unset( $_data['owner_mobile'] );
+                array_values( $_data );
+            }
+
             $data = ( object ) $_data;
             $collection->push( $data );
         }
@@ -62,5 +89,12 @@ class Shop implements FromCollection, WithHeadings
         }
 
         return $_collection ?? $collection;
+    }
+
+    public function validateKey( $key, $compare ) {
+        $exist = isset( $this->props[$key] );
+
+        if ( ! $exist ) return false;
+        return ( $this->props[$key] == $compare ) ? true : false;
     }
 }

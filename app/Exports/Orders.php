@@ -6,14 +6,13 @@ use App\Helpers;
 use App\Product;
 use App\ProductVariation;
 use App\SubOrder;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Orders implements FromCollection, WithHeadings
 {
-    protected $type, $interval, $helpers, $month;
+    protected $type, $interval, $helpers, $month, $collection;
 
     public function __construct( $type, $interval, $month )
     {
@@ -21,12 +20,13 @@ class Orders implements FromCollection, WithHeadings
         $this->interval = $interval;
         $this->month = $month;
         $this->helpers = new Helpers;
+        $this->collection = new Collection();
     }
 
     public function headings(): array
     {
-        $headers = [ "Order Number", "Customer Name", "Total", "Is Order Paid?", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total" ];
-        return $headers;
+        $headers = [ "Order Number", "Customer Name", "Total", "Shop Name", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total" ];
+        return [ [ "List of all Orders" ], $headers ];
     }
 
     /**
@@ -34,8 +34,6 @@ class Orders implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
-
         if ( $this->interval !== 'top' ) {
             $is_pick_up = ( $this->type == 'pickup' ) ? 'yes' : 'no';
             $orders = SubOrder::where( 'is_pick_up', $is_pick_up )->latest()->get();
@@ -109,14 +107,17 @@ class Orders implements FromCollection, WithHeadings
                     if ( count( $items ) < 2 ) {
                         $item = $items[0];
 
+                        if ( $order_status == "Completed" ) $isPaid = "Paid";
+
                         $product_variety_ent = ProductVariation::where( 'id', $item->pivot->variation_id )->first();
+                        $main_product = Product::find( $product_variety_ent->product_id );
                         $item_product_price_proc = $product_variety_ent->variation_price_per;
         
                         $_data = [
                             "#" . $order->order->id,
                             $order->order->shipping_fullname,
                             "Peso " . Helpers::numeric( $order->order->grand_total ),
-                            $isPaid . ", Method: {$method}",
+                            $main_product->shop->name,
                             $order_status,
                             $item->name,
                             Helpers::numeric( $item->pivot->quantity ),
@@ -126,7 +127,7 @@ class Orders implements FromCollection, WithHeadings
                         ];
         
                         $data = ( object ) $_data;
-                        $collection->push( $data );
+                        $this->collection->push( $data );
 
                     } else {
                         foreach ( $items as $item_index => $item ) {
@@ -154,7 +155,7 @@ class Orders implements FromCollection, WithHeadings
                             $_data = array_merge( $which_head, $_data_body );
             
                             $data = ( object ) $_data;
-                            $collection->push( $data );
+                            $this->collection->push( $data );
                         }
                     }
 
@@ -163,6 +164,6 @@ class Orders implements FromCollection, WithHeadings
 
         }
 
-        return $collection;
+        return $this->collection;
     }
 }

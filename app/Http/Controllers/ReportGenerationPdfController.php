@@ -48,7 +48,7 @@ class ReportGenerationPdfController extends Controller
             $month = Carbon::parse( now () )->month;
         }
         
-        $export = new Shop( $interval, $type, $month );
+        $export = new Shop( $interval, $type, $month, [ 'has_total_orders' => false, 'type' => 'pdf' ] );
         $headers = $export->headings();
         $data = $export->collection();
 

@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Payouts implements FromCollection, WithHeadings
 {
-    protected $status_id, $interval, $columns, $month;
+    protected $status_id, $interval, $columns, $month, $collection;
 
     public function __construct( $status_id, $interval, $columns, $month )
     {
@@ -19,17 +19,18 @@ class Payouts implements FromCollection, WithHeadings
         $this->interval = $interval;
         $this->columns = $columns;
         $this->month = $month;
+        $this->collection = new Collection();
     }
 
     public function headings(): array
     {
-        $headers = [ "Payout Number", "Name", "Amount", "GCash Name", "GCash Number", $this->columns['header'], "{reason}" ];
+        $headers = [ "Name", "Amount", "GCash Name", "GCash Number", $this->columns['header'], "{reason}" ];
 
         if ( $this->columns['type'] !== 'Rejected' ) {
             unset( $headers[6] );
         }
 
-        return $headers;
+        return [ [ "List of Seller Payout" ], $headers ];
     }
 
     /**
@@ -37,7 +38,6 @@ class Payouts implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
         $payouts = SellerPayoutRequest::where( 'status', $this->status_id );
 
         if ( $this->interval == "full" ) {
@@ -49,7 +49,6 @@ class Payouts implements FromCollection, WithHeadings
 
         foreach ( $payouts as $payout_index => $payout ) {
             $_data = [
-                "#" . $payout->id,
                 $payout->seller->name,
                 "Peso " . Helpers::numeric( $payout->amount ),
                 $payout->gcash_name,
@@ -63,10 +62,10 @@ class Payouts implements FromCollection, WithHeadings
             }
 
             $data = ( object ) $_data;
-            $collection->push( $data );
+            $this->collection->push( $data );
         }
 
 
-        return $collection;
+        return $this->collection;
     }
 }

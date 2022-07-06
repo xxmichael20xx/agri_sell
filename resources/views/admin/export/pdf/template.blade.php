@@ -5,7 +5,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    @foreach ( $headers as $header)
+                    @foreach ( $headers[1] as $header)
                         <th>{{ $header }}</th>
                     @endforeach
                 </tr>

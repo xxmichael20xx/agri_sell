@@ -11,13 +11,14 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Refunds implements FromCollection, WithHeadings
 {
-    protected $type, $interval, $month;
+    protected $type, $interval, $month, $collection;
 
     public function __construct( $type, $interval, $month )
     {
         $this->type = $type;
         $this->interval = $interval;
         $this->month = $month;
+        $this->collection = new Collection();
     }
 
     public function headings(): array
@@ -38,7 +39,7 @@ class Refunds implements FromCollection, WithHeadings
                 break;
         }
 
-        return $headers;
+        return [ [ "List of Customer Refunds" ], $headers ];
     }
 
     /**
@@ -46,7 +47,6 @@ class Refunds implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
         $refunds = refundModelOrder::latest();
 
         if ( $this->interval == 'full' ) {
@@ -91,9 +91,9 @@ class Refunds implements FromCollection, WithHeadings
                     break;
             }
             $data = ( object ) $_data;
-            if ( $boolean ) $collection->push( $data );
+            if ( $boolean ) $this->collection->push( $data );
         }
 
-        return $collection;
+        return $this->collection;
     }
 }

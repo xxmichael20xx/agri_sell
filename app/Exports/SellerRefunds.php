@@ -25,7 +25,7 @@ class SellerRefunds implements FromCollection, WithHeadings
     public function headings(): array
     {
         $headers = [ "Refund Number", "Name", "Reason", "Date", "Status" ];
-        return $headers;
+        return [ [ "List of Customer Refunds" ], $headers ];
     }
 
     /**

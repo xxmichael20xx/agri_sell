@@ -226,10 +226,27 @@
                             Report Generation
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/export/csv/activity-logs" target="_blank">CSV</a>
-                            <a class="dropdown-item" href="/export/pdf/activity-logs" target="_blank">PDF</a>
+                            @php
+                                $inc = [
+                                    'type' => 'admin_activities',
+                                    'key' => 'admin_activities' . rand( 50, 1000 ),
+                                    'title' => 'Activity Log',
+                                    'reports' => [
+                                        [
+                                            'href' => '/export/csv/activity-logs',
+                                            'label' => 'CSV',
+                                        ],
+                                        [
+                                            'href' => '/export/pdf/activity-logs',
+                                            'label' => 'PDF',
+                                        ],
+                                    ],
+                                ];
+                            @endphp
+                            @include( 'admin.export.modal_trigger', $inc )
                         </div>
                     </div>
+                    @include( 'admin.export.modal_content', $inc )
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -260,7 +277,7 @@
                                             {!! $notif->action_description !!}
                                         </td>
                                         <td>
-                                            {{$notif->user->name ?? 'not available'}}
+                                            {{$notif->user->name ?? 'User has been removed'}}
                                         </td>
                                         <td>
                                             {{$notif->created_at}}

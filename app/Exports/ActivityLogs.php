@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\adminNotifModel;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -33,10 +34,24 @@ class ActivityLogs implements FromCollection, WithHeadings, WithStrictNullCompar
         $regex = '/<[^>]*>[^<]*<[^>]*>/';
 
         foreach ( $notifs as $notif ) {
+            $action = $notif->action_type;
+
+            if ( $action == 'User regisration' ) {
+                $content = explode( ':', $notif->action_description );
+                $email = $content[1];
+                $tempUser = User::where( 'email', $email )->first();
+            }
+
+            if ( $action == 'User regisration' && $tempUser ) {
+                $userAccount = $tempUser->name;
+            } else {
+                $userAccount = $notif->user->name ?? '';
+            }
+
             $data = (object) [
                 $notif->action_type,
                 preg_replace( $regex, '', $notif->action_description ),
-                $notif->user->name ?? 'User has been removed',
+                $userAccount,
                 Carbon::parse( $notif->created_at )->format( 'M d, Y h:iA' )
             ];
             $this->collection->push( $data );

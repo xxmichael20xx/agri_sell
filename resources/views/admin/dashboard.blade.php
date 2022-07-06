@@ -1,5 +1,8 @@
 @extends('admin.front')
 @section('content')
+@php
+    use App\User;
+@endphp
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.0/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
@@ -268,19 +271,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($notifs as $notif)
+                                @foreach ( $notifs as $notif )
+                                    @php
+                                        $action = $notif->action_type;
+
+                                        if ( $action == 'User regisration' ) {
+                                            $content = explode( ':', $notif->action_description );
+                                            $email = $content[1];
+                                            $tempUser = User::where( 'email', $email )->first();
+                                        }
+                                    @endphp
                                     <tr>
                                         <td>
-                                            {{$notif->action_type }}
+                                            {{ $notif->action_type }}
                                         </td>
                                         <td>
                                             {!! $notif->action_description !!}
                                         </td>
                                         <td>
-                                            {{$notif->user->name ?? 'User has been removed'}}
+                                            @php
+                                                if ( $action == 'User regisration' && $tempUser ) {
+                                                    echo $tempUser->name;
+                                                } else {
+                                                    $notif->user->name ?? '';
+                                                }
+                                            @endphp
                                         </td>
                                         <td>
-                                            {{$notif->created_at}}
+                                            {{ $notif->created_at }}
                                         </td>
                                     </tr>
                                 @endforeach

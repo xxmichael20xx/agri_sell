@@ -60,11 +60,13 @@ class UsersAdminController extends Controller
     }
 
     function delete_user($user_id){
+        $user = User::find( $user_id );
         DB::table('users')->where('id', $user_id)->delete();
         DB::table('seller_registration_fee')->where('user_id', $user_id)->delete();
         DB::table('shops')->where('user_id', $user_id)->delete();
         DB::table('coins_top_up')->where('user_id', $user_id)->delete();
         DB::table('refund_request_products')->where('user_id', $user_id)->delete();
+        DB::table('user_valid_ids')->where('user_email', $user->email)->delete();
        return back();
     }
 

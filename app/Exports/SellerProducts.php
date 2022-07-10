@@ -31,7 +31,7 @@ class SellerProducts implements FromCollection, WithHeadings
             case 'list':
                 $headerTitle = "List of Products";
                 $headers = [
-                    "Product #", "Name", "Category", "Type", "Price", "Wholesale Price", "Weight", "Stocks", "Has Variants", "Variant Name", "Variant Price", "Variant Weight", "Variant Stock"
+                    "Name", "Category", "Type", "Price", "Wholesale Price", "Weight", "Stocks"
                 ];
                 break;
 
@@ -84,22 +84,20 @@ class SellerProducts implements FromCollection, WithHeadings
             $hasVariants = ProductVariation::where( 'product_id', $product->id )->get();
             $first = $hasVariants[0];
             $_data = [
-                '#' . $product->id,
                 $product->name,
                 $product->category->category->name,
                 $product->is_whole_sale ? 'Wholesale' : 'Retail',
                 "Peso " . $this->helpers->numeric( $first->variation_price_per ),
                 $product->is_whole_sale ? $this->helpers->numeric( $first->variation_wholesale_price_per ) : "N/A",
                 $this->helpers->numeric( $first->variation_net_weight ) . $first->variation_net_weight_unit,
-                $this->helpers->numeric( $first->variation_quantity ),
-                $hasVariants->count() > 1 ? 'Yes' : 'No',
-                "N/A", "N/A", "N/A", "N/A"
+                $this->helpers->numeric( $first->variation_quantity )
             ];
 
             $data = (object) $_data;
             $this->collection->push( $data );
+            $withVariants = false;
 
-            if ( $hasVariants->count() > 1 ) {
+            if ( $withVariants && $hasVariants->count() > 1 ) {
                 foreach ( $hasVariants as $variant_index => $variant ) {
                     if ( $variant_index > 0 ) {
                         $_data = [

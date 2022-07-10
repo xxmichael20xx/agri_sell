@@ -49,7 +49,7 @@
                                         <label class="col-md-3 col-form-label">Product images</label>
                                         <div class="col-md-9">
                                             <div class="custom-file h6 mt-2">
-                                                <input type="file" class="custom-file-input" id="images" name="images[]" accept="image/*" multiple required>
+                                                <input type="file" class="custom-file-input" id="images" name="images[]" accept="image/*" multiple>
                                                 <label class="custom-file-label text-muted" id="images--label" for="images">Choose an images</label>
                                             </div>
                                             <small class="text-secondary">Note: Click on a image to set it as the featured image</small>

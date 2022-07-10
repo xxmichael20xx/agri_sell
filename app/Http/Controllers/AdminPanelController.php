@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\adminNotifModel;
+use App\Product;
 use App\Rules\BdayRule;
 use App\Shop;
 use App\User;
@@ -63,7 +64,8 @@ class AdminPanelController extends Controller
         // $buyer_acc_count = DB::table('users')->where('role_id', '!=', '1')->where('role_id', '!=', '5')->count();
         $buyer_acc_count = DB::table( 'users' )->where( 'role_id', '2' )->count();
         $rider_acc_count = DB::table('users')->where('role_id', '5')->count();
-        $product_count = DB::table('products')->count();
+        // $product_count = DB::table('products')->count();
+        $product_count = Product::latest()->count();
         $order_qty_total = DB::table('orders')->sum('item_count');
         $ag_coins_topped_up_total = DB::table('coins_top_up')->where('remarks', '1')->sum('value');
 

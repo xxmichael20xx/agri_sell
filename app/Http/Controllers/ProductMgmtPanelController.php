@@ -78,7 +78,9 @@ class ProductMgmtPanelController extends Controller
 
 
     function delete($product_id) {
-        $product = Product::where('id', $product_id)->delete();
+        $product = Product::where('id', $product_id)->first();
+        $productName = $product->name;
+        $product->delete();
         // $productCategory = ProductCategory::where('product_id', $product_id)->delete();
         // $ratingsTbl = ratingsModel::where('rateable_id', $product_id)->delete();
         // $productRatings = DB::table('ratings')->where('rateable_id', $product_id)->delete();
@@ -86,6 +88,13 @@ class ProductMgmtPanelController extends Controller
         // $productPreOrders = PreOrderModel::where('product_id', $product_id)->delete();
         // $sub_order_items = SubOrderItem::where('product_id', $product_id)->delete();
         // $order_item = OrderItem::where('product_id', $product_id)->delete();
+
+        $adminnotif_ent = new adminNotifModel();
+        $adminnotif_ent->action_type = "Product delete";
+        $adminnotif_ent->user_id = Auth::user()->id;
+        $adminnotif_ent->action_description = "Deleted the product `{$productName}`.";
+        $adminnotif_ent->save();
+
         return back();
     }
 
@@ -900,6 +909,12 @@ class ProductMgmtPanelController extends Controller
 
         } else {
             $product->restore();
+
+            $adminnotif_ent = new adminNotifModel();
+            $adminnotif_ent->action_type = "Product restore";
+            $adminnotif_ent->user_id = $request->user_id;
+            $adminnotif_ent->action_description = "`{$product->name}` has been restored.";
+            $adminnotif_ent->save();
 
             return response()->json( [
                 'success' => true,

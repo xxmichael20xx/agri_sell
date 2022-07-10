@@ -96,7 +96,7 @@
                                         <td>
                                             @if ( $payout->status == '0' )
                                                 <span class="badge badge-info">PENDING</span>
-                                            @elseif ( $payout->status == '1')
+                                            @elseif ( $payout->status == '1' )
                                                 <span class="badge badge-success">CONFIRMED</span>
                                             @else
                                                 <span class="badge badge-warning">REJECTED</span>

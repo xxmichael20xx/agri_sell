@@ -105,7 +105,7 @@ class SellerPanelController extends Controller
 
         if ( $payouts->count() > 0 ) {
             foreach( $payouts as $payout_index => $payout ) {
-                $payoutTotal += $payout->amount;
+                if ( $payout->status == '1' ) $payoutTotal += $payout->amount;
             }
         }
 

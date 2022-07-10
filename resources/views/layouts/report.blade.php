@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+
+    <style>
+        @page {
+            size: 40cm 50cm;
+        }
+    </style>
 </head>
 <body class="bg-white">
     <div class="container-fluid">

@@ -83,31 +83,7 @@ class RegisterController extends Controller
         $upload_path_url = 'user-valid-ids\\' . date('FY') . '\\';
         $valid_id_image_url = $upload_path_url . $valid_idImageSaveAsName;
 
-        $success = $valid_idImage->move($upload_path, $valid_idImageSaveAsName);
-        $getLastInsertedUserId = DB::table('users')->latest('id')->first()->id + 1;
-
-        $valid_id_obj = new UserValidId();
-        $valid_id_obj->valid_id_path = $valid_id_image_url;
-        // change valid id obj to valid 
-        // changelog change is valid to 2 for pending
-        $valid_id_obj->is_valid = '2';
-        $valid_id_obj->user_email = $data['email'] ;
-        $valid_id_obj->user_id = $getLastInsertedUserId;
-        $valid_id_obj->save();
-    
-        // notify admin that the user registers
-        $adminnotif_ent = new adminNotifModel();
-        $adminnotif_ent->action_type = 'User regisration';
-        $adminnotif_ent->user_id = $getLastInsertedUserId;
-        $adminnotif_ent->action_description = $data['name'] . ' register a new account with an email:' . $data['email'];
-        $adminnotif_ent->save();
-
-        $this->adminPushNotifications( [
-            'title' => 'New User regisration',
-            'message' => $data['name'] . ' register a new account with an email:' . $data['email']
-        ] );
-
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'user_name' => 'null',
@@ -122,6 +98,30 @@ class RegisterController extends Controller
             'town' => $data['town'],
         ]);
 
-        return view('auth.verify');
+        $success = $valid_idImage->move($upload_path, $valid_idImageSaveAsName);
+        // $getLastInsertedUserId = DB::table('users')->latest('id')->first()->id + 1;
+
+        $valid_id_obj = new UserValidId();
+        $valid_id_obj->valid_id_path = $valid_id_image_url;
+        // change valid id obj to valid 
+        // changelog change is valid to 2 for pending
+        $valid_id_obj->is_valid = '2';
+        $valid_id_obj->user_email = $user->email;
+        $valid_id_obj->user_id = $user->id;
+        $valid_id_obj->save();
+    
+        // notify admin that the user registers
+        $adminnotif_ent = new adminNotifModel();
+        $adminnotif_ent->action_type = 'User regisration';
+        $adminnotif_ent->user_id = $user->id;
+        $adminnotif_ent->action_description = $user->name . ' register a new account with an email:' . $user->email;
+        $adminnotif_ent->save();
+
+        $this->adminPushNotifications( [
+            'title' => 'New User regisration',
+            'message' => $user->name . ' register a new account with an email:' . $user->email
+        ] );
+        return $user;
+        // return view('auth.verify');
     }
 }

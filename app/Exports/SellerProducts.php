@@ -45,7 +45,7 @@ class SellerProducts implements FromCollection, WithHeadings
             default:
                 $headerTitle = "List of Monthly Products Orders";
                 $headers = [
-                    "Product #", "Name", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
+                    "Name", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"
                 ];
                 break;
         }
@@ -280,7 +280,6 @@ class SellerProducts implements FromCollection, WithHeadings
             }
 
             $_data = [
-                '#' . $product->id,
                 $product->name
             ];
             $_data = array_merge( $_data, $months );

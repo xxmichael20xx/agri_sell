@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Shop implements FromCollection, WithHeadings
 {
-    protected $interval, $type, $month, $props;
+    protected $interval, $type, $month, $props, $collection;
 
     public function __construct( $interval, $type, $month, $props = [] )
     {
@@ -18,6 +18,7 @@ class Shop implements FromCollection, WithHeadings
         $this->type = $type;
         $this->month = $month;
         $this->props = $props;
+        $this->collection = new Collection();
     }
 
     public function headings(): array
@@ -47,7 +48,6 @@ class Shop implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
         $shops = AppShop::where( 'is_active', 1 );
 
         if ( $this->interval == 'full' ) {
@@ -81,14 +81,27 @@ class Shop implements FromCollection, WithHeadings
             }
 
             $data = ( object ) $_data;
-            $collection->push( $data );
+            $this->collection->push( $data );
         }
 
         if ( $this->type == 'top' ) {
-            $_collection = $collection->sortByDesc( 'order' );
+            $this->collection = $this->collection->sortByDesc( 'order' );
         }
 
-        return $_collection ?? $collection;
+        foreach ( range( 1, 5 ) as $num ) {
+            $space = [];
+            foreach( range( 1, count( $this->headings()[1] ) ) as $_ ) {
+                $space[] = "";
+            }
+
+            if ( $num == 5 ) {
+                $lastIndex = array_key_last( $space );
+                $space[$lastIndex] = "Validated by: Agrisell Admin";
+            }
+            $this->collection->push( (object) $space );
+        }
+
+        return $this->collection;
     }
 
     public function validateKey( $key, $compare ) {

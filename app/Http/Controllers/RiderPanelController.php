@@ -18,8 +18,9 @@ class RiderPanelController extends Controller
 
     }
 
-    function index() {
-        $orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', array( 3, 4, 5, 6, 9 ) )->get();
+    function index( $type = null ) {
+        $ids = $type ? $this->setIds( $type ) : array( 3, 4, 5, 6, 9 );
+        $orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $ids )->get();
         $assign_order_status_options = orderDeliveryStatusModel::whereIn( 'id', array( 2, 3, 4 ) )->get();
         $my_rider_id = Auth::user()->rider_staff->id;
 
@@ -33,6 +34,33 @@ class RiderPanelController extends Controller
             ->with('my_rider_id', $my_rider_id);
     }
 
+    public function setIds( $type ) {
+        $ids = [];
+
+        switch ( $type) {
+            case 'to-pick-up':
+                $ids = [ 9 ];
+                break;
+
+            case 'pick-up-success':
+                $ids = [ 3 ];
+                break;
+
+            case 'on-out-for-delivery':
+                $ids = [ 4 ];
+                break;
+
+            case 'completed':
+                $ids = [ 5, 6 ];
+                break;
+            
+            default:
+                $ids = [ 3, 4, 5, 6, 9 ];
+                break;
+        }
+
+        return $ids;
+    }
 
     public function show($order_id)
     {

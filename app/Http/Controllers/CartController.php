@@ -182,7 +182,7 @@ class CartController extends Controller
         $session = \Cart::session( auth()->id() );
         $items = $session->getContent();
 
-        foreach ( $items as $item ) {
+        /* foreach ( $items as $item ) {
             if ( $item->id == $itemId ) {
                 $variant = ProductVariation::find( $item->id );
 
@@ -191,7 +191,7 @@ class CartController extends Controller
                     $variant->save();
                 }
             }
-        }
+        } */
 
         $session->remove( $itemId );
 

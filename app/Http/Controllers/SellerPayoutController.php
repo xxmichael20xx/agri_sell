@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Helpers as Helper;
 use App\notification;
+use App\Order;
 use App\refundModelOrder;
 use App\SellerPayout;
 use App\SellerPayoutRequest;
@@ -132,6 +133,8 @@ class SellerPayoutController extends Controller
         $total_sales = 0;
         $subOrders = SubOrder::where('seller_id', $request->user_id )->get();
         foreach ( $subOrders as $order ) {
+            $mainOrder = Order::find( $order->order_id );
+            if ( $mainOrder->payment_method !== 'agrisell_coins' ) continue;
             if ( $order->status == 'completed' && $order->payout_request && count( $order->items ) > 0 ) {
                 foreach( $order->items as $item ) {
                     $item_pivot = $item->pivot;
@@ -179,8 +182,8 @@ class SellerPayoutController extends Controller
         $admin_id = User::where( 'email', 'agrisell2077@gmail.com' )->first();
         $seller = User::find( $request->user_id );
         $now = Carbon::now();
-        $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
-        $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
+        $weekStartDate = $now->format('Y-m-d H:i');
+        $weekEndDate = $now->addDays( 3 )->format('Y-m-d H:i');
         $request->request->add( [ 'gcash_name' => $request->gcash_first_name . " " . $request->gcash_last_name ] );
 
         if ( $request->payout_request_id ) return $this->updateRequest( $request );

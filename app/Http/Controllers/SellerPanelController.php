@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Order;
 use Illuminate\Http\Request;
 use Auth;
 use App\Product;
@@ -74,14 +75,11 @@ class SellerPanelController extends Controller
         $order_items = $shop_orders;
         
         foreach ( $order_items as $order_item ) {
+            $mainOrder = Order::find( $order_item->order_id );
+            if ( $mainOrder->payment_method !== 'agrisell_coins' ) continue;
             if ( $order_item->status == 'completed' && $order_item->payout_request && count( $order_item->items ) > 0 ) {
                 foreach( $order_item->items as $item ) {
                     $item_pivot = $item->pivot;
-
-                    /* if ( $item->is_sale == 1 ) {
-                        $itemprice = $item->price - ( ( $item->sale_pct_deduction / 100 ) * $item->price );
-                    } */
-
                     $total_sales += $item_pivot->price * $item_pivot->quantity;
                 }
             }

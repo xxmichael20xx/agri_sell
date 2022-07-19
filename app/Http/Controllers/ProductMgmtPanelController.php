@@ -10,6 +10,7 @@ use App\ProductCategory;
 use App\ProductVariation;
 use App\adminNotifModel;
 use App\ProductImage;
+use App\Rules\NumberChecker;
 use DB;
 
 class ProductMgmtPanelController extends Controller
@@ -361,18 +362,25 @@ class ProductMgmtPanelController extends Controller
     }
 
     public function save_new_products_v2( Request $request ) {
+        if ( ! isset( $request->is_wholesale ) ) {
+            $request->request->add([ 'is_wholesale' => 'off' ]);
+        }
+        if ( ! isset( $request->has_vartiants ) ) {
+            $request->request->add([ 'has_vartiants' => 'off' ]);
+        }
+
         $this->validate( $request, [
             'product_name' => 'required',
             'images' => 'required',
             'category_id' => 'required',
-            'retail_price' => 'required|numeric|min:1',
-            'wholesale_price' => 'required_if:is_wholesale,==,on|numeric|min:1',
-            'wholesale_min_qty' => 'required_if:is_wholesale,==,on|numeric|min:1',
-            'wholesale_sold_per' => 'required_if:is_wholesale,==,on',
+            'retail_price' => [ 'required', new NumberChecker( 'retail_price' ) ],
+            'wholesale_price' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_price', $request ) ],
+            'wholesale_min_qty' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_min_qty', $request ) ],
+            'sold_per' => 'required',
             'product_desc' => 'required',
-            'standard_net_weight' => 'required|numeric|min:1',
+            'standard_net_weight' => [ 'required', new NumberChecker( 'standard_net_weight' ) ],
             'standard_net_weight_unit' => 'required',
-            'stocks' => 'required|numeric|min:1',
+            'stocks' => [ 'required', new NumberChecker( 'stocks' ) ],
         ] );
 
         $is_wholesale = $request->is_wholesale == 'on' ? true : false;
@@ -440,7 +448,7 @@ class ProductMgmtPanelController extends Controller
         $productVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
         $productVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
         $productVariation->variation_quantity = $request->stocks;
-        $productVariation->variation_sold_per = $request->wholesale_sold_per;
+        $productVariation->variation_sold_per = $request->sold_per;
         $productVariation->variation_net_weight = $request->standard_net_weight;
         $productVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
         $productVariation->save();
@@ -742,17 +750,24 @@ class ProductMgmtPanelController extends Controller
     }
 
     public function update_product_v2( Request $request ) {
+        if ( ! isset( $request->is_wholesale ) ) {
+            $request->request->add([ 'is_wholesale' => 'off' ]);
+        }
+        if ( ! isset( $request->has_vartiants ) ) {
+            $request->request->add([ 'has_vartiants' => 'off' ]);
+        }
+
         $this->validate( $request, [
             'product_name' => 'required',
             'category_id' => 'required',
-            'retail_price' => 'required|numeric|min:1',
-            'wholesale_price' => 'required_if:is_wholesale,==,on|numeric|min:1',
-            'wholesale_min_qty' => 'required_if:is_wholesale,==,on|numeric|min:1',
-            'wholesale_sold_per' => 'required_if:is_wholesale,==,on',
+            'retail_price' => [ 'required', new NumberChecker( 'retail_price' ) ],
+            'wholesale_price' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_price', $request ) ],
+            'wholesale_min_qty' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_min_qty', $request ) ],
+            'sold_per' => 'required',
             'product_desc' => 'required',
-            'standard_net_weight' => 'required|numeric|min:1',
+            'standard_net_weight' => [ 'required', new NumberChecker( 'standard_net_weight' ) ],
             'standard_net_weight_unit' => 'required',
-            'stocks' => 'required|numeric|min:1',
+            'stocks' => [ 'required', new NumberChecker( 'stocks' ) ],
         ] );
 
         $is_wholesale = $request->is_wholesale == 'on' ? true : false;
@@ -833,7 +848,7 @@ class ProductMgmtPanelController extends Controller
             $firstVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
             $firstVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
             $firstVariation->variation_quantity = $request->stocks;
-            $firstVariation->variation_sold_per = $request->wholesale_sold_per;
+            $firstVariation->variation_sold_per = $request->sold_per;
             $firstVariation->variation_net_weight = $request->standard_net_weight;
             $firstVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
             $firstVariation->save();

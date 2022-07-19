@@ -29,29 +29,16 @@
                                 <span class="amount">
                                     <span>Price per product ₱ {{ $item['price'] }}</span>
                                     <br>
-                                    @if($item['isSale'] == 1)
-                                        <s>₱ {{ $item['price'] }}</s>
-                                        <br>
-                                        <span>₱ {{ $item['price'] - (($item['salePct'] / 100) * $item['price']) }}</span>
-                                    @else
-                                        <span>₱ {{ $item['price'] }}</span>
-                                    @endif
+                                    <span>₱ {{ $item['price'] }}</span>
+                                    x
+                                    {{ $item['quantity'] }}
                                 </span>
-                                x
-                                {{ $item['quantity'] }} 
-                                @php
-                                    //  $subtotal_cart_item =
-                                    //  Cart::session(auth()->id())->get($item['id'])->getPriceSum();
-                                    //  $discounted_cart_item = $subtotal_cart_item - (($item['salePct'] / 100) *
-                                    //  $subtotal_cart_item);
-
-                                    $subtotal_cart_item = Cart::session(auth()->id())->get($item['id'])->getPriceSum();
-                                    $discounted_cart_item = $subtotal_cart_item - (($item['salePct'] / 100) * $subtotal_cart_item);
-                                @endphp
+                                <br>
+                                <span class="amount">Total = ₱ {{ number_format( $item['price'] * $item['quantity'] ) }}</span>
                             </td>
                         </tr>
                     @endforeach
-
+                    <tr style="border-bottom: 1px solid #D8D8D8;"></tr>
                 </tbody>
                 <tfoot>
                     <tr class="cart-subtotal text-left">

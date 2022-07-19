@@ -457,7 +457,7 @@
                                             @php
                                                 $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
                                             @endphp
-                                            <select class="form-control" name="wholesale_sold_per" id="wholesale_sold_per"> 
+                                            <select class="form-control" name="sold_per" id="sold_per"> 
                                                 <option selected disabled>Select option</option>
                                                 @foreach ( $soldPerOptions as $soldPerOption )
                                                     @php
@@ -466,8 +466,8 @@
                                                     <option value="{{ $soldPerOption }}" {{ $isSelected }}>{{ ucfirst( $soldPerOption ) }}</option>
                                                 @endforeach
                                             </select>
-                                            @if ( $errors->has( 'wholesale_sold_per' ) )
-                                                <span class="text-danger">{{ $errors->first( 'wholesale_sold_per' ) }}</span>
+                                            @if ( $errors->has( 'sold_per' ) )
+                                                <span class="text-danger">{{ $errors->first( 'sold_per' ) }}</span>
                                             @endif
                                         </div>
                                     </div>
@@ -579,7 +579,7 @@
         _selected_files = 0
 
     window.onload = () => {
-        $( document ).on( 'change', '#wholesale_sold_per', function() {
+        $( document ).on( 'change', '#sold_per', function() {
             const val = $( this ).val()
             const weightOptionSelector = '#standard_net_weight_unit'
             let weightOptionValue = 'kilogram'

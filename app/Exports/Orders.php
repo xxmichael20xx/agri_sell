@@ -164,6 +164,19 @@ class Orders implements FromCollection, WithHeadings
 
         }
 
+        foreach ( range( 1, 5 ) as $num ) {
+            $space = [];
+            foreach( range( 1, count( $this->headings()[1] ) ) as $_ ) {
+                $space[] = "";
+            }
+
+            if ( $num == 5 ) {
+                $lastIndex = array_key_last( $space );
+                $space[$lastIndex] = "Validated by: Agrisell Admin";
+            }
+            $this->collection->push( (object) $space );
+        }
+
         return $this->collection;
     }
 }

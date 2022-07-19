@@ -39,7 +39,7 @@
             <label class="col-md-3 col-form-label text-dark">Product Description<span class="text-primary font-weight-bold">*</span></label>
             <div class="col-md-9">
                 <div class="form-group">
-                    <textarea type="text" class="form-control" name="product_desc" value="{{ old( 'product_desc' ) }}"></textarea>
+                    <textarea type="text" class="form-control" name="product_desc">{{ old( 'product_desc' ) }}</textarea>
                     <small>(Note: Please indicate the detailed size if your product is sold per KAING or BOX)</small>
                     @if ( $errors->has( 'product_desc' ) )
                         <span class="text-danger">{{ $errors->first( 'product_desc' ) }}</span>
@@ -219,17 +219,17 @@
                 @php
                     $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
                 @endphp
-                <select class="form-control" name="wholesale_sold_per" id="wholesale_sold_per"> 
+                <select class="form-control" name="sold_per" id="sold_per"> 
                     <option selected disabled>Select option</option>
                     @foreach ( $soldPerOptions as $soldPerOption )
                         @php
-                            $isSelected = old( 'wholesale_sold_per' ) == $soldPerOption ? 'selected' : '';
+                            $isSelected = old( 'sold_per' ) == $soldPerOption ? 'selected' : '';
                         @endphp
                         <option value="{{ $soldPerOption }}" {{ $isSelected }}>{{ ucfirst( $soldPerOption ) }}</option>
                     @endforeach
                 </select>
-                @if ( $errors->has( 'wholesale_sold_per' ) )
-                    <span class="text-danger">{{ $errors->first( 'wholesale_sold_per' ) }}</span>
+                @if ( $errors->has( 'sold_per' ) )
+                    <span class="text-danger">{{ $errors->first( 'sold_per' ) }}</span>
                 @endif
             </div>
         </div>
@@ -353,7 +353,7 @@
         _selected_files = 0
 
     window.onload = () => {
-        $( document ).on( 'change', '#wholesale_sold_per', function() {
+        $( document ).on( 'change', '#sold_per', function() {
             const val = $( this ).val()
             const weightOptionSelector = '#standard_net_weight_unit'
             let weightOptionValue = 'kilogram'

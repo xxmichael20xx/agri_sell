@@ -87,6 +87,7 @@
                                 </div>
                                 <div class="col-10">
                                     <input type="password" name="payout_password" id="payout_password" class="form-control" required>
+                                    <p class="text-muted">Please insert your seller account password for validation, enable to process your payout request.</p>
                                     <small class="text-danger collapse">Password is required</small>
                                 </div>
                             </div>
@@ -163,22 +164,22 @@
 
                     if ( ! val ) {
                         if ( isNum ) {
-                            el.next().text( 'Payout amount is required' )
+                            el.next().find( 'small' ).text( 'Payout amount is required' )
                         }
 
-                        el.next().show()
+                        el.next().find( 'small' ).show()
                         return false
 
                     } else {
                         if ( isNum ) {
                             if ( val < 100 ) {
-                                el.next().text( 'Payout amount must be greater than 100' )
-                                el.next().show()
+                                el.next().find( 'small' ).text( 'Payout amount must be greater than 100' )
+                                el.next().find( 'small' ).show()
                                 return false
                             }
                         }
 
-                        el.next().hide()
+                        el.next().find( 'small' ).hide()
                         return true
                     }
                 }
@@ -237,7 +238,7 @@
                                     icon: 'warning',
                                     title: 'PROCEED PAYOUT REQUEST',
                                     html: `
-                                        Note: You can only request for payout every 7 day!
+                                        Note: You can only request for payout every 3 day!
                                     `,
                                     showCancelButton: true,
                                     showConfirmButton: true,

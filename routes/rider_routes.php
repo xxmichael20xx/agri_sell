@@ -1,6 +1,6 @@
 <?php
 Route::group(['middleware' => 'auth', 'middleware' => 'rider'], function () {
-    Route::get('/rider_dashboard', 'RiderPanelController@index');
+    Route::get('/rider_dashboard/{type?}', 'RiderPanelController@index');
     // manage order routes
 
     Route::get('/rider/order/{order_num}', 'RiderPanelController@show_seller_order');

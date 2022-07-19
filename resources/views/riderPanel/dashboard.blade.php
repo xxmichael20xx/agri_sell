@@ -6,18 +6,18 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Manage Order delivery  {{Auth::user()->rider_staff->rider_id ?? 'not available'}}</h4>
+                        <h4 class="card-title">Manage Order delivery {{ Auth::user()->rider_staff->rider_id ?? 'not available' }}</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <div class="toolbar">
-                                <!--        Here you can write extra buttons/actions for the toolbar              -->
-                            </div>
                             <table id="datatable" class="table " cellspacing="0" width="100%">
                                 <thead class="text-primary">
                                     <tr>
                                         <th>
                                             Customer name
+                                        </th>
+                                        <th>
+                                            Address
                                         </th>
                                         <th>
                                             Total
@@ -38,6 +38,8 @@
                                         @php
                                             $method = $order->order->payment_method;
                                             $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
+
+                                            $_user = App\User::find( $order->order->user_id );
                                         @endphp
                                         <tr>
                                             <td>
@@ -45,6 +47,15 @@
                                                 @if ( $order->order->order_number )
                                                     <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Ref. Number:<br>{{ $order->order->order_number }}"></i>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    if ( $_user ) {
+                                                        echo "{$_user->address} {$_user->barangay}, {$_user->town}";
+                                                    } else {
+                                                        echo "";
+                                                    }
+                                                @endphp
                                             </td>
                                             <td>
                                                 ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
@@ -129,7 +140,16 @@
                                                                         <div class="form-group row">
                                                                             <div class="col-12">
                                                                                 <label for="reason" class="col-form-label">Reason for delivery failed</label>
-                                                                                <textarea class="form-control" name="reason" id="reason" rows="5" required></textarea>
+                                                                                <select name="reason" id="reason" class="custom-select" required>
+                                                                                    <option value="" selected disabled>Select an option</option>
+                                                                                    <option value="Delivery address was incorrect/incomplete">Delivery address was incorrect/incomplete</option>
+                                                                                    <option value="The receiver was absent (there was no one at the address to receive the parcel)">The receiver was absent (there was no one at the address to receive the parcel)</option>
+                                                                                    <option value="Courier could not access the delivery location">Courier could not access the delivery location</option>
+                                                                                    <option value="Not finding a secure place to leave the order">Not finding a secure place to leave the order</option>
+                                                                                    <option value="Customer refusing to accept the delivery">Customer refusing to accept the delivery</option>
+                                                                                    <option value="Others">Others</option>
+                                                                                </select>
+                                                                                <textarea class="form-control collapse mt-2" name="reason_others" id="reason_others" rows="5" placeholder="Please provide other reasons"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -188,6 +208,21 @@
                         window.location.href = href
                     }
                 } )
+            } )
+
+            $( document ).on( 'change', '#reason', function() {
+                const val = $( this ).val()
+                const others = $( '#reason_others' )
+
+                if ( val == 'Others' ) {
+                    others.removeClass( 'collapse' )
+                    others.attr( 'required', true )
+
+                } else {
+                    others.addClass( 'collapse' )
+                    others.attr( 'required', false )
+                    others.val( '' )
+                }
             } )
         })
     })(jQuery)

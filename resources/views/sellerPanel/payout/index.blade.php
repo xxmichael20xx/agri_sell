@@ -124,8 +124,8 @@
                         <div class="col-12">
                             <h6>Reminders:</h6>
                             <ol class="pl-3">
-                                <li>To process your payout request, make sure that you have an existing verified account in Gcash. </li>
-                                <li>Please be advised that seller payouts will not be processed every day. Processing will resume every seven days.</li>
+                                <li>To process your payout request, make sure that you have an existing verified account in Gcash/Bank Account. </li>
+                                <li>Please be advised that seller payout will not be processed everyday. Processing will resume every 3 days</li>
                                 <li>Agrisell will only be able to process payouts via Seller Total Sales. </li>
                             </ol>
                         </div>
@@ -183,7 +183,7 @@
                                 <div class="tab-pane active" id="step-1" role="tabpanel" aria-labelledby="step-1-tab">
                                     <span class="text-muted font-weight-bold">Form Validation</span>
                                     <ul class="pl-3">
-                                        <li>Double-check the recipient’s GCash name and mobile number.</li>
+                                        <li>Double-check the recipient’s name and mobile number.</li>
                                         <li>Please ensure that all the information is correct before proceeding to submission.</li>
                                     </ul>
 
@@ -206,7 +206,7 @@
                                 <div class="tab-pane" id="step-3" role="tabpanel" aria-labelledby="step-3-tab">
                                     <span class="text-muted font-weight-bold">Admins Approval</span>
                                     <ul class="pl-3">
-                                        <li>Kindly wait within 24-48 hours for the admin to process your payout that will be sent to your GCash Account.</li>
+                                        <li>Kindly wait within 24-48 hours for the admin to process your payout that will be sent to your Gcash/Bank Account.</li>
                                     </ul>
 
                                     <hr>

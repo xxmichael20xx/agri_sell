@@ -179,10 +179,16 @@ class OrderMgmtPanelController extends Controller
             $temp_sub_order->where( 'seller_id', $seller_id );
         }
 
+        $reason = $request->reason;
+
+        if ( $reason == 'Others' ) {
+            $reason = 'Others: ' . $request->reason_others;
+        }
+
         $sub_order = $temp_sub_order->first();
         $sub_order->status_id = $status_id;
         $sub_order->pick_up_status_id = $status_id;
-        $sub_order->order_notes = $request->reason;
+        $sub_order->order_notes = $reason;
 
         if ( $status_id == 5 ) {
             $sub_order->status = 'completed';

@@ -9,13 +9,14 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class Users implements FromCollection, WithHeadings
 {
-    protected $interval, $role_id, $month;
+    protected $interval, $role_id, $month, $collection;
 
     public function __construct( $interval, $role_id, $month )
     {
         $this->interval = $interval;
         $this->role_id = $role_id;
         $this->month = $month;
+        $this->collection = new Collection();
     }
 
     public function headings(): array
@@ -29,7 +30,6 @@ class Users implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        $collection = new Collection();
         $users = User::where( 'role_id', $this->role_id );
 
         if ( $this->interval == "full" ) {
@@ -50,9 +50,22 @@ class Users implements FromCollection, WithHeadings
             ];
 
             $data = (object) $_data;
-            $collection->push( $data );
+            $this->collection->push( $data );
         }
 
-        return $collection;
+        foreach ( range( 1, 5 ) as $num ) {
+            $space = [];
+            foreach( range( 1, count( $this->headings()[1] ) ) as $_ ) {
+                $space[] = "";
+            }
+
+            if ( $num == 5 ) {
+                $lastIndex = array_key_last( $space );
+                $space[$lastIndex] = "Validated by: Agrisell Admin";
+            }
+            $this->collection->push( (object) $space );
+        }
+
+        return $this->collection;
     }
 }

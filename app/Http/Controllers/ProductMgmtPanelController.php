@@ -368,7 +368,7 @@ class ProductMgmtPanelController extends Controller
             'retail_price' => 'required|numeric|min:1',
             'wholesale_price' => 'required_if:is_wholesale,==,on|numeric|min:1',
             'wholesale_min_qty' => 'required_if:is_wholesale,==,on|numeric|min:1',
-            'wholesale_sold_per' => 'required_if:is_wholesale,==,on|numeric|min:1',
+            'wholesale_sold_per' => 'required_if:is_wholesale,==,on',
             'product_desc' => 'required',
             'standard_net_weight' => 'required|numeric|min:1',
             'standard_net_weight_unit' => 'required',
@@ -745,14 +745,14 @@ class ProductMgmtPanelController extends Controller
         $this->validate( $request, [
             'product_name' => 'required',
             'category_id' => 'required',
-            'retail_price' => 'required|numeric|min:2',
-            'wholesale_price' => 'required_if:is_wholesale,==,on|numeric|min:2',
-            'wholesale_min_qty' => 'required_if:is_wholesale,==,on|numeric|min:2',
-            'wholesale_sold_per' => 'required_if:is_wholesale,==,on|numeric|min:2',
+            'retail_price' => 'required|numeric|min:1',
+            'wholesale_price' => 'required_if:is_wholesale,==,on|numeric|min:1',
+            'wholesale_min_qty' => 'required_if:is_wholesale,==,on|numeric|min:1',
+            'wholesale_sold_per' => 'required_if:is_wholesale,==,on',
             'product_desc' => 'required',
-            'standard_net_weight' => 'required|numeric|min:2',
+            'standard_net_weight' => 'required|numeric|min:1',
             'standard_net_weight_unit' => 'required',
-            'stocks' => 'required|numeric|min:2',
+            'stocks' => 'required|numeric|min:1',
         ] );
 
         $is_wholesale = $request->is_wholesale == 'on' ? true : false;

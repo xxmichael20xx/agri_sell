@@ -34,12 +34,45 @@
 
                                 <div class="card-body">
                                     <div class="form-group row">
+                                        <label class="col-md-3 col-form-label">Product category</label>
+                                        <div class="col-md-9">
+                                            @php
+                                                $product_categories = App\Category::all();
+                                            @endphp
+                                            <select class="selectpicker w-100" data-style="btn btn-primary btn-round" title="Select product category" name="category_id">
+                                                @foreach ( $product_categories as $product_category )
+                                                    @php
+                                                        $isSelected = $product->category_id == $product_category->id ? 'selected' : '';
+                                                    @endphp
+                                                    <option value="{{ $product_category->id }}" {{ $isSelected }}>{{ $product_category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ( $errors->has( 'category_id' ) )
+                                                <span class="text-danger">{{ $errors->first( 'category_id' ) }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Product name</label>
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <input type="text" class="form-control" name="product_name" value="{{ $product->name }}">
                                                 @if ( $errors->has( 'product_name' ) )
                                                     <span class="text-danger">{{ $errors->first( 'product_name' ) }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label">Product description</label>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <textarea type="text" class="form-control" name="product_desc" value="{{ $product->description }}">{{ $product->description }}</textarea>
+                                                <small>(Note: Please indicate the detailed size if your product is sold per KAING or BOX)</small>
+                                                @if ( $errors->has( 'product_desc' ) )
+                                                    <span class="text-danger">{{ $errors->first( 'product_desc' ) }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -67,49 +100,353 @@
                                             <div class="form-group row mt-3 border-top pt-3" id="image_preview"></div>
                                         </div>
                                     </div>
-                            
-                                    <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Product category</label>
-                                        <div class="col-md-9">
-                                            @php
-                                                $product_categories = App\Category::all();
-                                            @endphp
-                                            <select class="selectpicker w-100" data-style="btn btn-primary btn-round" title="Select product category" name="category_id">
-                                                @foreach ( $product_categories as $product_category )
-                                                    @php
-                                                        $isSelected = $product->category_id == $product_category->id ? 'selected' : '';
-                                                    @endphp
-                                                    <option value="{{ $product_category->id }}" {{ $isSelected }}>{{ $product_category->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            @if ( $errors->has( 'category_id' ) )
-                                                <span class="text-danger">{{ $errors->first( 'category_id' ) }}</span>
-                                            @endif
+
+                                    <div class="form-group row variants--container">
+                                        <div class="col">
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" name="has_vartiants" id="has_vartiants" {{ $product->has_variants ? 'checked': '' }}>
+                                                <label class="custom-control-label" for="has_vartiants">Product has variants?</label>
+                                            </div>
                                         </div>
                                     </div>
                             
-                                    <div class="form-group row">
-                                        <div class="col-md-3"></div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Price</label>
-                                                        <input type="number" class="form-control" name="retail_price" value="{{ $first->variation_price_per }}">
-                                                        @if ( $errors->has( 'retail_price' ) )
-                                                            <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
-                                                        @endif
+                                    <div class="form-group row {{ $product->has_variants ? '': 'd-none' }} variant--input-container">
+                                        <div class="col-12">
+                                            <div class="border-top border-bottom py-2" id="variant--0">
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 col-form-label text-dark">Variant details</label>
+                                                    <div class="col-md-9">
+                                                        <div class="form-group">
+                                                            <label class="col-form-label text-dark">Name<span class="text-primary font-weight-bold">*</span></label>
+                                                            @if ( isset( $firstVariant ) )
+                                                                <input type="text" class="form-control" name="variant_names[]" value="{{ $firstVariant ? $firstVariant->variation_name : '' }}">
+                                                                <input type="hidden" class="form-control" name="variant_id[]" value="{{ $firstVariant ? $firstVariant->id : '' }}">
+                                                            @else
+                                                                <input type="text" class="form-control" name="variant_names[]">
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Stocks</label>
-                                                        <input type="number" class="form-control" name="stocks" value="{{ $first->variation_quantity }}">
-                                                        @if ( $errors->has( 'stocks' ) )
-                                                            <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
-                                                        @endif
+
+                                                <div class="form-group row">
+                                                    <div class="col-3"></div>
+                                                    <div class="col-9">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <label class="col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
+                                                                @php
+                                                                    $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
+                                                                @endphp
+                                                                <select class="form-control variant_soldper" name="variant_soldper[]" data-id="variant_standard_net_weight_unit_0"> 
+                                                                    <option selected disabled>Select option</option>
+                                                                    @foreach ( $soldPerOptions as $soldPerOption )
+                                                                        @php
+                                                                            $selectedSoldPer = ( $firstVariant && $firstVariant->variation_sold_per == $soldPerOption ) ? 'selected' : '';
+                                                                        @endphp
+                                                                        <option value="{{ $soldPerOption }}" {{ $selectedSoldPer }}>{{ ucfirst( $soldPerOption ) }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-3"></div>
+                                                    <div class="col-9">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <label class="col-form-label text-dark">Product Size</label>
+                                                                @php
+                                                                    $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                                                @endphp
+                                                                <select class="form-control" name="variant_product_size[]"> 
+                                                                    <option selected disabled>Select option (optional)</option>
+                                                                    @foreach ( $productSizes as $productSize )
+                                                                        @php
+                                                                            $selectedProductSize = ( $firstVariant && $firstVariant->product_size == $productSize ) ? 'selected' : '';
+                                                                        @endphp
+                                                                        <option value="{{ $productSize }}" {{ $selectedProductSize }}>{{ ucfirst( $productSize ) }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-3"></div>
+                                                    <div class="col-9">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_0" readonly>
+                                                                            <option selected disabled>Select option</option>
+                                                                            <option value="gram" {{ $firstVariant && $firstVariant->variation_net_weight_unit == 'gram' ? 'selected' : '' }}>Gram</option>
+                                                                            <option value="kilogram" {{ $firstVariant && $firstVariant->variation_net_weight_unit == 'kilogram' ? 'selected' : '' }}>Kilogram</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-md-3"></div>
+                                                    <div class="col-md-9">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label class="col-form-label">Price</label>
+                                                                    @if ( isset( $firstVariant ) )
+                                                                        <input type="number" class="form-control" name="variant_prices[]" value="{{ $firstVariant ? $firstVariant->variation_price_per : '' }}">
+                                                                    @else
+                                                                        <input type="number" class="form-control" name="variant_prices[]">
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label class="col-form-label">Stocks</label>
+                                                                    @if ( isset( $firstVariant ) )
+                                                                        <input type="number" class="form-control" name="variant_stocks[]" value="{{ $firstVariant ? $firstVariant->variation_quantity : '' }}">
+                                                                    @else
+                                                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-3"></div>
+                                                    <div class="col-9">
+                                                        <div class="form-group row wholesale--container-global wholesale--container-variant-0">
+                                                            <div class="col">
+                                                                <div class="custom-control custom-switch">
+                                                                    <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-0" data-id="variant-0" {{ $firstVariant && $firstVariant->is_variation_wholesale == 'yes' ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label text-dark" for="is_wholesale-variant-0">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                
+                                                        <div class="form-group row {{ $firstVariant && $firstVariant->is_variation_wholesale == 'yes' ? '' : 'd-none' }} wholesale--input-variant-0 border-top pt-2">
+                                                            <div class="col-md-12">
+                                                                <label class="col-form-label text-dark font-weight-bold">Wholesale Details</label>
+                                                                <div class="form-group row">
+                                                                    <div class="col-md-6">
+                                                                        <label class="col-form-label text-dark">Price*</label>
+                                                                        <div class="form-group">
+                                                                            @if ( isset( $firstVariant ) )
+                                                                                <input type="number" class="form-control" name="variant_wholesale_price[]" value="{{ $firstVariant ? $firstVariant->variation_wholesale_price_per : '' }}">
+                                                                            @else
+                                                                                <input type="number" class="form-control" name="variant_wholesale_price[]">
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="col-form-label text-dark">Minimum quantity*</label>
+                                                                        <div class="form-group"> 
+                                                                            @if ( isset( $firstVariant ) )
+                                                                                <input type="number" class="form-control" name="variant_wholesale_min_qty[]" value="{{ $firstVariant ? $firstVariant->variation_min_qty_wholesale : '' }}">
+                                                                            @else
+                                                                                <input type="number" class="form-control" name="variant_wholesale_min_qty[]">
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-12 text-right">
+                                                        <button type="button" class="btn btn-primary add--more-variant">
+                                                            <i class="nc-icon nc-simple-add"></i> Add More
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="more--variants">
+                                                @if ( $product->prod_variation->count() > 2 )
+                                                    @foreach ( $product->prod_variation as $key => $variant )
+                                                        @if ( $key > 1 )
+                                                            <div class="border-top border-bottom py-2" id="variant--old-{{ $variant->id }}">
+                                                                <div class="form-group row">
+                                                                    <label class="col-md-3 col-form-label text-dark">Variant details</label>
+                                                                    <div class="col-md-9">
+                                                                        <div class="form-group">
+                                                                            <label class="col-form-label text-dark">Name<span class="text-primary font-weight-bold">*</span></label>
+                                                                            @if ( isset( $variant ) )
+                                                                                <input type="text" class="form-control" name="variant_names[]" value="{{ $variant ? $variant->variation_name : '' }}">
+                                                                                <input type="hidden" class="form-control" name="variant_id[]" value="{{ $variant ? $variant->id : '' }}">
+                                                                            @else
+                                                                                <input type="text" class="form-control" name="variant_names[]">
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                
+                                                                <div class="form-group row">
+                                                                    <div class="col-3"></div>
+                                                                    <div class="col-9">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <label class="col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
+                                                                                @php
+                                                                                    $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
+                                                                                @endphp
+                                                                                <select class="form-control variant_soldper" name="variant_soldper[]" data-id="variant_standard_net_weight_unit_{{ $variant->id }}"> 
+                                                                                    <option selected disabled>Select option</option>
+                                                                                    @foreach ( $soldPerOptions as $soldPerOption )
+                                                                                        @php
+                                                                                            $selectedSoldPer = ( $variant && $variant->variation_sold_per == $soldPerOption ) ? 'selected' : '';
+                                                                                        @endphp
+                                                                                        <option value="{{ $soldPerOption }}" {{ $selectedSoldPer }}>{{ ucfirst( $soldPerOption ) }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                
+                                                                <div class="form-group row">
+                                                                    <div class="col-3"></div>
+                                                                    <div class="col-9">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <label class="col-form-label text-dark">Product Size</label>
+                                                                                @php
+                                                                                    $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                                                                @endphp
+                                                                                <select class="form-control" name="variant_product_size[]"> 
+                                                                                    <option selected disabled>Select option (optional)</option>
+                                                                                    @foreach ( $productSizes as $productSize )
+                                                                                        @php
+                                                                                            $selectedProductSize = ( $variant && $variant->product_size == $productSize ) ? 'selected' : '';
+                                                                                        @endphp
+                                                                                        <option value="{{ $productSize }}" {{ $selectedProductSize }}>{{ ucfirst( $productSize ) }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                
+                                                                <div class="form-group row">
+                                                                    <div class="col-3"></div>
+                                                                    <div class="col-9">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
+                                                                                <div class="row">
+                                                                                    <div class="col">
+                                                                                        <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_{{ $variant->id }}" readonly>
+                                                                                            <option selected disabled>Select option</option>
+                                                                                            <option value="gram" {{ $variant && $variant->variation_net_weight_unit == 'gram' ? 'selected' : '' }}>Gram</option>
+                                                                                            <option value="kilogram" {{ $variant && $variant->variation_net_weight_unit == 'kilogram' ? 'selected' : '' }}>Kilogram</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="col">
+                                                                                        <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                
+                                                                <div class="form-group row">
+                                                                    <div class="col-md-3"></div>
+                                                                    <div class="col-md-9">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="form-group">
+                                                                                    <label class="col-form-label">Price</label>
+                                                                                    @if ( isset( $variant ) )
+                                                                                        <input type="number" class="form-control" name="variant_prices[]" value="{{ $variant ? $variant->variation_price_per : '' }}">
+                                                                                    @else
+                                                                                        <input type="number" class="form-control" name="variant_prices[]">
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <div class="form-group">
+                                                                                    <label class="col-form-label">Stocks</label>
+                                                                                    @if ( isset( $variant ) )
+                                                                                        <input type="number" class="form-control" name="variant_stocks[]" value="{{ $variant ? $variant->variation_quantity : '' }}">
+                                                                                    @else
+                                                                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
+                                                                                    @endif
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                
+                                                                <div class="form-group row">
+                                                                    <div class="col-3"></div>
+                                                                    <div class="col-9">
+                                                                        <div class="form-group row wholesale--container-global wholesale--container-variant-{{ $variant->id }}">
+                                                                            <div class="col">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-{{ $variant->id }}" data-id="variant-{{ $variant->id }}" {{ $variant && $variant->is_variation_wholesale == 'yes' ? 'checked' : '' }}>
+                                                                                    <label class="custom-control-label text-dark" for="is_wholesale-variant-{{ $variant->id }}">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                
+                                                                        <div class="form-group row {{ $variant && $variant->is_variation_wholesale == 'yes' ? '' : 'd-none' }} wholesale--input-variant-{{ $variant->id }} border-top pt-2">
+                                                                            <div class="col-md-12">
+                                                                                <label class="col-form-label text-dark font-weight-bold">Wholesale Details</label>
+                                                                                <div class="form-group row">
+                                                                                    <div class="col-md-6">
+                                                                                        <label class="col-form-label text-dark">Price*</label>
+                                                                                        <div class="form-group">
+                                                                                            @if ( isset( $variant ) )
+                                                                                                <input type="number" class="form-control" name="variant_wholesale_price[]" value="{{ $variant ? $variant->variation_wholesale_price_per : '' }}">
+                                                                                            @else
+                                                                                                <input type="number" class="form-control" name="variant_wholesale_price[]">
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <label class="col-form-label text-dark">Minimum quantity*</label>
+                                                                                        <div class="form-group"> 
+                                                                                            @if ( isset( $variant ) )
+                                                                                                <input type="number" class="form-control" name="variant_wholesale_min_qty[]" value="{{ $variant ? $variant->variation_min_qty_wholesale : '' }}">
+                                                                                            @else
+                                                                                                <input type="number" class="form-control" name="variant_wholesale_min_qty[]">
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <div class="col-12 text-right">
+                                                                        <button type="button" class="btn btn-primary add--more-variant">
+                                                                            <i class="nc-icon nc-simple-add"></i> Add More
+                                                                        </button>
+                                                                        <button type="button" class="btn btn-secondary delete--more-variant old--variant" data-id="{{ $variant->id }}">
+                                                                            <i class="nc-icon nc-simple-minus"></i> Remove
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -136,19 +473,6 @@
                                     </div>
                             
                                     <div class="form-group row">
-                                        <label class="col-md-3 col-form-label">Product description</label>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <textarea type="text" class="form-control" name="product_desc" value="{{ $product->description }}">{{ $product->description }}</textarea>
-                                                <small>(Note: Please indicate the detailed size if your product is sold per KAING or BOX)</small>
-                                                @if ( $errors->has( 'product_desc' ) )
-                                                    <span class="text-danger">{{ $errors->first( 'product_desc' ) }}</span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <div class="form-group row">
                                         <label class="col-md-3 col-form-label">Standard net weight</label>
                                         <div class="col-md-9">
                                             <div class="row">
@@ -167,6 +491,32 @@
                                                     @if ( $errors->has( 'standard_net_weight' ) )
                                                         <span class="text-danger">{{ $errors->first( 'standard_net_weight' ) }}</span>
                                                     @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Price</label>
+                                                        <input type="number" class="form-control" name="retail_price" value="{{ $first->variation_price_per }}">
+                                                        @if ( $errors->has( 'retail_price' ) )
+                                                            <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Stocks</label>
+                                                        <input type="number" class="form-control" name="stocks" value="{{ $first->variation_quantity }}">
+                                                        @if ( $errors->has( 'stocks' ) )
+                                                            <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -207,141 +557,6 @@
                                             </div>
                                         </div>
                                     @endif
-                                    
-                                    <div class="form-group row variants--container">
-                                        <div class="col">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" name="has_vartiants" id="has_vartiants" {{ $product->has_variants ? 'checked': '' }}>
-                                                <label class="custom-control-label" for="has_vartiants">Has variants?</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <div class="form-group row {{ $product->has_variants ? '': 'd-none' }} variant--input-container">
-                                        <div class="col-12">
-                                            <div class="border-top border-bottom py-2" id="variant--0">
-                                                <div class="form-group row">
-                                                    <label class="col-md-3 col-form-label">Variant details</label>
-                                                    <div class="col-md-9">
-                                                        <div class="form-group">
-                                                            <label class="col-form-label">Name</label>
-                                                            
-                                                            @if ( isset( $firstVariant ) )
-                                                                <input type="text" class="form-control" name="variant_names[]" value="{{ $firstVariant ? $firstVariant->variation_name : '' }}">
-                                                                <input type="hidden" class="form-control" name="variant_id[]" value="{{ $firstVariant ? $firstVariant->id : '' }}">
-                                                            @else
-                                                                <input type="text" class="form-control" name="variant_names[]">
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <div class="col-md-3"></div>
-                                                    <div class="col-md-9">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <div class="form-group">
-                                                                    <label class="col-form-label">Price</label>
-                                                                    @if ( isset( $firstVariant ) )
-                                                                        <input type="number" class="form-control" name="variant_prices[]" value="{{ $firstVariant ? $firstVariant->variation_price_per : '' }}">
-                                                                    @else
-                                                                        <input type="number" class="form-control" name="variant_prices[]">
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                            <div class="col">
-                                                                <div class="form-group">
-                                                                    <label class="col-form-label">Stocks</label>
-                                                                    @if ( isset( $firstVariant ) )
-                                                                        <input type="number" class="form-control" name="variant_stocks[]" value="{{ $firstVariant ? $firstVariant->variation_quantity : '' }}">
-                                                                    @else
-                                                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-12 text-right">
-                                                                <button type="button" class="btn btn-primary add--more-variant">
-                                                                    <i class="nc-icon nc-simple-add"></i> Add More
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="more--variants">
-                                                @if ( $product->prod_variation->count() > 2 )
-                                                    @foreach ( $product->prod_variation as $key => $variant )
-                                                        @if ( $key > 1 )
-                                                            <div class="border-top border-bottom py-2" id="variant--old-{{ $variant->id }}">
-                                                                <div class="form-group row">
-                                                                    <label class="col-md-3 col-form-label">Variant details</label>
-                                                                    <div class="col-md-9">
-                                                                        <div class="form-group">
-                                                                            <label class="col-form-label">Name</label>
-                                                                            <input type="text" class="form-control" name="variant_names[]" value="{{ $variant ? $variant->variation_name : '' }}">
-                                                                            <input type="hidden" class="form-control" name="variant_id[]" value="{{ $variant ? $variant->id : '' }}">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group row">
-                                                                    <div class="col-md-3"></div>
-                                                                    <div class="col-md-9">
-                                                                        <div class="row">
-                                                                            <div class="col">
-                                                                                <div class="form-group">
-                                                                                    <label class="col-form-label">Price</label>
-                                                                                    <input type="number" class="form-control" name="variant_prices[]" value="{{ $variant ? $variant->variation_price_per : '' }}">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col">
-                                                                                <div class="form-group">
-                                                                                    <label class="col-form-label">Stocks</label>
-                                                                                    <input type="number" class="form-control" name="variant_stocks[]" value="{{ $variant ? $variant->variation_quantity : '' }}">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="row">
-                                                                            <div class="col-12 text-right">
-                                                                                <button type="button" class="btn btn-primary add--more-variant">
-                                                                                    <i class="nc-icon nc-simple-add"></i> Add More
-                                                                                </button>
-                                                                                <button type="button" class="btn btn-secondary delete--more-variant old--variant" data-id="{{ $variant->id }}">
-                                                                                    <i class="nc-icon nc-simple-minus"></i> Remove
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <div hidden class="row">
-                                        <label class="col-md-3 col-form-label">Sale precentage deduction</label>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <input type="number" class="form-control" name="sale_pct_deduction" value="{{ $product->sale_pct_deduction }}">=
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <div hidden class="row">
-                                        <label class="col-md-3 col-form-label">Sale</label>
-                                        <div class="col-md-4">
-                                            <input class="bootstrap-switch" type="checkbox" onchange="changeIsProductSaleStatus()"
-                                                    id="switch_is_prod_sale" data-toggle="switch"
-                                                    data-on-label="<i class='nc-icon nc-check-2'></i>"
-                                                    data-off-label="<i class='nc-icon nc-simple-remove'></i>" data-on-color="success"
-                                                    data-off-color="success" />
-                                            <input type="hidden" id="isSaleValueSetter" name="is_Sale">
-                                        </div>
-                                    </div>
                             
                                     <div class="form-group row">
                                         <div class="col-md-12">
@@ -373,9 +588,35 @@
             $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
         } )
 
+        $( document ).on( 'change', '.variant_soldper', function() {
+            const val = $( this ).val()
+            const weightOptionSelector = '#' + $( this ).data( 'id' )
+            console.log( weightOptionSelector )
+            let weightOptionValue = 'kilogram'
+
+            if ( val == 'piece' ) weightOptionValue = 'gram'
+            $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
+        } )
+
         $( document ).on( 'click', '#is_wholesale,#has_vartiants', function() {
             const isChecked = $( this ).is( ':checked' )
             const selectors = $( this ).attr( 'id' ) == 'is_wholesale' ? '.wholesale--input' : '.variant--input-container'
+            const inputs = $( selectors )
+
+            if ( isChecked ) {
+                inputs.each( function() {
+                    $( this ).removeClass( 'd-none' )
+                } )
+            } else {
+                inputs.each( function() {
+                    $( this ).addClass( 'd-none' )
+                } )
+            }
+        } )
+
+        $( document ).on( 'click', '.is_wholesale-variant', function() {
+            const isChecked = $( this ).is( ':checked' )
+            const selectors = '.wholesale--input-' + $( this ).data( 'id' )
             const inputs = $( selectors )
 
             if ( isChecked ) {
@@ -400,11 +641,73 @@
             let moreVariant = `
                 <div class="border-top border-bottom py-2 more--variants" id="variant--${variantsCount}">
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Variant details</label>
+                        <label class="col-md-3 col-form-label text-dark">Variant details</label>
                         <div class="col-md-9">
                             <div class="form-group">
-                                <label class="col-form-label">Name</label>
+                                <label class="col-form-label text-dark">Name<span class="text-primary font-weight-bold">*</span></label>
                                 <input type="text" class="form-control" name="variant_names[]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
+                                    @php
+                                        $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
+                                    @endphp
+                                    <select class="form-control variant_soldper" name="variant_soldper[]" data-id="variant_standard_net_weight_unit_${variantsCount}"> 
+                                        <option selected disabled>Select option</option>
+                                        @foreach ( $soldPerOptions as $soldPerOption )
+                                            <option value="{{ $soldPerOption }}">{{ ucfirst( $soldPerOption ) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Product Size</label>
+                                    @php
+                                        $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                    @endphp
+                                    <select class="form-control" name="variant_product_size[]"> 
+                                        <option selected disabled>Select option (optional)</option>
+                                        @foreach ( $productSizes as $productSize )
+                                            <option value="{{ $productSize }}">{{ ucfirst( $productSize ) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
+                                    <div class="row">
+                                        <div class="col">
+                                            <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_${variantsCount}" readonly>
+                                                <option selected disabled>Select option</option>
+                                                <option value="gram">Gram</option>
+                                                <option value="kilogram">Kilogram</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -414,27 +717,62 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="col-form-label">Price</label>
+                                        <label class="col-form-label text-dark">Price<span class="text-primary font-weight-bold">*</span></label>
                                         <input type="number" class="form-control mb-2" name="variant_prices[]">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="col-form-label">Stocks</label>
+                                        <label class="col-form-label text-dark">Stocks<span class="text-primary font-weight-bold">*</span></label>
                                         <input type="number" class="form-control mb-2" name="variant_stocks[]">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12 text-right">
-                                    <button type="button" class="btn btn-primary add--more-variant">
-                                        <i class="nc-icon nc-simple-add"></i> Add More
-                                    </button>
-                                    <button type="button" class="btn btn-secondary delete--more-variant" data-id="${variantsCount}">
-                                        <i class="nc-icon nc-simple-minus"></i> Remove
-                                    </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="form-group row wholesale--container-global wholesale--container-variant-${variantsCount}">
+                                <div class="col">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-${variantsCount}" data-id="variant-${variantsCount}">
+                                        <label class="custom-control-label text-dark" for="is_wholesale-variant-${variantsCount}">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
+                                    </div>
                                 </div>
                             </div>
+                    
+                            <div class="form-group row d-none wholesale--input-variant-${variantsCount} border-top pt-2">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark font-weight-bold">Wholesale Details</label>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label text-dark">Price*</label>
+                                            <div class="form-group"> 
+                                                <input type="number" class="form-control" name="variant_wholesale_price[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="col-form-label text-dark">Minimum quantity*</label>
+                                            <div class="form-group"> 
+                                                <input type="text" class="form-control" name="variant_wholesale_min_qty[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-primary add--more-variant">
+                                <i class="nc-icon nc-simple-add"></i> Add More
+                            </button>
+                            <button type="button" class="btn btn-secondary delete--more-variant" data-id="${variantsCount}">
+                                <i class="nc-icon nc-simple-minus"></i> Remove
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -451,6 +789,8 @@
             if ( isOldVariant ) {
                 setRemovedIds( id, 'removed_variants' )
                 selector += `old-${id}`
+            } else {
+                selector += id
             }
 
             $( selector ).remove()

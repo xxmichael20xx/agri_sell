@@ -5,34 +5,7 @@
     <input type="hidden" name="featured_index" id="featured_index">
     <div class="card-body">
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Product name</label>
-            <div class="col-md-9">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="product_name" value="{{ old('product_name') }}">
-                    @if ( $errors->has( 'product_name' ) )
-                        <span class="text-danger">{{ $errors->first( 'product_name' ) }}</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-2">
-            <label class="col-md-3 col-form-label">Product images</label>
-            <div class="col-md-9">
-                <div class="custom-file h6 mt-2">
-                    <input type="file" class="custom-file-input" id="images" name="images[]" accept="image/*" multiple required>
-                    <label class="custom-file-label text-muted" id="images--label" for="images">Choose an images</label>
-                </div>
-                <small class="text-secondary">Note: Click on a image to set it as the featured image</small>
-                @if ( $errors->has( 'images' ) )
-                    <span class="text-danger">{{ $errors->first( 'images' ) }}</span>
-                @endif
-                <div class="row mt-3" id="image_preview"></div>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Product category</label>
+            <label class="col-md-3 col-form-label text-dark">Product category<span class="text-primary font-weight-bold">*</span></label>
             <div class="col-md-9">
                 @php
                     $product_categories = App\Category::all();
@@ -50,56 +23,20 @@
                 @endif
             </div>
         </div>
-
         <div class="form-group row">
-            <div class="col-md-3"></div>
+            <label class="col-md-3 col-form-label text-dark">Product Name<span class="text-primary font-weight-bold">*</span></label>
             <div class="col-md-9">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="col-form-label">Price</label>
-                            <input type="number" class="form-control" name="retail_price" value="{{ old( 'retail_price' ) }}">
-                            @if ( $errors->has( 'retail_price' ) )
-                                <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="col-form-label">Stocks</label>
-                            <input type="number" class="form-control" name="stocks" value="{{ old( 'stocks' ) }}">
-                            @if ( $errors->has( 'stocks' ) )
-                                <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
-                            @endif
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="product_name" value="{{ old('product_name') }}">
+                    @if ( $errors->has( 'product_name' ) )
+                        <span class="text-danger">{{ $errors->first( 'product_name' ) }}</span>
+                    @endif
                 </div>
             </div>
         </div>
 
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Product sold per</label>
-            <div class="col-md-9">
-                @php
-                    $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
-                @endphp
-                <select class="form-control" name="wholesale_sold_per" id="wholesale_sold_per"> 
-                    <option selected disabled>Select option</option>
-                    @foreach ( $soldPerOptions as $soldPerOption )
-                        @php
-                            $isSelected = old( 'wholesale_sold_per' ) == $soldPerOption ? 'selected' : '';
-                        @endphp
-                        <option value="{{ $soldPerOption }}" isSelected>{{ ucfirst( $soldPerOption ) }}</option>
-                    @endforeach
-                </select>
-                @if ( $errors->has( 'wholesale_sold_per' ) )
-                    <span class="text-danger">{{ $errors->first( 'wholesale_sold_per' ) }}</span>
-                @endif
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="col-md-3 col-form-label">Product description</label>
+            <label class="col-md-3 col-form-label text-dark">Product Description<span class="text-primary font-weight-bold">*</span></label>
             <div class="col-md-9">
                 <div class="form-group">
                     <textarea type="text" class="form-control" name="product_desc" value="{{ old( 'product_desc' ) }}"></textarea>
@@ -111,8 +48,215 @@
             </div>
         </div>
 
+        <div class="row mb-2">
+            <label class="col-md-3 col-form-label text-dark">Product Images<span class="text-primary font-weight-bold">*</span></label>
+            <div class="col-md-9">
+                <div class="custom-file h6 mt-2">
+                    <input type="file" class="custom-file-input" id="images" name="images[]" accept="image/*" multiple required>
+                    <label class="custom-file-label text-muted" id="images--label" for="images">Choose an images</label>
+                </div>
+                <small class="text-secondary">Note: Click on a image to set it as the featured image</small>
+                @if ( $errors->has( 'images' ) )
+                    <span class="text-danger">{{ $errors->first( 'images' ) }}</span>
+                @endif
+                <div class="row mt-3" id="image_preview"></div>
+            </div>
+        </div>
+        
+        <div class="form-group row variants--container">
+            <div class="col">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" name="has_vartiants" id="has_vartiants">
+                    <label class="custom-control-label text-dark" for="has_vartiants">Product has variants?<span class="text-primary font-weight-bold">*</span></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row d-none variant--input-container">
+            <div class="col-12">
+                <div class="border-top border-bottom py-2" id="variant--0">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label text-dark">Variant details</label>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="col-form-label text-dark">Name<span class="text-primary font-weight-bold">*</span></label>
+                                <input type="text" class="form-control" name="variant_names[]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
+                                    @php
+                                        $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
+                                    @endphp
+                                    <select class="form-control variant_soldper" name="variant_soldper[]" data-id="variant_standard_net_weight_unit_0"> 
+                                        <option selected disabled>Select option</option>
+                                        @foreach ( $soldPerOptions as $soldPerOption )
+                                            <option value="{{ $soldPerOption }}">{{ ucfirst( $soldPerOption ) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Product Size</label>
+                                    @php
+                                        $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                    @endphp
+                                    <select class="form-control" name="variant_product_size[]"> 
+                                        <option selected disabled>Select option (optional)</option>
+                                        @foreach ( $productSizes as $productSize )
+                                            <option value="{{ $productSize }}">{{ ucfirst( $productSize ) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
+                                    <div class="row">
+                                        <div class="col">
+                                            <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_0" readonly>
+                                                <option selected disabled>Select option</option>
+                                                <option value="gram">Gram</option>
+                                                <option value="kilogram">Kilogram</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="col-form-label text-dark">Price<span class="text-primary font-weight-bold">*</span></label>
+                                        <input type="number" class="form-control mb-2" name="variant_prices[]">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="col-form-label text-dark">Stocks<span class="text-primary font-weight-bold">*</span></label>
+                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="form-group row wholesale--container-global wholesale--container-variant-0">
+                                <div class="col">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-0" data-id="variant-0">
+                                        <label class="custom-control-label text-dark" for="is_wholesale-variant-0">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <div class="form-group row d-none wholesale--input-variant-0 border-top pt-2">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark font-weight-bold">Wholesale Details</label>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label text-dark">Price*</label>
+                                            <div class="form-group"> 
+                                                <input type="number" class="form-control" name="variant_wholesale_price[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="col-form-label text-dark">Minimum quantity*</label>
+                                            <div class="form-group"> 
+                                                <input type="text" class="form-control" name="variant_wholesale_min_qty[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-primary add--more-variant">
+                                <i class="nc-icon nc-simple-add"></i> Add More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="more--variants"></div>
+            </div>
+        </div>
+
         <div class="form-group row">
-            <label class="col-md-3 col-form-label">Standard net weight</label>
+            <label class="col-md-3 col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
+            <div class="col-md-9">
+                @php
+                    $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
+                @endphp
+                <select class="form-control" name="wholesale_sold_per" id="wholesale_sold_per"> 
+                    <option selected disabled>Select option</option>
+                    @foreach ( $soldPerOptions as $soldPerOption )
+                        @php
+                            $isSelected = old( 'wholesale_sold_per' ) == $soldPerOption ? 'selected' : '';
+                        @endphp
+                        <option value="{{ $soldPerOption }}" {{ $isSelected }}>{{ ucfirst( $soldPerOption ) }}</option>
+                    @endforeach
+                </select>
+                @if ( $errors->has( 'wholesale_sold_per' ) )
+                    <span class="text-danger">{{ $errors->first( 'wholesale_sold_per' ) }}</span>
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label text-dark">Product Size</label>
+            <div class="col-md-9">
+                @php
+                    $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                @endphp
+                <select class="form-control" name="product_size" id="product_size"> 
+                    <option selected disabled>Select option (optional)</option>
+                    @foreach ( $productSizes as $productSize )
+                        @php
+                            $isSelected = old( 'product_size' ) == $productSize ? 'selected' : '';
+                        @endphp
+                        <option value="{{ $productSize }}" {{ $isSelected }}>{{ ucfirst( $productSize ) }}</option>
+                    @endforeach
+                </select>
+                @if ( $errors->has( 'product_size' ) )
+                    <span class="text-danger">{{ $errors->first( 'product_size' ) }}</span>
+                @endif
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
             <div class="col-md-9">
                 <div class="row">
                     <div class="col">
@@ -134,22 +278,48 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group row">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="col-form-label text-dark">Price<span class="text-primary font-weight-bold">*</span></label>
+                            <input type="number" class="form-control" name="retail_price" value="{{ old( 'retail_price' ) }}">
+                            @if ( $errors->has( 'retail_price' ) )
+                                <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="col-form-label text-dark">Stocks<span class="text-primary font-weight-bold">*</span></label>
+                            <input type="number" class="form-control" name="stocks" value="{{ old( 'stocks' ) }}">
+                            @if ( $errors->has( 'stocks' ) )
+                                <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="form-group row wholesale--container">
             <div class="col">
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale">
-                    <label class="custom-control-label" for="is_wholesale">Is Wholesale?</label>
+                    <label class="custom-control-label text-dark" for="is_wholesale">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
                 </div>
             </div>
         </div>
 
         <div class="form-group row d-none wholesale--input border-top pt-2">
-            <label class="col-md-3 col-form-label font-weight-bold">Wholesale</label>
+            <label class="col-md-3 col-form-label text-dark font-weight-bold">Wholesale</label>
             <div class="col-md-9">
                 <div class="form-group row">
                     <div class="col-md-6">
-                        <label class="col-form-label">Price</label>
+                        <label class="col-form-label text-dark">Price*</label>
                         <div class="form-group"> 
                             <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
                             @if ( $errors->has( 'wholesale_price' ) )
@@ -158,7 +328,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-form-label">Minimum quantity</label>
+                        <label class="col-form-label text-dark">Minimum quantity*</label>
                         <div class="form-group"> 
                             <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
                             @if ( $errors->has( 'wholesale_min_qty' ) )
@@ -167,79 +337,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="form-group row variants--container">
-            <div class="col">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="has_vartiants" id="has_vartiants">
-                    <label class="custom-control-label" for="has_vartiants">Has variants?</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group row d-none variant--input-container">
-            <div class="col-12">
-                <div class="border-top border-bottom py-2" id="variant--0">
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Variant details</label>
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <label class="col-form-label">Name</label>
-                                <input type="text" class="form-control" name="variant_names[]">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-9">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Price</label>
-                                        <input type="number" class="form-control mb-2" name="variant_prices[]">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Stocks</label>
-                                        <input type="number" class="form-control mb-2" name="variant_stocks[]">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12 text-right">
-                                    <button type="button" class="btn btn-primary add--more-variant">
-                                        <i class="nc-icon nc-simple-add"></i> Add More
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="more--variants"></div>
-            </div>
-        </div>
-
-        <div hidden class="row">
-            <label class="col-md-3 col-form-label">Sale precentage deduction</label>
-            <div class="col-md-9">
-                <div class="form-group">
-                    <input type="number" class="form-control" name="sale_pct_deduction" value="{{ old( 'sale_pct_deduction' ) }}">=
-                </div>
-            </div>
-        </div>
-
-        <div hidden class="row">
-            <label class="col-md-3 col-form-label">Sale</label>
-            <div class="col-md-4">
-                <input class="bootstrap-switch" type="checkbox" onchange="changeIsProductSaleStatus()"
-                        id="switch_is_prod_sale" data-toggle="switch"
-                        data-on-label="<i class='nc-icon nc-check-2'></i>"
-                        data-off-label="<i class='nc-icon nc-simple-remove'></i>" data-on-color="success"
-                        data-off-color="success" />
-                <input type="hidden" id="isSaleValueSetter" name="is_Sale">
             </div>
         </div>
 
@@ -265,9 +362,35 @@
             $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
         } )
 
+        $( document ).on( 'change', '.variant_soldper', function() {
+            const val = $( this ).val()
+            const weightOptionSelector = '#' + $( this ).data( 'id' )
+            console.log( weightOptionSelector )
+            let weightOptionValue = 'kilogram'
+
+            if ( val == 'piece' ) weightOptionValue = 'gram'
+            $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
+        } )
+
         $( document ).on( 'click', '#is_wholesale,#has_vartiants', function() {
             const isChecked = $( this ).is( ':checked' )
             const selectors = $( this ).attr( 'id' ) == 'is_wholesale' ? '.wholesale--input' : '.variant--input-container'
+            const inputs = $( selectors )
+
+            if ( isChecked ) {
+                inputs.each( function() {
+                    $( this ).removeClass( 'd-none' )
+                } )
+            } else {
+                inputs.each( function() {
+                    $( this ).addClass( 'd-none' )
+                } )
+            }
+        } )
+
+        $( document ).on( 'click', '.is_wholesale-variant', function() {
+            const isChecked = $( this ).is( ':checked' )
+            const selectors = '.wholesale--input-' + $( this ).data( 'id' )
             const inputs = $( selectors )
 
             if ( isChecked ) {
@@ -292,11 +415,73 @@
             let moreVariant = `
                 <div class="border-top border-bottom py-2 more--variants" id="variant--${variantsCount}">
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Variant details</label>
+                        <label class="col-md-3 col-form-label text-dark">Variant details</label>
                         <div class="col-md-9">
                             <div class="form-group">
-                                <label class="col-form-label">Name</label>
+                                <label class="col-form-label text-dark">Name<span class="text-primary font-weight-bold">*</span></label>
                                 <input type="text" class="form-control" name="variant_names[]">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
+                                    @php
+                                        $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
+                                    @endphp
+                                    <select class="form-control variant_soldper" name="variant_soldper[]" data-id="variant_standard_net_weight_unit_${variantsCount}"> 
+                                        <option selected disabled>Select option</option>
+                                        @foreach ( $soldPerOptions as $soldPerOption )
+                                            <option value="{{ $soldPerOption }}">{{ ucfirst( $soldPerOption ) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Product Size</label>
+                                    @php
+                                        $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                    @endphp
+                                    <select class="form-control" name="variant_product_size[]"> 
+                                        <option selected disabled>Select option (optional)</option>
+                                        @foreach ( $productSizes as $productSize )
+                                            <option value="{{ $productSize }}">{{ ucfirst( $productSize ) }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
+                                    <div class="row">
+                                        <div class="col">
+                                            <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_${variantsCount}" readonly>
+                                                <option selected disabled>Select option</option>
+                                                <option value="gram">Gram</option>
+                                                <option value="kilogram">Kilogram</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -306,27 +491,62 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="col-form-label">Price</label>
+                                        <label class="col-form-label text-dark">Price<span class="text-primary font-weight-bold">*</span></label>
                                         <input type="number" class="form-control mb-2" name="variant_prices[]">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label class="col-form-label">Stocks</label>
+                                        <label class="col-form-label text-dark">Stocks<span class="text-primary font-weight-bold">*</span></label>
                                         <input type="number" class="form-control mb-2" name="variant_stocks[]">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12 text-right">
-                                    <button type="button" class="btn btn-primary add--more-variant">
-                                        <i class="nc-icon nc-simple-add"></i> Add More
-                                    </button>
-                                    <button type="button" class="btn btn-secondary delete--more-variant" data-id="variant--${variantsCount}">
-                                        <i class="nc-icon nc-simple-minus"></i> Remove
-                                    </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-3"></div>
+                        <div class="col-9">
+                            <div class="form-group row wholesale--container-global wholesale--container-variant-${variantsCount}">
+                                <div class="col">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-${variantsCount}" data-id="variant-${variantsCount}">
+                                        <label class="custom-control-label text-dark" for="is_wholesale-variant-${variantsCount}">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
+                                    </div>
                                 </div>
                             </div>
+                    
+                            <div class="form-group row d-none wholesale--input-variant-${variantsCount} border-top pt-2">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-dark font-weight-bold">Wholesale Details</label>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="col-form-label text-dark">Price*</label>
+                                            <div class="form-group"> 
+                                                <input type="number" class="form-control" name="variant_wholesale_price[]">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="col-form-label text-dark">Minimum quantity*</label>
+                                            <div class="form-group"> 
+                                                <input type="text" class="form-control" name="variant_wholesale_min_qty[]">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-12 text-right">
+                            <button type="button" class="btn btn-primary add--more-variant">
+                                <i class="nc-icon nc-simple-add"></i> Add More
+                            </button>
+                            <button type="button" class="btn btn-secondary delete--more-variant" data-id="variant--${variantsCount}">
+                                <i class="nc-icon nc-simple-minus"></i> Remove
+                            </button>
                         </div>
                     </div>
                 </div>

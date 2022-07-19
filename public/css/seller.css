@@ -67,6 +67,7 @@
     cursor: not-allowed !important;
 }
 
+.wholesale--container-global .custom-control-input:checked ~ .custom-control-label::before, 
 .wholesale--container .custom-control-input:checked ~ .custom-control-label::before, 
 .variants--container .custom-control-input:checked ~ .custom-control-label::before {
     border-color: #219F94 !important;

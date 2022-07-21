@@ -26,7 +26,6 @@
                                 <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Date reflected</th>
-                                <th>Uploaded by</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,12 +34,6 @@
                                     <td>
                                         <div class="monitor--logs-image" style="background-image: url('/storage/{{ $product_monitoring_ent->item_image }}');" ></div>
                                     </td>
-                                    <td>{{ $product_monitoring_ent->created_by_user->name ?? 'not available' }}</td>
-                                    <td>{{ $product_monitoring_ent->sub_order_item->product->name ?? 'not available' }}</td>
-                                    <td>{{ $product_monitoring_ent->status}}</td>
-                                    <td>{{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->quantity ) ?? 'not available' }}</td>
-                                    <td>₱ {{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->price ) ?? 'not available' }}</td>
-                                    <td>{{ $product_monitoring_ent->sub_order_item->sub_order_parent->updated_at ?? 'not available' }}</td>
                                     <td>
                                         @php
                                             $role_id = $product_monitoring_ent->created_by_user->role_id;
@@ -58,8 +51,14 @@
                                                     break;
                                             }
                                             
-                                            echo $role_name;
+                                            echo $role_name . ": ";
                                         @endphp
+                                        {{ $product_monitoring_ent->created_by_user->name ?? 'not available' }}</td>
+                                    <td>{{ $product_monitoring_ent->sub_order_item->product->name ?? 'not available' }}</td>
+                                    <td>{{ $product_monitoring_ent->status}}</td>
+                                    <td>{{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->quantity ) ?? 'not available' }}</td>
+                                    <td>₱ {{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->price ) ?? 'not available' }}</td>
+                                    <td>{{ $product_monitoring_ent->sub_order_item->sub_order_parent->updated_at ?? 'not available' }}</td>
                                 </tr>
                             @empty
                                 <tr>

@@ -286,7 +286,7 @@ class OrderMgmtPanelController extends Controller
                 $notifData = [
                     'user_id' => $order->user_id,
                     'frm_user_id' => $this->userId(),
-                    'notification_title' => "Order #{$order_id} Updated",
+                    'notification_title' => "Order Updated",
                     'notification_txt' => $title,
                 ];
                 $eventData = [ 

@@ -1,6 +1,12 @@
 @extends('sellerPanel.front')
 @section('content')
-
+<style>
+    .logo--image {
+        width: 40px !important;
+        height: 30px !important;
+        margin-right: 10px;
+    }
+</style>
 <div class="content">
     <a href="/sellerpanel/payout" class="btn btn-outline-dark btn-round mb-4">Go back</a>
 
@@ -12,13 +18,49 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <div class="col-md-8 mx-auto text-center">
+                        <div class="col-6 text-right">
                             <button type="button" class="btn btn-outline-primary payout--type" data-value="GCash">
+                                <img src="/img/gcash.png" class="img-fluid w-25 logo--image">
                                 Add GCash Account
                             </button>
-                            <button type="button" class="btn btn-outline-primary payout--type" data-value="Bank">
-                                Add Bank Account
-                            </button>
+                        </div>
+                        <div class="col-6">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="payoutOptionType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="/img/bank.png" class="img-fluid w-25 logo--image">
+                                    Add Bank Account
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="payoutOptionType">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Unionbank Internet Banking">
+                                        <img src="/img/union_bank.png" class="img-fluid w-25 logo--image">
+                                        Unionbank Internet Banking
+                                    </a>
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="RCBC AccessOne">
+                                        <img src="/img/rcbc.png" class="img-fluid w-25 logo--image">
+                                        RCBC AccessOne
+                                    </a>
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="BDO">
+                                        <img src="/img/bdo.png" class="img-fluid w-25 logo--image">
+                                        BDO
+                                    </a>
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Metrobank Direct">
+                                        <img src="/img/metrobank.png" class="img-fluid w-25 logo--image">
+                                        Metrobank Direct
+                                    </a>
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Landbank ATM Online">
+                                        <img src="/img/landbank.png" class="img-fluid w-25 logo--image">
+                                        Landbank ATM Online
+                                    </a>
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Bank of Commerce">
+                                        <img src="/img/bank_of_commerce.png" class="img-fluid w-25 logo--image">
+                                        Bank of Commerce
+                                    </a>
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="UCPB Connect">
+                                        <img src="/img/ucpb.png" class="img-fluid w-25 logo--image">
+                                        UCPB Connect
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <form method="POST" id="payout--request-form" class="collapse">
@@ -117,7 +159,7 @@
                                 </div>
                                 <div class="col-10">
                                     <input type="password" name="payout_password" id="payout_password" class="form-control">
-                                    <p class="text-muted d-block">Please insert your seller account password for validation, enable to process your payout request.</p>
+                                    {{-- <p class="text-muted d-block">Please insert your seller account password, enable to process your payout request.</p> --}}
                                     <small class="text-danger" id="payout_password_error"></small>
                                 </div>
                             </div>
@@ -144,6 +186,7 @@
 
                 $( document ).on( 'click', '.payout--type', function() {
                     const val = $( this ).data( 'value' )
+                    const bank = $( this ).data( 'bank' )
                     const self = this
 
                     $( '#payout--request-form' ).removeClass( 'collapse' )
@@ -172,10 +215,16 @@
                     $( this ).addClass( 'btn-primary' )
                     $( this ).removeClass( 'btn-outline-primary' )
 
-                    if ( val == "Bank" ) {
+                    /* if ( val == "Bank" ) {
                         $( '#payout--option-container' ).removeClass( 'collapse' )
                     } else {
                         $( '#payout--option-container' ).addClass( 'collapse' )
+                        $( '#payout_option' ).val( '' ).trigger( 'change' )
+                    } */
+
+                    if ( bank ) {
+                        $( '#payout_option' ).val( bank ).trigger( 'change' )
+                    } else {
                         $( '#payout_option' ).val( '' ).trigger( 'change' )
                     }
                 } )

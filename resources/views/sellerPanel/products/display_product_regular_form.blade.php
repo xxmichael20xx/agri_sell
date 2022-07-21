@@ -111,7 +111,7 @@
                                 <div class="col-md-12">
                                     <label class="col-form-label text-dark">Product Size</label>
                                     @php
-                                        $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                        $productSizes = [ 'Small', 'Medium', 'Large', 'Extra Large' ];
                                     @endphp
                                     <select class="form-control" name="variant_product_size[]"> 
                                         <option selected disabled>Select option (optional)</option>
@@ -238,7 +238,7 @@
             <label class="col-md-3 col-form-label text-dark">Product Size</label>
             <div class="col-md-9">
                 @php
-                    $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                    $productSizes = [ 'Small', 'Medium', 'Large', 'Extra Large' ];
                 @endphp
                 <select class="form-control" name="product_size" id="product_size"> 
                     <option selected disabled>Select option (optional)</option>
@@ -450,7 +450,7 @@
                                 <div class="col-md-12">
                                     <label class="col-form-label text-dark">Product Size</label>
                                     @php
-                                        $productSizes = [ 'S', 'M', 'L', 'XL' ];
+                                        $productSizes = [ 'Small', 'Medium', 'Large', 'Extra Large' ];
                                     @endphp
                                     <select class="form-control" name="variant_product_size[]"> 
                                         <option selected disabled>Select option (optional)</option>

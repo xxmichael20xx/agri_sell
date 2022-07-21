@@ -114,34 +114,74 @@ class CartController extends Controller
         }
 
         $cart = \Cart::session(auth()->id());
-        // $cartItems = $cart->getContent();
+        $cartItems = $cart->getContent();
 
-        // delclare a product variation obj in cart
-        $variant = ProductVariation::find($req->variation_id);
-        $isWholesale = $variant->is_variation_wholesale_only;
-        $product_final_price_tmp = $variant->variation_price_per;
-        $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
+        foreach ( $cartItems as $item_index => $item ) {
+            $variant = ProductVariation::find($req->variation_id);
+            if ( $item->id == $req->variation_id ) {
+                $itemQuantity = $item->quantity;
+                $requestQuantity = $req->quantity;
+                $variantQuantity = $variant->variation_quantity;
 
-        $cart->add(array(
-            'id' => $req->variation_id,
-            'product_id' => $product->id,
-            'name' => $product->name,
-            'description'=> $product->description,
-            'cover_img' => $product->featured_image,
-            'price' => $product_final_price_tmp,
-            'quantity' => $req->quantity,
-            'attributes' => array(),
-            'conditions' => NULL,
-            'isSale' => $product->is_sale,
-            'isWholeSale' => ($product->is_whole_sale == 1) ? '1' : '0',
-            'wholeSaleMinQty' => $wholeSaleMinQty,
-            'salePct' => $product->sale_pct_deduction,
-            'wholeSalePct' => $product->whole_sale_pct_deduction,
-            'associatedModel' => $product,
-            'variation_id' => $req->variation_id,
-        ));
+                if ( $itemQuantity + $requestQuantity > $variantQuantity ) {
+                    return back()->withError( 'Product stock is insufficient. Maximum quantity: ' . $variantQuantity . ' and in your cart you have: ' . $itemQuantity );
+                    break;
+                }
+            }
+            // delclare a product variation obj in cart
+            $variant = ProductVariation::find($req->variation_id);
+            $product_final_price_tmp = $variant->variation_price_per;
+            $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
+    
+            $cart->add(array(
+                'id' => $req->variation_id,
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'description'=> $product->description,
+                'cover_img' => $product->featured_image,
+                'price' => $product_final_price_tmp,
+                'quantity' => $req->quantity,
+                'attributes' => array(),
+                'conditions' => NULL,
+                'isSale' => $product->is_sale,
+                'isWholeSale' => ($product->is_whole_sale == 1) ? '1' : '0',
+                'wholeSaleMinQty' => $wholeSaleMinQty,
+                'salePct' => $product->sale_pct_deduction,
+                'wholeSalePct' => $product->whole_sale_pct_deduction,
+                'associatedModel' => $product,
+                'variation_id' => $req->variation_id,
+            ));
+    
+            return redirect()->route('cart.index');
+        }
 
-        return redirect()->route('cart.index');
+        if ( count( $cartItems ) < 1 ) {
+            $variant = ProductVariation::find($req->variation_id);
+            $product_final_price_tmp = $variant->variation_price_per;
+            $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
+    
+            $cart->add(array(
+                'id' => $req->variation_id,
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'description'=> $product->description,
+                'cover_img' => $product->featured_image,
+                'price' => $product_final_price_tmp,
+                'quantity' => $req->quantity,
+                'attributes' => array(),
+                'conditions' => NULL,
+                'isSale' => $product->is_sale,
+                'isWholeSale' => ($product->is_whole_sale == 1) ? '1' : '0',
+                'wholeSaleMinQty' => $wholeSaleMinQty,
+                'salePct' => $product->sale_pct_deduction,
+                'wholeSalePct' => $product->whole_sale_pct_deduction,
+                'associatedModel' => $product,
+                'variation_id' => $req->variation_id,
+            ));
+    
+            return redirect()->route('cart.index');
+        }
+
     }
 
     public function index()

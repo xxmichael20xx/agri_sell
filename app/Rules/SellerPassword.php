@@ -32,7 +32,7 @@ class SellerPassword implements Rule
         $passwordCheck = Hash::check( $this->request->payout_password, $seller->password );
 
         if ( ! $passwordCheck ) {
-            $this->message = "Password is incorrect!";
+            $this->message = "Password is incorrect, please try again";
             return false;
         }
 

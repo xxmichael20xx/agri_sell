@@ -131,6 +131,8 @@ class SellerPayoutController extends Controller
             $this->validate( $request, [
                 'amount' => [ 'required', new SellerPayoutAmount( $request ) ],
                 'payout_password' => [ 'required', new SellerPassword( $request ) ]
+            ], [
+                'payout_password.required' => 'Please insert your seller account password, enable to process your payout request.'
             ] );
         }
 

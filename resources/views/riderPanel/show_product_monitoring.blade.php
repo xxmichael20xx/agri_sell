@@ -21,11 +21,12 @@
                             <tr>
                                 <th></th>
                                 <th>Created by</th>
-                                <th>Status</th>
+                                <th>Product name</th>
                                 <th>Status notes</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Date reflected</th>
+                                <th>Uploaded by</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,6 +41,26 @@
                                     <td>{{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->quantity ) ?? 'not available' }}</td>
                                     <td>₱ {{ AppHelpers::numeric( $product_monitoring_ent->sub_order_item->price ) ?? 'not available' }}</td>
                                     <td>{{ $product_monitoring_ent->sub_order_item->sub_order_parent->updated_at ?? 'not available' }}</td>
+                                    <td>
+                                        @php
+                                            $role_id = $product_monitoring_ent->created_by_user->role_id;
+                                            
+                                            switch ( $role_id ) {
+                                                case 1:
+                                                    $role_name = "Admin";
+                                                    break;
+
+                                                case 3:
+                                                    $role_name = "Seller";
+                                                
+                                                default:
+                                                    $role_name = "Rider";
+                                                    break;
+                                            }
+                                            
+                                            echo $role_name;
+                                        @endphp
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -86,7 +107,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Product status notes</label>
-                                            <textarea class="form-control" form="addprodmonitor" name="prod_status_names" rows="3"></textarea>
+                                            <textarea class="form-control" form="addprodmonitor" name="prod_status_names" rows="3" required></textarea>
                                         </div>
                                     </div>
                                 </div>

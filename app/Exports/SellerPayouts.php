@@ -24,7 +24,7 @@ class SellerPayouts implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        $headers = [ "Payout #", "Amount", "Week Range", "Date Requested", "Status" ];
+        $headers = [ "Payout #", "Type", "Amount", "Week Range", "Date Requested", "Status" ];
         return [ [ "List of Seller Payout" ], $headers ];
     }
 
@@ -59,6 +59,7 @@ class SellerPayouts implements FromCollection, WithHeadings
 
             $_data = [
                 "#" . $payout->id,
+                $payout->metadata['type'],
                 "Peso " . $this->helpers->numeric( $payout->amount ),
                 $this->helpers->humanDate( $payout->payout->week_start, false ) . " - " . $this->helpers->humanDate( $payout->payout->week_end, false ),
                 $this->helpers->humanDate( $payout->created_at ),

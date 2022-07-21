@@ -11,33 +11,63 @@
                     <h5 class="card-title">Payout Request Form {{ $payout ? "- Update" : "" }}</h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST" id="payout--request-form">
+                    <div class="form-group row">
+                        <div class="col-md-8 mx-auto text-center">
+                            <button type="button" class="btn btn-outline-primary payout--type" data-value="GCash">
+                                Add GCash Account
+                            </button>
+                            <button type="button" class="btn btn-outline-primary payout--type" data-value="Bank">
+                                Add Bank Account
+                            </button>
+                        </div>
+                    </div>
+                    <form method="POST" id="payout--request-form" class="collapse">
                         @csrf
                         <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
+                        <input type="hidden" name="payout_type" id="payout_type">
+                        <input type="hidden" name="form_step" id="form_step" value="1">
                         @if ( $payout )
                             <input type="hidden" name="payout_request_id" id="payout_request_id" value="{{ $payout->id }}">
                         @endif
 
                         <div class="form-group row">
                             <div class="col-12">
-                                <div class="h6">GCash Verified Information</div>
+                                <div class="h6"><span id="account--details"></span> Account Details</div>
                             </div>
                         </div>
 
                         <div id="first-fields">
+                            <div class="form-group row collapse" id="payout--option-container">
+                                <div class="col-2">
+                                    <label class="col-form-label">Payment option:</label>
+                                </div>
+                                <div class="col-10">
+                                    <select class="select custom-select" id="payout_option" name="payout_option">
+                                        <option value="" selected disabled>Select payment option</option>
+                                        <option value="Unionbank Internet Banking">Unionbank Internet Banking</option>
+                                        <option value="RCBC AccessOne">RCBC AccessOne</option>
+                                        <option value="BDO">BDO</option>
+                                        <option value="Metrobank Direct">Metrobank Direct</option>
+                                        <option value="Landbank ATM Online">Landbank ATM Online</option>
+                                        <option value="Bank of Commerce">Bank of Commerce</option>
+                                        <option value="UCPB Connect">UCPB Connect</option>
+                                    </select>
+                                    <small class="text-danger" id="payout_option_error"></small>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-2">
-                                    <label class="col-form-label">GCash Name:</label>
+                                    <label class="col-form-label"><span id="fields--name"></span> Name:</label>
                                 </div>
                                 <div class="col-10">
                                     <div class="form-group row">
                                         <div class="col">
-                                            <input type="text" name="gcash_first_name" id="gcash_first_name" class="form-control" placeholder="First name: i.e. John" value="{{ $payout->gcash_first_name ?? '' }}" required>
-                                            <small class="text-danger collapse">First name is required</small>
+                                            <input type="text" name="gcash_first_name" id="gcash_first_name" class="form-control" placeholder="First name: i.e. John" value="{{ $payout->gcash_first_name ?? '' }}">
+                                            <small class="text-danger" id="gcash_first_name_error"></small>
                                         </div>
                                         <div class="col">
-                                            <input type="text" name="gcash_last_name" id="gcash_last_name" class="form-control" placeholder="Last nae: i.e. Doe" value="{{ $payout->gcash_last_name ?? '' }}" required>
-                                            <small class="text-danger collapse">Last name is required</small>
+                                            <input type="text" name="gcash_last_name" id="gcash_last_name" class="form-control" placeholder="Last nae: i.e. Doe" value="{{ $payout->gcash_last_name ?? '' }}">
+                                            <small class="text-danger" id="gcash_last_name_error"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -45,11 +75,11 @@
 
                             <div class="form-group row">
                                 <div class="col-2">
-                                    <label for="gcash_number" class="col-form-label">GCash Number:</label>
+                                    <label for="gcash_number" class="col-form-label"><span id="fields--number"></span> Number:</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="tel" name="gcash_number" id="gcash_number" class="form-control" placeholder="i.e. +6399151118383" value="{{ $payout->gcash_number ?? '' }}" required>
-                                    <small class="text-danger collapse">GCash Number is required</small>
+                                    <input type="tel" name="gcash_number" id="gcash_number" class="form-control" value="{{ $payout->gcash_number ?? '' }}">
+                                    <small class="text-danger" id="gcash_number_error"></small>
                                 </div>
                             </div>
 
@@ -65,7 +95,7 @@
 
                             <div class="form-group row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-primary btn-action" data-action="next">Next</button>
+                                    <button type="submit" class="btn btn-primary">Next</button>
                                 </div>
                             </div>
                         </div>
@@ -76,8 +106,8 @@
                                     <label for="amount" class="col-form-label">Amount of Payout:</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="number" name="amount" id="amount" class="form-control" placeholder="i.e. 200" value="{{ $payout->amount ?? '' }}" required>
-                                    <small class="text-danger collapse">Payout amount is required</small>
+                                    <input type="number" name="amount" id="amount" class="form-control" placeholder="i.e. 200" value="{{ $payout->amount ?? '' }}">
+                                    <small class="text-danger" id="amount_error"></small>
                                 </div>
                             </div>
 
@@ -86,16 +116,16 @@
                                     <label for="payout_password" class="col-form-label">Password:</label>
                                 </div>
                                 <div class="col-10">
-                                    <input type="password" name="payout_password" id="payout_password" class="form-control" required>
-                                    <p class="text-muted">Please insert your seller account password for validation, enable to process your payout request.</p>
-                                    <small class="text-danger collapse">Password is required</small>
+                                    <input type="password" name="payout_password" id="payout_password" class="form-control">
+                                    <p class="text-muted d-block">Please insert your seller account password for validation, enable to process your payout request.</p>
+                                    <small class="text-danger" id="payout_password_error"></small>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <div class="col-12">
-                                    <button type="button" class="btn btn-secondary btn-action" data-action="back">Back</button>
-                                    <button type="button" class="btn btn-primary btn-action" data-action="submit">Validate Form</button>
+                                    <button type="button" class="btn btn-secondary btn-back">Back</button>
+                                    <button type="submit" class="btn btn-primary btn-action" data-action="submit">Validate Form</button>
                                 </div>
                             </div>
                         </div>
@@ -112,149 +142,106 @@
         (function($) {
             $(document).ready(function() {
 
-                $( document ).on( 'click', '.btn-action', function() {
-                    const action = $( this ).data( 'action' )
-                    const first = $( '#first-fields' )
-                    const second = $( '#second-fields' )
-                    let proceed = false
+                $( document ).on( 'click', '.payout--type', function() {
+                    const val = $( this ).data( 'value' )
+                    const self = this
 
-                    if ( action == 'next' ) {
-                        let firstName = $( '#gcash_first_name' )
-                        let lastName = $( '#gcash_last_name' )
-                        let gnumber = $( '#gcash_number' )
-                        // let gref = $( '#gcash_ref' )
+                    $( '#payout--request-form' ).removeClass( 'collapse' )
+                    $( '#account--details' ).text( val )
+                    $( '#fields--name' ).text( val )
+                    $( '#fields--number' ).text( val )
 
-                        let afterValidate = [ validate( firstName ), validate( lastName ), validate( gnumber ) ]
-                        let proceed = afterValidate.includes( false ) ? false : true
+                    $( '#payout--request-form small.text-danger' ).each( function() {
+                        $( this ).html( '' )
+                    } )
 
-                        if ( proceed ) {
-                            const reg = new RegExp( /^09[0-9]{9,9}$/i )
-                            const isValid = reg.test( gnumber.val() )
-
-                            if ( ! isValid ) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Opps, there seems to be a problem',
-                                    html: 'Please enter a valid Phone Number'
-                                })
-                                return false
-                            }
-
-                            first.hide()
-                            second.show()
-                        }
-
-                    } else if ( action == 'back' ) {
-                        first.show()
-                        second.hide()
-
-                    } else {
-                        let proceed = triggerVerify()
-                        if ( proceed ) verifyForm()
-                        
+                    if ( val.toLowerCase() !== $( '#payout_type' ).val() ) {
+                        $( '#gcash_first_name' ).val( '' )
+                        $( '#gcash_last_name' ).val( '' )
+                        $( '#gcash_number' ).val( '' )
                     }
+
+                    $( '#payout_type' ).val( val.toLowerCase() )
+                    $( '#gcash_number' ).attr( 'placeholder', `Enter ${val} number` )
+
+                    $( '.payout--type' ).each( function() {
+                        $( this ).removeClass( 'btn-primary' )
+                        $( this ).addClass( 'btn-outline-primary' )
+                    } )
+
+                    $( this ).addClass( 'btn-primary' )
+                    $( this ).removeClass( 'btn-outline-primary' )
+
+                    if ( val == "Bank" ) {
+                        $( '#payout--option-container' ).removeClass( 'collapse' )
+                    } else {
+                        $( '#payout--option-container' ).addClass( 'collapse' )
+                        $( '#payout_option' ).val( '' ).trigger( 'change' )
+                    }
+                } )
+
+                $( document ).on( 'click', '.btn-back', function() {
+                    $( '#form_step' ).val( 1 )
+                    $( '#first-fields' ).removeClass( 'collapse' )
+                    $( '#second-fields' ).addClass( 'collapse' )
                 } )
 
                 $( document ).on( 'submit', '#payout--request-form', function( e ) {
                     e.preventDefault()
-                } )
 
-                function validate( el, isNum = false ) {
-                    const val = el.val()
+                    const form = new FormData( $( this )[0] )
+                    const data = JSON.stringify( Object.fromEntries( form ) )
 
-                    if ( ! val ) {
-                        if ( isNum ) {
-                            el.next().find( 'small' ).text( 'Payout amount is required' )
-                        }
-
-                        el.next().find( 'small' ).show()
-                        return false
-
-                    } else {
-                        if ( isNum ) {
-                            if ( val < 100 ) {
-                                el.next().find( 'small' ).text( 'Payout amount must be greater than 100' )
-                                el.next().find( 'small' ).show()
-                                return false
-                            }
-                        }
-
-                        el.next().find( 'small' ).hide()
-                        return true
-                    }
-                }
-
-                function triggerVerify() {
-                    let payoutAmount = $( '#amount' )
-                    let payoutPassword = $( '#payout_password' )
-                    
-                    let afterValidate = [ validate( payoutAmount, true ), validate( payoutPassword ) ]
-                    let proceed = afterValidate.includes( false ) ? false : true
-                    return proceed
-                }
-
-                function verifyForm() {
-                    const form = new FormData( $( '#payout--request-form' )[0] )
-                    // const payoutRef = form.get( 'gcash_ref' )
-                    const amount = form.get( 'amount' )
-                    const password = form.get( 'payout_password' )
-                    const number = form.get( 'gcash_number' )
-                    const user_id = {{ Auth::user()->id }}
-                    const body = {
-                        user_id: user_id,
-                        // payoutRef: payoutRef,
-                        amount: amount,
-                        password: password,
-                        number: number
-                    }
-
-                    const loading = Swal.fire({
-                        title: 'Validation form',
-                        allowOutsideClick: false,
-                        onBeforeOpen: () => {
-                            Swal.showLoading()
-                        }
-                    })
+                    $( '#payout--request-form small.text-danger' ).each( function() {
+                        $( this ).html( '' )
+                    } )
 
                     fetch( `/api/seller/payout/validation`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
                         },
-                        body: JSON.stringify( body )
+                        body: data
                     } ).then( r => r.json() ).then( res => {
-                        loading.close()
+                        const errors = res.errors
+                        const success = res.success
 
-                        setTimeout( () => {
-                            if ( ! res.success ) {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Opps, there seems to be a problem',
-                                    html: res.message
-                                })
+                        if ( errors ) {
+                            Object.keys( errors ).forEach( ( key ) => {
+                                const id = '#' + key + '_error'
+                                const el = $( id )
 
-                            } else {
-                                Swal.fire({
-                                    icon: 'warning',
-                                    title: 'PROCEED PAYOUT REQUEST',
-                                    html: `
-                                        Note: You can only request for payout every 3 day!
-                                    `,
-                                    showCancelButton: true,
-                                    showConfirmButton: true,
-                                    confirmButtonColor: '#dc3545',
-                                    confirmButtonText: 'Yes',
-                                    cancelButtonText: 'No',
-                                    allowOutsideClick: false
-                                }).then( ( event ) => {
-                                    if ( event.value ) createRequest()
-                                })
-                            }
-                        } )
-                    } ).catch( e => {
-                        loading.close()
+                                el.html()
+                                el.html( errors[key] )
+                            } )
+                        }
+
+                        if ( success ) {
+                            $( '#form_step' ).val( 2 )
+                            $( '#first-fields' ).addClass( 'collapse' )
+                            $( '#second-fields' ).removeClass( 'collapse' )
+                        }
+
+                        if ( success && res.message == 'Payout request continue' ) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'PROCEED PAYOUT REQUEST',
+                                html: `
+                                    Note: You can only request for payout every 3 day!
+                                `,
+                                showCancelButton: true,
+                                showConfirmButton: true,
+                                confirmButtonColor: '#dc3545',
+                                confirmButtonText: 'Yes',
+                                cancelButtonText: 'No',
+                                allowOutsideClick: false
+                            }).then( ( event ) => {
+                                if ( event.value ) createRequest()
+                            })
+                        }
                     } )
-                }
+                } )
 
                 function createRequest() {
                     const form = new FormData( $( '#payout--request-form' )[0] )

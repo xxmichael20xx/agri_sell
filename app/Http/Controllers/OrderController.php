@@ -269,7 +269,7 @@ class OrderController extends Controller
                     $notification_ent = new notification();
                     $notification_ent->user_id = $sellerId;
                     $notification_ent->frm_user_id = $this->userId();
-                    $notification_ent->notification_title = "New {$title_partial} - #{$order->id}";
+                    $notification_ent->notification_title = "New {$title_partial}";
                     $notification_ent->notification_txt = "New {$text_partial} has been placed. Item `{$sellerNotif['item_name']} x{$item_qty}`";
                     
                     if ( $notification_ent->save() ) {

@@ -38,7 +38,7 @@ class SellerProducts implements FromCollection, WithHeadings
             case 'history':
                 $headerTitle = "List of Orders";
                 $headers = [
-                    "Order Number", "Customer Name", "Total", "Is Order Paid?", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total"
+                    "Customer Name", "Total", "Is Order Paid?", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total"
                 ];
                 break;
             
@@ -139,7 +139,7 @@ class SellerProducts implements FromCollection, WithHeadings
 
     public function productsHistory() {
         // Header
-        // "Order Number", "Customer Name", "Total", "Is Order Paid?", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total"
+        // "Customer Name", "Total", "Is Order Paid?", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total"
         $orders = SubOrder::where( 'seller_id', auth()->user()->id )->latest();
 
         if ( $this->interval == "full" ) {
@@ -224,7 +224,6 @@ class SellerProducts implements FromCollection, WithHeadings
                     $item_product_price_proc = $product_variety_ent->variation_price_per;
     
                     $_data = [
-                        "#" . $order->order->id,
                         $order->order->shipping_fullname,
                         "Peso " . Helpers::numeric( $order->order->grand_total ),
                         $isPaid . ", Method: {$method}",

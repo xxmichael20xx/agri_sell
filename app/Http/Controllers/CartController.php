@@ -113,40 +113,16 @@ class CartController extends Controller
             }
         }
 
-        $sale_pct_deduct = '-'.$product['sale_pct_deduction'] . '%';
-        // identify if the item object is sale or not
-           $saleCondition = new \Darryldecode\Cart\CartCondition(array(
-            'name' => 'SALE 5%',
-            'type' => 'tax',
-            'value' => $sale_pct_deduct
-        ));
-        // $wholeSale_discount = '-' . $product['whole_sale_pct_deduction'] . '%';
-
-        // $wholeSaleCondition = new \Darryldecode\Cart\CartCondition(array(
-        //     'name' => 'SALE',
-        //     'type' => 'tax',
-        //     'value' => $sale_pct_deduct
-        // ));
-
+        $cart = \Cart::session(auth()->id());
+        // $cartItems = $cart->getContent();
 
         // delclare a product variation obj in cart
         $variant = ProductVariation::find($req->variation_id);
         $isWholesale = $variant->is_variation_wholesale_only;
-        // $product_final_price_tmp = $isWholesale == 'yes' ? $variant->variation_wholesale_price_per : $variant->variation_price_per;
         $product_final_price_tmp = $variant->variation_price_per;
         $wholeSaleMinQty = $variant->variation_min_qty_wholesale;
 
-        /* if ( $variant ) {
-            $variant->variation_quantity = $variant->variation_quantity - $req->quantity;
-            $variant->save();
-        } */
-
-
-        // add the product to cart
-        // customize the price add parameter as have a variation in the second parameter
-        
-
-        \Cart::session(auth()->id())->add(array(
+        $cart->add(array(
             'id' => $req->variation_id,
             'product_id' => $product->id,
             'name' => $product->name,
@@ -155,7 +131,7 @@ class CartController extends Controller
             'price' => $product_final_price_tmp,
             'quantity' => $req->quantity,
             'attributes' => array(),
-            'conditions' => ($product->is_sale == 1) ? $saleCondition : null,
+            'conditions' => NULL,
             'isSale' => $product->is_sale,
             'isWholeSale' => ($product->is_whole_sale == 1) ? '1' : '0',
             'wholeSaleMinQty' => $wholeSaleMinQty,
@@ -164,8 +140,8 @@ class CartController extends Controller
             'associatedModel' => $product,
             'variation_id' => $req->variation_id,
         ));
-        return redirect()->route('cart.index');
 
+        return redirect()->route('cart.index');
     }
 
     public function index()

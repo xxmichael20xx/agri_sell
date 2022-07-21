@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\PayoutEvent;
-use App\SubOrder;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Helpers as Helper;
 use App\notification;
-use App\Order;
-use App\refundModelOrder;
+use App\Rules\CheckBankNumber;
+use App\Rules\SellerPassword;
+use App\Rules\SellerPayoutAmount;
 use App\SellerPayout;
 use App\SellerPayoutRequest;
 
@@ -103,72 +101,36 @@ class SellerPayoutController extends Controller
     }
 
     public function validation( Request $request ) {
-        $seller = User::find( $request->user_id );
-        $passwordCheck = Hash::check( $request->password, $seller->password );
-        /* $refExists = SellerPayoutRequest::where( 'gcash_ref', $request->payoutRef )->get()->count();
+        if ( $request->form_step == 1 ) {
+            $numberValidation = [ 'required', 'regex:/^[0-9]{11}+$/' ];
+            $numberMessage = 'GCash number must be a valid phone number';
+            $type = 'GCash number';
 
-        if ( $refExists > 0 ) {
-            return response()->json( [
-                'success' => false,
-                'message' => "GCash Reference Number has been already used!"
-            ] );
-        } */
-
-        if ( ! $passwordCheck ) {
-            return response()->json( [
-                'success' => false,
-                'message' => "Password is incorrect!"
-            ] );
-        }
-
-        /* $isPhoneValid = preg_match( '/^[0-9]{11}+$/', $request->number );
-        if ( ! $isPhoneValid ) {
-            return response()->json( [
-                'success' => false,
-                'message' => "Please enter a valid Phone Number",
-                'validation' => $request->number
-            ] );
-        } */
-
-        $total_sales = 0;
-        $subOrders = SubOrder::where('seller_id', $request->user_id )->get();
-        foreach ( $subOrders as $order ) {
-            $mainOrder = Order::find( $order->order_id );
-            if ( $mainOrder->payment_method !== 'agrisell_coins' ) continue;
-            if ( $order->status == 'completed' && $order->payout_request && count( $order->items ) > 0 ) {
-                foreach( $order->items as $item ) {
-                    $item_pivot = $item->pivot;
-                    $total_sales += $item_pivot->price * $item_pivot->quantity;
-                }
+            if ( $request->payout_type == 'bank' ) {
+                $type = 'Account number';
+                $numberValidation = [ 'required', new CheckBankNumber() ];
+                $numberMessage = 'Account number be a valid number';
             }
-        }
-
-        $payouts = SellerPayoutRequest::where( 'user_id', $request->user_id )->get();
-        $_refunds = refundModelOrder::where( 'status', 3 )->get();
-        $payoutTotal = 0;
-        $refundsAmount = 0;
-
-        if ( $payouts->count() > 0 ) {
-            foreach( $payouts as $payout_index => $payout ) {
-                $payoutTotal += $payout->amount;
-            }
-        }
-
-        foreach( $_refunds as $refund ) {
-            if ( $refund->product->product_user_id == $request->user_id ) {
-                $amount = ( $refund->order_item->price * $refund->order_item->quantity / 2 );
-                $refundsAmount += $amount;
-            }
-        }
-
-        $total_sales = $total_sales - $payoutTotal - $refundsAmount;
-
-        if ( $total_sales < $request->amount ) {
-            $total_sales = "₱ " . Helper::numeric( $total_sales, 2 );
+            $this->validate( $request, [
+                'payout_option' => 'required_if:payout_type,bank',
+                'gcash_first_name' => 'required',
+                'gcash_last_name' => 'required',
+                'gcash_number' => $numberValidation
+            ], [
+                'gcash_first_name.required' => 'First name is required',
+                'gcash_last_name.required' => 'Last name is required',
+                'gcash_number.required' => $type . ' is required',
+                'gcash_number.regex' => $numberMessage,
+            ] );
 
             return response()->json( [
-                'success' => false,
-                'message' => "You dont' have enough sales to payout. <br> Maximum: {$total_sales}"
+                'success' => true
+            ] );
+
+        } else {
+            $this->validate( $request, [
+                'amount' => [ 'required', new SellerPayoutAmount( $request ) ],
+                'payout_password' => [ 'required', new SellerPassword( $request ) ]
             ] );
         }
 
@@ -188,6 +150,12 @@ class SellerPayoutController extends Controller
 
         if ( $request->payout_request_id ) return $this->updateRequest( $request );
 
+        $request->request->add( [
+            'metadata' => [
+                'type' => $request->payout_type == 'bank' ? "Bank" : "GCash",
+                'option' => $request->payout_option
+            ]
+        ] );
         $sellerPayout = SellerPayoutRequest::create( $request->all() );
 
         if ( ! $sellerPayout ) {

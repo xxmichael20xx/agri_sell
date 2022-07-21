@@ -23,11 +23,16 @@
                             <span class="text-muted">Seller name: {{ $payout->seller->name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">GCash name: {{ $payout->gcash_name }}</span>
+                            <span class="text-muted">{{ $payout->metadata['type'] }} name: {{ $payout->gcash_name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">GCash number: {{ $payout->gcash_number }}</span>
+                            <span class="text-muted">{{ $payout->metadata['type'] }} number: {{ $payout->gcash_number }}</span>
                         </div>
+                        @if ( $payout->metadata['type'] == 'Bank' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">{{ $payout->metadata['option'] }}</span>
+                            </div>
+                        @endif
                         {{-- <div class="col-12 mb-3">
                             <span class="text-muted">GCash reference number: {{ $payout->gcash_ref }}</span>
                         </div> --}}

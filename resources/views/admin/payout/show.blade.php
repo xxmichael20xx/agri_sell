@@ -29,11 +29,16 @@
                             <span class="text-muted">Seller name: {{ $payout->seller->name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">GCash name: {{ $payout->gcash_name }}</span>
+                            <span class="text-muted">{{ $payout->metadata['type'] }}  name: {{ $payout->gcash_name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">GCash number: {{ $payout->gcash_number }}</span>
+                            <span class="text-muted">{{ $payout->metadata['type'] }}  number: {{ $payout->gcash_number }}</span>
                         </div>
+                        @if ( $payout->metadata['type'] == 'Bank' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">{{ $payout->metadata['option'] }}</span>
+                            </div>
+                        @endif
                         {{-- <div class="col-12 mb-3">
                             <span class="text-muted">GCash reference number: {{ $payout->gcash_ref }}</span>
                         </div> --}}
@@ -67,10 +72,18 @@
                                                         <label for="reject_reason" class="col-form-label">Select a reason:</label>
                                                         <select name="reject_reason" id="reject_reason" class="custom-select" required>
                                                             <option value="" selected disabled>Select an option</option>
-                                                            <option value="Unverified GCash name/number">Unverified GCash name/number</option>
-                                                            <option value="Invalid GCash number">Invalid GCash number</option>
-                                                            {{-- <option value="Payout amount exceeded your sales">Payout amount exceeded your sales</option> --}}
-                                                            <option value="Others">Others</option>
+                                                            @if ( $payout->metadata['type'] == 'Bank' )
+                                                                <option value="Credit card expired">Credit card expired</option>
+                                                                <option value="Unverified Account Name/Number">Unverified Account Name/Number</option>
+                                                                <option value="Incorrect Account number">Incorrect Account number</option>
+                                                                <option value="Credit card declined">Credit card declined</option>
+                                                                <option value="Others">Others</option>
+                                                            @else
+                                                                <option value="Unverified GCash name/number">Unverified GCash name/number</option>
+                                                                <option value="Invalid GCash number">Invalid GCash number</option>
+                                                                {{-- <option value="Payout amount exceeded your sales">Payout amount exceeded your sales</option> --}}
+                                                                <option value="Others">Others</option>
+                                                            @endif
                                                         </select>
                                                         <textarea name="reject_reason_other" id="reject_reason_other" rows="5" class="form-control mt-3 collapse" placeholder="Please provided a reason for rejecting this payout request."></textarea>
                                                     </div>

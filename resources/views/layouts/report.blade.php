@@ -17,6 +17,11 @@
 </head>
 <body class="bg-white">
     <div class="container-fluid">
+        <div class="form-group row my-4">
+            <div class="col-md-6 mx-auto text-center">
+                <img src="{{ asset( 'img/agri_logo.png' ) }}">
+            </div>
+        </div>
         @yield('content')
     </div>
 </body>

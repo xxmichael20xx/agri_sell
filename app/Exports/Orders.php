@@ -25,7 +25,7 @@ class Orders implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        $headers = [ "Order Number", "Customer Name", "Total", "Shop Name", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total" ];
+        $headers = [ "Customer Name", "Total", "Shop Name", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total" ];
         return [ [ "List of all Orders" ], $headers ];
     }
 
@@ -114,7 +114,6 @@ class Orders implements FromCollection, WithHeadings
                         $item_product_price_proc = $product_variety_ent->variation_price_per;
         
                         $_data = [
-                            "#" . $order->order->id,
                             $order->order->shipping_fullname,
                             "Peso " . Helpers::numeric( $order->order->grand_total ),
                             $main_product->shop->name,

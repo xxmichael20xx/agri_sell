@@ -143,10 +143,13 @@
                                                                                 <select name="reason" id="reason" class="custom-select" required>
                                                                                     <option value="" selected disabled>Select an option</option>
                                                                                     <option value="Delivery address was incorrect/incomplete">Delivery address was incorrect/incomplete</option>
+                                                                                    <option value="Address (shop or office) is closed ">Address (shop or office) is closed </option>
                                                                                     <option value="The receiver was absent (there was no one at the address to receive the parcel)">The receiver was absent (there was no one at the address to receive the parcel)</option>
                                                                                     <option value="Courier could not access the delivery location">Courier could not access the delivery location</option>
                                                                                     <option value="Not finding a secure place to leave the order">Not finding a secure place to leave the order</option>
                                                                                     <option value="Customer refusing to accept the delivery">Customer refusing to accept the delivery</option>
+                                                                                    <option value="Buyer could not be contacted">Buyer could not be contacted</option>
+                                                                                    <option value="Other factors cannot be controlled, such as natural disasters, epidemics, riots, and others">Other factors cannot be controlled, such as natural disasters, epidemics, riots, and others</option>
                                                                                     <option value="Others">Others</option>
                                                                                 </select>
                                                                                 <textarea class="form-control collapse mt-2" name="reason_others" id="reason_others" rows="5" placeholder="Please provide other reasons"></textarea>

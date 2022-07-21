@@ -24,10 +24,10 @@ class Payouts implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        $headers = [ "Name", "Amount", "GCash Name", "GCash Number", $this->columns['header'], "{reason}" ];
+        $headers = [ "Name", "Amount", "Type", "Name", "Number", $this->columns['header'], "{reason}" ];
 
         if ( $this->columns['type'] !== 'Rejected' ) {
-            unset( $headers[6] );
+            unset( $headers[7] );
         }
 
         return [ [ "List of Seller Payout" ], $headers ];
@@ -51,6 +51,7 @@ class Payouts implements FromCollection, WithHeadings
             $_data = [
                 $payout->seller->name,
                 "Peso " . Helpers::numeric( $payout->amount ),
+                $payout->metadata['type'],
                 $payout->gcash_name,
                 $payout->gcash_number,
                 $payout->{$this->columns['column']},

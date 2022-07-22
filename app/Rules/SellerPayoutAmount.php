@@ -38,7 +38,7 @@ class SellerPayoutAmount implements Rule
         $passwordCheck = Hash::check( $this->request->payout_password, $seller->password );
 
         if ( ! $passwordCheck ) {
-            $this->message = "Please provide correct password for payout amount validation";
+            $this->message = "Payout amount validation failed! Please provide correct password";
             return false;
         }
 

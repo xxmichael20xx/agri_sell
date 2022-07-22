@@ -39,15 +39,20 @@
                                             $role_id = $product_monitoring_ent->created_by_user->role_id;
                                             
                                             switch ( $role_id ) {
-                                                case 1:
+                                                case '1':
                                                     $role_name = "Admin";
                                                     break;
 
-                                                case 3:
+                                                case '3':
                                                     $role_name = "Seller";
-                                                
-                                                default:
+                                                    break;
+
+                                                case '5':
                                                     $role_name = "Rider";
+                                                    break;
+
+                                                default:
+                                                    $role_name = "User";
                                                     break;
                                             }
                                             

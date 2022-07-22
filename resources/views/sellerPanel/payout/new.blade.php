@@ -3,7 +3,7 @@
 <style>
     .logo--image {
         width: 40px !important;
-        height: 30px !important;
+        height: 40px !important;
         margin-right: 10px;
     }
 </style>
@@ -27,35 +27,35 @@
                         <div class="col-6">
                             <div class="dropdown">
                                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="payoutOptionType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="/img/bank.png" class="img-fluid w-25 logo--image">
-                                    Add Bank Account
+                                    <img src="/img/bank.png" data-orig="/img/bank.png" class="img-fluid w-25 logo--image">
+                                    <span data-orig="Add Bank Account">Add Bank Account</span>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="payoutOptionType">
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Unionbank Internet Banking">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/union_bank.png" data-bank="Unionbank Internet Banking">
                                         <img src="/img/union_bank.png" class="img-fluid w-25 logo--image">
                                         Unionbank Internet Banking
                                     </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="RCBC AccessOne">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/rcbc.png" data-bank="RCBC AccessOne">
                                         <img src="/img/rcbc.png" class="img-fluid w-25 logo--image">
                                         RCBC AccessOne
                                     </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="BDO">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/bdo.png" data-bank="BDO">
                                         <img src="/img/bdo.png" class="img-fluid w-25 logo--image">
                                         BDO
                                     </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Metrobank Direct">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/metrobank.png" data-bank="Metrobank Direct">
                                         <img src="/img/metrobank.png" class="img-fluid w-25 logo--image">
                                         Metrobank Direct
                                     </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Landbank ATM Online">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/landbank.png" data-bank="Landbank ATM Online">
                                         <img src="/img/landbank.png" class="img-fluid w-25 logo--image">
                                         Landbank ATM Online
                                     </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="Bank of Commerce">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/bank_of_commerce.png" data-bank="Bank of Commerce">
                                         <img src="/img/bank_of_commerce.png" class="img-fluid w-25 logo--image">
                                         Bank of Commerce
                                     </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-bank="UCPB Connect">
+                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/ucpb.png" data-bank="UCPB Connect">
                                         <img src="/img/ucpb.png" class="img-fluid w-25 logo--image">
                                         UCPB Connect
                                     </a>
@@ -187,7 +187,9 @@
                 $( document ).on( 'click', '.payout--type', function() {
                     const val = $( this ).data( 'value' )
                     const bank = $( this ).data( 'bank' )
+                    const src = $( this ).data( 'src' )
                     const self = this
+                    const addBank = $( '#payoutOptionType' )
 
                     $( '#payout--request-form' ).removeClass( 'collapse' )
                     $( '#account--details' ).text( val )
@@ -214,6 +216,16 @@
 
                     $( this ).addClass( 'btn-primary' )
                     $( this ).removeClass( 'btn-outline-primary' )
+
+                    if ( val == 'Bank' ) {
+                        addBank.find( 'img' ).attr( 'src', src )
+                        addBank.find( 'span' ).text( bank )
+                    } else {
+                        const img = addBank.find( 'img' )
+                        const span = addBank.find( 'span' )
+                        img.attr( 'src', $( img ).data( 'orig' ) )
+                        span.text( $( span ).data( 'orig' ) )
+                    }
 
                     /* if ( val == "Bank" ) {
                         $( '#payout--option-container' ).removeClass( 'collapse' )

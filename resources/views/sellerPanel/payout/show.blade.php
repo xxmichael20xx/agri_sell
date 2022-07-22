@@ -30,7 +30,7 @@
                         </div>
                         @if ( $payout->metadata && $payout->metadata['type'] == 'Bank' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Bank: {{ $payout->metadata['option'] }}</span>
+                                <span class="text-muted">Bank Account: {{ $payout->metadata['option'] }}</span>
                             </div>
                         @endif
                         {{-- <div class="col-12 mb-3">

@@ -131,7 +131,7 @@
                                 <div class="col-md-12">
                                     <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col collapse">
                                             <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_0" readonly>
                                                 <option selected disabled>Select option</option>
                                                 <option value="gram">Gram</option>
@@ -213,7 +213,7 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row hide-if-variants">
             <label class="col-md-3 col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
             <div class="col-md-9">
                 @php
@@ -234,7 +234,7 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row hide-if-variants">
             <label class="col-md-3 col-form-label text-dark">Product Size</label>
             <div class="col-md-9">
                 @php
@@ -255,11 +255,11 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row hide-if-variants">
             <label class="col-md-3 col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
             <div class="col-md-9">
                 <div class="row">
-                    <div class="col">
+                    <div class="col collapse">
                         <select class="form-control custom--disabled" name="standard_net_weight_unit" id="standard_net_weight_unit" readonly>
                             <option selected disabled>Select option</option>
                             <option value="gram" {{ old( 'standard_net_weight_unit' ) == 'gram' ? 'selected': '' }}>Gram</option>
@@ -279,7 +279,7 @@
             </div>
         </div>
 
-        <div class="form-group row">
+        <div class="form-group row hide-if-variants">
             <div class="col-md-3"></div>
             <div class="col-md-9">
                 <div class="row">
@@ -305,7 +305,7 @@
             </div>
         </div>
         
-        <div class="form-group row wholesale--container">
+        <div class="form-group row wholesale--container hide-if-variants">
             <div class="col">
                 <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale">
@@ -376,14 +376,23 @@
             const isChecked = $( this ).is( ':checked' )
             const selectors = $( this ).attr( 'id' ) == 'is_wholesale' ? '.wholesale--input' : '.variant--input-container'
             const inputs = $( selectors )
+            const willHide = $( '.hide-if-variants' )
 
             if ( isChecked ) {
                 inputs.each( function() {
                     $( this ).removeClass( 'd-none' )
                 } )
+
+                willHide.each( function() {
+                    $( this ).hide()
+                } )
             } else {
                 inputs.each( function() {
                     $( this ).addClass( 'd-none' )
+                } )
+
+                willHide.each( function() {
+                    $( this ).show()
                 } )
             }
         } )
@@ -470,7 +479,7 @@
                                 <div class="col-md-12">
                                     <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
                                     <div class="row">
-                                        <div class="col">
+                                        <div class="col collapse">
                                             <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_${variantsCount}" readonly>
                                                 <option selected disabled>Select option</option>
                                                 <option value="gram">Gram</option>

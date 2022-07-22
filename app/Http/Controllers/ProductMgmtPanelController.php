@@ -373,14 +373,14 @@ class ProductMgmtPanelController extends Controller
             'product_name' => 'required',
             'images' => 'required',
             'category_id' => 'required',
-            'retail_price' => [ 'required', new NumberChecker( 'retail_price' ) ],
-            'wholesale_price' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_price', $request ) ],
-            'wholesale_min_qty' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_min_qty', $request ) ],
-            'sold_per' => 'required',
-            'product_desc' => 'required',
-            'standard_net_weight' => [ 'required', new NumberChecker( 'standard_net_weight' ) ],
-            'standard_net_weight_unit' => 'required',
-            'stocks' => [ 'required', new NumberChecker( 'stocks' ) ],
+            'wholesale_price' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_price', $request ) ],
+            'wholesale_min_qty' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_min_qty', $request ) ],
+            'sold_per' => 'required_if:has_vartiants,off',
+            'product_desc' => 'required_if:has_vartiants,off',
+            'standard_net_weight' => [ 'required_if:has_vartiants,off', new NumberChecker( 'standard_net_weight' ) ],
+            'standard_net_weight_unit' => 'required_if:has_vartiants,off',
+            'retail_price' => [ 'required_if:has_vartiants,off', new NumberChecker( 'retail_price' ) ],
+            'stocks' => [ 'required_if:has_vartiants,off', new NumberChecker( 'stocks' ) ],
         ] );
 
         $is_wholesale = $request->is_wholesale == 'on' ? true : false;
@@ -444,13 +444,13 @@ class ProductMgmtPanelController extends Controller
         $productVariation->variation_name = $checkVariants ? $request->product_name : "Regular";
         $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
         $productVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
-        $productVariation->variation_price_per = $request->retail_price;
+        $productVariation->variation_price_per = $checkVariants ? $request->variant_prices[0] : $request->retail_price;
         $productVariation->variation_wholesale_price_per = $is_wholesale ? $request->wholesale_price : 0;
         $productVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
-        $productVariation->variation_quantity = $request->stocks;
-        $productVariation->variation_sold_per = $request->sold_per;
-        $productVariation->variation_net_weight = $request->standard_net_weight;
-        $productVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
+        $productVariation->variation_quantity = $checkVariants ? $request->variant_stocks[0] : $request->stocks;
+        $productVariation->variation_sold_per = $checkVariants ? $request->variant_soldper[0] : $request->sold_per;
+        $productVariation->variation_net_weight = $checkVariants ? $request->variant_standard_net_weight[0] : $request->standard_net_weight;
+        $productVariation->variation_net_weight_unit = $checkVariants ? $request->variant_standard_net_weight_unit[0] : $request->standard_net_weight_unit;
         $productVariation->save();
 
         if ( $checkVariants ) {
@@ -760,14 +760,14 @@ class ProductMgmtPanelController extends Controller
         $this->validate( $request, [
             'product_name' => 'required',
             'category_id' => 'required',
-            'retail_price' => [ 'required', new NumberChecker( 'retail_price' ) ],
-            'wholesale_price' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_price', $request ) ],
-            'wholesale_min_qty' => [ 'required_if:is_wholesale,==,on', new NumberChecker( 'wholesale_min_qty', $request ) ],
-            'sold_per' => 'required',
-            'product_desc' => 'required',
-            'standard_net_weight' => [ 'required', new NumberChecker( 'standard_net_weight' ) ],
-            'standard_net_weight_unit' => 'required',
-            'stocks' => [ 'required', new NumberChecker( 'stocks' ) ],
+            'wholesale_price' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_price', $request ) ],
+            'wholesale_min_qty' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_min_qty', $request ) ],
+            'sold_per' => 'required_if:has_vartiants,off',
+            'product_desc' => 'required_if:has_vartiants,off',
+            'standard_net_weight' => [ 'required_if:has_vartiants,off', new NumberChecker( 'standard_net_weight' ) ],
+            'standard_net_weight_unit' => 'required_if:has_vartiants,off',
+            'retail_price' => [ 'required_if:has_vartiants,off', new NumberChecker( 'retail_price' ) ],
+            'stocks' => [ 'required_if:has_vartiants,off', new NumberChecker( 'stocks' ) ],
         ] );
 
         $is_wholesale = $request->is_wholesale == 'on' ? true : false;

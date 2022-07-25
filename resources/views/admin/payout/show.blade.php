@@ -72,7 +72,7 @@
                                                         <label for="reject_reason" class="col-form-label">Select a reason:</label>
                                                         <select name="reject_reason" id="reject_reason" class="custom-select" required>
                                                             <option value="" selected disabled>Select an option</option>
-                                                            @if ( $payout->metadata['type'] == 'Bank' )
+                                                            @if ( $payout->metadata && $payout->metadata['type'] == 'Bank' )
                                                                 <option value="Credit card expired">Credit card expired</option>
                                                                 <option value="Unverified Account Name/Number">Unverified Account Name/Number</option>
                                                                 <option value="Incorrect Account number">Incorrect Account number</option>

@@ -131,7 +131,7 @@
                                 <div class="col-md-12">
                                     <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
                                     <div class="row">
-                                        <div class="col collapse">
+                                        <div class="col">
                                             <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_0" readonly>
                                                 <option selected disabled>Select option</option>
                                                 <option value="gram">Gram</option>
@@ -259,7 +259,7 @@
             <label class="col-md-3 col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
             <div class="col-md-9">
                 <div class="row">
-                    <div class="col collapse">
+                    <div class="col">
                         <select class="form-control custom--disabled" name="standard_net_weight_unit" id="standard_net_weight_unit" readonly>
                             <option selected disabled>Select option</option>
                             <option value="gram" {{ old( 'standard_net_weight_unit' ) == 'gram' ? 'selected': '' }}>Gram</option>
@@ -479,7 +479,7 @@
                                 <div class="col-md-12">
                                     <label class="col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
                                     <div class="row">
-                                        <div class="col collapse">
+                                        <div class="col">
                                             <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_${variantsCount}" readonly>
                                                 <option selected disabled>Select option</option>
                                                 <option value="gram">Gram</option>

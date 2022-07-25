@@ -124,7 +124,7 @@ class CartController extends Controller
                 $variantQuantity = $variant->variation_quantity;
 
                 if ( $itemQuantity + $requestQuantity > $variantQuantity ) {
-                    return back()->withError( 'Product stock is insufficient. Available Stocks: ' . $variantQuantity . ' and in your cart you have: ' . $itemQuantity );
+                    return back()->withError( 'Available Stocks: ' . $variantQuantity . ' and in your cart you have: ' . $itemQuantity );
                     break;
                 }
             }

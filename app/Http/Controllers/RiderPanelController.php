@@ -25,7 +25,12 @@ class RiderPanelController extends Controller
         $my_rider_id = Auth::user()->rider_staff->id;
 
         foreach ( $orders as $index => $order ) {
-            if ( ! $order->order ) $orders->forget( $index );
+            if ( ! $order->order ) {
+                $orders->forget( $index );
+
+            } else if ( $order->order->rider_id !== $my_rider_id ) {
+                $orders->forget( $index );
+            }
         }
 
         return view( 'riderPanel.dashboard' )

@@ -59,6 +59,69 @@ class OrderMgmtPanelController extends Controller
             ->with( 'panel_name', 'orders' );
     }
 
+    function show_deliveries( $type ) {
+        $ids = $type ? $this->setIds( $type ) : array( 3, 4, 5, 6, 9 );
+        $orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $ids )->get();
+        $assign_order_status_options = orderDeliveryStatusModel::whereIn( 'id', array( 2, 3, 4 ) )->get();
+        $deliver_Staffs = deliveryStaffModel::get();
+
+        foreach ( $orders as $index => $order ) {
+            if ( ! $order->order ) $orders->forget( $index );
+        }
+        return view( 'admin.order_mgmt.index_deliveries' )
+            ->with(compact('orders', 'assign_order_status_options', 'type', 'deliver_Staffs'))
+            ->with('panel_name', 'orders');
+    }
+
+    public function setIds( $type ) {
+        $ids = [];
+
+        switch ( $type) {
+            case 'to-pick-up':
+                $ids = [ 9 ];
+                break;
+
+            case 'pick-up-success':
+                $ids = [ 3 ];
+                break;
+
+            case 'on-out-for-delivery':
+                $ids = [ 4 ];
+                break;
+
+            case 'completed':
+                $ids = [ 5, 6 ];
+                break;
+            
+            default:
+                $ids = [ 3, 4, 5, 6, 9 ];
+                break;
+        }
+
+        return $ids;
+    }
+
+    public function adminOrderAssignRider( Request $request ) {
+        $order = Order::find( $request->order_id );
+
+        if ( ! $order ) {
+            $data = [
+                'success' => false,
+                'message' => 'Order not found!'
+            ];
+        } else {
+            $order->rider_id = $request->rider_id;
+            $order->save();
+
+            $data = [
+                'success' => true,
+                'message' => 'Rider has been assigned!'
+            ];
+        }
+
+        return response()->json( $data );
+    }
+
     public function show($order_id)
     {
         $order = Suborder::where('order_id', $order_id)->first();

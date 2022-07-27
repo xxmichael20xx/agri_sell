@@ -264,7 +264,7 @@
                                 Swal.fire({
                                     icon: 'info',
                                     title: 'Unable to request payout',
-                                    text: `You’ve already requested you payout. Payout request process is every 3 days.`
+                                    text: `You’ve already requested your payout. Payout request process is every 3 days.`
                                 })
 
                             } else {

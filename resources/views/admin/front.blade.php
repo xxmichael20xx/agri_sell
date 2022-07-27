@@ -174,6 +174,18 @@ Coded by www.creative-tim.com
             </a>
           </li>
 
+          <li class="ml-5 pl-2">
+            <a href="/admin/manage_orders/pickup/1">
+              <p>Orders</p>
+            </a>
+          </li>
+
+          <li class="ml-5 pl-2">
+            <a href="/admin/manage_orders/order/deliveries/to-pick-up">
+              <p>Deliveries</p>
+            </a>
+          </li>
+
           <li hidden class="{{($panel_name == 'products_monitoring') ? 'active' : ''}}">
             <a href="/admin/product_order_monitoring">
               <i class="nc-icon nc-tile-56"></i>

@@ -76,8 +76,9 @@ class SellerPayoutAmount implements Rule
         $total_sales = $total_sales - $payoutTotal - $refundsAmount;
 
         if ( $total_sales < $this->request->amount ) {
-            $total_sales = "₱ " . Helpers::numeric( $total_sales, 2 );
-            $this->message = "You don't have enough sales to request a payout. <br> Maximum: {$total_sales}";
+            // $total_sales = "₱ " . Helpers::numeric( $total_sales, 2 );
+            // $this->message = "You don't have enough sales to request a payout. <br> Maximum: {$total_sales}";
+            $this->message = "You don't have enough sales to request a payout.";
 
             return false;
         }

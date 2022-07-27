@@ -58,6 +58,57 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <div class="col-6">
+                <label for="address" class=" col-form-label">{{ __('Address line(house #, street name/purok)') }}</label>
+                <input 
+                    id="address" 
+                    name="rider_address"
+                    type="text"
+                    class="form-control" 
+                    value="{{ old( 'rider_address' ) }}"
+                    autocomplete="email">
+                @if ( $errors->has( 'rider_address' ) )
+                    <span class="text-danger">{{ $errors->first( 'rider_address' ) }}</span>
+                @endif
+            </div>
+            <div class="col-6">
+                <label for="b-day" class="col-form-label text-md-right">{{ __('Birthday') }}</label>
+                <input type="date" name="rider_bday" id="b-day" class="form-control" value="{{ old( 'rider_bday' ) }}" />
+                @if( $errors->has( 'rider_bday' ) )
+                    <span class="text-danger">{{ $errors->first( 'rider_bday' ) }}</span>
+                @endif
+            </div>
+            <input type="hidden" id="brgyval" name="rider_barangay">
+            <input type="hidden" id="townval" name="rider_town">
+            <input type="hidden" id="provval" name="rider_province">
+        </div>
+    
+        <div class="form-group row">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col col-lg-4">
+                        <label>Province</label>
+                        <select id="province" class="form-control" disabled="disabled"  onload="setProvince()">
+                            <option>Select province</option>
+                        </select>
+                    </div>
+                    <div class="col col-lg-4">
+                        <label>Municipality/City</label>
+                        <select id="municipality" class="form-control"  onchange="setTown()">
+                            <option value="">Select municipality</option>
+                        </select>
+                    </div>
+                    <div class="col col-lg-4">
+                        <label>Barangay</label>
+                        <select id="barangay" class="form-control input-lg"  onchange="setBarangay()">
+                            <option value="">Select barangay</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group row mb-0">
             <div class="col text-left">
                 <button type="submit" class="btn btn-primary">Create Rider</button>

@@ -34,8 +34,25 @@ class riderMgmtController extends Controller
             'rider_email' => 'required|email|unique:users,email',
             'rider_password' => 'required',
             'rider_contact' => 'required',
-            'rider_vehicle' => 'required'
+            'rider_vehicle' => 'required',
+            'rider_address' => 'required',
+            'rider_bday' => 'required',
+            'rider_barangay' => 'required',
+            'rider_town' => 'required',
+            'rider_province' => 'required',
         ] );
+
+        $location_path = public_path() . '/province_municipality_barangay.json';
+        $location = json_decode( file_get_contents( $location_path ), true);
+
+        $province = "Pangasinan";
+        $town = "";
+        $barangay = "";
+
+        foreach ( $location as $_location ) {
+            if ( $_location['id'] == $request->rider_town && ! $town ) $town = $_location['name'];
+            if ( $_location['id'] == $request->rider_barangay && ! $barangay ) $barangay = $_location['name'];
+        }
 
         $user = new User();
         $user->role_id = '5';
@@ -44,11 +61,11 @@ class riderMgmtController extends Controller
         $user->password = bcrypt( $request->rider_password );
         $user->mobile = $request->rider_contact;
         $user->email_verified_at = NOW();
-        $user->address = 'Purok 6';
-        $user->barangay = 'Amamperez';
-        $user->town = 'Villasis';
-        $user->province = 'Pangasinan';
-        $user->bday = '2021-11-10';
+        $user->address = $request->rider_address;
+        $user->barangay = trim( $barangay );
+        $user->town = trim( $town );
+        $user->province = trim( $province );
+        $user->bday = $request->rider_bday;
         $user->is_accepted_user_tos = 'yes';
         $user->save();
 
@@ -89,6 +106,30 @@ class riderMgmtController extends Controller
     }
 
     public function update_rider( Request $request ) {
+        if ( ! $request->rider_province ) $request->merge( [ 'rider_province' => 1 ] );
+        $this->validate( $request, [
+            'rider_name' => 'required',
+            'rider_contact' => 'required',
+            'rider_vehicle' => 'required',
+            'rider_address' => 'required',
+            'rider_bday' => 'required',
+            'rider_barangay' => 'required',
+            'rider_town' => 'required',
+            'rider_province' => 'required',
+        ] );
+
+        $location_path = public_path() . '/province_municipality_barangay.json';
+        $location = json_decode( file_get_contents( $location_path ), true);
+
+        $province = "Pangasinan";
+        $town = "";
+        $barangay = "";
+
+        foreach ( $location as $_location ) {
+            if ( $_location['id'] == $request->rider_town && ! $town ) $town = $_location['name'];
+            if ( $_location['id'] == $request->rider_barangay && ! $barangay ) $barangay = $_location['name'];
+        }
+
         $rider = deliveryStaffModel::where( 'user_id', $request->id )->first();
 
         if ( ! $rider ) {
@@ -101,6 +142,11 @@ class riderMgmtController extends Controller
         $rider_user = User::find( $request->id );
         $rider_user->name = $request->rider_name;
         $rider_user->mobile = $request->rider_contact;
+        $rider_user->address = $request->rider_address;
+        $rider_user->barangay = trim( $barangay );
+        $rider_user->town = trim( $town );
+        $rider_user->province = trim( $province );
+        $rider_user->bday = $request->rider_bday;
         $rider_user->save();
 
         return back()->with( 'success', "Rider information has been updated." );

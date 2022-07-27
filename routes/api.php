@@ -29,6 +29,7 @@ Route::group([ 'prefix' => 'admin' ], function() {
     Route::post( 'pending/payouts', 'AdminPushNotifications@pendingPayouts' );
     Route::post( 'rider/verify', 'riderMgmtController@riderVerify' );
     Route::post( 'refund/reject/{id}', 'RefundAdminController@refundReject' );
+    Route::post( 'order/assign-rider', 'OrderMgmtPanelController@adminOrderAssignRider' );
 
     Route::group([ 'prefix' => 'payout' ], function() {
         Route::post('update', 'AdminPayoutController@update');

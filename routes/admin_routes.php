@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
     Route::get('/admin/manage_orders', 'OrderMgmtPanelController@index');
     
     Route::get('/admin/manage_orders/{status_type}/{status_id}', 'OrderMgmtPanelController@show_by_cat');
+    Route::get('/admin/manage_orders/order/deliveries/{type}', 'OrderMgmtPanelController@show_deliveries');
     Route::post('/admin/edit_order_status' ,'OrderMgmtPanelController@editOrderStatus')->name('admin.order.update');
 
     Route::get('/admin/manage_products', 'ProductMgmtPanelController@index');

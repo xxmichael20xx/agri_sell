@@ -207,16 +207,24 @@
                                         <a class="btn btn-sm btn-primary btn-round text-white" href="/admin_seller/order/{{ $order->order_id }}">View items</a>
                                     </td>
                                     <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $order->id }}" data-toggle="dropdown">
-                                                Select a rider
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $order->id }}">
-                                                @foreach ( $deliver_Staffs as $rider )
-                                                    <a class="dropdown-item assign--rider-dropdown" href="#" data-id="{{ $rider->id }}" data-order-id="{{ $order->order->id }}">{{ $rider->user->name }}</a>
-                                                @endforeach
-                                            </div>
-                                        </div>
+                                        @if ( $type == 'to-pick-up' )
+                                            @if ( ! $order->order->rider )
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $order->id }}" data-toggle="dropdown">
+                                                        Select a rider
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $order->id }}">
+                                                        @foreach ( $deliver_Staffs as $rider )
+                                                            <a class="dropdown-item assign--rider-dropdown" href="#" data-id="{{ $rider->id }}" data-order-id="{{ $order->order->id }}">{{ $rider->user->name }}</a>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @else
+                                                {{ $order->order->rider->user->name }}
+                                            @endif
+                                        @else
+                                            {{ $order->order->rider->user->name }}
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

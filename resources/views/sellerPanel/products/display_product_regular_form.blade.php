@@ -305,7 +305,7 @@
             </div>
         </div>
         
-        <div class="form-group row wholesale--container hide-if-variants">
+        <div class="form-group row wholesale--container">
             <div class="col">
                 <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale">
@@ -372,11 +372,25 @@
             $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
         } )
 
-        $( document ).on( 'click', '#is_wholesale,#has_vartiants', function() {
+        $( document ).on( 'click', '#is_wholesale', function() {
             const isChecked = $( this ).is( ':checked' )
-            const selectors = $( this ).attr( 'id' ) == 'is_wholesale' ? '.wholesale--input' : '.variant--input-container'
-            const inputs = $( selectors )
-            const willHide = $( '.hide-if-variants' )
+            const inputs = $( '.wholesale--input' )
+
+            if ( isChecked ) {
+                inputs.each( function() {
+                    $( this ).removeClass( 'd-none' )
+                } )
+            } else {
+                inputs.each( function() {
+                    $( this ).addClass( 'd-none' )
+                } )
+            }
+        } )
+
+        $( document ).on( 'click', '#has_vartiants', function() {
+            const isChecked = $( this ).is( ':checked' )
+            const inputs = $( '.variant--input-container' )
+            const willHide = $( '.wholesale--input, .wholesale--container' )
 
             if ( isChecked ) {
                 inputs.each( function() {

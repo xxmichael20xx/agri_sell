@@ -13,13 +13,13 @@
                 </div>
                 <div class="card-body">
                     @if (isset($order->order->rider_id))
-                    <p>Rider ID:{{ $order->order->rider->rider_id}}</p>
-                    <p>Delivery man name:{{ $order->order->rider->user->name}}</p>
-                    <p>Delivery man mobile:{{ $order->order->rider->user->mobile}}</p>
-                    <p>Vehicle used: {{$order->order->rider->vehicle_used}} </p>
-                    <p>Delivery status: {{$order->deliverystatus->display_name}} </p>
+                        <p>Rider ID:{{ $order->order->rider->rider_id}}</p>
+                        <p>Delivery man name:{{ $order->order->rider->user->name}}</p>
+                        <p>Delivery man mobile:{{ $order->order->rider->user->mobile}}</p>
+                        <p>Vehicle used: {{$order->order->rider->vehicle_used}} </p>
+                        <p>Delivery status: {{$order->deliverystatus->display_name}} </p>
                     @else
-                    <p>Delivery man not set</p>
+                        <p>No assigned Delivery rider</p>
                     @endif
                    
                 </div>

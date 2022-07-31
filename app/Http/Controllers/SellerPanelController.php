@@ -52,24 +52,6 @@ class SellerPanelController extends Controller
         if ( $ratings_ocurr && $sumAverageRating ) {
             $shopAveRating = round( $sumAverageRating / $ratings_ocurr, 1 );
         }
-
-        /* $sumAverageRating = 0;
-        $ratings_ocurr = 0;
-        $shopAveRating = "Unrared";
-
-        foreach ( $shopProducts as $shopProduct ) {
-            if ( $shopProduct->averageRating != null || $shopProduct->averageRating() != 0 ) {
-                $sumAverageRating += $shopProduct->averageRating();
-                $ratings_ocurr++;
-            }
-        }
-
-        if ( $ratings_ocurr != 0 && $sumAverageRating != 0 ) {
-            $shopAveRating = round( $sumAverageRating / $ratings_ocurr, 1 );
-
-        } else {
-            $shopAveRating = 'Unrated';
-        } */
         
         $total_sales = 0;
         $order_items = $shop_orders;
@@ -84,10 +66,6 @@ class SellerPanelController extends Controller
                 }
             }
         }
-
-        /* $total_commission_deduction = 10;
-        $total_sales_deduction = $total_sales - ( ( $total_commission_deduction / 100 ) * $total_sales );
-        $total_sales_deduction_diff = $total_sales - $total_sales_deduction; */
 
         $payouts = SellerPayoutRequest::where( 'user_id', auth()->user()->id )->get();
         $_refunds = refundModelOrder::where( 'status', 3 )->get();
@@ -108,9 +86,7 @@ class SellerPanelController extends Controller
         }
 
         $total_sales_deduction_diff = $total_sales - $payoutTotal - $refundsAmount;
-        if ( $total_sales_deduction_diff < 1 ) {
-            $total_sales_deduction_diff = 0;
-        }
+        if ( $total_sales_deduction_diff < 1 ) $total_sales_deduction_diff = 0;
         
         // shop_title
         // shop_description

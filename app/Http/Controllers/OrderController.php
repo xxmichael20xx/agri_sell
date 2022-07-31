@@ -134,9 +134,24 @@ class OrderController extends Controller
         //     'shipping_zipcode' => 'required',
         //     'payment_method' => 'required',
         // ]);
+        $cart_session = \Cart::session(auth()->id());
+
+        foreach ($cart_session->getContent() as $item) {
+            $product = Product::where( 'id', $item->product_id )->first();
+            $_variant_query = array( 'product_id', $item->product_id );
+            if ( $_id = json_decode( $item )->id ) {
+                $_variant_query = array( 'id', $_id );
+            }
+
+            $variant = ProductVariation::where( $_variant_query[0], $_variant_query[1] )->first();
+
+            if ( ! $variant ) continue;
+            if ( $variant->variation_quantity < 1 ) {
+                return back()->withError( "Product '{$product->name}' is out of stock!" );
+            }
+        }
 
         $order = new Order();
-
         $order->order_number = uniqid('AGRIREF-');
         $order_ref_id = $order->order_number;
         $order->shipping_fullname = $request->input('shipping_fullname');
@@ -164,7 +179,6 @@ class OrderController extends Controller
         }
 
         $_is_pickup = $order->is_pick_up == 'yes' ? TRUE : FALSE;
-        $cart_session = \Cart::session(auth()->id());
         $order->grand_total = $cart_session->getTotal( $_is_pickup );
         $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee() + $cart_session->getTotalnetweightShippingAdditionals();
         $order->item_count = $cart_session->getContent()->count();

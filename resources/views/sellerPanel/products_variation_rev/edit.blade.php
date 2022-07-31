@@ -522,41 +522,42 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="form-group row wholesale--container hide-if-variants" style="display: {{ $product->has_variants ? 'none' : 'block' }}">
+                                    <div class="form-group row wholesale--container" style="display: {{ $product->has_variants ? 'none' : 'block' }}">
                                         <div class="col">
-                                            <div class="custom-control custom-checkbox">
+                                            <div class="custom-control custom-switch">
                                                 <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale" {{ $product->is_whole_sale ? 'checked': '' }}>
-                                                <label class="custom-control-label" for="is_wholesale">Is Wholesale?</label>
+                                                <label class="custom-control-label text-dark" for="is_wholesale">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    @if ( $product->is_whole_sale )
-                                        <div class="form-group row wholesale--input">
-                                            <label class="col-md-12 col-form-label font-weight-bold">Wholesale</label>
-                                            <label class="col-md-3 col-form-label">Price</label>
-                                            <div class="col-md-9">
-                                                <div class="form-group"> 
-                                                    <input type="number" class="form-control" name="wholesale_price" value="{{ $first->variation_wholesale_price_per }}">
-                                                    @if ( $errors->has( 'wholesale_price' ) )
-                                                        <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
-                                                    @endif
+                                    <div class="form-group row {{ $first->is_whole_sale ? '' : 'd-none' }} wholesale--input border-top pt-2">
+                                        <div class="col-md-3">
+                                            <label class="col-form-label text-dark font-weight-bold">Wholesale</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label text-dark">Price*</label>
+                                                    <div class="form-group"> 
+                                                        <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
+                                                        @if ( $errors->has( 'wholesale_price' ) )
+                                                            <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="col-form-label text-dark">Minimum quantity*</label>
+                                                    <div class="form-group"> 
+                                                        <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
+                                                        @if ( $errors->has( 'wholesale_min_qty' ) )
+                                                            <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                
-                                        <div class="form-group row wholesale--input">
-                                            <label class="col-md-3 col-form-label">Minimum quantity</label>
-                                            <div class="col-md-9">
-                                                <div class="form-group"> 
-                                                    <input type="text" class="form-control" name="wholesale_min_qty" value="{{ $first->variation_min_qty_wholesale }}">
-                                                    @if ( $errors->has( 'wholesale_min_qty' ) )
-                                                        <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
+                                    </div>
                             
                                     <div class="form-group row">
                                         <div class="col-md-12">
@@ -598,15 +599,34 @@
             $( weightOptionSelector ).val( weightOptionValue ).trigger( 'change' )
         } )
 
-        $( document ).on( 'click', '#is_wholesale,#has_vartiants', function() {
+        $( document ).on( 'click', '#is_wholesale', function() {
             const isChecked = $( this ).is( ':checked' )
-            const selectors = $( this ).attr( 'id' ) == 'is_wholesale' ? '.wholesale--input' : '.variant--input-container'
-            const inputs = $( selectors )
-            const willHide = $( '.hide-if-variants' )
+            const inputs = $( '.wholesale--input' )
 
             if ( isChecked ) {
                 inputs.each( function() {
                     $( this ).removeClass( 'd-none' )
+                } )
+            } else {
+                inputs.each( function() {
+                    $( this ).addClass( 'd-none' )
+                } )
+            }
+        } )
+
+        $( document ).on( 'click', '#has_vartiants', function() {
+            const isChecked = $( this ).is( ':checked' )
+            const inputs = $( '.variant--input-container' )
+            const hideIfVariants = $( '.hide-if-variants' )
+            const willHide = $( '.wholesale--input, .wholesale--container' )
+
+            if ( isChecked ) {
+                inputs.each( function() {
+                    $( this ).removeClass( 'd-none' )
+                } )
+
+                hideIfVariants.each( function() {
+                    $( this ).hide()
                 } )
 
                 willHide.each( function() {
@@ -615,6 +635,10 @@
             } else {
                 inputs.each( function() {
                     $( this ).addClass( 'd-none' )
+                } )
+
+                hideIfVariants.each( function() {
+                    $( this ).show()
                 } )
 
                 willHide.each( function() {

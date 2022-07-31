@@ -61,7 +61,7 @@ class OrderMgmtPanelController extends Controller
 
     function show_deliveries( $type ) {
         $ids = $type ? $this->setIds( $type ) : array( 3, 4, 5, 6, 9 );
-        $orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $ids )->get();
+        $orders = SubOrder::where( 'is_pick_up', 'no' )->whereIn( 'status_id', $ids )->get();
         $assign_order_status_options = orderDeliveryStatusModel::whereIn( 'id', array( 2, 3, 4 ) )->get();
         $deliver_Staffs = deliveryStaffModel::get();
 

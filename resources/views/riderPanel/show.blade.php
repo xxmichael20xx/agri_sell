@@ -29,7 +29,7 @@
                             <p>Vehicle used: {{$order->order->rider->vehicle_used ?? 'not available'}} </p>
                             <p> Delivery status: {{$order->deliverystatus->display_name ?? 'not available'}} </p>
                         @else
-                            <p>Delivery man not set</p>
+                            <p>No assigned Delivery rider</p>
                         @endif
                     </div>
 

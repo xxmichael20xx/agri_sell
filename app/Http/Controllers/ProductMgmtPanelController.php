@@ -370,7 +370,7 @@ class ProductMgmtPanelController extends Controller
         }
 
         $this->validate( $request, [
-            'product_name' => 'required',
+            'product_name' => 'required|unique:products,name',
             'images' => 'required',
             'category_id' => 'required',
             'wholesale_price' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_price', $request ) ],
@@ -758,7 +758,7 @@ class ProductMgmtPanelController extends Controller
         }
 
         $this->validate( $request, [
-            'product_name' => 'required',
+            'product_name' => 'required|unique:products,name,' . $request->product_id,
             'category_id' => 'required',
             'wholesale_price' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_price', $request ) ],
             'wholesale_min_qty' => [ 'required_if:is_wholesale,on', new NumberChecker( 'wholesale_min_qty', $request ) ],

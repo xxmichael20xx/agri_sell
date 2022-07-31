@@ -43,12 +43,12 @@ class SellerPayoutAmount implements Rule
         }
 
         $total_sales = 0;
-        $subOrders = SubOrder::where('seller_id', $this->request->user_id )->get();
-        foreach ( $subOrders as $order ) {
-            $mainOrder = Order::find( $order->order_id );
+        $order_items = SubOrder::where('seller_id', $this->request->user_id )->get();
+        foreach ( $order_items as $order_item ) {
+            $mainOrder = Order::find( $order_item->order_id );
             if ( $mainOrder->payment_method !== 'agrisell_coins' ) continue;
-            if ( $order->status == 'completed' && $order->payout_request && count( $order->items ) > 0 ) {
-                foreach( $order->items as $item ) {
+            if ( $order_item->status == 'completed' && $order_item->payout_request && count( $order_item->items ) > 0 ) {
+                foreach( $order_item->items as $item ) {
                     $item_pivot = $item->pivot;
                     $total_sales += $item_pivot->price * $item_pivot->quantity;
                 }
@@ -60,12 +60,6 @@ class SellerPayoutAmount implements Rule
         $payoutTotal = 0;
         $refundsAmount = 0;
 
-        if ( $payouts->count() > 0 ) {
-            foreach( $payouts as $payout_index => $payout ) {
-                $payoutTotal += $payout->amount;
-            }
-        }
-
         foreach( $_refunds as $refund ) {
             if ( $refund->product->product_user_id == $this->request->user_id ) {
                 $amount = ( $refund->order_item->price * $refund->order_item->quantity / 2 );
@@ -73,7 +67,14 @@ class SellerPayoutAmount implements Rule
             }
         }
 
+        if ( $payouts->count() > 0 ) {
+            foreach( $payouts as $payout_index => $payout ) {
+                if ( $payout->status == '1' ) $payoutTotal += $payout->amount;
+            }
+        }
+
         $total_sales = $total_sales - $payoutTotal - $refundsAmount;
+        if ( $total_sales < 1 ) $total_sales = 0;
 
         if ( $total_sales < $this->request->amount ) {
             // $total_sales = "₱ " . Helpers::numeric( $total_sales, 2 );

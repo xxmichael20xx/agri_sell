@@ -151,7 +151,7 @@
                         <p>Vehicle used: {{ $refund->order->suborder_ent->order->rider->vehicle_used ?? '' }} </p>
                         <p>Delivery status: <span class="badge badge-info">{{ $refund->order->suborder_ent->deliverystatus->display_name ?? '' }}</span></p>
                     @else
-                        <p>Delivery man not set</p>
+                        <p>No assigned Delivery rider</p>
                     @endif
                 </div>
             </div>

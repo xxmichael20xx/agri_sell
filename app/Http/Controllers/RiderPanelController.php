@@ -22,7 +22,7 @@ class RiderPanelController extends Controller
         $ids = $type ? $this->setIds( $type ) : array( 3, 4, 5, 6, 9 );
         $orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $ids )->get();
         $assign_order_status_options = orderDeliveryStatusModel::whereIn( 'id', array( 2, 3, 4 ) )->get();
-        $my_rider_id = Auth::user()->rider_staff->id;
+        $my_rider_id = auth()->user()->rider_staff->id;
 
         foreach ( $orders as $index => $order ) {
             if ( ! $order->order ) {
@@ -33,10 +33,28 @@ class RiderPanelController extends Controller
             }
         }
 
+        $_types = [ 'to-pick-up', 'pick-up-success', 'on-out-for-delivery', 'completed' ];
+        $_counts = [];
+        foreach( $_types as $_type ) {
+            $_ids = $_type ? $this->setIds( $_type ) : array( 3, 4, 5, 6, 9 );
+            $_orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $_ids )->get();
+
+            foreach ( $_orders as $index => $_order ) {
+                if ( ! $_order->order ) {
+                    $_orders->forget( $index );
+
+                } else if ( $_order->order->rider_id !== $my_rider_id ) {
+                    $_orders->forget( $index );
+                }
+            }
+            $_counts[$_type] = $_orders->count();
+        }
+
         return view( 'riderPanel.dashboard' )
             ->with(compact('orders', 'assign_order_status_options'))
             ->with('panel_name', 'orders')
-            ->with('my_rider_id', $my_rider_id);
+            ->with('my_rider_id', $my_rider_id)
+            ->with('_counts', $_counts);
     }
 
     public function setIds( $type ) {

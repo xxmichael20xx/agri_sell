@@ -192,9 +192,7 @@ class OrderMgmtPanelController extends Controller
             $order->is_paid = true;
             $order->status = "completed";
             $order->save();
-        }
 
-        if ( $status_id == 5 ) {
             $sub_order->status = 'completed';
         }
         $sub_order->save();
@@ -346,6 +344,17 @@ class OrderMgmtPanelController extends Controller
                 if ( ( $config_key == 'pickup_status' && $status_id == 3 ) || ( $config_key == 'order_status' && $status_id == 7 ) ) {
                     $title .= "<br>Cancelation reason: " . $request->cancel_reason;
                 }
+
+                if ( $status_id == 4 ) {
+                    $title = "Your order has been marked as <span style='color: #28A745;'>'Out for delivery'</span>";
+                    $title .= "<br>";
+                    $title .= "Rider: " . auth()->user()->name;
+                    $title .= "<br>";
+                    $title .= "Number: " . auth()->user()->mobile;
+                    $title .= "<br>";
+                    $title .= "For COD, please prepare the exact amount. Photo proof of delivery is required. Thanks and be safe!";
+                }
+
                 $notifData = [
                     'user_id' => $order->user_id,
                     'frm_user_id' => $this->userId(),

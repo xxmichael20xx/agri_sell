@@ -451,8 +451,8 @@
                                         </div>
                                     </div>
                             
-                                    <div class="form-group row hide-if-variants" style="display: {{ $product->has_variants ? 'none' : 'block' }}">
-                                        <label class="col-md-3 col-form-label">Product sold per</label>
+                                    <div class="form-group row hide-if-variants {{ $product->has_variants ? 'd-none': '' }}">
+                                        <label class="col-md-3 col-form-label text-dark">Sold Per<span class="text-primary font-weight-bold">*</span></label>
                                         <div class="col-md-9">
                                             @php
                                                 $soldPerOptions = [ 'kilo', 'sacks', 'box', 'piece', 'kaing' ];
@@ -471,9 +471,30 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    <div class="form-group row hide-if-variants">
+                                        <label class="col-md-3 col-form-label text-dark">Product Size</label>
+                                        <div class="col-md-9">
+                                            @php
+                                                $productSizes = [ 'Small', 'Medium', 'Large', 'Extra Large' ];
+                                            @endphp
+                                            <select class="form-control" name="product_size" id="product_size"> 
+                                                <option selected disabled>Select option (optional)</option>
+                                                @foreach ( $productSizes as $productSize )
+                                                    @php
+                                                        $isSelected = $first->product_size == $productSize ? 'selected' : '';
+                                                    @endphp
+                                                    <option value="{{ $productSize }}" {{ $isSelected }}>{{ ucfirst( $productSize ) }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if ( $errors->has( 'product_size' ) )
+                                                <span class="text-danger">{{ $errors->first( 'product_size' ) }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                             
-                                    <div class="form-group row hide-if-variants" style="display: {{ $product->has_variants ? 'none' : 'block' }}">
-                                        <label class="col-md-3 col-form-label">Standard net weight</label>
+                                    <div class="form-group row hide-if-variants {{ $product->has_variants ? 'd-none': '' }}">
+                                        <label class="col-md-3 col-form-label text-dark">Standard net weight<span class="text-primary font-weight-bold">*</span> (for shipping details)</label>
                                         <div class="col-md-9">
                                             <div class="row">
                                                 <div class="col">
@@ -496,13 +517,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row hide-if-variants" style="display: {{ $product->has_variants ? 'none' : 'block' }}">
+                                    <div class="form-group row hide-if-variants {{ $product->has_variants ? 'd-none': '' }}">
                                         <div class="col-md-3"></div>
                                         <div class="col-md-9">
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label class="col-form-label">Price</label>
+                                                        <label class="col-form-label text-dark">Price<span class="text-primary font-weight-bold">*</span></label>
                                                         <input type="number" class="form-control" name="retail_price" value="{{ $first->variation_price_per }}">
                                                         @if ( $errors->has( 'retail_price' ) )
                                                             <span class="text-danger">{{ $errors->first( 'retail_price' ) }}</span>
@@ -511,7 +532,7 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="form-group">
-                                                        <label class="col-form-label">Stocks</label>
+                                                        <label class="col-form-label text-dark">Stocks<span class="text-primary font-weight-bold">*</span></label>
                                                         <input type="number" class="form-control" name="stocks" value="{{ $first->variation_quantity }}">
                                                         @if ( $errors->has( 'stocks' ) )
                                                             <span class="text-danger">{{ $errors->first( 'stocks' ) }}</span>
@@ -522,7 +543,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="form-group row wholesale--container" style="display: {{ $product->has_variants ? 'none' : 'block' }}">
+                                    <div class="form-group row wholesale--container {{ $product->has_variants ? 'd-none': '' }}">
                                         <div class="col">
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale" {{ $product->is_whole_sale ? 'checked': '' }}>
@@ -531,7 +552,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="form-group row {{ $first->is_whole_sale ? '' : 'd-none' }} wholesale--input border-top pt-2">
+                                    <div class="form-group row {{ $first->is_whole_sale ? '' : 'd-none' }} wholesale--input border-top pt-2" data-wholesale="{{ $first->is_whole_sale ? 'yes' : 'no' }}">
                                         <div class="col-md-3">
                                             <label class="col-form-label text-dark font-weight-bold">Wholesale</label>
                                         </div>
@@ -617,32 +638,27 @@
         $( document ).on( 'click', '#has_vartiants', function() {
             const isChecked = $( this ).is( ':checked' )
             const inputs = $( '.variant--input-container' )
-            const hideIfVariants = $( '.hide-if-variants' )
-            const willHide = $( '.wholesale--input, .wholesale--container' )
+            const willHide = $( '.wholesale--input, .wholesale--container, .hide-if-variants' )
 
             if ( isChecked ) {
                 inputs.each( function() {
                     $( this ).removeClass( 'd-none' )
                 } )
 
-                hideIfVariants.each( function() {
-                    $( this ).hide()
-                } )
-
                 willHide.each( function() {
-                    $( this ).hide()
+                    $( this ).addClass( 'd-none' )
                 } )
             } else {
                 inputs.each( function() {
                     $( this ).addClass( 'd-none' )
                 } )
 
-                hideIfVariants.each( function() {
-                    $( this ).show()
-                } )
-
                 willHide.each( function() {
-                    $( this ).show()
+                    let bol = true
+                    const dataWholesale = $( this ).attr( 'data-wholesale' )
+
+                    if ( typeof dataWholesale !== undefined && dataWholesale == 'no' ) bol = false
+                    if ( bol ) $( this ).removeClass( 'd-none' )
                 } )
             }
         } )

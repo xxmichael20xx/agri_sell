@@ -390,7 +390,7 @@
         $( document ).on( 'click', '#has_vartiants', function() {
             const isChecked = $( this ).is( ':checked' )
             const inputs = $( '.variant--input-container' )
-            const willHide = $( '.wholesale--input, .wholesale--container' )
+            const willHide = $( '.wholesale--input, .wholesale--container, .hide-if-variants' )
 
             if ( isChecked ) {
                 inputs.each( function() {
@@ -398,7 +398,7 @@
                 } )
 
                 willHide.each( function() {
-                    $( this ).hide()
+                    $( this ).addClass( 'd-none' )
                 } )
             } else {
                 inputs.each( function() {
@@ -406,7 +406,7 @@
                 } )
 
                 willHide.each( function() {
-                    $( this ).show()
+                    $( this ).removeClass( 'd-none' )
                 } )
             }
         } )

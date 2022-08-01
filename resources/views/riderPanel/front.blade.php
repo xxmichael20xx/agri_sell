@@ -95,22 +95,22 @@ Coded by www.creative-tim.com
           </li>
           <li class="ml-5 pl-2">
             <a href="/rider_dashboard/to-pick-up">
-              <p>To Pick Up</p>
+              <p>To Pick Up <span class="badge badge-primary">{{ $_counts['to-pick-up'] }}</span></p>
             </a>
           </li>
           <li class="ml-5 pl-2">
             <a href="/rider_dashboard/pick-up-success">
-              <p>Pick Up Success</p>
+              <p>Pick Up Success <span class="badge badge-primary">{{ $_counts['pick-up-success'] }}</span></p>
             </a>
           </li>
           <li class="ml-5 pl-2">
             <a href="/rider_dashboard/on-out-for-delivery">
-              <p>On out for delivery</p>
+              <p>On out for delivery <span class="badge badge-primary">{{ $_counts['on-out-for-delivery'] }}</span></p>
             </a>
           </li>
           <li class="ml-5 pl-2">
             <a href="/rider_dashboard/completed">
-              <p>Completed</p>
+              <p>Completed <span class="badge badge-primary">{{ $_counts['completed'] }}</span></p>
             </a>
           </li>
         </ul>

@@ -4,12 +4,15 @@ namespace App\Exports;
 
 use App\Helpers;
 use App\SellerPayoutRequest;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class Payouts implements FromCollection, WithHeadings
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
+class Payouts implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
     protected $status_id, $interval, $columns, $month, $collection;
 
@@ -24,13 +27,29 @@ class Payouts implements FromCollection, WithHeadings
 
     public function headings(): array
     {
-        $headers = [ "Name", "Amount", "Type", "Name", "Number", $this->columns['header'], "{reason}" ];
+        $headers = [ "Name", "Amount", "Type", "Name", "Number", $this->columns['header'], "Reason" ];
 
         if ( $this->columns['type'] !== 'Rejected' ) {
             unset( $headers[7] );
         }
 
         return [ [ "List of Seller Payout" ], $headers ];
+    }
+
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/img/agri_logo.png'));
+        $drawing->setHeight(90);
+        $drawing->setCoordinates('C1');
+
+        return $drawing;
+    }
+
+    public function startCell(): string {
+        return 'A6';
     }
 
     /**
@@ -48,10 +67,16 @@ class Payouts implements FromCollection, WithHeadings
         }
 
         foreach ( $payouts as $payout_index => $payout ) {
+            $type = "GCash";
+
+            if ( isset( $payout->metadata['type'] ) ) {
+               $type = $payout->metadata['type'];
+            }
+
             $_data = [
                 $payout->seller->name,
                 "Peso " . Helpers::numeric( $payout->amount ),
-                $payout->metadata['type'],
+                $type,
                 $payout->gcash_name,
                 $payout->gcash_number,
                 $payout->{$this->columns['column']},

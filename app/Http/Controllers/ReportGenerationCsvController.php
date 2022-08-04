@@ -26,24 +26,32 @@ class ReportGenerationCsvController extends Controller
     }
     
     public function activityLogs( Request $request ) {
-        $fileName = $this->time() . "_Activity_Logs.csv";
-        return \Excel::download( new ActivityLogs, $fileName );
+        $fileName = $this->time() . "_Activity_Logs.xlsx";
+        $report = \Excel::download( new ActivityLogs, $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+        return $report;
     }
 
     public function refunds( Request $request, $type, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Refunds_" . ucwords( $type ) . ".csv";
-        return \Excel::download( new Refunds( $type, $interval, $month ), $fileName );
+        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Refunds_" . ucwords( $type ) . ".xlsx";
+        $report = \Excel::download( new Refunds( $type, $interval, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function shops( Request $request, $interval, $type, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Approved_Shops_" . ucwords( $type ) . ".csv";
-        return \Excel::download( new Shop( $interval, $type, $month ), $fileName );
+        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Approved_Shops_" . ucwords( $type ) . ".xlsx";
+        $report = \Excel::download( new Shop( $interval, $type, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function users( Request $request, $interval, $role_id, $month = NULL ) {
@@ -73,8 +81,11 @@ class ReportGenerationCsvController extends Controller
                 break;
         }
 
-        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Users_" . $roleType . ".csv";
-        return \Excel::download( new Users( $interval, $role_id, $month ), $fileName );
+        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Users_" . $roleType . ".xlsx";
+        $report = \Excel::download( new Users( $interval, $role_id, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function payouts( Request $request, $status_id, $interval, $month = NULL ) {
@@ -107,24 +118,33 @@ class ReportGenerationCsvController extends Controller
                 break;
         }
 
-        $fileName = $this->time() . "_" . $columns['type'] . "_" . ucwords( $interval ) . "_Payout" . ".csv";
-        return \Excel::download( new Payouts( $status_id, $interval, $columns, $month ), $fileName );
+        $fileName = $this->time() . "_" . $columns['type'] . "_" . ucwords( $interval ) . "_Payout" . ".xlsx";
+        $report = \Excel::download( new Payouts( $status_id, $interval, $columns, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function orders( Request $request, $type, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_" . ucwords( $type ) . "_Orders_" . ucwords( $interval ) . ".csv";
-        return \Excel::download( new Orders( $type, $interval, $month ), $fileName );
+        $fileName = $this->time() . "_" . ucwords( $type ) . "_Orders_" . ucwords( $interval ) . ".xlsx";
+        $report = \Excel::download( new Orders( $type, $interval, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function transactions( Request $request, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Transaction_History.csv";
-        return \Excel::download( new TransactionHistory( $interval, $month ), $fileName );
+        $fileName = $this->time() . "_" . ucwords( $interval ) . "_Transaction_History.xlsx";
+        $report = \Excel::download( new TransactionHistory( $interval, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     // Seller Report Generation
@@ -132,29 +152,40 @@ class ReportGenerationCsvController extends Controller
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_" . ucwords( $type ) . "_Products_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerProducts( $type, $interval, $month ), $fileName );
+        $fileName = $this->time() . "_" . ucwords( $type ) . "_Products_" .  ucwords( $interval ) . ".xlsx";
+        $report = \Excel::download( new SellerProducts( $type, $interval, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function sellerRefunds( Request $request, $type, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_Refunds_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerRefunds( $type, $interval, $month ), $fileName );
+        $fileName = $this->time() . "_Refunds_" .  ucwords( $interval ) . ".xlsx";
+        $report = \Excel::download( new SellerRefunds( $type, $interval, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function sellerPayouts( Request $request, $interval, $month = NULL ) {
         if ( ! $month ) {
             $month = Carbon::parse( now () )->month;
         }
-        $fileName = $this->time() . "_Payouts_" .  ucwords( $interval ) . ".csv";
-        return \Excel::download( new SellerPayouts( $interval, $month ), $fileName );
+        $fileName = $this->time() . "_Payouts_" .  ucwords( $interval ) . ".xlsx";
+        $report = \Excel::download( new SellerPayouts( $interval, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 
     public function riderDeliveries( Request $request, $type ) {
-        $fileName = $this->time() . "_Deliveries_" .  ucwords( $type ) . ".csv";
-        return \Excel::download( new RiderDeliveries( $type ), $fileName );
-        // return (new RiderDeliveries($type))->download('Productos.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        $fileName = $this->time() . "_Deliveries_" .  ucwords( $type ) . ".xlsx";
+        $report = \Excel::download( new RiderDeliveries( $type ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        ob_end_clean();
+
+        return $report;
     }
 }

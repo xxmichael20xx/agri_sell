@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class Shop implements FromCollection, WithHeadings
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
+class Shop implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
     protected $interval, $type, $month, $props, $collection;
 
@@ -41,6 +45,22 @@ class Shop implements FromCollection, WithHeadings
     public function isPDFFull() {
         $boolean = $this->validateKey( 'type', 'pdf' ) && $this->type == 'full';
         return $boolean;
+    }
+
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/img/agri_logo.png'));
+        $drawing->setHeight(90);
+        $drawing->setCoordinates('C1');
+
+        return $drawing;
+    }
+
+    public function startCell(): string {
+        return 'A6';
     }
 
     /**

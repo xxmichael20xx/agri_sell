@@ -10,16 +10,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class RiderDeliveries implements FromCollection, WithHeadings
+class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
-    use Exportable;
-
     protected  $type, $helpers, $collection;
 
     public function __construct( $type )
@@ -35,29 +31,21 @@ class RiderDeliveries implements FromCollection, WithHeadings
         return [ [ "List of Delivery - " . ucwords( $this->type ) ], $headers ];
     }
 
-    /* public function drawings()
+    public function drawings()
     {
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
         $drawing->setPath(public_path('/img/agri_logo.png'));
         $drawing->setHeight(90);
-        $drawing->setWidth(120);
-        $drawing->setCoordinates('B10');
+        $drawing->setCoordinates('C1');
 
         return $drawing;
-    } */
+    }
 
-    /* public function registerEvents(): array {
-        return [
-            AfterSheet::class => function (AfterSheet $event) {
-                $workSheet = $event->sheet->getDelegate();
-
-                // insert images
-                $this->drawings()->setWorksheet($workSheet);
-            },
-        ];
-    } */
+    public function startCell(): string {
+        return 'A6';
+    }
 
     /**
     * @return \Illuminate\Support\Collection

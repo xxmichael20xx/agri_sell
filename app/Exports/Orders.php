@@ -10,7 +10,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class Orders implements FromCollection, WithHeadings
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
+class Orders implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
     protected $type, $interval, $helpers, $month, $collection;
 
@@ -27,6 +31,22 @@ class Orders implements FromCollection, WithHeadings
     {
         $headers = [ "Customer Name", "Total", "Shop Name", "Status", "Item Name", "Qty", "Variety", "Price", "Sub Total" ];
         return [ [ "List of all Orders" ], $headers ];
+    }
+
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/img/agri_logo.png'));
+        $drawing->setHeight(90);
+        $drawing->setCoordinates('C1');
+
+        return $drawing;
+    }
+
+    public function startCell(): string {
+        return 'A6';
     }
 
     /**

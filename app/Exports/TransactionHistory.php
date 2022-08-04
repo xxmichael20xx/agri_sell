@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class TransactionHistory implements FromCollection, WithHeadings
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
+class TransactionHistory implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
     protected $collection, $interval, $helpers, $month;
 
@@ -25,6 +29,22 @@ class TransactionHistory implements FromCollection, WithHeadings
     {
         $headers = [ "Transaction #", "Name", "Transaction type", "Amount", "Transaction Reference ID", "Date" ];
         return [ [ "List of Transactions" ], $headers ];
+    }
+
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/img/agri_logo.png'));
+        $drawing->setHeight(90);
+        $drawing->setCoordinates('C1');
+
+        return $drawing;
+    }
+
+    public function startCell(): string {
+        return 'A6';
     }
 
     /**

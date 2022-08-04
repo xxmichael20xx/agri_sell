@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class Refunds implements FromCollection, WithHeadings
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+
+class Refunds implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
     protected $type, $interval, $month, $collection;
 
@@ -40,6 +44,22 @@ class Refunds implements FromCollection, WithHeadings
         }
 
         return [ [ "List of Customer Refunds" ], $headers ];
+    }
+
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/img/agri_logo.png'));
+        $drawing->setHeight(90);
+        $drawing->setCoordinates('C1');
+
+        return $drawing;
+    }
+
+    public function startCell(): string {
+        return 'A6';
     }
 
     /**

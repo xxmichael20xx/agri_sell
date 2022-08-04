@@ -154,7 +154,7 @@ class ReportGenerationCsvController extends Controller
 
     public function riderDeliveries( Request $request, $type ) {
         $fileName = $this->time() . "_Deliveries_" .  ucwords( $type ) . ".csv";
-        // return \Excel::download( new RiderDeliveries( $type ), $fileName );
-        return (new RiderDeliveries($type))->download('Productos.xlsx');
+        return \Excel::download( new RiderDeliveries( $type ), $fileName );
+        // return (new RiderDeliveries($type))->download('Productos.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 }

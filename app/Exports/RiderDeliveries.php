@@ -12,9 +12,11 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithDrawings;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings
+class RiderDeliveries implements FromCollection, WithHeadings
 {
     use Exportable;
 
@@ -30,21 +32,32 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings
     public function headings(): array
     {
         $headers = [ "Customer Name", "Address", "Order Total", "Is Order Paid", "Status", "Delivered by", "Date Ordered" ];
-        return $headers;
         return [ [ "List of Delivery - " . ucwords( $this->type ) ], $headers ];
     }
 
-    public function drawings()
+    /* public function drawings()
     {
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
         $drawing->setPath(public_path('/img/agri_logo.png'));
         $drawing->setHeight(90);
-        $drawing->setCoordinates('G50');
+        $drawing->setWidth(120);
+        $drawing->setCoordinates('B10');
 
         return $drawing;
-    }
+    } */
+
+    /* public function registerEvents(): array {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $workSheet = $event->sheet->getDelegate();
+
+                // insert images
+                $this->drawings()->setWorksheet($workSheet);
+            },
+        ];
+    } */
 
     /**
     * @return \Illuminate\Support\Collection
@@ -109,7 +122,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings
             $this->collection->push( $data );
         }
 
-        /* foreach ( range( 1, 5 ) as $num ) {
+        foreach ( range( 1, 5 ) as $num ) {
             $space = [];
             foreach( range( 1, count( $this->headings()[1] ) ) as $_ ) {
                 $space[] = "";
@@ -120,7 +133,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings
                 $space[$lastIndex] = "Validated by: Agrisell Admin";
             }
             $this->collection->push( (object) $space );
-        } */
+        }
         
         return $this->collection;
     }

@@ -472,7 +472,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row hide-if-variants">
+                                    <div class="form-group row hide-if-variants {{ $product->has_variants ? 'd-none': '' }}">
                                         <label class="col-md-3 col-form-label text-dark">Product Size</label>
                                         <div class="col-md-9">
                                             @php

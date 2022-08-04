@@ -6,6 +6,7 @@ use App\Exports\ActivityLogs;
 use App\Exports\Orders;
 use App\Exports\Payouts;
 use App\Exports\Refunds;
+use App\Exports\RiderDeliveries;
 use App\Exports\SellerPayouts;
 use App\Exports\SellerProducts;
 use App\Exports\SellerRefunds;
@@ -149,5 +150,11 @@ class ReportGenerationCsvController extends Controller
         }
         $fileName = $this->time() . "_Payouts_" .  ucwords( $interval ) . ".csv";
         return \Excel::download( new SellerPayouts( $interval, $month ), $fileName );
+    }
+
+    public function riderDeliveries( Request $request, $type ) {
+        $fileName = $this->time() . "_Deliveries_" .  ucwords( $type ) . ".csv";
+        // return \Excel::download( new RiderDeliveries( $type ), $fileName );
+        return (new RiderDeliveries($type))->download('Productos.xlsx');
     }
 }

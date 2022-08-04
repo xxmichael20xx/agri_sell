@@ -14,5 +14,19 @@ Route::group(['middleware' => 'auth', 'middleware' => 'rider'], function () {
 
     Route::get('/product_monitoring_status/{suborder_item_id}/', 'OrderMgmtPanelController@showSingleSubItemSingle');
 
+    // Report Generation Routes
+    Route::group( [ 'prefix' => '/export/csv/rider' ], function() {
+        // Deliveries
+        Route::group( [ 'prefix' => 'deliveries' ], function() {
+            Route::get( '{type}', 'ReportGenerationCsvController@riderDeliveries' );
+        } );
+    });
 
+    // Report Generation Routes
+    Route::group( [ 'prefix' => '/export/pdf/rider' ], function() {
+        // Deliveries
+        Route::group( [ 'prefix' => 'deliveries' ], function() {
+            Route::get( '{type}', 'ReportGenerationPdfController@riderDeliveries' );
+        } );
+    });
 });

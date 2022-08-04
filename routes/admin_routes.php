@@ -166,6 +166,22 @@ Route::group(['middleware' => 'auth', 'middleware' => 'admin'], function () {
         } );
     } );
 
+    // Report Generation Routes
+    Route::group( [ 'prefix' => '/export/csv/admin' ], function() {
+        // Deliveries
+        Route::group( [ 'prefix' => 'deliveries' ], function() {
+            Route::get( '{type}', 'ReportGenerationCsvController@riderDeliveries' );
+        } );
+    });
+
+    // Report Generation Routes
+    Route::group( [ 'prefix' => '/export/pdf/admin' ], function() {
+        // Deliveries
+        Route::group( [ 'prefix' => 'deliveries' ], function() {
+            Route::get( '{type}', 'ReportGenerationPdfController@riderDeliveries' );
+        } );
+    });
+
     Route::group( [ 'prefix' => 'export/pdf' ], function() {
         // Activity Logs
         Route::get( 'activity-logs', 'ReportGenerationPdfController@activityLogs' );

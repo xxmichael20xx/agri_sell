@@ -3,9 +3,7 @@
 namespace App\Exports;
 
 use App\Helpers;
-use App\refundModelOrder;
 use App\SellerPayoutRequest;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -57,9 +55,15 @@ class SellerPayouts implements FromCollection, WithHeadings
                     break;
             }
 
+            $type = "GCash";
+
+            if ( isset( $payout->metadata['type'] ) ) {
+               $type = $payout->metadata['type'];
+            }
+
             $_data = [
                 "#" . $payout->id,
-                $payout->metadata['type'],
+                $type,
                 "Peso " . $this->helpers->numeric( $payout->amount ),
                 $this->helpers->humanDate( $payout->payout->week_start, false ) . " - " . $this->helpers->humanDate( $payout->payout->week_end, false ),
                 $this->helpers->humanDate( $payout->created_at ),

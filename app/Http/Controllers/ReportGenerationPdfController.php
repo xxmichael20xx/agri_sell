@@ -6,6 +6,7 @@ use App\Exports\ActivityLogs;
 use App\Exports\Orders;
 use App\Exports\Payouts;
 use App\Exports\Refunds;
+use App\Exports\RiderDeliveries;
 use App\Exports\SellerPayouts;
 use App\Exports\SellerProducts;
 use App\Exports\SellerRefunds;
@@ -153,6 +154,14 @@ class ReportGenerationPdfController extends Controller
             $month = Carbon::parse( now () )->month;
         }
         $export = new SellerPayouts( $interval, $month );
+        $headers = $export->headings();
+        $data = $export->collection();
+
+        return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
+    }
+
+    public function riderDeliveries( Request $request, $type ) {
+        $export = new RiderDeliveries( $type );
         $headers = $export->headings();
         $data = $export->collection();
 

@@ -149,34 +149,6 @@
                         </div>
                         <a href="/shop/catalog/{{ $product->shop->id }}">{{ $product->shop->name }}</a>
                         <br>
-                        <div class="my-2">
-                            <span>Sold per: </span>
-                            <!-- Sold per widget -->
-                            @php
-                                $variation_ent_tmp = App\ProductVariation::where('product_id', $product->id)->get();
-                                $var_tmp_sold_per = [];
-                                
-                                foreach ($variation_ent_tmp as $variation_instance) {
-                                    array_push($var_tmp_sold_per, $variation_instance->variation_sold_per);
-                                }
-                                
-                                $var_tmp_sold_per = array_unique($var_tmp_sold_per);
-                                
-                            @endphp
-                            @foreach ($var_tmp_sold_per as $var_tmp_sold_per_instance)
-                                <span>{{ $var_tmp_sold_per_instance }}</span>
-                            @endforeach
-                        </div>
-                        <!-- end of sold per widget -->
-                        <div class="quick-view-select my-2">
-                            Product description: {{ $product->description }}
-                        </div>
-
-                        <div class="my-5"></div>
-
-                        <div class="fb-share-button mb-3" data-layout="button" data-size="large">
-                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}&locale=en_US" class="fb-xfbml-parse-ignore">Share</a>
-                        </div>
 
                         @php
                             $all_vars = App\ProductVariation::where('product_id', $product->id)->get();
@@ -205,6 +177,39 @@
                                 $variantWholesale = 'yes';
                             }
                         @endphp
+
+                        <div class="my-2">
+                            <span>Sold per: </span>
+                            <!-- Sold per widget -->
+                            @php
+                                $variation_ent_tmp = App\ProductVariation::where('product_id', $product->id)->get();
+                                $var_tmp_sold_per = [];
+                                
+                                foreach ($variation_ent_tmp as $variation_instance) {
+                                    array_push($var_tmp_sold_per, $variation_instance->variation_sold_per);
+                                }
+                                
+                                $var_tmp_sold_per = array_unique($var_tmp_sold_per);
+                                
+                            @endphp
+                            @foreach ($var_tmp_sold_per as $var_tmp_sold_per_instance)
+                                <span>{{ $var_tmp_sold_per_instance }}</span>
+                            @endforeach
+                        </div>
+                        <!-- end of sold per widget -->
+                        <div class="quick-view-select my-2">
+                            Product description: {{ $product->description }}
+                            @if ( $first_var->product_size )
+                                <br>
+                                <span id="product-size">Size: {{ $first_var->product_size }}</span>
+                            @endif
+                        </div>
+
+                        <div class="my-5"></div>
+
+                        <div class="fb-share-button mb-3" data-layout="button" data-size="large">
+                            <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}&locale=en_US" class="fb-xfbml-parse-ignore">Share</a>
+                        </div>
 
                         <!-- changelog change GET to POST -->
                         <form method="GET" action="{{ route('cart.addWquantityVariation', $product) }}" id="add--cart-form">
@@ -315,6 +320,7 @@
                     const variantPrice = Number( data.variation_price_per ).toLocaleString()
                     const variantWholeSaleMinQty = data.variation_min_qty_wholesale
                     const variantSoldFor = data.variation_sold_per
+                    const variantSize = data.product_size
 
                     $( '#variant--stock' ).text( variantStock.toLocaleString() )
                     $( '#variant--weight' ).text( variantWeight )
@@ -323,6 +329,7 @@
                     $( '#variation_max_stock' ).attr( 'data-max', variantStock )
                     $( '#quantity--max' ).text( variantStock.toLocaleString() )
                     $( '#variant--sold-for' ).text( variantSoldFor )
+                    $( '#product-size' ).text( 'Size: ' + variantSize )
 
                     if ( data.is_variation_wholesale == 'yes' ) {
                         $( '#variation_max_stock' ).attr( 'data-min', 1 )

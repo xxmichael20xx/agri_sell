@@ -1,194 +1,297 @@
 @extends('riderPanel.front')
 @section('content')
+@php
+    $inc = [
+        'type' => 'rider_deliveries',
+        'is_seller' => true
+    ];
 
-    <div class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Manage Order delivery {{ Auth::user()->rider_staff->rider_id ?? 'not available' }}</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="datatable" class="table " cellspacing="0" width="100%">
-                                <thead class="text-primary">
+    $deliveryToday = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-today',
+        'title' => 'Delivery Today',
+        'reports' => [
+            [
+                'href' => '/export/csv/rider/deliveries/today',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/rider/deliveries/today',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryMonthly = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-monthly',
+        'title' => 'Delivery Monthly',
+        'reports' => [
+            [
+                'href' => '/export/csv/rider/deliveries/monthly',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/rider/deliveries/monthly',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryYearly = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-yearly',
+        'title' => 'Delivery Yearly',
+        'reports' => [
+            [
+                'href' => '/export/csv/rider/deliveries/yearly',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/rider/deliveries/yearly',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryCompleted = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-completed',
+        'title' => 'Delivery Completed',
+        'reports' => [
+            [
+                'href' => '/export/csv/rider/deliveries/completed',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/rider/deliveries/completed',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryFailed = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-failed',
+        'title' => 'Delivery Failed',
+        'reports' => [
+            [
+                'href' => '/export/csv/rider/deliveries/failed',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/rider/deliveries/failed',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+@endphp
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Manage Order delivery {{ Auth::user()->rider_staff->rider_id ?? 'not available' }}</h4>
+                    @if ( ! $type )
+                        <div class="dropdown dropleft">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="report--rider-deliveries" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Report Generation
+                            </button>
+                            <div class="dropdown-menu">
+                                @include( 'admin.export.modal_trigger', $inc )
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="datatable" class="table " cellspacing="0" width="100%">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th>
+                                        Customer name
+                                    </th>
+                                    <th>
+                                        Address
+                                    </th>
+                                    <th>
+                                        Total
+                                    </th>
+                                    <th>
+                                        Is Order Paid?
+                                    </th>
+                                    <th>
+                                        Delivery status/Pick up notes
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach( $orders as $order )
+                                    @php
+                                        $method = $order->order->payment_method;
+                                        $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
+
+                                        $_user = App\User::find( $order->order->user_id );
+                                    @endphp
                                     <tr>
-                                        <th>
-                                            Customer name
-                                        </th>
-                                        <th>
-                                            Address
-                                        </th>
-                                        <th>
-                                            Total
-                                        </th>
-                                        <th>
-                                            Is Order Paid?
-                                        </th>
-                                        <th>
-                                            Delivery status/Pick up notes
-                                        </th>
-                                        <th>
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach( $orders as $order )
-                                        @php
-                                            $method = $order->order->payment_method;
-                                            $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
-
-                                            $_user = App\User::find( $order->order->user_id );
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                {{ $order->order->shipping_fullname ?? 'Not available' }}
-                                                @if ( $order->order->order_number )
-                                                    <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Ref. Number:<br>{{ $order->order->order_number }}"></i>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @php
-                                                    if ( $_user ) {
-                                                        echo "{$_user->address} {$_user->barangay}, {$_user->town}";
-                                                    } else {
-                                                        echo "";
-                                                    }
-                                                @endphp
-                                            </td>
-                                            <td>
-                                                ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
-                                            </td>
-                                            <td>
-                                                @if ( $isPaid )
-                                                    <span class="badge badge-success">Paid</span>
+                                        <td>
+                                            {{ $order->order->shipping_fullname ?? 'Not available' }}
+                                            @if ( $order->order->order_number )
+                                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="Ref. Number:<br>{{ $order->order->order_number }}"></i>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @php
+                                                if ( $_user ) {
+                                                    echo "{$_user->address} {$_user->barangay}, {$_user->town}";
+                                                } else {
+                                                    echo "";
+                                                }
+                                            @endphp
+                                        </td>
+                                        <td>
+                                            ₱ {{ AppHelpers::numeric( $order->order->grand_total ) }}
+                                        </td>
+                                        <td>
+                                            @if ( $isPaid )
+                                                <span class="badge badge-success">Paid</span>
+                                            @else
+                                                @if ( in_array( $order->status_id, array( 4, 5 ) ) )
+                                                    <span class="badge badge-warning">Unpaid</span>
                                                 @else
-                                                    @if ( in_array( $order->status_id, array( 4, 5 ) ) )
-                                                        <span class="badge badge-warning">Unpaid</span>
-                                                    @else
-                                                        <span class="badge badge-warning">Unpaid</span>
-                                                    @endif
+                                                    <span class="badge badge-warning">Unpaid</span>
                                                 @endif
-                                                <br>
-                                                {{ $order->order->agcoins_transid }}
-                                            </td>
-                                            <td>
+                                            @endif
+                                            <br>
+                                            {{ $order->order->agcoins_transid }}
+                                        </td>
+                                        <td>
+                                            @php
+                                                $href = '#';
+                                                $action = '';
+                                                $button = '';
+
+                                                if ( $order->status_id == 9 ) {
+                                                    $href = "/admin/edit_order_status/3/{$order->order_id}";
+                                                    $button = "Pick up success";
+
+                                                } else if ( $order->status_id == 3 ) {
+                                                    $href = "/admin/edit_order_status/4/{$order->order_id}";
+                                                    $button = "On out delivery";
+
+                                                } else if ( $order->status_id == 4 ) {
+                                                    $href = "/admin/edit_order_status/5/{$order->order_id}";
+                                                    $button = "Completed";
+
+                                                }
+                                            @endphp
+                                            @if ( $button )
+                                                <button type="button" class="btn btn-primary btn-sm btn-round btn-action" data-href="{{ $href }}" data-title="{{ $button }}">{{ $button }}</button>
+                                            @else
                                                 @php
-                                                    $href = '#';
-                                                    $action = '';
-                                                    $button = '';
+                                                    $title = "No actions needed";
+                                                    switch ( $order->status_id ) {
+                                                        case 1:
+                                                            $title = "Pending<br>";
+                                                            break;
+                                                        
+                                                        case 2:
+                                                            $title = "Confirmed<br>";
+                                                            break;
 
-                                                    if ( $order->status_id == 9 ) {
-                                                        $href = "/admin/edit_order_status/3/{$order->order_id}";
-                                                        $button = "Pick up success";
+                                                        case 3:
+                                                            $title = "Order has been picked up<br>";
+                                                            break;
 
-                                                    } else if ( $order->status_id == 3 ) {
-                                                        $href = "/admin/edit_order_status/4/{$order->order_id}";
-                                                        $button = "On out delivery";
-
-                                                    } else if ( $order->status_id == 4 ) {
-                                                        $href = "/admin/edit_order_status/5/{$order->order_id}";
-                                                        $button = "Completed";
-
-                                                    }
-                                                @endphp
-                                                @if ( $button )
-                                                    <button type="button" class="btn btn-primary btn-sm btn-round btn-action" data-href="{{ $href }}" data-title="{{ $button }}">{{ $button }}</button>
-                                                @else
-                                                    @php
-                                                        $title = "No actions needed";
-                                                        switch ( $order->status_id ) {
-                                                            case 1:
-                                                                $title = "Pending<br>";
-                                                                break;
+                                                        case 5:
+                                                        case 6:
+                                                            $title = "";
+                                                            break;
                                                             
-                                                            case 2:
-                                                                $title = "Confirmed<br>";
-                                                                break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                @endphp
+                                                {!! $title !!}
+                                            @endif
 
-                                                            case 3:
-                                                                $title = "Order has been picked up<br>";
-                                                                break;
+                                            @if ( $order->status_id == 4 )
+                                                <button type="button" class="btn btn-danger btn-sm btn-round" data-toggle="modal" data-target="#orderModal-{{ $order->order_id }}" data-href="/admin/edit_order_status/6/{{ $order->order_id }}" data-title="Delivery failed">Delivery failed</button>
 
-                                                            case 5:
-                                                            case 6:
-                                                                $title = "";
-                                                                break;
-                                                                
-                                                            default:
-                                                                break;
-                                                        }
-                                                    @endphp
-                                                    {!! $title !!}
-                                                @endif
-
-                                                @if ( $order->status_id == 4 )
-                                                    <button type="button" class="btn btn-danger btn-sm btn-round" data-toggle="modal" data-target="#orderModal-{{ $order->order_id }}" data-href="/admin/edit_order_status/6/{{ $order->order_id }}" data-title="Delivery failed">Delivery failed</button>
-
-                                                    <div class="modal fade" id="orderModal-{{ $order->order_id }}">
-                                                        <div class="modal-dialog">
-                                                            <form method="POST" action="{{ route( 'order.delivery.update' ) }}">
-                                                                <div class="modal-content">
-                                                                    @csrf
-                                                                    <input type="hidden" name="order_id" value="{{ $order->order_id }}">
-                                                                    <input type="hidden" name="status_id" value="6">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title">Delivery Failed</h5>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="form-group row">
-                                                                            <div class="col-12">
-                                                                                <label for="reason" class="col-form-label">Reason for delivery failed</label>
-                                                                                <select name="reason" id="reason" class="custom-select" required>
-                                                                                    <option value="" selected disabled>Select an option</option>
-                                                                                    <option value="Delivery address was incorrect/incomplete">Delivery address was incorrect/incomplete</option>
-                                                                                    <option value="Address (shop or office) is closed ">Address (shop or office) is closed </option>
-                                                                                    <option value="The receiver was absent (there was no one at the address to receive the parcel)">The receiver was absent (there was no one at the address to receive the parcel)</option>
-                                                                                    <option value="Courier could not access the delivery location">Courier could not access the delivery location</option>
-                                                                                    <option value="Not finding a secure place to leave the order">Not finding a secure place to leave the order</option>
-                                                                                    <option value="Customer refusing to accept the delivery">Customer refusing to accept the delivery</option>
-                                                                                    <option value="Buyer could not be contacted">Buyer could not be contacted</option>
-                                                                                    <option value="Other factors cannot be controlled, such as natural disasters, epidemics, riots, and others">Other factors cannot be controlled, such as natural disasters, epidemics, riots, and others</option>
-                                                                                    <option value="Others">Others</option>
-                                                                                </select>
-                                                                                <textarea class="form-control collapse mt-2" name="reason_others" id="reason_others" rows="5" placeholder="Please provide other reasons"></textarea>
-                                                                            </div>
+                                                <div class="modal fade" id="orderModal-{{ $order->order_id }}">
+                                                    <div class="modal-dialog">
+                                                        <form method="POST" action="{{ route( 'order.delivery.update' ) }}">
+                                                            <div class="modal-content">
+                                                                @csrf
+                                                                <input type="hidden" name="order_id" value="{{ $order->order_id }}">
+                                                                <input type="hidden" name="status_id" value="6">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Delivery Failed</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group row">
+                                                                        <div class="col-12">
+                                                                            <label for="reason" class="col-form-label">Reason for delivery failed</label>
+                                                                            <select name="reason" id="reason" class="custom-select" required>
+                                                                                <option value="" selected disabled>Select an option</option>
+                                                                                <option value="Delivery address was incorrect/incomplete">Delivery address was incorrect/incomplete</option>
+                                                                                <option value="Address (shop or office) is closed ">Address (shop or office) is closed </option>
+                                                                                <option value="The receiver was absent (there was no one at the address to receive the parcel)">The receiver was absent (there was no one at the address to receive the parcel)</option>
+                                                                                <option value="Courier could not access the delivery location">Courier could not access the delivery location</option>
+                                                                                <option value="Not finding a secure place to leave the order">Not finding a secure place to leave the order</option>
+                                                                                <option value="Customer refusing to accept the delivery">Customer refusing to accept the delivery</option>
+                                                                                <option value="Buyer could not be contacted">Buyer could not be contacted</option>
+                                                                                <option value="Other factors cannot be controlled, such as natural disasters, epidemics, riots, and others">Other factors cannot be controlled, such as natural disasters, epidemics, riots, and others</option>
+                                                                                <option value="Others">Others</option>
+                                                                            </select>
+                                                                            <textarea class="form-control collapse mt-2" name="reason_others" id="reason_others" rows="5" placeholder="Please provide other reasons"></textarea>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                        <button type="submit" class="btn btn-danger">Submit</button>
-                                                                    </div>
                                                                 </div>
-                                                            </form>
-                                                        </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-danger">Submit</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                @endif
+                                                </div>
+                                            @endif
 
-                                                @if ( $order->status_id == 5 || $order->status_id == 6 )
-                                                    Delivery {{ $order->status_id == 5 ? 'success' : 'failed' }}
-                                                    @php
-                                                        $addl_title = '';
-                                                        if ( $order->status_id == 6 ) {
-                                                            $addl_title = $order->order_notes . "<br>";
-                                                        }
-                                                    @endphp
-                                                    <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="{{ $addl_title ?? '' }}{{ AppHelpers::humanDate( $order->updated_at ) }}"></i>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-sm btn-primary btn-round text-white" href="/rider/order/{{ $order->order_id }}">View items</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                            @if ( $order->status_id == 5 || $order->status_id == 6 )
+                                                Delivery {{ $order->status_id == 5 ? 'success' : 'failed' }}
+                                                @php
+                                                    $addl_title = '';
+                                                    if ( $order->status_id == 6 ) {
+                                                        $addl_title = $order->order_notes . "<br>";
+                                                    }
+                                                @endphp
+                                                <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" data-html="true" title="{{ $addl_title ?? '' }}{{ AppHelpers::humanDate( $order->updated_at ) }}"></i>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-primary btn-round text-white" href="/rider/order/{{ $order->order_id }}">View items</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+@if ( ! $type )
+    @include( 'admin.export.modal_content', $deliveryToday )
+    @include( 'admin.export.modal_content', $deliveryMonthly )
+    @include( 'admin.export.modal_content', $deliveryYearly )
+    @include( 'admin.export.modal_content', $deliveryCompleted )
+    @include( 'admin.export.modal_content', $deliveryFailed )
+@endif
 @endsection
 
 @section( 'custom.scripts' )

@@ -54,7 +54,8 @@ class RiderPanelController extends Controller
             ->with(compact('orders', 'assign_order_status_options'))
             ->with('panel_name', 'orders')
             ->with('my_rider_id', $my_rider_id)
-            ->with('_counts', $_counts);
+            ->with('_counts', $_counts)
+            ->with('type', $type);
     }
 
     public function setIds( $type ) {

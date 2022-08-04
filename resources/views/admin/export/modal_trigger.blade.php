@@ -24,3 +24,11 @@
     <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-orders-full">CSV/PDF - Orders Full</a>
     <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-monthly-sale">CSV/PDF - Monthly Sale</a>
 @endif
+
+@if ( $type == "rider_deliveries" )
+    <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-today">CSV/PDF - Delivery Today</a>
+    <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-monthly">CSV/PDF - Delivery Monthly</a>
+    <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-yearly">CSV/PDF - Delivery Yearly</a>
+    <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-completed">CSV/PDF - Delivery Completed</a>
+    <a class="dropdown-item clickable" data-toggle="modal" data-target="#{{ $type }}-failed">CSV/PDF - Delivery Failed</a>
+@endif

@@ -1,5 +1,91 @@
 @extends('admin.front')
 @section('content')
+@php
+    $inc = [
+        'type' => 'rider_deliveries',
+        'is_seller' => true
+    ];
+
+    $deliveryToday = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-today',
+        'title' => 'Delivery Today',
+        'reports' => [
+            [
+                'href' => '/export/csv/admin/deliveries/today',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/admin/deliveries/today',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryMonthly = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-monthly',
+        'title' => 'Delivery Monthly',
+        'reports' => [
+            [
+                'href' => '/export/csv/admin/deliveries/monthly',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/admin/deliveries/monthly',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryYearly = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-yearly',
+        'title' => 'Delivery Yearly',
+        'reports' => [
+            [
+                'href' => '/export/csv/admin/deliveries/yearly',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/admin/deliveries/yearly',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryCompleted = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-completed',
+        'title' => 'Delivery Completed',
+        'reports' => [
+            [
+                'href' => '/export/csv/admin/deliveries/completed',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/admin/deliveries/completed',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+
+    $deliveryFailed = [
+        'type' => 'rider_deliveries',
+        'key' => 'rider_deliveries-failed',
+        'title' => 'Delivery Failed',
+        'reports' => [
+            [
+                'href' => '/export/csv/admin/deliveries/failed',
+                'label' => 'CSV'
+            ],
+            [
+                'href' => '/export/pdf/admin/deliveries/failed',
+                'label' => 'PDF'
+            ],
+        ]
+    ];
+@endphp
 <style>
     .custom--dropdown-menu {
         left: unset !important;
@@ -8,7 +94,8 @@
 </style>
 <div class="content">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-3"></div>
+        <div class="col-6">
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
                     <ul id="tabs" class="nav nav-tabs" role="tablist">
@@ -25,6 +112,16 @@
                             <a class="nav-link font-weight-bold {{ $type == 'completed' ? 'active' : '' }}" href="completed">Completed</a>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 text-right">
+            <div class="dropdown dropleft">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="report--admin-deliveries" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Report Generation
+                </button>
+                <div class="dropdown-menu">
+                    @include( 'admin.export.modal_trigger', $inc )
                 </div>
             </div>
         </div>
@@ -266,6 +363,11 @@
         </div>
     </div>
 </div>
+@include( 'admin.export.modal_content', $deliveryToday )
+@include( 'admin.export.modal_content', $deliveryMonthly )
+@include( 'admin.export.modal_content', $deliveryYearly )
+@include( 'admin.export.modal_content', $deliveryCompleted )
+@include( 'admin.export.modal_content', $deliveryFailed )
 @endsection
 @section('admin.custom_scripts')
     <script>

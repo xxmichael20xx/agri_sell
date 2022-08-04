@@ -190,7 +190,7 @@
         </div>
     </div>
 @endif
-@if ( $type == "seller_dashboard" || $type == "admin_activities" )
+@if ( $type == "seller_dashboard" || $type == "admin_activities" || $type == "rider_deliveries" )
     <div class="modal fade hahaha" id="{{ $key }}">
         <div class="modal-dialog">
             <div class="modal-content">

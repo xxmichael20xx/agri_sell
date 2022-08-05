@@ -152,9 +152,29 @@ class OrderMgmtPanelController extends Controller
                 ->with('panel_name', 'orders');
 
         } else if ( Auth::user()->role->name == 'rider' ) {
+            $my_rider_id = auth()->user()->rider_staff->id;
+
+            $_types = [ 'to-pick-up', 'pick-up-success', 'on-out-for-delivery', 'completed' ];
+            $_counts = [];
+            foreach( $_types as $_type ) {
+                $_ids = $_type ? $this->setIds( $_type ) : array( 3, 4, 5, 6, 9 );
+                $_orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $_ids )->get();
+
+                foreach ( $_orders as $index => $_order ) {
+                    if ( ! $_order->order ) {
+                        $_orders->forget( $index );
+
+                    } else if ( $_order->order->rider_id !== $my_rider_id ) {
+                        $_orders->forget( $index );
+                    }
+                }
+                $_counts[$_type] = $_orders->count();
+            }
+            
             return view('riderPanel.show_product_monitoring')
                 ->with('product_monitoring_logs', $product_monitoring_logs)
                 ->with('order_item', $order_item)
+                ->with('_counts', $_counts)
                 ->with('panel_name', 'orders')
                 ->with('suborder_item_id', $suborder_item_id);
 

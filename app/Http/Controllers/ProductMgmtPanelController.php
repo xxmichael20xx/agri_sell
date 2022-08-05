@@ -625,7 +625,7 @@ class ProductMgmtPanelController extends Controller
         $product_entity->delete();
         return back();
     }
-
+    
     function saveNewProductRegular(Request $req) {
         
         $product = new Product();
@@ -792,22 +792,6 @@ class ProductMgmtPanelController extends Controller
                 $images[] = array( $movedImage[2], $is_featured );
             }
         }
-        
-        /* if ( $request->hasFile( 'images' ) ) {
-            $multiple_images = $request->file( 'images' );
-            $images = array();
-
-            foreach( $multiple_images as $index => $single_image ) {
-                $image = $this->uploadImages( $single_image );
-                $single_image->move( $image[0], $image[1] );
-                $is_featured = false;
-
-                if ( $request->featured_type == 'new' && $request->featured_index == $index ) {
-                    $is_featured = true;
-                }
-                $images[] = array( $image[2], $is_featured );
-            }
-        } */
 
         if ( Auth::user()->role->name == 'admin' ) {
             $product->shop_id = $request->shop_id;
@@ -857,31 +841,42 @@ class ProductMgmtPanelController extends Controller
         }
 
         if ( $checkVariants ) {
-            $multiple_variation_names = $request->variant_names;
             $multiple_variant_ids = $request->variant_id;
+
+            $multiple_variation_names = $request->variant_names;
+            $multiple_variant_soldper = $request->variant_soldper;
+            $multiple_variant_product_size = $request->variant_product_size;
+
+            $multiple_variation_net_weight_unit = $request->variant_standard_net_weight_unit;
+            $multiple_variation_net_weight = $request->variant_standard_net_weight;
+
             $multiple_variation_prices = $request->variant_prices;
-            $multiple_variation_size = $request->variant_product_size;
-            $multiple_variation_price_whole_sale = $is_wholesale ? $request->wholesale_price : 0;
-    
-            $multiple_variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
-            $multiple_variation_net_weight = $request->standard_net_weight;
-            $multiple_variation_net_weight_unit = $request->standard_net_weight_unit;
             $multiple_variation_stocks = $request->variant_stocks;
+
+            $multiple_variant_is_wholesale = $request->variant_is_wholesale;
+            $multiple_variant_wholesale_price = $request->variant_wholesale_price;
+            $multiple_variant_wholesale_min_qty = $request->variant_wholesale_min_qty;
     
             foreach ( $multiple_variation_names as $index => $variant ) {
+                $variant_wholesale = false;
+
+                if ( isset( $multiple_variant_is_wholesale[$index] ) && $multiple_variant_is_wholesale[$index] == 'on' ) {
+                    $variant_wholesale = true;
+                }
+
                 $productVariation = isset( $multiple_variant_ids[$index] ) ? ProductVariation::find( $multiple_variant_ids[$index] ) : new ProductVariation;
                 $productVariation->product_id = $request->product_id;
                 $productVariation->variation_name = $multiple_variation_names[$index];
-                $productVariation->variation_min_qty_wholesale = $multiple_variation_min_qty_wholesale;
+                $productVariation->variation_sold_per = $multiple_variant_soldper[$index];
+                $productVariation->product_size = $multiple_variant_product_size[$index] ?? NULL;
+                $productVariation->variation_wholesale_price_per = $variant_wholesale ? $multiple_variant_wholesale_price[$index] : 0;
+                $productVariation->variation_min_qty_wholesale = $variant_wholesale ? $multiple_variant_wholesale_min_qty[$index] : 0;
                 $productVariation->variation_quantity = $multiple_variation_stocks[$index];
-                $productVariation->variation_sold_per = $request->wholesale_sold_per;
-                $productVariation->variation_net_weight = $multiple_variation_net_weight;
-                $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit;
-                $productVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
+                $productVariation->variation_net_weight = $multiple_variation_net_weight[$index];
+                $productVariation->variation_net_weight_unit = $multiple_variation_net_weight_unit[$index];
+                $productVariation->is_variation_wholesale = $variant_wholesale ? 'yes' : 'no';
                 $productVariation->variation_price_per = $multiple_variation_prices[$index];
-                $productVariation->product_size = $multiple_variation_size[$index];
-                $productVariation->variation_wholesale_price_per = $multiple_variation_price_whole_sale;
-                $productVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
+                $productVariation->is_variation_wholesale_only = $variant_wholesale ? 'yes' : 'no';
                 $productVariation->save();
             }
         } else {

@@ -167,8 +167,10 @@ class RiderPanelController extends Controller
         $my_rider_id = Auth::user()->rider_staff->id;
         $panel_name = "Orders";
 
+        $_counts = $this->getCounts();
+
         return view('riderPanel.show')->with( compact(
-            'panel_name', 'items', 'sub_ids', 'assign_order_status_options', 'delivery_man_options', 'order', 'my_rider_id'
+            'panel_name', 'items', 'sub_ids', 'assign_order_status_options', 'delivery_man_options', 'order', 'my_rider_id', '_counts'
         ) );
     }
 
@@ -182,6 +184,29 @@ class RiderPanelController extends Controller
     public function sellerStatus($opt_id){
         dd($opt_id);
 
+    }
+
+    public function getCounts() {
+        $my_rider_id = auth()->user()->rider_staff->id;
+
+        $_types = [ 'to-pick-up', 'pick-up-success', 'on-out-for-delivery', 'completed' ];
+        $_counts = [];
+        foreach( $_types as $_type ) {
+            $_ids = $_type ? $this->setIds( $_type ) : array( 3, 4, 5, 6, 9 );
+            $_orders = SubOrder::where( 'is_pick_up', '!=', 'yes' )->whereIn( 'status_id', $_ids )->get();
+
+            foreach ( $_orders as $index => $_order ) {
+                if ( ! $_order->order ) {
+                    $_orders->forget( $index );
+
+                } else if ( $_order->order->rider_id !== $my_rider_id ) {
+                    $_orders->forget( $index );
+                }
+            }
+            $_counts[$_type] = $_orders->count();
+        }
+
+        return $_counts;
     }
 
 }

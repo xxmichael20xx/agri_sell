@@ -546,13 +546,13 @@
                                     <div class="form-group row wholesale--container {{ $first->has_variants ? 'd-none': '' }}">
                                         <div class="col">
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale" {{ $first->is_whole_sale ? 'checked': '' }}>
+                                                <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale" {{ $first->is_variation_wholesale == 'yes' ? 'checked': '' }}>
                                                 <label class="custom-control-label text-dark" for="is_wholesale">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <div class="form-group row {{ $first->is_whole_sale ? '' : 'd-none' }} wholesale--input border-top pt-2" data-wholesale="{{ $first->is_whole_sale ? 'yes' : 'no' }}">
+                                    <div class="form-group row {{ $first->is_variation_wholesale == 'yes' ? '' : 'd-none' }} wholesale--input border-top pt-2" data-wholesale="{{ $first->is_variation_wholesale == 'yes' ? 'yes' : 'no' }}">
                                         <div class="col-md-3">
                                             <label class="col-form-label text-dark font-weight-bold">Wholesale</label>
                                         </div>
@@ -561,7 +561,7 @@
                                                 <div class="col-md-6">
                                                     <label class="col-form-label text-dark">Price*</label>
                                                     <div class="form-group"> 
-                                                        <input type="number" class="form-control" name="wholesale_price" value="{{ old( 'wholesale_price' ) }}">
+                                                        <input type="number" class="form-control" name="wholesale_price" value="{{ $first->variation_wholesale_price_per ?? '' }}">
                                                         @if ( $errors->has( 'wholesale_price' ) )
                                                             <span class="text-danger">{{ $errors->first( 'wholesale_price' ) }}</span>
                                                         @endif
@@ -570,7 +570,7 @@
                                                 <div class="col-md-6">
                                                     <label class="col-form-label text-dark">Minimum quantity*</label>
                                                     <div class="form-group"> 
-                                                        <input type="text" class="form-control" name="wholesale_min_qty" value="{{ old( 'wholesale_min_qty' ) }}">
+                                                        <input type="text" class="form-control" name="wholesale_min_qty" value="{{ $first->variation_min_qty_wholesale ?? '' }}">
                                                         @if ( $errors->has( 'wholesale_min_qty' ) )
                                                             <span class="text-danger">{{ $errors->first( 'wholesale_min_qty' ) }}</span>
                                                         @endif

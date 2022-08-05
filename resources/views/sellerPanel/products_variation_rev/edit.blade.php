@@ -141,7 +141,7 @@
                                                                     <option selected disabled>Select option</option>
                                                                     @foreach ( $soldPerOptions as $soldPerOption )
                                                                         @php
-                                                                            $selectedSoldPer = ( $firstVariant && $firstVariant->variation_sold_per == $soldPerOption ) ? 'selected' : '';
+                                                                            $selectedSoldPer = ( isset( $firstVariant ) && $firstVariant->variation_sold_per == $soldPerOption ) ? 'selected' : '';
                                                                         @endphp
                                                                         <option value="{{ $soldPerOption }}" {{ $selectedSoldPer }}>{{ ucfirst( $soldPerOption ) }}</option>
                                                                     @endforeach
@@ -164,7 +164,7 @@
                                                                     <option selected disabled>Select option (optional)</option>
                                                                     @foreach ( $productSizes as $productSize )
                                                                         @php
-                                                                            $selectedProductSize = ( $firstVariant && $firstVariant->product_size == $productSize ) ? 'selected' : '';
+                                                                            $selectedProductSize = ( isset( $firstVariant ) && $firstVariant->product_size == $productSize ) ? 'selected' : '';
                                                                         @endphp
                                                                         <option value="{{ $productSize }}" {{ $selectedProductSize }}>{{ ucfirst( $productSize ) }}</option>
                                                                     @endforeach
@@ -184,12 +184,12 @@
                                                                     <div class="col">
                                                                         <select class="form-control custom--disabled" name="variant_standard_net_weight_unit[]" id="variant_standard_net_weight_unit_0" readonly>
                                                                             <option selected disabled>Select option</option>
-                                                                            <option value="gram" {{ $firstVariant && $firstVariant->variation_net_weight_unit == 'gram' ? 'selected' : '' }}>Gram</option>
-                                                                            <option value="kilogram" {{ $firstVariant && $firstVariant->variation_net_weight_unit == 'kilogram' ? 'selected' : '' }}>Kilogram</option>
+                                                                            <option value="gram" {{ isset( $firstVariant ) && $firstVariant->variation_net_weight_unit == 'gram' ? 'selected' : '' }}>Gram</option>
+                                                                            <option value="kilogram" {{ isset( $firstVariant ) && $firstVariant->variation_net_weight_unit == 'kilogram' ? 'selected' : '' }}>Kilogram</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="col">
-                                                                        <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]" value="{{ $firstVariant && $firstVariant->variation_net_weight }}">
+                                                                        <input type="number" class="form-control mb-2" name="variant_standard_net_weight[]" value="{{ isset( $firstVariant ) && $firstVariant->variation_net_weight }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -231,13 +231,13 @@
                                                         <div class="form-group row wholesale--container-global wholesale--container-variant-0">
                                                             <div class="col">
                                                                 <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-0" data-id="variant-0" {{ $firstVariant && $firstVariant->is_variation_wholesale == 'yes' ? 'checked' : '' }}>
+                                                                    <input type="checkbox" class="custom-control-input is_wholesale-variant" name="variant_is_wholesale[]" id="is_wholesale-variant-0" data-id="variant-0" {{ isset( $firstVariant ) && $firstVariant->is_variation_wholesale == 'yes' ? 'checked' : '' }}>
                                                                     <label class="custom-control-label text-dark" for="is_wholesale-variant-0">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                 
-                                                        <div class="form-group row {{ $firstVariant && $firstVariant->is_variation_wholesale == 'yes' ? '' : 'd-none' }} wholesale--input-variant-0 border-top pt-2">
+                                                        <div class="form-group row {{ isset( $firstVariant ) && $firstVariant->is_variation_wholesale == 'yes' ? '' : 'd-none' }} wholesale--input-variant-0 border-top pt-2">
                                                             <div class="col-md-12">
                                                                 <label class="col-form-label text-dark font-weight-bold">Wholesale Details</label>
                                                                 <div class="form-group row">
@@ -543,10 +543,10 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="form-group row wholesale--container {{ $product->has_variants ? 'd-none': '' }}">
+                                    <div class="form-group row wholesale--container {{ $first->has_variants ? 'd-none': '' }}">
                                         <div class="col">
                                             <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale" {{ $product->is_whole_sale ? 'checked': '' }}>
+                                                <input type="checkbox" class="custom-control-input" name="is_wholesale" id="is_wholesale" {{ $first->is_whole_sale ? 'checked': '' }}>
                                                 <label class="custom-control-label text-dark" for="is_wholesale">Product has wholesale?<span class="text-primary font-weight-bold">*</span></label>
                                             </div>
                                         </div>

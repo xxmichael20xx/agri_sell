@@ -82,7 +82,6 @@
                                 </div>
                             </div>
                         </div>
-                        <br>
                 
                         <a href="/set_as_verified_coins_top_up/{{$user->id}}" class="btn btn-success btn-round m-1">Confirm</a>
                         {{-- @include('admin.coins_top_up.edit_coins_top_up_amount_modal') --}}

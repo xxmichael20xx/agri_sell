@@ -14,6 +14,7 @@
 
                 if ( isset( $_GET['dev'] ) ) {
                     echo gettype( $order_items );
+                    echo $order_items->count();
                 }
             @endphp
 

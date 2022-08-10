@@ -22,7 +22,17 @@
                                     $product_item = App\Product::where('id', $order_item->product_id)->first();
                                     $grand_total = $order_item->price * $order_item->quantity;
 
-                                    if ( $product_item->product_user_id ) {
+                                    $product_user_id = NULL;
+                                    $_type = gettype( $product_item );
+
+                                    if ( $_type == 'array' ) {
+                                        $product_user_id = $product_item['product_user_id'];
+
+                                    } else if ( $_type == 'object' ) {
+                                        $product_user_id = $product_item->product_user_id;
+                                    }
+
+                                    if ( $product_item ) {
                                         $vendor = App\Shop::where( 'user_id', $product_item->product_user_id )->first();
 
                                         if ( $vendor && ! in_array( $vendor->name, $vendors ) ) {

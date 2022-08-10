@@ -12,13 +12,10 @@
                 $grand_total = 0;
                 $vendors = [];
 
-                if ( isset( $_GET['dev'] ) ) {
-                    echo gettype( $order_items );
-                    echo $order_items->count();
-                }
-
                 foreach ( $order_items as $_order_item_index => $_order_item ) {
                     $_product_item = App\Product::find( $_order_item->product_id );
+
+                    echo gettype( $_product_item );
 
                     if ( $_product_item == NULL ) {
                         $order_items->forget( $_order_item_index );

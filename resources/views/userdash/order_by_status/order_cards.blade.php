@@ -40,7 +40,7 @@
                                         }
                                     }
                                 @endphp
-                                @if ( $product_item->id )
+                                @if ( $product_item )
                                     <tr>
                                         <th scope="row" width="30">
                                         <a href="{{ url('products/' . $product_item->id) }}">

@@ -22,10 +22,12 @@
                                     $product_item = App\Product::where('id', $order_item->product_id)->first();
                                     $grand_total = $order_item->price * $order_item->quantity;
 
-                                    $vendor = App\Shop::where( 'user_id', $product_item->product_user_id )->first();
+                                    if ( $product_item->product_user_id ) {
+                                        $vendor = App\Shop::where( 'user_id', $product_item->product_user_id )->first();
 
-                                    if ( $vendor && ! in_array( $vendor->name, $vendors ) ) {
-                                        $vendors[] = $vendor->name;
+                                        if ( $vendor && ! in_array( $vendor->name, $vendors ) ) {
+                                            $vendors[] = $vendor->name;
+                                        }
                                     }
                                 @endphp
                                 @if ( $product_item->id )

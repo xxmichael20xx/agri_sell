@@ -19,8 +19,6 @@
                         $order_items->forget( $_order_item_index );
                     }
                 }
-
-                echo $order_items->count();
             @endphp
 
             @if ( $order_items->count() > 0 )

@@ -15,15 +15,15 @@
                 foreach ( $order_items as $_order_item_index => $_order_item ) {
                     $_product_item = App\Product::find( $_order_item->product_id );
 
-                    echo gettype( $_product_item );
-
                     if ( $_product_item == NULL ) {
                         $order_items->forget( $_order_item_index );
                     }
                 }
+
+                echo $order_items->count();
             @endphp
 
-            @if ( $order_items )
+            @if ( $order_items->count() > 0 )
                 <div class="card mt-1 border-0">
                     <div class="card-body">
                         <table class="table">

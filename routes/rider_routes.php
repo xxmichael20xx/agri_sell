@@ -18,7 +18,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'rider'], function () {
     Route::group( [ 'prefix' => '/export/csv/rider' ], function() {
         // Deliveries
         Route::group( [ 'prefix' => 'deliveries' ], function() {
-            Route::get( '{type}', 'ReportGenerationCsvController@riderDeliveries' );
+            Route::get( '{type}/{month?}', 'ReportGenerationCsvController@riderDeliveries' );
         } );
     });
 
@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth', 'middleware' => 'rider'], function () {
     Route::group( [ 'prefix' => '/export/pdf/rider' ], function() {
         // Deliveries
         Route::group( [ 'prefix' => 'deliveries' ], function() {
-            Route::get( '{type}', 'ReportGenerationPdfController@riderDeliveries' );
+            Route::get( '{type}/{month?}', 'ReportGenerationPdfController@riderDeliveries' );
         } );
     });
 });

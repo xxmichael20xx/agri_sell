@@ -46,8 +46,8 @@
                     {{ $order->order->agcoins_transid ?? '' }}
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>
                     <button type="button" class="btn btn-primary btn-sm btn-round btn-pickup" data-href="/edit_order_status/2/{{ $order->order_id }}" data-title="Confirmed">Confirm</button>
+                    <button type="button" class="btn btn-danger btn-sm btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>
 
                     @foreach ($assign_order_delivery_status_options as $option)
                         @if ( AppHelpers::filterStatus( $option, $status_id ) && $option->name == 'cancelled' )

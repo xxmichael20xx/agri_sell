@@ -47,6 +47,7 @@
                                     $inc = [
                                         'type' => 'seller_payout',
                                         'key' => 'seller_payout' . rand( 50, 1000 ),
+                                        'is_seller' => true,
                                         'reports' => $exports,
                                         'csv_url' => '/export/csv/seller/payouts/current',
                                         'pdf_url' => '/export/pdf/seller/payouts/current',

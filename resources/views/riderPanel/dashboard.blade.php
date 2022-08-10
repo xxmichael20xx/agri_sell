@@ -3,7 +3,10 @@
 @php
     $inc = [
         'type' => 'rider_deliveries',
-        'is_seller' => true
+        'key' => 'rider_deliveries_monthly',
+        'is_seller' => 'rider',
+        'csv_url' => '/export/csv/rider/deliveries/monthly',
+        'pdf_url' => '/export/pdf/rider/deliveries/monthly',
     ];
 
     $deliveryToday = [
@@ -287,10 +290,11 @@
 
 @if ( ! $type )
     @include( 'admin.export.modal_content', $deliveryToday )
-    @include( 'admin.export.modal_content', $deliveryMonthly )
+    {{-- @include( 'admin.export.modal_content', $deliveryMonthly ) --}}
     @include( 'admin.export.modal_content', $deliveryYearly )
     @include( 'admin.export.modal_content', $deliveryCompleted )
     @include( 'admin.export.modal_content', $deliveryFailed )
+    @include( 'admin.export.months_modal', $inc )
 @endif
 @endsection
 

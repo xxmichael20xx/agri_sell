@@ -3,8 +3,7 @@
 @section('content')
 <div class="content">
     <a href="/sellerpanel/manage_orders/pickup/1" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
-
-    @if ( $order->is_pick_up == 'yes' && $order->pick_up_status_id == '1' )
+    @if ( ( $order->is_pick_up == 'yes' && $order->pick_up_status_id == '1' ) || ( $order->is_pick_up == 'no' && $order->status_id == '1' ) )
         <button type="button" class="btn btn-primary btn-round btn-pickup" data-href="/edit_pickup_status/6/{{ $order->order_id }}" data-title="Confirmed">Confirm</button>
         <button type="button" class="btn btn-danger btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>    
 

@@ -181,9 +181,13 @@ class ReportGenerationCsvController extends Controller
         return $report;
     }
 
-    public function riderDeliveries( Request $request, $type ) {
+    public function riderDeliveries( Request $request, $type, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+
         $fileName = $this->time() . "_Deliveries_" .  ucwords( $type ) . ".xlsx";
-        $report = \Excel::download( new RiderDeliveries( $type ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
+        $report = \Excel::download( new RiderDeliveries( $type, $month ), $fileName, \Maatwebsite\Excel\Excel::XLSX );
         ob_end_clean();
 
         return $report;

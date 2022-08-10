@@ -160,8 +160,11 @@ class ReportGenerationPdfController extends Controller
         return view( 'admin.export.pdf.template', compact( 'headers', 'data' ) );
     }
 
-    public function riderDeliveries( Request $request, $type ) {
-        $export = new RiderDeliveries( $type );
+    public function riderDeliveries( Request $request, $type, $month = NULL ) {
+        if ( ! $month ) {
+            $month = Carbon::parse( now () )->month;
+        }
+        $export = new RiderDeliveries( $type, $month );
         $headers = $export->headings();
         $data = $export->collection();
 

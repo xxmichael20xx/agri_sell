@@ -16,11 +16,12 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, WithCustomStartCell
 {
-    protected  $type, $helpers, $collection;
+    protected  $type, $month, $helpers, $collection;
 
-    public function __construct( $type )
+    public function __construct( $type, $month )
     {
         $this->type = $type;
+        $this->month = $month;
         $this->collection = new Collection();
         $this->helpers = new Helpers;
     }
@@ -61,7 +62,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
                 break;
 
             case 'monthly':
-                $orders = $orders->whereMonth( 'created_at', Carbon::parse( now() )->month )->get();
+                $orders = $orders->whereMonth( 'created_at', $this->month )->get();
                 break;
 
             case 'yearly':

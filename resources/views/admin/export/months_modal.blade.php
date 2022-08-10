@@ -14,6 +14,7 @@ $months = array(
     'December',
 );
 $handle = isset( $is_seller ) ? 'custom-scripts' : 'admin.custom_scripts';
+if ( $is_seller == 'rider' ) $handle = 'custom.scripts';
 @endphp
 <div class="modal fade" id="csvMonths-{{ $key }}">
     <div class="modal-dialog">

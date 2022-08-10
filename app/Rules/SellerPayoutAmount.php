@@ -84,8 +84,8 @@ class SellerPayoutAmount implements Rule
             return false;
         }
 
-        if ( $this->request->amount < 100 ) {
-            $this->message = "Minimum payout amount must be ₱ 100";
+        if ( $this->request->amount < 1 ) {
+            $this->message = "Payout amount must be at least ₱ 1";
             return false;
         }
 

@@ -16,6 +16,14 @@
                     echo gettype( $order_items );
                     echo $order_items->count();
                 }
+
+                foreach ( $order_items as $_order_item_index => $_order_item ) {
+                    $_product_item = App\Product::find( $_order_item->product_id );
+
+                    if ( $_product_item == NULL ) {
+                        $order_items->forget( $_order_item_index );
+                    }
+                }
             @endphp
 
             @if ( $order_items )
@@ -24,7 +32,7 @@
                         <table class="table">
                             @foreach($order_items as $order_item_index => $order_item)
                                 @php
-                                    $product_item = App\Product::where('id', $order_item->product_id)->first();
+                                    $product_item = App\Product::find( $order_item->product_id );
                                     $grand_total = $order_item->price * $order_item->quantity;
 
                                     $product_user_id = NULL;
@@ -38,7 +46,7 @@
                                     }
 
                                     if ( $product_item ) {
-                                        $vendor = App\Shop::where( 'user_id', $product_item->product_user_id )->first();
+                                        $vendor = App\Shop::where( 'user_id', $product_user_id )->first();
 
                                         if ( $vendor && ! in_array( $vendor->name, $vendors ) ) {
                                             $vendors[] = $vendor->name;

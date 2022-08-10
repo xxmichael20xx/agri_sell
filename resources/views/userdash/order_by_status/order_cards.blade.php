@@ -39,6 +39,11 @@
                                             $vendors[] = $vendor->name;
                                         }
                                     }
+
+                                    if ( isset( $_GET['dev'] ) ) {
+                                        echo $product_item;
+                                    }
+
                                 @endphp
                                 @if ( $product_item )
                                     <tr>

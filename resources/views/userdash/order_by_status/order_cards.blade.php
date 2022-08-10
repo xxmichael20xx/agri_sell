@@ -41,7 +41,7 @@
                                     }
 
                                     if ( isset( $_GET['dev'] ) ) {
-                                        echo $product_item;
+                                        echo gettype( $product_item );
                                     }
 
                                 @endphp

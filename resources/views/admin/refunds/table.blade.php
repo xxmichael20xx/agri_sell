@@ -20,9 +20,9 @@
                         <th>
                             Name
                         </th>
-                        <th>
+                        {{-- <th>
                             Image
-                        </th>
+                        </th> --}}
                         @if ( $index == '0' )
                             <th>
                                 Confirmed Date
@@ -52,7 +52,7 @@
                             <td>
                                 {{ $item->customer->name }}
                             </td>
-                            <td id="refund--container-{{ $_index }}" class="w-25">
+                            {{-- <td id="refund--container-{{ $_index }}" class="w-25">
                                 @if ( count( $item->expl_images ) > 0  )
                                     <img src="/storage/{{ $item->expl_images[0] }}" class="img-fluid view-images w-75" data-id="refund--image-{{ $_index }}" data-raw="{{ $index }}">
 
@@ -78,7 +78,7 @@
                                 @else
                                     No image(s) provided
                                 @endif
-                            </td>
+                            </td> --}}
                             @if ( $index == '0' )
                                 <td>
                                     {{ AppHelpers::humanDate( $item->created_at, true ) }}

@@ -4,6 +4,11 @@
     .dropdown.bootstrap-select {
         width: 100% !important;
     }
+
+    .enlarge--image {
+        height: 30em !important;
+        width: 30em !important;
+    }
 </style>
 <div class="content">
     <a href="/admin/manage_refunds/" class="btn btn-outline-dark btn-round mb-4">Go back</a>
@@ -141,15 +146,20 @@
         <div class="col-12 col-md-5">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Order details</h5>
+                    @php
+                        $_status = $refund->order->suborder_ent->deliverystatus->display_name;
+
+                        if ( $_status ) $_status = ' - ' . $_status;
+                    @endphp
+                    <h5 class="card-title">Order details {{ $_status }}</h5>
                 </div>
                 <div class="card-body">
                     @if ( isset( $refund->order->suborder_ent->order->rider_id ) && isset( $refund->order->suborder_ent->order->rider->user ) )
-                        <p>Rider ID:{{ $refund->order->suborder_ent->order->rider->rider_id }}</p>
-                        <p>Delivery man name:{{ $refund->order->suborder_ent->order->rider->user->name ?? '' }}</p>
-                        <p>Delivery man mobile:{{ $refund->order->suborder_ent->order->rider->user->mobile ?? '' }}</p>
-                        <p>Vehicle used: {{ $refund->order->suborder_ent->order->rider->vehicle_used ?? '' }} </p>
-                        <p>Delivery status: <span class="badge badge-info">{{ $refund->order->suborder_ent->deliverystatus->display_name ?? '' }}</span></p>
+                        <p><b>Rider ID:</b> {{ $refund->order->suborder_ent->order->rider->rider_id }}</p>
+                        <p><b>Delivery man name:</b> {{ $refund->order->suborder_ent->order->rider->user->name ?? '' }}</p>
+                        <p><b>Delivery man mobile:</b> {{ $refund->order->suborder_ent->order->rider->user->mobile ?? '' }}</p>
+                        <p><b>Vehicle used:</b> {{ $refund->order->suborder_ent->order->rider->vehicle_used ?? '' }} </p>
+                        {{-- <p>Delivery status: <span class="badge badge-info">{{ $refund->order->suborder_ent->deliverystatus->display_name ?? '' }}</span></p> --}}
                     @else
                         <p>No assigned Delivery rider</p>
                     @endif

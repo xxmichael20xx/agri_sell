@@ -82,7 +82,7 @@ class SellerPayoutController extends Controller
 
     public function new( Request $request, $id = NULL ) {
         if ( ! isset( $_COOKIE['payout_agree'] ) ) {
-            return redirect( '/sellerpanel/payout' )->with( 'info', 'Payout Request Agreement Required');
+            // return redirect( '/sellerpanel/payout' )->with( 'info', 'Payout Request Agreement Required');
         }
         $payout = NULL;
         if ( $id ) {
@@ -109,17 +109,23 @@ class SellerPayoutController extends Controller
             if ( $request->payout_type == 'bank' ) {
                 $type = 'Account number';
                 $numberValidation = [ 'required', new CheckBankNumber() ];
-                $numberMessage = 'Account number be a valid number';
+                $numberMessage = 'Account must number be a valid number';
+
+            } else  if ( $request->payout_type == 'remit' ) {
+                $addressMessage = 'Address is required';
             }
+
             $this->validate( $request, [
                 'payout_option' => 'required_if:payout_type,bank',
                 'gcash_first_name' => 'required',
                 'gcash_last_name' => 'required',
+                'gcash_address' => 'required_if:payout_type,remit',
                 'gcash_number' => $numberValidation
             ], [
                 'gcash_first_name.required' => 'First name is required',
                 'gcash_last_name.required' => 'Last name is required',
                 'gcash_number.required' => $type . ' is required',
+                'gcash_address.required_if' => $addressMessage ?? '',
                 'gcash_number.regex' => $numberMessage,
             ] );
 
@@ -152,10 +158,25 @@ class SellerPayoutController extends Controller
 
         if ( $request->payout_request_id ) return $this->updateRequest( $request );
 
+        switch ( $request->payout_type ) {
+            case 'bank':
+                $type = "Bank";
+                break;
+
+            case 'remit':
+                $type = "Remit";
+                break;
+            
+            default:
+                $type = "GCash";
+                break;
+        }
+
         $request->request->add( [
             'metadata' => [
-                'type' => $request->payout_type == 'bank' ? "Bank" : "GCash",
-                'option' => $request->payout_option
+                'address' => $request->gcash_address ?? NULL,
+                'type' => $type,
+                'option' => $request->payout_option ?? NULL
             ]
         ] );
         $sellerPayout = SellerPayoutRequest::create( $request->all() );

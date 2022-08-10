@@ -24,6 +24,20 @@
                     <h5 class="card-title">Payout Request details</h5>
                 </div>
                 <div class="card-body">
+                    @php
+                        $type = $payout->metadata['type'];
+                        $numberLabel = '';
+
+                        if ( $type == 'GCash' ) {
+                            $numberLabel = 'GCash number';
+
+                        } else if ( $type == 'Bank' ) {
+                            $numberLabel = 'Bank number';
+
+                        } else {
+                            $numberLabel = 'Number';
+                        }
+                    @endphp
                     <div class="form-group row">
                         <div class="col-12 mb-3">
                             <span class="text-muted">Seller name: {{ $payout->seller->name }}</span>
@@ -32,11 +46,16 @@
                             <span class="text-muted">{{ $payout->metadata['type'] ?? 'GCash' }}  name: {{ $payout->gcash_name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">{{ $payout->metadata['type'] ?? 'GCash' }}  number: {{ $payout->gcash_number }}</span>
+                            <span class="text-muted">{{ $numberLabel }}: {{ $payout->gcash_number }}</span>
                         </div>
                         @if ( $payout->metadata && $payout->metadata['type'] == 'Bank' )
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Bank Account: {{ $payout->metadata['option'] }}</span>
+                            </div>
+                        @endif
+                        @if ( $payout->metadata && $payout->metadata['type'] == 'Remit' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">Address: {{ $payout->metadata['address'] }}</span>
                             </div>
                         @endif
                         {{-- <div class="col-12 mb-3">

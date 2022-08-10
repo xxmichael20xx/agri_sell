@@ -3,6 +3,45 @@
 @section('content')
 <div class="content">
     <a href="/sellerpanel/manage_orders/pickup/1" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
+
+    @if ( $order->is_pick_up == 'yes' && $order->pick_up_status_id == '1' )
+        <button type="button" class="btn btn-primary btn-round btn-pickup" data-href="/edit_pickup_status/6/{{ $order->order_id }}" data-title="Confirmed">Confirm</button>
+        <button type="button" class="btn btn-danger btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>    
+
+        <div class="modal fade" id="cancelOrderModal-{{ $order->order_id }}">
+            <div class="modal-dialog">
+                <form method="POST" action="{{ route( 'order.order.update' ) }}">
+                    <div class="modal-content">
+                        @csrf
+                        <input type="hidden" name="order_id" value="{{ $order->order_id }}">
+                        <input type="hidden" name="status_id" value="3">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cancel Order</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
+                                    <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
+                                        <option value="" selected disabled>Select a reason</option>
+                                        <option value="Order quantity can't be fulfilled">Order quantity can't be fulfilled</option>
+                                        <option value="Possible fraud">Possible fraud</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                    <textarea class="form-control mt-2 collapse" name="cancel_reason_others" id="cancel_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Cancel order</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-5">
             <div class="card">
@@ -197,4 +236,45 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('custom-scripts')
+    <script>
+        (function($) {
+            $(document).ready(function() {
+                $( document ).on( 'click', '.btn-confirm,.btn-pickup,.btn-delivery', function() {
+                    const href = $( this ).data( 'href' )
+                    const title = $( this ).data( 'title' )
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Are you sure?',
+                        text: `Order status will be changed to '${title}'`,
+                        showCancelButton: true,
+                        confirmButtonColor: '#219F94',
+                        confirmButtonText: 'Yes, proceed'
+                    }).then( ( result ) => {
+                        if ( result.value ) {
+                            window.location.href = href
+                        }
+                    } )
+                } )
+
+                $( document ).on( 'change', '#cancel_reason', function() {
+                    const val = $( this ).val()
+                    const others = $( '#cancel_reason_others' )
+
+                    if ( val == 'Others' ) {
+                        others.attr( 'required', true )
+                        others.removeClass( 'collapse' )
+
+                    } else {
+                        others.attr( 'required', false )
+                        others.addClass( 'collapse' )
+                        others.val( '' )
+                    }
+                } )
+            })
+        })(jQuery)
+    </script>
 @endsection

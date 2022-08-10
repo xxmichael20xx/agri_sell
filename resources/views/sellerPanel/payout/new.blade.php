@@ -1,5 +1,56 @@
 @extends('sellerPanel.front')
 @section('content')
+@php
+    $banks = [
+        [
+            'src' => '/img/union_bank.png',
+            'bank' => 'Unionbank Internet Banking',
+        ],
+        [
+            'src' => '/img/rcbc.png',
+            'bank' => 'RCBC AccessOne',
+        ],
+        [
+            'src' => '/img/bdo.png',
+            'bank' => 'BDO',
+        ],
+        [
+            'src' => '/img/metrobank.png',
+            'bank' => 'Metrobank Direct',
+        ],
+        [
+            'src' => '/img/landbank.png',
+            'bank' => 'Landbank ATM Online',
+        ],
+        [
+            'src' => '/img/bank_of_commerce.png',
+            'bank' => 'Bank of Commerce',
+        ],
+        [
+            'src' => '/img/ucpb.png',
+            'bank' => 'UCPB Connect',
+        ],
+    ];
+
+    $remitances = [
+        [
+            'src' => '/img/remit_lbc.png',
+            'remit' => 'LBC'
+        ],
+        [
+            'src' => '/img/remit_western.png',
+            'remit' => 'Western Union'
+        ],
+        [
+            'src' => '/img/remit_cebuana.png',
+            'remit' => 'Cebuana Lhuillier'
+        ],
+        [
+            'src' => '/img/remit_palawan.png',
+            'remit' => 'Palawan'
+        ],
+    ];
+@endphp
 <style>
     .logo--image {
         width: 40px !important;
@@ -18,47 +69,37 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
-                        <div class="col-6 text-right">
+                        <div class="col-12 d-flex flex-wrap justify-content-center">
                             <button type="button" class="btn btn-outline-primary payout--type" data-value="GCash">
                                 <img src="/img/gcash.png" class="img-fluid w-25 logo--image">
                                 Add GCash Account
                             </button>
-                        </div>
-                        <div class="col-6">
                             <div class="dropdown">
                                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="payoutOptionType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <img src="/img/bank.png" data-orig="/img/bank.png" class="img-fluid w-25 logo--image">
                                     <span data-orig="Add Bank Account">Add Bank Account</span>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="payoutOptionType">
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/union_bank.png" data-bank="Unionbank Internet Banking">
-                                        <img src="/img/union_bank.png" class="img-fluid w-25 logo--image">
-                                        Unionbank Internet Banking
-                                    </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/rcbc.png" data-bank="RCBC AccessOne">
-                                        <img src="/img/rcbc.png" class="img-fluid w-25 logo--image">
-                                        RCBC AccessOne
-                                    </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/bdo.png" data-bank="BDO">
-                                        <img src="/img/bdo.png" class="img-fluid w-25 logo--image">
-                                        BDO
-                                    </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/metrobank.png" data-bank="Metrobank Direct">
-                                        <img src="/img/metrobank.png" class="img-fluid w-25 logo--image">
-                                        Metrobank Direct
-                                    </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/landbank.png" data-bank="Landbank ATM Online">
-                                        <img src="/img/landbank.png" class="img-fluid w-25 logo--image">
-                                        Landbank ATM Online
-                                    </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/bank_of_commerce.png" data-bank="Bank of Commerce">
-                                        <img src="/img/bank_of_commerce.png" class="img-fluid w-25 logo--image">
-                                        Bank of Commerce
-                                    </a>
-                                    <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="/img/ucpb.png" data-bank="UCPB Connect">
-                                        <img src="/img/ucpb.png" class="img-fluid w-25 logo--image">
-                                        UCPB Connect
-                                    </a>
+                                    @foreach ( $banks as $bank )
+                                        <a class="dropdown-item payout--type" href="#" data-value="Bank" data-src="{{ $bank['src'] }}" data-bank="{{ $bank['bank'] }}">
+                                            <img src="{{ $bank['src'] }}" class="img-fluid w-25 logo--image">
+                                            {{ $bank['bank'] }}
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="payoutOptionTypeRemit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img src="/img/remit.png" data-orig="/img/remit.png" class="img-fluid w-25 logo--image">
+                                    <span data-orig="Money Remittance">Money Remittance</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="payoutOptionTypeRemit">
+                                    @foreach ( $remitances as $remit )
+                                        <a class="dropdown-item payout--type" href="#" data-value="Remit" data-src="{{ $remit['src'] }}" data-bank="{{ $remit['remit'] }}">
+                                            <img src="{{ $remit['src'] }}" class="img-fluid w-25 logo--image">
+                                            {{ $remit['remit'] }}
+                                        </a>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -122,6 +163,20 @@
                                 <div class="col-10">
                                     <input type="tel" name="gcash_number" id="gcash_number" class="form-control" value="{{ $payout->gcash_number ?? '' }}">
                                     <small class="text-danger" id="gcash_number_error"></small>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="remit--container">
+                                <div class="col-2">
+                                    <label class="col-form-label"><span id="fields--address"></span> Address:</label>
+                                </div>
+                                <div class="col-10">
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <input type="text" name="gcash_address" id="gcash_address" class="form-control" placeholder="#123 St. Ave." value="{{ $payout->gcash_address ?? '' }}">
+                                            <small class="text-danger" id="gcash_address_error"></small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -190,11 +245,12 @@
                     const src = $( this ).data( 'src' )
                     const self = this
                     const addBank = $( '#payoutOptionType' )
+                    const addRemit = $( '#payoutOptionTypeRemit' )
 
                     $( '#payout--request-form' ).removeClass( 'collapse' )
                     $( '#account--details' ).text( val )
                     $( '#fields--name' ).text( val )
-                    $( '#fields--number' ).text( val )
+                    $( '#fields--number' ).text( val == 'Remit' ? '' : val )
 
                     $( '#payout--request-form small.text-danger' ).each( function() {
                         $( this ).html( '' )
@@ -206,8 +262,10 @@
                         $( '#gcash_number' ).val( '' )
                     }
 
+                    const _place = val == 'Remit' ? 'Enter number' : `Enter ${val} number`
+
                     $( '#payout_type' ).val( val.toLowerCase() )
-                    $( '#gcash_number' ).attr( 'placeholder', `Enter ${val} number` )
+                    $( '#gcash_number' ).attr( 'placeholder', _place )
 
                     $( '.payout--type' ).each( function() {
                         $( this ).removeClass( 'btn-primary' )
@@ -220,11 +278,37 @@
                     if ( val == 'Bank' ) {
                         addBank.find( 'img' ).attr( 'src', src )
                         addBank.find( 'span' ).text( bank )
+                        $( '#remit--container' ).hide()
+                        $( '#gcash_address' ).val(  '' )
+
+                        const imgRemit = addRemit.find( 'img' )
+                        const spanRemit = addRemit.find( 'span' )
+                        imgRemit.attr( 'src', $( imgRemit ).data( 'orig' ) )
+                        spanRemit.text( $( spanRemit ).data( 'orig' ) )
+
+                        $( '#remit--container' ).hide()
+                        $( '#gcash_address' ).val(  '' )
+
+                    } else if ( val == 'Remit' ) {
+                        addRemit.find( 'img' ).attr( 'src', src )
+                        addRemit.find( 'span' ).text( bank )
+
+                        $( '#remit--container' ).show()
+                        $( '#gcash_address' ).val(  '' )
+
                     } else {
                         const img = addBank.find( 'img' )
                         const span = addBank.find( 'span' )
                         img.attr( 'src', $( img ).data( 'orig' ) )
                         span.text( $( span ).data( 'orig' ) )
+
+                        const imgRemit = addRemit.find( 'img' )
+                        const spanRemit = addRemit.find( 'span' )
+                        imgRemit.attr( 'src', $( imgRemit ).data( 'orig' ) )
+                        spanRemit.text( $( spanRemit ).data( 'orig' ) )
+
+                        $( '#remit--container' ).hide()
+                        $( '#gcash_address' ).val(  '' )
                     }
 
                     /* if ( val == "Bank" ) {

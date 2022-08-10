@@ -7,27 +7,27 @@
     }
 
     $basketOptions = array(
-        'Qty', 
+        'Quantity', 
         'SubTotal', 
-        'Total net weight(kilograms)', 
-        'Total net weight(grams)', 
-        'Shipping charges', 
-        'Net weight additional charges', 
-        'User addresses', 
-        'Shop addresses',
-        'Total',
+        // 'Total net weight(kilograms)', 
+        // 'Total net weight(grams)', 
+        // 'Shipping charges', 
+        // 'Net weight additional charges', 
+        // 'User addresses', 
+        // 'Shop addresses',
+        // 'Total',
     );
     $basketValues = [];
     $basketValuesTemp = [
         $cartSession->getTotalQuantity(),
         $cartSession->getSubTotal() -  $cartSession->getWholeSaleDeductions(),
-        $cartSession->getTotalNetWeight() / 1000,
-        $cartSession->getTotalNetWeight(),
-        $cartSession->getShippingFee(),
-        $cartSession->getTotalnetweightShippingAdditionals(),
-        Auth::user()->town,
-        implode( ' ', $cartSession->getShopAddresses() ),
-        $cartSession->getTotal(),
+        // $cartSession->getTotalNetWeight() / 1000,
+        // $cartSession->getTotalNetWeight(),
+        // $cartSession->getShippingFee(),
+        // $cartSession->getTotalnetweightShippingAdditionals(),
+        // Auth::user()->town,
+        // implode( ' ', $cartSession->getShopAddresses() ),
+        // $cartSession->getTotal(),
     ];
 
     foreach( $basketValuesTemp as $_ ) {

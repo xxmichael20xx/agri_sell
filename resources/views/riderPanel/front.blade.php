@@ -105,7 +105,7 @@ Coded by www.creative-tim.com
           </li>
           <li class="ml-5 pl-2">
             <a href="/rider_dashboard/on-out-for-delivery">
-              <p>On out for delivery <span class="badge badge-primary">{{ $_counts['on-out-for-delivery'] }}</span></p>
+              <p>Out for delivery <span class="badge badge-primary">{{ $_counts['on-out-for-delivery'] }}</span></p>
             </a>
           </li>
           <li class="ml-5 pl-2">

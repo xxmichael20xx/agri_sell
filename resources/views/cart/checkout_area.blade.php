@@ -48,7 +48,7 @@
                   
                     <tr class="cart-subtotal text-left">
                         <th class="text-left">Basket Shipping fee</th>
-                        <td class="text-left"><span class="amount">  <span id="shipping_fee_dialog" style="display: none;">₱ {{ \Cart::session(auth()->id())->getShippingFee() }}  </span></span></td>
+                        <td class="text-left"><span class="amount">  <span id="shipping_fee_dialog" data-shipping="₱ {{ \Cart::session(auth()->id())->getShippingFee() }}">₱ 0</span></span></td>
                     </tr>
 
                     <tr class="cart-subtotal-additional text-left collapse" id="shipping_fee_dialog_additional">

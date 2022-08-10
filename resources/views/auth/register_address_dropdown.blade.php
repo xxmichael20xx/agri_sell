@@ -11,7 +11,6 @@
     <label>Municipality/City</label>
         <select id="municipality" class="form-control" onchange="setTown()" required>
             <option value="" selected disabled>Select municipality</option>
-
         </select>
     </div>
     <div class="col col-lg-4">

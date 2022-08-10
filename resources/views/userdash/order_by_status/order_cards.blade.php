@@ -11,6 +11,10 @@
                 $order_items = App\OrderItem::where( 'order_id', '=', $order->order->id )->latest()->get();
                 $grand_total = 0;
                 $vendors = [];
+
+                if ( isset( $_GET['dev'] ) ) {
+                    echo gettype( $order_items );
+                }
             @endphp
 
             @if ( $order_items )
@@ -40,12 +44,8 @@
                                         }
                                     }
 
-                                    if ( isset( $_GET['dev'] ) ) {
-                                        echo gettype( $product_item );
-                                    }
-
                                 @endphp
-                                @if ( $product_item )
+                                @if ( $product_item !== NULL )
                                     <tr>
                                         <th scope="row" width="30">
                                         <a href="{{ url('products/' . $product_item->id) }}">

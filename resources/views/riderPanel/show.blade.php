@@ -3,31 +3,31 @@
 @section('content')
     <div class="content">
         <a href="/rider_dashboard" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-5">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-header">
                         <h5>Customer info</h5>
                     </div>
                     <div class="card-body">
-                        <p>Name: {{ $order->order->user->name ?? 'not available' }}</p>
-                        <p>Address: {{ $order->order->user->address ?? 'not available' }} {{ $order->order->user->barangay ?? 'not available' }} {{ $order->order->user->town ?? 'not available' }} {{ $order->order->user->province ?? 'not available' }}</p>
-                        <p>Mobile: {{ $order->order->user->mobile ?? 'not available' }}
+                        <p><b>Name:</b> {{ $order->order->user->name ?? 'not available' }}</p>
+                        <p><b>Address:</b> {{ $order->order->user->address ?? 'not available' }} {{ $order->order->user->barangay ?? 'not available' }} {{ $order->order->user->town ?? 'not available' }} {{ $order->order->user->province ?? 'not available' }}</p>
+                        <p><b>Mobile:</b> {{ $order->order->user->mobile ?? 'not available' }}
                     </div>
                 </div>
             </div>
             <div class="col-7">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-header">
                         <h5>Delivery info</h5>
                     </div>
                     <div class="card-body">
                         @if (isset($order->order->rider_id))
-                            <p>Rider ID:{{ $order->order->rider->rider_id}}</p>
-                            <p>Delivery man name:{{ $order->order->rider->user->name ?? 'not available'}}</p>
-                            <p>Delivery man mobile:{{ $order->order->rider->user->mobile ?? 'not available'}}</p>
-                            <p>Vehicle used: {{$order->order->rider->vehicle_used ?? 'not available'}} </p>
-                            <p> Delivery status: {{$order->deliverystatus->display_name ?? 'not available'}} </p>
+                            <p><b>Rider ID:</b> {{ $order->order->rider->rider_id}}</p>
+                            <p><b>Delivery man name:</b> {{ $order->order->rider->user->name ?? 'not available'}}</p>
+                            <p><b>Delivery man mobile:</b> {{ $order->order->rider->user->mobile ?? 'not available'}}</p>
+                            <p><b>Vehicle used:</b> {{$order->order->rider->vehicle_used ?? 'not available'}} </p>
+                            <p><b>Delivery status:</b> {{$order->deliverystatus->display_name ?? 'not available'}} </p>
                         @else
                             <p>No assigned Delivery rider</p>
                         @endif

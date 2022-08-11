@@ -10,9 +10,13 @@
                         <h5>Customer info</h5>
                     </div>
                     <div class="card-body">
-                        <p><b>Name:</b> {{ $order->order->user->name ?? 'not available' }}</p>
-                        <p><b>Address:</b> {{ $order->order->user->address ?? 'not available' }} {{ $order->order->user->barangay ?? 'not available' }} {{ $order->order->user->town ?? 'not available' }} {{ $order->order->user->province ?? 'not available' }}</p>
-                        <p><b>Mobile:</b> {{ $order->order->user->mobile ?? 'not available' }}
+                        <p><b>Name:</b> {{ $order->order->user->name }}</p>
+                        <p><b>Address:</b> {{ $order->order->user->address }} {{ $order->order->user->barangay }} {{ $order->order->user->town }} {{ $order->order->user->province }}</p>
+                        <p><b>Mobile:</b> {{ $order->order->user->mobile }}
+
+                        @if ( $order->order->is_pick_up == 'no' )
+                            <p><b>Shipping Address:</b> {{ $order->order->shipping_address }} {{ $order->order->shipping_city }} {{ $order->order->shipping_barangay }} Pangasinan</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -32,39 +36,12 @@
                             <p>No assigned Delivery rider</p>
                         @endif
                     </div>
-
-                    {{-- <div class="card-footer">
-                        <div class="row">
-                            <div class="col col-6">
-
-                                <div class="dropdown ">
-                                    <button class="dropdown-toggle btn btn-warning btn-round btn-block " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="false" aria-expanded="true">
-                                        Assign delivery status
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right " aria-labelledby="dropdownMenuButton" style="will-change: transform; position: absolute; transform: translate3d(-25px, -173px, 0px); top: 0px; left: 0px;" x-placement="top-end">
-                                        <div class="dropdown-header">Select delivery status option</div>
-                                        @foreach ( $assign_order_status_options as $option )
-                                            @if ($option->name != 'notdelivery')
-                                                <a 
-                                                    class="dropdown-item" 
-                                                    href="/admin/edit_order_status/{{ $option->id }}/{{ $order->order_id }}"
-                                                >
-                                                    {{ $option->display_name }}
-                                                </a>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div> --}}
                 </div>
             </div>
         </div>
-        <div class="row ">
+        <div class="row">
             <div class="col-12">
-                <div class="card  ">
+                <div class="card">
                     <div class="card-header">
                         <h5>Order Summary</h5>
                     </div>

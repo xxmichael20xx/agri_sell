@@ -134,6 +134,7 @@ class OrderController extends Controller
         //     'shipping_zipcode' => 'required',
         //     'payment_method' => 'required',
         // ]);
+
         $cart_session = \Cart::session(auth()->id());
 
         foreach ($cart_session->getContent() as $item) {
@@ -178,9 +179,15 @@ class OrderController extends Controller
             $order->billing_zipcode = $request->input('billing_zipcode');
         }
 
+        if ( $request->is_pick_up == "no" ) {
+            $order->shipping_city = $request->town;
+            $order->shipping_barangay = $request->barangay;
+        }
+
+
         $_is_pickup = $order->is_pick_up == 'yes' ? TRUE : FALSE;
         $order->grand_total = $cart_session->getTotal( $_is_pickup );
-        $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee() + $cart_session->getTotalnetweightShippingAdditionals();
+        $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee( $request->town ) + $cart_session->getTotalnetweightShippingAdditionals();
         $order->item_count = $cart_session->getContent()->count();
 
         $order_ref_amount = $cart_session->getTotal( $_is_pickup );

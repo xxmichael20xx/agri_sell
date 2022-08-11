@@ -73,6 +73,29 @@
         var isUsingAgCoins = document.getElementById("isUsingAgCoinsVal").value;
         var total_ag_coins = {!! $total_ag_coins !!};
         var total_cart_order_total = document.getElementById('totalCheckoutAmountCharges').value;
+        const shippingType = document.querySelector( '#deliver_option option:checked' ).value
+        let go = false
+
+        if ( shippingType == 'delivery' ) {
+            const town = document.querySelector( '.billing--address[data-type="town"] option:checked' ).value
+            const barangay = document.querySelector( '.billing--address[data-type="barangay"] option:checked' ).value
+
+            if ( town == '' || barangay == '' ) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Delivery Address',
+                    text: 'Please select your delivery address Municipality/Barangay'
+                })
+                go = false
+                
+            } else {
+                go = true
+            }
+        } else {
+            go = true
+        }
+
+        if ( ! go ) return false
 
         if (isUsingAgCoins == 'true') {
             if (total_ag_coins > total_cart_order_total) {

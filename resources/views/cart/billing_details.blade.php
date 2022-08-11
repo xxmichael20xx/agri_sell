@@ -69,7 +69,7 @@
                 <div class="col-6 col-md-6">
                     <div class="checkout-form-list">
                         <label>Municipality</label>
-                        <select id="municipality" class="form-control" onchange="setTown()" required>
+                        <select id="municipality" class="form-control billing--address" data-type="town" onchange="setTown()" required>
                             <option value="" selected disabled>Select municipality</option>
                         </select>
                         {{-- <input type="text" name="shipping_town" value="{{ $autofill_data->town }}" placeholder="Street address"> --}}
@@ -78,7 +78,7 @@
                 <div class="col-6 col-md-6">
                     <div class="checkout-form-list">
                         <label>Barangay</label>
-                        <select id="barangay" class="form-control input-lg" onchange="setBarangay()" required>
+                        <select id="barangay" class="form-control input-lg billing--address" data-type="barangay" onchange="setBarangay()" required>
                             <option value="" disabled selected>Select barangay</option>
                         </select>
                         {{-- <input type="text" name="shipping_barangay" value="{{ $autofill_data->barangay }}" placeholder="Street address"> --}}
@@ -154,6 +154,9 @@
     }
 
     ( function( $ ) {
+        const _token = "{{ csrf_token() }}"
+        const shipping_user_id = {{ auth()->user()->id }}
+        let shippingData = {}
 
         $(document).ready(function () {
             load_json_data( 'province' )
@@ -237,7 +240,51 @@
                     }, 1500 )
                 } )
             }, 1500 )
+
+            $( document ).on( 'change', '.billing--address', function() {
+                const type = $( this ).data( 'type' )
+                const town = $( '#municipality' ).val()
+                let barangay = $( '#barangay' ).val()
+
+                if ( type == 'town' ) {
+                    barangay = ''
+                    $( '#barangay' ).val( '' )
+                }
+
+                if ( town !== '' && barangay !== '' ) {
+                    shippingData = { town: town, barangay: barangay, user_id: shipping_user_id }
+                    processChange()
+                }
+            } )
         })
+
+        function debounce( func, timeout = 1500 ) {
+            let timer
+            return ( ...args ) => {
+                clearTimeout( timer )
+                timer = setTimeout( () => { func.apply( this, args ) }, timeout )
+            }
+        }
+
+        function fetchShippingRates() {
+            fetch( `/shipping/rates`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': _token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify( shippingData ) 
+            } ).then( r => r.json() ).then( res => {
+                if ( res.success ) {
+                    const ship = $( '#shipping_fee_dialog' )
+                    ship.attr( 'data-shipping' , `₱ ${res.rate}` )
+                    ship.text( `₱ ${res.rate}` )
+                }
+            } )
+        }
+
+        const processChange = debounce( () => fetchShippingRates() )
+
     } )( jQuery )
 </script>
 @endsection

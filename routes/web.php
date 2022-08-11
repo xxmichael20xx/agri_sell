@@ -211,3 +211,4 @@ Route::get('user_pre_orders', ['middleware' => 'auth', function()
 // ordermonitoring set images public routes both rider and seller
 Route::post('order_products_monitoring_upload', 'OrderMgmtPanelController@addProductMonitoringLogs');
 
+Route::post( '/shipping/rates', 'GlobalProductController@shippingRates' );

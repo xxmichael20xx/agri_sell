@@ -49,3 +49,5 @@ Route::group([ 'prefix' => 'seller' ], function() {
 });
 
 Route::post( '/products/rate', 'GlobalProductController@rate' );
+
+// Route::post( '/shipping/rates', 'GlobalProductController@shippingRates' );

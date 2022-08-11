@@ -25,17 +25,20 @@
                 </div>
                 <div class="card-body">
                     @php
-                        $type = $payout->metadata['type'];
-                        $numberLabel = '';
+                        $numberLabel = 'GCash number';
 
-                        if ( $type == 'GCash' ) {
-                            $numberLabel = 'GCash number';
+                        if ( $payout->metadata ) {
+                            $type = $payout->metadata['type'];
 
-                        } else if ( $type == 'Bank' ) {
-                            $numberLabel = 'Bank number';
+                            if ( $type == 'GCash' ) {
+                                $numberLabel = 'GCash number';
 
-                        } else {
-                            $numberLabel = 'Number';
+                            } else if ( $type == 'Bank' ) {
+                                $numberLabel = 'Bank number';
+
+                            } else {
+                                $numberLabel = 'Number';
+                            }
                         }
                     @endphp
                     <div class="form-group row">
@@ -54,6 +57,9 @@
                             </div>
                         @endif
                         @if ( $payout->metadata && $payout->metadata['type'] == 'Remit' )
+                            <div class="col-12 mb-3">
+                                <span class="text-muted">Money Remittance: {{ $payout->metadata['option'] }}</span>
+                            </div>
                             <div class="col-12 mb-3">
                                 <span class="text-muted">Address: {{ $payout->metadata['address'] }}</span>
                             </div>

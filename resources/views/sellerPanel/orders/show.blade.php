@@ -3,43 +3,6 @@
 @section('content')
 <div class="content">
     <a href="/sellerpanel/manage_orders/pickup/1" class="btn btn-outline-dark btn-round m-1 mb-2">Go back</a>
-    @if ( ( $order->is_pick_up == 'yes' && $order->pick_up_status_id == '1' ) || ( $order->is_pick_up == 'no' && $order->status_id == '1' ) )
-        <button type="button" class="btn btn-primary btn-round btn-pickup" data-href="/edit_pickup_status/6/{{ $order->order_id }}" data-title="Confirmed">Confirm</button>
-        <button type="button" class="btn btn-danger btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>    
-
-        <div class="modal fade" id="cancelOrderModal-{{ $order->order_id }}">
-            <div class="modal-dialog">
-                <form method="POST" action="{{ route( 'order.order.update' ) }}">
-                    <div class="modal-content">
-                        @csrf
-                        <input type="hidden" name="order_id" value="{{ $order->order_id }}">
-                        <input type="hidden" name="status_id" value="3">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Cancel Order</h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
-                                    <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
-                                        <option value="" selected disabled>Select a reason</option>
-                                        <option value="Order quantity can't be fulfilled">Order quantity can't be fulfilled</option>
-                                        <option value="Possible fraud">Possible fraud</option>
-                                        <option value="Others">Others</option>
-                                    </select>
-                                    <textarea class="form-control mt-2 collapse" name="cancel_reason_others" id="cancel_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-danger">Cancel order</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    @endif
 
     <div class="row">
         <div class="col-5">
@@ -232,6 +195,51 @@
                     </table>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 d-flex justify-content-end">
+            @if ( ( $order->is_pick_up == 'yes' && $order->pick_up_status_id == '1' ) || ( $order->is_pick_up == 'no' && $order->status_id == '1' ) )
+                @php
+                    $prefix = ( $order->is_pick_up == 'yes' ) ? 'edit_pickup_status/6/' : 'edit_order_status/2/';
+                @endphp
+                <button type="button" class="btn btn-primary btn-round btn-pickup" data-href="/{{ $prefix }}{{ $order->order_id }}" data-title="Confirmed">Confirm</button>
+                <button type="button" class="btn btn-danger btn-round" data-toggle="modal" data-target="#cancelOrderModal-{{ $order->order_id }}">Cancel</button>    
+
+                <div class="modal fade" id="cancelOrderModal-{{ $order->order_id }}">
+                    <div class="modal-dialog">
+                        <form method="POST" action="{{ route( 'order.order.update' ) }}">
+                            <div class="modal-content">
+                                @csrf
+                                <input type="hidden" name="order_id" value="{{ $order->order_id }}">
+                                <input type="hidden" name="status_id" value="3">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cancel Order</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <label for="cancel_reason" class="col-form-label">Reason for cancelling</label>
+                                            <select class="custom-select" name="cancel_reason" id="cancel_reason" required>
+                                                <option value="" selected disabled>Select a reason</option>
+                                                <option value="Order quantity can't be fulfilled">Order quantity can't be fulfilled</option>
+                                                <option value="Possible fraud">Possible fraud</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                            <textarea class="form-control mt-2 collapse" name="cancel_reason_others" id="cancel_reason_others" rows="5" placeholder="Please provide a reason"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-danger">Cancel order</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

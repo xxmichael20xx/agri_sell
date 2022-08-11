@@ -86,7 +86,7 @@ class refundController extends Controller
         $notification_ent = new notification();
         $notification_ent->user_id = Auth::user()->id;
         $notification_ent->frm_user_id = Auth::user()->id;
-        $notification_ent->notification_title = 'Refund request for ' . Order::where('id', $req->order_item_id)->first()->order_number;
+        $notification_ent->notification_title = 'Refund request for ' . Order::where('id', $req->order_id)->first()->order_number;
         $notification_ent->notification_txt = 'Your refund process for : ' . Product::where('id', $req->product_id)->first()->name . ' is on progress<br>You can check your refund request in the <a href="/user_refund_requests"/ class="/btn btn-light"/> My refund requests section</a>';                ;
         $notification_ent->save();
 

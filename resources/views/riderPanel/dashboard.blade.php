@@ -183,7 +183,7 @@
 
                                                 } else if ( $order->status_id == 3 ) {
                                                     $href = "/admin/edit_order_status/4/{$order->order_id}";
-                                                    $button = "On out delivery";
+                                                    $button = "Out for delivery";
 
                                                 } else if ( $order->status_id == 4 ) {
                                                     $href = "/admin/edit_order_status/5/{$order->order_id}";

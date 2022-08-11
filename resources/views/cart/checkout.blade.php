@@ -119,7 +119,6 @@
 
             document.getElementById('shipping_fee_dialog').style.display = "none";
             document.getElementById('shipping_fee_dialog_additional').classList.add( 'collapse' )
-            document.getElementById('shipping_fee_dialog_additional_text').classList.add( 'collapse' )
 
             // document.getElementById("cod_option").style.display = "none";
             // document.getElementById("cop_option").style.display = "initial";
@@ -139,7 +138,6 @@
             
             document.getElementById('shipping_fee_dialog').style.display = "initial";
             document.getElementById('shipping_fee_dialog_additional').classList.remove( 'collapse' )
-            document.getElementById('shipping_fee_dialog_additional_text').classList.remove( 'collapse' )
 
             // document.getElementById("cod_option").style.display = "none";
             // document.getElementById("cop_option").style.display = "initial";

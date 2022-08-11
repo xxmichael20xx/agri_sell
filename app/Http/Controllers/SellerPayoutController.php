@@ -176,7 +176,7 @@ class SellerPayoutController extends Controller
             'metadata' => [
                 'address' => $request->gcash_address ?? NULL,
                 'type' => $type,
-                'option' => $request->payout_option ?? NULL
+                'option' => $request->payout_option
             ]
         ] );
         $sellerPayout = SellerPayoutRequest::create( $request->all() );

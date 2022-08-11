@@ -109,6 +109,7 @@
                         <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
                         <input type="hidden" name="payout_type" id="payout_type">
                         <input type="hidden" name="form_step" id="form_step" value="1">
+                        <input type="hidden" name="payout_option" id="payout_option" value="GCash">
                         @if ( $payout )
                             <input type="hidden" name="payout_request_id" id="payout_request_id" value="{{ $payout->id }}">
                         @endif
@@ -120,24 +121,6 @@
                         </div>
 
                         <div id="first-fields">
-                            <div class="form-group row collapse" id="payout--option-container">
-                                <div class="col-2">
-                                    <label class="col-form-label">Payment option:</label>
-                                </div>
-                                <div class="col-10">
-                                    <select class="select custom-select" id="payout_option" name="payout_option">
-                                        <option value="" selected disabled>Select payment option</option>
-                                        <option value="Unionbank Internet Banking">Unionbank Internet Banking</option>
-                                        <option value="RCBC AccessOne">RCBC AccessOne</option>
-                                        <option value="BDO">BDO</option>
-                                        <option value="Metrobank Direct">Metrobank Direct</option>
-                                        <option value="Landbank ATM Online">Landbank ATM Online</option>
-                                        <option value="Bank of Commerce">Bank of Commerce</option>
-                                        <option value="UCPB Connect">UCPB Connect</option>
-                                    </select>
-                                    <small class="text-danger" id="payout_option_error"></small>
-                                </div>
-                            </div>
                             <div class="form-group row">
                                 <div class="col-2">
                                     <label class="col-form-label"><span id="fields--name"></span> Name:</label>
@@ -311,18 +294,7 @@
                         $( '#gcash_address' ).val(  '' )
                     }
 
-                    /* if ( val == "Bank" ) {
-                        $( '#payout--option-container' ).removeClass( 'collapse' )
-                    } else {
-                        $( '#payout--option-container' ).addClass( 'collapse' )
-                        $( '#payout_option' ).val( '' ).trigger( 'change' )
-                    } */
-
-                    if ( bank ) {
-                        $( '#payout_option' ).val( bank ).trigger( 'change' )
-                    } else {
-                        $( '#payout_option' ).val( '' ).trigger( 'change' )
-                    }
+                    $( '#payout_option' ).val( bank || 'GCash' )
                 } )
 
                 $( document ).on( 'click', '.btn-back', function() {

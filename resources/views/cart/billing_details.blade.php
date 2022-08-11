@@ -277,8 +277,10 @@
             } ).then( r => r.json() ).then( res => {
                 if ( res.success ) {
                     const ship = $( '#shipping_fee_dialog' )
+                    const total = $( '#order_total_delivery' )
                     ship.attr( 'data-shipping' , `₱ ${res.rate}` )
                     ship.text( `₱ ${res.rate}` )
+                    total.text( `₱ ${res.total}` )
                 }
             } )
         }

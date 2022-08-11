@@ -53,7 +53,8 @@ class GlobalProductController extends Controller
             if ( $id == $request->barangay && empty( $barangay ) ) $barangay = $name;
         }
 
-        $cartItems = \Cart::session( auth()->user()->id )->getContent();
+        $cartSession = \Cart::session( auth()->user()->id );
+        $cartItems = $cartSession->getContent();
         $vendors = array();
 
         foreach( $cartItems as $item ) {
@@ -71,10 +72,12 @@ class GlobalProductController extends Controller
         }
 
         if ( $rates < 1 ) $rates = 60;
+        $total = number_format( $cartSession->getTotal( false, $town ) );
 
         return response()->json( [
             'success' => true,
-            'rate' => $rates
+            'rate' => $rates,
+            'total' => $total
         ] );
     }
 }

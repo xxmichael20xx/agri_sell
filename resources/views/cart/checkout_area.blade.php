@@ -53,7 +53,12 @@
 
                     <tr class="cart-subtotal-additional text-left collapse" id="shipping_fee_dialog_additional">
                         <th class="text-left">Basket Additional Shipping fee</th>
-                        <td class="text-left"><span class="amount">  <span>₱ {{ number_format( \Cart::session(auth()->id())->getTotalnetweightShippingAdditionals() ) }}  </span></span></td>
+                        <td class="text-left"><span class="amount"><span>₱ {{ number_format( \Cart::session(auth()->id())->getTotalnetweightShippingAdditionals() ) }}</span></span></td>
+                    </tr>
+
+                    <tr class="cart-subtotal-additional text-left collapse" id="shipping_fee_dialog_additional_text">
+                        <th class="text-left">Additional shipping fee is added when you<br>reach the standard weight limit of your order.</th>
+                        <td></td>
                     </tr>
                   
                     <tr class="order-total text-left">

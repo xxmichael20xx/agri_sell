@@ -62,6 +62,7 @@
                                 'type' => 'admin_refunds',
                                 'key' => 'admin_refunds' . rand( 50, 1000 ) . '-confirmed',
                                 'reports' => $exports,
+                                'is_seller' => true,
                                 'csv_url' => '/export/csv/seller/refunds/confirmed/current',
                                 'pdf_url' => '/export/pdf/seller/refunds/confirmed/current',
                             ];
@@ -99,6 +100,7 @@
                                 'type' => 'admin_refunds',
                                 'key' => 'admin_refunds' . rand( 50, 1000 ) . '-rejected',
                                 'reports' => $exports,
+                                'is_seller' => true,
                                 'csv_url' => '/export/csv/seller/refunds/rejected/current',
                                 'pdf_url' => '/export/pdf/seller/refunds/rejected/current',
                             ];
@@ -136,6 +138,7 @@
                                 'type' => 'admin_refunds',
                                 'key' => 'admin_refunds' . rand( 50, 1000 ) . '-requests',
                                 'reports' => $exports,
+                                'is_seller' => true,
                                 'csv_url' => '/export/csv/seller/refunds/requests/current',
                                 'pdf_url' => '/export/pdf/seller/refunds/requests/current',
                             ];

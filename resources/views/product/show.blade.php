@@ -21,6 +21,20 @@
             transform: translate(-50%, -50%);
         }
 
+        .green-highlight {
+            font-weight: bold;
+            color: #28A745;
+        }
+
+        .dark-highlight {
+            font-weight: bold;
+            color: #000;
+        }
+        .red-highlight {
+            font-weight: bold;
+            color: #dc3545;
+        }
+
     </style>
 
     <div class="product-details ptb-100 pb-90">
@@ -144,10 +158,10 @@
                                     $product_variation_range_sale = $product_variation_min_price != $product_variation_max_price ? '₱' . $product_variation_min_price . '- ₱' . $product_variation_max_price : '₱ ' . ($product_variation_max_price - ($product->sale_pct_deduction / 100) * $product->product_variation_max_price);
                                 @endphp
                                 {{-- Product price will be replaced by javascript --}}
-                                <span id="price_list">{{ $product_variation_range }}</span>
+                                <span id="price_list" class="red-highlight">{{ $product_variation_range }}</span>
                             </span>
                         </div>
-                        <a href="/shop/catalog/{{ $product->shop->id }}">{{ $product->shop->name }}</a>
+                        <a href="/shop/catalog/{{ $product->shop->id }}" class="green-highlight">{{ $product->shop->name }}</a>
                         <br>
 
                         @php
@@ -179,7 +193,7 @@
                         @endphp
 
                         <div class="my-2">
-                            <span>Sold per: </span>
+                            <span class="dark-highlight">Sold per: </span>
                             <!-- Sold per widget -->
                             @php
                                 $variation_ent_tmp = App\ProductVariation::where('product_id', $product->id)->get();
@@ -198,10 +212,10 @@
                         </div>
                         <!-- end of sold per widget -->
                         <div class="quick-view-select my-2">
-                            Product description: {{ $product->description }}
+                            <span class="dark-highlight">Product description:</span> {{ $product->description }}
                             @if ( $first_var->product_size )
                                 <br>
-                                <span id="product-size">Size: {{ $first_var->product_size }}</span>
+                                <span id="product-size" class="dark-highlight">Size: {{ $first_var->product_size }}</span>
                             @endif
                         </div>
 
@@ -260,13 +274,13 @@
                                     <small class="text-danger collapse" id="quantity--message-zero">OUT OF STOCK</small>
                                 </div>
                                 <div class="col-8">
-                                    <span>Available stocks </span> <span id="variant--stock">{{ $variantStocks }}</span>
+                                    <span class="dark-highlight">Available stocks: </span><span id="variant--stock" class="">{{ $variantStocks }}</span>
                                     <br>
-                                    <span>Product net weight</span> <span id="variant--weight">{{ $variantWeight }}</span> (<span id="variant--weight-unit">{{ $variantWeightUnit }}</span>)
+                                    <span class="dark-highlight">Product net weight: </span><span id="variant--weight" class="">{{ $variantWeight }}</span>(<span id="variant--weight-unit" class="">{{ $variantWeightUnit }}</span>)
                                     <br>
-                                    <span>Sold per </span> <span id="variant--sold-for">{{ $variantSoldPer }}</span>
+                                    <span class="dark-highlight">Sold per: </span><span id="variant--sold-for" class="">{{ $variantSoldPer }}</span>
                                     <br>
-                                    <span id="variant--additional-text">{{ $variantText }}</span>
+                                    <span id="variant--additional-text" class="dark-highlight">{{ $variantText }}</span>
                                 </div>
                             </div>
                             <div class="row">

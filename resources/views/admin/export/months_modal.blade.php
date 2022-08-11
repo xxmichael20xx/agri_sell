@@ -13,8 +13,18 @@ $months = array(
     'November',
     'December',
 );
-$handle = isset( $is_seller ) ? 'custom-scripts' : 'admin.custom_scripts';
-if ( isset( $is_seller ) && $is_seller == 'rider' ) $handle = 'custom.scripts';
+// $handle = isset( $is_seller ) ? 'custom-scripts' : 'admin.custom_scripts';
+// if ( $is_seller == 'rider' ) $handle = 'custom.scripts';
+
+$handle = '';
+
+if ( isset( $is_seller ) ) {
+    $handle = ( gettype( $is_seller ) == 'boolean' ) ? 'custom-scripts' : 'custom.scripts';
+
+} else {
+    $handle = 'admin.custom_scripts';
+}
+
 @endphp
 <div class="modal fade" id="csvMonths-{{ $key }}">
     <div class="modal-dialog">

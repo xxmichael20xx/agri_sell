@@ -3,7 +3,7 @@
 <div class="content">
     <a href="/coins_dashboard" class="btn btn-outline-dark btn-round m-1">Go back</a>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-4">
             <div class="card mt-2">
                 <div class="card-header">
                     <h5 class="card-title">Coins top up proof</h5>

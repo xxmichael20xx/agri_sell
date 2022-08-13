@@ -28,7 +28,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
 
     public function headings(): array
     {
-        $headers = [ "Customer Name", "Address", "Shipping Address", "Order Total", "Is Order Paid", "Status", "Delivered by", "Date Ordered" ];
+        $headers = [ "Customer Name", "Address", "Shipping Address", "Order Total", "Is Order Paid", "Status", "Order Notes", "Delivered by", "Date Ordered" ];
         return [ [ "List of Delivery - " . ucwords( $this->type ) ], $headers ];
     }
 
@@ -107,6 +107,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
                 "Peso " . $this->helpers->numeric( $order->order->grand_total ),
                 $isPaid ? "Paid" : "Unpaid",
                 $this->setStatus( $order ),
+                $order->order->notes ?? 'N/A',
                 $order->order->rider->user->name,
                 $this->helpers->humanDate( $order->created_at, true )
             ];

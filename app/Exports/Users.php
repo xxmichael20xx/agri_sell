@@ -25,7 +25,7 @@ class Users implements FromCollection, WithHeadings, WithDrawings, WithCustomSta
 
     public function headings(): array
     {
-        $headers = [ "User number", "Name", "Email", "Mobile Number", "Birthday", "Address" ];
+        $headers = [ "Name", "Email", "Mobile Number", "Birthday", "Address" ];
         return [ [ "List of Users" ], $headers ];
     }
 
@@ -61,7 +61,6 @@ class Users implements FromCollection, WithHeadings, WithDrawings, WithCustomSta
 
         foreach ( $users as $user_index => $user ) {
             $_data = [
-                "#" . $user->id,
                 $user->name,
                 $user->email,
                 $user->mobile,

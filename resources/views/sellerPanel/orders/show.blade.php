@@ -25,7 +25,7 @@
             <div class="col-7">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h5>Delivery info</h5>
+                        <h5>Delivery info - {{ $order->deliverystatus->display_name }}</h5>
                     </div>
                     <div class="card-body">
                         @if ( isset( $order->order->rider_id ) && isset( $order->order->rider->user ) )
@@ -33,7 +33,7 @@
                             <p><b>Delivery man name:</b> {{ $order->order->rider->user->name ?? '-' }}</p>
                             <p><b>Delivery man mobile:</b> {{ $order->order->rider->user->mobile ?? '-' }}</p>
                             <p><b>Vehicle used:</b> {{$order->order->rider->vehicle_used ?? '-' }} </p>
-                            <p><b>Delivery status:</b> {{$order->deliverystatus->display_name ?? '-' }} </p>
+                            {{-- <p><b>Delivery status:</b> {{$order->deliverystatus->display_name ?? '-' }} </p> --}}
                         @else
                             <p>No assigned Delivery rider</p>
                         @endif
@@ -44,11 +44,11 @@
             <div class="col-7">
                 <div class="card h-100">
                     <div class="card-header">
-                        <h5>Pick up info</h5>
+                        <h5>Pick up info - {{ $order->pickupstatus->display_name }}</h5>
                     </div>
                     <div class="card-body">
                         <p><b>User ID:</b> {{ $order->order->user_id }}</p>
-                        <p><b>Pickup status:</b> <span class="badge badge-info">{{ $order->pickupstatus->display_name ?? '' }}</span></p>
+                        {{-- <p><b>Pickup status:</b> <span class="badge badge-info">{{ $order->pickupstatus->display_name ?? '' }}</span></p> --}}
                         <p><b>Order last updated:</b> {{ AppHelpers::humanDate( $order->updated_at ) }}</p>
                     </div>
                 </div>

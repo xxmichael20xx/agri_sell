@@ -28,7 +28,7 @@
                         <th>
                             Shop
                         </th>
-                        <th class="text-right">
+                        <th>
                             Actions
                         </th>
                     </tr>

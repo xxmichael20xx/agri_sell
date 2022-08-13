@@ -44,9 +44,7 @@ Coded by www.creative-tim.com
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js" type="text/javascript"></script>
 </head>
 <style>
- /* ===== Scrollbar CSS ===== */
-  /* Firefox */
- /* ===== Scrollbar CSS ===== */
+  /* ===== Scrollbar CSS ===== */
   /* Firefox */
   * {
     scrollbar-width: auto;
@@ -68,7 +66,12 @@ Coded by www.creative-tim.com
     border: 0px solid #ffffff;
   }
 
-  </style>
+  .dark-highlight {
+    font-weight: bold !important;
+    color: #000;
+  }
+
+</style>
 
 <body class="">
   <div class="wrapper ">

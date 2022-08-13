@@ -14,16 +14,16 @@
                 @endphp
             <div style="width: 100%; height: 320px;background-position: center;background-size: cover;background-image: url('/storage/{{$product->featured_image}}');"></div>
                 <div class="card-header">
-                    <h4>{{ $product->name }}</h4>
+                    <h4 class="dark-highlight">{{ $product->name }}</h4>
                     <h5>{!! $product_variation_range !!}</h5>
                 </div>
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Product description:  {!! $product->description !!}</span>
+                            <span class="text-muted"><span class="dark-highlight">Product description:</span> {!! $product->description !!}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Sold by: {{ $product->shop->owner->name }}</span>
+                            <span class="text-muted"><span class="dark-highlight">Sold by:</span> {{ $product->shop->owner->name }}</span>
                         </div>
                     </div>
                 </div>

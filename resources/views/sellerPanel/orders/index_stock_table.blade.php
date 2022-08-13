@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header">
                 @if ( isset( $status_obj ) && isset( $is_pick_up ) )
-                    <h4 class="card-title">{{ $status_obj->display_name }}</h4>
+                    <h4 class="card-title">Status - {{ $status_obj->display_name }}</h4>
                 @endif
             </div>
             <div class="card-body">

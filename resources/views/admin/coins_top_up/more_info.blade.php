@@ -15,32 +15,32 @@
                     @php
                         $user_obj = DB::table('users')->where('id', $user->user_id)->first();
                     @endphp
-                    <span class="text-muted ">Name: {{$user_obj->name}}</span>
+                    <span class="text-muted"><span class="dark-highlight">Name:</span> {{$user_obj->name}}</span>
                     <br>
-                    <span class="text-muted">Address: {{$user_obj->address}} {{$user_obj->barangay}} {{$user_obj->town}} {{$user_obj->province}}</span>
+                    <span class="text-muted"><span class="dark-highlight">Address:</span> {{$user_obj->address}} {{$user_obj->barangay}} {{$user_obj->town}} {{$user_obj->province}}</span>
                     <br>
-                    <span class="text-muted">Amount: {{$user->value}}</span>
+                    <span class="text-muted"><span class="dark-highlight">Amount:</span> {{$user->value}}</span>
                     <br>
-                    <span class="text-muted">Transaction id: {{$user->trans_id}}</span>
+                    <span class="text-muted"><span class="dark-highlight">Transaction id:</span> {{$user->trans_id}}</span>
                     @php
                         $trans_code_existence = App\TransactionCode::trans_code_duplicate_check_display($user->trans_id);
                     @endphp
                     <!-- <span class="text-muted">Is transaction id used: {{$trans_code_existence}}</span> -->
                     <br>
                     @if ($user->remarks == '0')
-                        <span class="text-muted">Verication status: Not Approved </span>
+                        <span class="text-muted"><span class="dark-highlight">Verication status:</span> Not Approved </span>
                     @elseif ($user->remarks == '1')
-                        <span class="text-muted">Verication status: Approved </span>
+                        <span class="text-muted"><span class="dark-highlight">Verication status:</span> Approved </span>
                         <br>
-                        <span class="text-muted">Date approved: {{ AppHelpers::humanDate( $user->updated_at, true ) }}</span>
+                        <span class="text-muted"><span class="dark-highlight">Date approved:</span> {{ AppHelpers::humanDate( $user->updated_at, true ) }}</span>
                     @elseif ($user->remarks == '2')
-                        <span class="text-muted">Verication status: For verification</span>
+                        <span class="text-muted"><span class="dark-highlight">Verication status:</span> For verification</span>
                     @endif
 
                     <br>
 
                     @if($user->invalid_reason != '')
-                        <span class="text-muted">Invalid status: {{$user->invalid_reason}}</span>
+                        <span class="text-muted"><span class="dark-highlight">Invalid status:</span> {{$user->invalid_reason}}</span>
                     @endif
 
                     <br>

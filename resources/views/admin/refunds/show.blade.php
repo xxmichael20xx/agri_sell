@@ -9,6 +9,11 @@
         height: 30em !important;
         width: 30em !important;
     }
+
+    .dark-highlight {
+        font-weight: bold !important;
+        color: #000 !important;
+    }
 </style>
 <div class="content">
     <a href="/admin/manage_refunds/" class="btn btn-outline-dark btn-round mb-4">Go back</a>
@@ -46,56 +51,58 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-12 mb-3 mt-3">
-                            <span class="text-muted font-weight-bold">Customer details</span>
+                            <span class="text-muted dark-highlight">Customer details</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-dark">Name: 
+                            <span class="text-dark">
+                                <b>Name: </b>
                                 <a href="/admin/manage_user/{{ $refund->customer->id }}" target="_blank" class="text-decoration-none">{{ $refund->customer->name }}</a>
                                 <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" title="Click on name to view more details"></i>
                             </span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-dark">Contact Number:  {{ $refund->customer->mobile }}</span>
+                            <span class="text-dark"><b>Contact Number:</b> {{ $refund->customer->mobile }}</span>
                         </div>
                         
                         <div class="col-12 my-3">
-                            <span class="text-muted font-weight-bold">Refund details: ID {{ $refund->refund_ref_id }}</span>
+                            <span class="text-muted dark-highlight"><b>Refund details:</b> ID {{ $refund->refund_ref_id }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-dark">Shop: 
+                            <span class="text-dark">
+                                <b class="text-muted">Shop:</b> 
                                 <a href="/admin/manage_shop/{{ $refund->product->shop->id }}" target="_blank" class="text-decoration-none">{{ $refund->product->shop->name }}</a>
                                 <i class="fa fa-info-circle text-primary" data-toggle="tooltip" data-placement="top" title="Click on name to view more details"></i>
                             </span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Reason: {{ $refund->refund_reason_prod_txt }}</span>
+                            <span class="text-muted"><b>Reason:</b> {{ $refund->refund_reason_prod_txt }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
+                            <span class="text-muted"><b>Amount:</b> ₱ {{ AppHelpers::numeric( $refund->order_item->price * $refund->order_item->quantity ) }}</span>
                         </div>
                         @if ( $refund->status == '1' || $refund->status == '3' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Date Confirmed: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
+                                <span class="text-muted"><b>Date Confirmed:</b> {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif
                         @if ( $refund->status == '2' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Reason for rejecting: (admin) {{ $refund->reason }}</span>
+                                <span class="text-muted"><b>Reason for rejecting:</b> (admin) {{ $refund->reason }}</span>
                             </div>
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Date Rejected: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
+                                <span class="text-muted"><b>Date Rejected:</b> {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif
                         @if ( $refund->status == '4' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Reason for rejecting: (seller) {{ $refund->reason }}</span>
+                                <span class="text-muted"><b>Reason for rejecting:</b> (seller) {{ $refund->reason }}</span>
                             </div>
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Date Confirmed: {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
+                                <span class="text-muted"><b>Date Confirmed:</b> {{ AppHelpers::humanDate( $refund->updated_at, true ) }}</span>
                             </div>
                         @endif
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Date Requested: {{ AppHelpers::humanDate( $refund->created_at, true ) }}</span>
+                            <span class="text-muted"><b>Date Requested:</b> {{ AppHelpers::humanDate( $refund->created_at, true ) }}</span>
                         </div>
                     </div>
                 </div>

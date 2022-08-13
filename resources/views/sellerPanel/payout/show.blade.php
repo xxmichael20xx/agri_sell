@@ -19,17 +19,20 @@
                 </div>
                 <div class="card-body">
                     @php
-                        $type = $payout->metadata['type'];
-                        $numberLabel = '';
+                        $numberLabel = 'GCash number';
 
-                        if ( $type == 'GCash' ) {
-                            $numberLabel = 'GCash number';
+                        if ( $payout->metadata && isset( $payout->metadata['type'] ) ) {
+                            $type = $payout->metadata['type'];
 
-                        } else if ( $type == 'Bank' ) {
-                            $numberLabel = 'Bank number';
+                            if ( $type == 'GCash' ) {
+                                $numberLabel = 'GCash number';
 
-                        } else {
-                            $numberLabel = 'Number';
+                            } else if ( $type == 'Bank' ) {
+                                $numberLabel = 'Bank number';
+
+                            } else {
+                                $numberLabel = 'Number';
+                            }
                         }
                     @endphp
                     <div class="form-group row">

@@ -14,16 +14,14 @@
                             {{ $refund_req->refund_ref_id }}
                         </div>
                         <div class="card-body">
-                            Product name: {!! $refund_req->product->name !!}<br>
-                            Product quantity: {!! AppHelpers::numeric( $refund_req->order_item->quantity ) !!}<br>
-                            Refundable amount: ₱ {!! AppHelpers::numeric( $amount ) !!}<br>
-                            Refund status: {{ $status->slug ?? '' }}<br>
-                            Confirmed Refundable amount: ₱ {{ AppHelpers::numeric( $amount / 2 ) }}
+                            <b>Product name:</b> {!! $refund_req->product->name !!}<br>
+                            <b>Product quantity:</b> {!! AppHelpers::numeric( $refund_req->order_item->quantity ) !!}<br>
+                            <b>Refundable amount:</b> ₱ {!! AppHelpers::numeric( $amount ) !!}<br>
+                            <b>Refund status:</b> {{ $status->slug ?? '' }}<br>
+                            <b>Confirmed Refundable amount:</b> ₱ {{ AppHelpers::numeric( $amount / 2 ) }}
                             <br>
-                            <p class="text-muted font-weight-bold">Note: 50% OF THE REFUND AMOUNT WILL BE DEDUCTED FROM THE SUBTOTAL OF EACH ORDER ITEM.</p>
-                        </div>
-                        <div class="card-footer">
-                            Date requested: {{ AppHelpers::humanDate( $refund_req->created_at, true ) }}
+                            <b>Date requested:</b> {{ AppHelpers::humanDate( $refund_req->created_at, true ) }}
+                            <p class="text-muted font-weight-bold mb-0">Note: 50% OF THE REFUND AMOUNT WILL BE DEDUCTED FROM THE SUBTOTAL OF EACH ORDER ITEM.</p>
                         </div>
                     </div>
                 </div>

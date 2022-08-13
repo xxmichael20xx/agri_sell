@@ -26,11 +26,11 @@
                     <p class="h4">{{ $product->name }}</p>
                     <p class="h5"> {!! $product_variation_range !!}</p>
                     <p class="text-focus">{{ $product->shop->owner->name ?? '' }}</p>
-                    <p>Sold per: {{ $product_variants[0]->variation_sold_per }}</p>
-                    <p>Available stocks: {{ $product_variants[0]->variation_quantity }}</p>
-                    <p>Product new weight: {{ $product_variants[0]->variation_net_weight }}{{ $product_variants[0]->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g' }}</p>
-                    <p>Product type: {{ $product_variants[0]->is_variation_wholesale ? 'Wholesale' : 'Retail' }}</p>
-                    <p>Product description: {!! $product->description !!}</p>
+                    <p><b>Sold per:</b> {{ $product_variants[0]->variation_sold_per }}</p>
+                    <p><b>Available stocks:</b> {{ $product_variants[0]->variation_quantity }}</p>
+                    <p><b>Product new weight:</b> {{ $product_variants[0]->variation_net_weight }}{{ $product_variants[0]->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g' }}</p>
+                    <p><b>Product type:</b> {{ $product_variants[0]->is_variation_wholesale ? 'Wholesale' : 'Retail' }}</p>
+                    <p><b>Product description:</b> {!! $product->description !!}</p>
                 </div>
                 <div class="card-footer">
                     @if ( $product->is_sale == '1' )

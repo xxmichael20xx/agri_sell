@@ -83,7 +83,7 @@
                                     <a href="javascript:void(0)" class="tag tag-{{ $tagClass }}">{{ $tagTitle }}</a>
                                 </td>
                                 <td>
-                                    <img src="{{ asset('storage/'.$product->featured_image) }}" height="100" alt="">
+                                    <img src="{{ asset('storage/'.$product->featured_image) }}" width="100" height="100" alt="">
                                 </td>
                                 <td>
                                     @if ( $product->is_sale == 1 )

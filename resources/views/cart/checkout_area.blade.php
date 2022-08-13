@@ -55,7 +55,7 @@
                         <th class="text-left">
                             Basket Additional Shipping fee
                             <br>
-                            <span class="text-danger pr-3">Additional shipping fee is added when you<br>reach the standard weight limit of your order.</span>
+                            <small class="text-danger pr-3">Note: Additional shipping fee is added when you<br>reach the standard weight limit of your order.</small>
                         </th>
                         <td class="text-left"><span class="amount"><span>₱ {{ number_format( \Cart::session(auth()->id())->getTotalnetweightShippingAdditionals() ) }}</span></span></td>
                     </tr>

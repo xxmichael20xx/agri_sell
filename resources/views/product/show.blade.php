@@ -176,7 +176,7 @@
                             $variantWeightUnit = $first_var->variation_net_weight_unit == 'kilogram' ? 'kg' : 'g';
                             $variantSoldPer = $first_var->variation_sold_per;
                             $variantPrice = number_format( $first_var->variation_price_per );
-                            $variantText = "Retail";
+                            $variantText = "<span class='dark-highlight'>Retail</span>";
                             $variantWholesale = 'no';
 
                             if ( count( $product_variations ) >= 2 ) {
@@ -187,7 +187,7 @@
                             if ( $first_var->is_variation_wholesale == 'yes' ) {
                                 // $variantMinQty = $first_var->variation_min_qty_wholesale;
                                 $variation_wholesale_price_per = number_format( $first_var->variation_wholesale_price_per );
-                                $variantText = "Wholesale: Buy a minimum qty of {$first_var->variation_min_qty_wholesale} and the price will be ₱{$variation_wholesale_price_per}";
+                                $variantText = "<span class='dark-highlight'>Wholesale:</span> Buy a minimum qty of {$first_var->variation_min_qty_wholesale} and the price will be ₱{$variation_wholesale_price_per}";
                                 $variantWholesale = 'yes';
                             }
                         @endphp
@@ -215,7 +215,7 @@
                             <span class="dark-highlight">Product description:</span> {{ $product->description }}
                             @if ( $first_var->product_size )
                                 <br>
-                                <span id="product-size" class="dark-highlight">Size: {{ $first_var->product_size }}</span>
+                                <span id="product-size"><span class="dark-highlight">Size:</span> {{ $first_var->product_size }}</span>
                             @endif
                         </div>
 
@@ -280,7 +280,7 @@
                                     <br>
                                     <span class="dark-highlight">Sold per: </span><span id="variant--sold-for" class="">{{ $variantSoldPer }}</span>
                                     <br>
-                                    <span id="variant--additional-text" class="dark-highlight">{{ $variantText }}</span>
+                                    <span id="variant--additional-text">{!! $variantText !!}</span>
                                 </div>
                             </div>
                             <div class="row">
@@ -348,12 +348,12 @@
                     if ( data.is_variation_wholesale == 'yes' ) {
                         $( '#variation_max_stock' ).attr( 'data-min', 1 )
                         $( '#quantity--min' ).text( 1 )
-                        $( '#variant--additional-text' ).text( `Wholesale: Buy a minimum qty of ${variantWholeSaleMinQty} and the price will be ₱${variantPrice}` )
+                        $( '#variant--additional-text' ).html( `<span class="dark-highlight">Wholesale:</span> Buy a minimum qty of ${variantWholeSaleMinQty} and the price will be ₱${variantPrice}` )
 
                     } else {
                         $( '#variation_max_stock' ).attr( 'data-min', 1 )
                         $( '#quantity--min' ).text( 1 )
-                        $( '#variant--additional-text' ).text( 'Retail' )
+                        $( '#variant--additional-text' ).html( '<span class="dark-highlight">Retail</span>' )
                     }
 
                     const btn = $( 'input.add--to-cart' )

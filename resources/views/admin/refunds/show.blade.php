@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="modal fade" id="enlarge--image-modal">
-                            <div class="modal-dialog modal-xl modal-dialog-scrollable pt-0">
+                            <div class="modal-dialog modal-lg modal-dialog-scrollable pt-0">
                                 <div class="modal-content">
                                     <div class="modal-body">
                                         <img id="enlarge--image-src" class="img-fluid w-100 h-100">

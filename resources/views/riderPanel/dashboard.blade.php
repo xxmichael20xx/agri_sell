@@ -192,7 +192,7 @@
                                                 }
                                             @endphp
                                             @if ( $button )
-                                                <button type="button" class="btn btn-primary btn-sm btn-round btn-action" data-href="{{ $href }}" data-title="{{ $button }}">{{ $button }}</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-round btn-action-rider" data-href="{{ $href }}" data-title="{{ $button }}">{{ $button }}</button>
                                             @else
                                                 @php
                                                     $title = "No actions needed";
@@ -302,7 +302,7 @@
 <script>
     (function($) {
         $(document).ready(function() {
-            $( document ).on( 'click', '.btn-action', function() {
+            $( document ).on( 'click', '.btn-action-rider', function() {
                 const href = $( this ).data( 'href' )
                 const title = $( this ).data( 'title' )
 

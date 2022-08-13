@@ -28,7 +28,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
 
     public function headings(): array
     {
-        $headers = [ "Customer Name", "Address", "Order Total", "Is Order Paid", "Status", "Delivered by", "Date Ordered" ];
+        $headers = [ "Customer Name", "Address", "Shipping Address", "Order Total", "Is Order Paid", "Status", "Delivered by", "Date Ordered" ];
         return [ [ "List of Delivery - " . ucwords( $this->type ) ], $headers ];
     }
 
@@ -97,9 +97,13 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
             $isPaid = $method == 'agrisell_coins' || $order->order->is_paid;
 
             $_user = User::find( $order->order->user_id );
+            $_address = $_user ? "{$_user->address} {$_user->barangay}, {$_user->town}" : "";
+            $_delivery_address = "{$this->setAddress( $order->order->shipping_address )} {$this->setAddress( $order->order->shipping_city)} {$this->setAddress( $order->order->shipping_barangay)} Pangasinan";
+
             $_data = [
                 $order->order->shipping_fullname,
-                $_user ? "{$_user->address} {$_user->barangay}, {$_user->town}" : "",
+                $_address,
+                $_delivery_address,
                 "Peso " . $this->helpers->numeric( $order->order->grand_total ),
                 $isPaid ? "Paid" : "Unpaid",
                 $this->setStatus( $order ),
@@ -125,6 +129,12 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
         }
         
         return $this->collection;
+    }
+
+    public function setAddress( $data ) {
+        if ( $data == 'na' ) return '';
+
+        return $data;
     }
 
     public function setIds( $type ) {

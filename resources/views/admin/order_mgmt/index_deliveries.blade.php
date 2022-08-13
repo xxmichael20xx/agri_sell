@@ -344,11 +344,11 @@
                     <div class="form-group row">
                         <div class="col-12">
                             <h5>Rider Details</h5>
-                            <p>Rider ID: <span id="rider_id"></span></p>
-                            <p>Delivery man name: <span id="rider_name"></span></p>
-                            <p>Delivery man mobile: <span id="rider_mobile"></span></p>
-                            <p>Vehicle used: <span id="rider_vehicle"></span></p>
-                            <p>Address: <span id="rider_address"></span></p>
+                            <p><span class="dark-highlight">Rider ID:</span> <span id="rider_id"></span></p>
+                            <p><span class="dark-highlight">Delivery man name:</span> <span id="rider_name"></span></p>
+                            <p><span class="dark-highlight">Delivery man mobile:</span> <span id="rider_mobile"></span></p>
+                            <p><span class="dark-highlight">Vehicle used:</span> <span id="rider_vehicle"></span></p>
+                            <p><span class="dark-highlight">Address:</span> <span id="rider_address"></span></p>
                         </div>
                     </div>
 

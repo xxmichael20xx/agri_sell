@@ -35,6 +35,9 @@
                         @else
                             <p>No assigned Delivery rider</p>
                         @endif
+                        @if ( $order->order->notes !== NULL )
+                            <p><b>Order Notes:</b> {{ $order->order->notes }}</p>
+                        @endif
                     </div>
                 </div>
             </div>

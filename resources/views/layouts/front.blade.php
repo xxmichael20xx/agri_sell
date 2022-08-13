@@ -93,6 +93,15 @@
     border: 0px solid #ffffff;
   }
 
+  .dark-highlight {
+    font-weight: bold !important;
+    color: #000;
+  }
+
+  .text-md {
+    font-size: 1.1em;
+  }
+
 </style>
 
 <body>

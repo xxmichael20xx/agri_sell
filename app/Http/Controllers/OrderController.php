@@ -162,6 +162,7 @@ class OrderController extends Controller
         $order->shipping_phone = $request->input('shipping_phone');
         $order->is_pick_up = ($request->input('is_pick_up') == NULL) ? 'yes' : $request->input('is_pick_up');
         $order->shipping_zipcode = $request->input('shipping_zipcode');
+        $order->notes = $request->notes ?? NULL;
 
         if (!$request->has('billing_fullname')) {
             $order->billing_fullname = $request->input('shipping_fullname');

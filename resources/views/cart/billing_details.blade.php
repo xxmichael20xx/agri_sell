@@ -41,7 +41,7 @@
                         <p>{{$shop_entity_obj->owner->mobile ?? 'not available'}}</p>
                         <label>Email</label>
                         <p>{{$shop_entity_obj->owner->email ?? 'not available'}}</p>
-                        <label>Note: Please take screenshot of the shop seller details </label>
+                        <label class="dark-highlight text-md text-danger">Note: Please take screenshot of the shop seller details </label>
                         </div>
                         </div>    
                       </div>
@@ -130,8 +130,7 @@
                         <label hidden>I will pick up the item</label>
                         <input id="cboxval" type="hidden" name="is_pick_up">
                         <label>Order Note:</label>
-                        <textarea id="notes" name="notes" placeholder="Pick-up">
-                        </textarea>
+                        <textarea id="notes" name="notes" placeholder="Pick-up"></textarea>
                     </div>
                 </div>
             </div>

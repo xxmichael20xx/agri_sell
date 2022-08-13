@@ -81,7 +81,14 @@ class SellerPanelController extends Controller
 
         if ( $payouts->count() > 0 ) {
             foreach( $payouts as $payout_index => $payout ) {
-                if ( $payout->status == '1' ) $payoutTotal += $payout->amount;
+                if ( $payout->status == '1' ) {
+                    $payoutTotal += $payout->amount;
+                    
+                    if ( $payout->metadata && $payout->metadata['type'] == 'Remit' ) {
+                        $payoutTotal += intval( $payout->metadata['remitt_amount'] );
+                    }
+                }
+
             }
         }
 

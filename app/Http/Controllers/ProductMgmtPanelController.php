@@ -438,6 +438,7 @@ class ProductMgmtPanelController extends Controller
         }
 
         $checkVariants = $has_variants && ( $request->variant_names && count( $request->variant_names ) > 0 );
+        $temp_variant_product_size = $request->variant_product_size[0] ?? NULL;
 
         $productVariation = new ProductVariation;
         $productVariation->product_id = $product->id;
@@ -449,7 +450,7 @@ class ProductMgmtPanelController extends Controller
         $productVariation->variation_min_qty_wholesale = $is_wholesale ? $request->wholesale_min_qty : 0;
         $productVariation->variation_quantity = $checkVariants ? $request->variant_stocks[0] : $request->stocks;
         $productVariation->variation_sold_per = $checkVariants ? $request->variant_soldper[0] : $request->sold_per;
-        $productVariation->product_size = $checkVariants ? $request->variant_product_size[0] : $request->product_size;
+        $productVariation->product_size = $checkVariants ? $temp_variant_product_size : $request->product_size;
         $productVariation->variation_net_weight = $checkVariants ? $request->variant_standard_net_weight[0] : $request->standard_net_weight;
         $productVariation->variation_net_weight_unit = $checkVariants ? $request->variant_standard_net_weight_unit[0] : $request->standard_net_weight_unit;
         $productVariation->save();

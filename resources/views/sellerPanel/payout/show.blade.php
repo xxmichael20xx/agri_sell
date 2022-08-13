@@ -12,7 +12,7 @@
     <a href="/sellerpanel/payout" class="btn btn-outline-dark btn-round mb-4">Go back</a>
 
     <div class="row">
-        <div class="col-12 col-md-7">
+        <div class="col-12 col-md-4">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Payout Request details</h5>

@@ -41,7 +41,8 @@
                             $amount = $item->amount;
 
                             if ( $item->metadata && $item->metadata['type'] == 'Remit' ) {
-                                $amount += intval( $item->metadata['remitt_amount'] );
+                                $remitt_amount = isset( $item->metadata['remitt_amount'] ) ? $item->metadata['remitt_amount'] : 0;
+                                $amount += intval( $remitt_amount );
                             }
                         @endphp
                         <tr>

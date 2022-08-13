@@ -85,7 +85,8 @@ class SellerPanelController extends Controller
                     $payoutTotal += $payout->amount;
                     
                     if ( $payout->metadata && $payout->metadata['type'] == 'Remit' ) {
-                        $payoutTotal += intval( $payout->metadata['remitt_amount'] );
+                        $remitt_amount = isset( $payout->metadata['remitt_amount'] ) ? $payout->metadata['remitt_amount'] : 0;
+                        $amount += intval( $remitt_amount );
                     }
                 }
 

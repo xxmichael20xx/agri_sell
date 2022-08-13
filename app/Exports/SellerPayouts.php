@@ -82,7 +82,8 @@ class SellerPayouts implements FromCollection, WithHeadings, WithDrawings, WithC
                $type = $payout->metadata['type'];
 
                if ( $type == 'Remit' ) {
-                   $amount += intval( $payout->metadata['remitt_amount'] );
+                    $remitt_amount = isset( $payout->metadata['remitt_amount'] ) ? $payout->metadata['remitt_amount'] : 0;
+                    $amount += intval( $remitt_amount );
                }
             }
 

@@ -115,3 +115,8 @@
     height: 250px;
     overflow-y: auto;
 }
+
+.dark-highlight {
+    font-weight: bold !important;
+    color: #000 !important;
+}

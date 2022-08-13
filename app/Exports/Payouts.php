@@ -68,14 +68,19 @@ class Payouts implements FromCollection, WithHeadings, WithDrawings, WithCustomS
 
         foreach ( $payouts as $payout_index => $payout ) {
             $type = "GCash";
+            $amount = $payout->amount;
 
             if ( isset( $payout->metadata['type'] ) ) {
-               $type = $payout->metadata['type'];
+                $type = $payout->metadata['type'];
+
+                if ( $type == 'Remit' ) {
+                    $amount += intval( $payout->metadata['remitt_amount'] );
+                }
             }
 
             $_data = [
                 $payout->seller->name,
-                "Peso " . Helpers::numeric( $payout->amount ),
+                "Peso " . Helpers::numeric( $amount ),
                 $type,
                 $payout->gcash_name,
                 $payout->gcash_number,

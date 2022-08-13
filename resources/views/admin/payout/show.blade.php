@@ -26,8 +26,9 @@
                 <div class="card-body">
                     @php
                         $numberLabel = 'GCash number';
+                        $is_remittance = false;
 
-                        if ( $payout->metadata ) {
+                        if ( $payout->metadata && isset( $payout->metadata['type'] ) ) {
                             $type = $payout->metadata['type'];
 
                             if ( $type == 'GCash' ) {
@@ -38,41 +39,47 @@
 
                             } else {
                                 $numberLabel = 'Number';
+                                $is_remittance = true;
                             }
                         }
                     @endphp
                     <div class="form-group row">
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Seller name: {{ $payout->seller->name }}</span>
+                            <span class="text-muted"><span class="dark-highlight">Seller name:</span> {{ $payout->seller->name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">{{ $payout->metadata['type'] ?? 'GCash' }}  name: {{ $payout->gcash_name }}</span>
+                            <span class="text-muted"><span class="dark-highlight">{{ $payout->metadata['type'] ?? 'GCash' }} name:</span> {{ $payout->gcash_name }}</span>
                         </div>
                         <div class="col-12 mb-3">
-                            <span class="text-muted">{{ $numberLabel }}: {{ $payout->gcash_number }}</span>
+                            <span class="text-muted"><span class="dark-highlight">{{ $numberLabel }}:</span> {{ $payout->gcash_number }}</span>
                         </div>
                         @if ( $payout->metadata && $payout->metadata['type'] == 'Bank' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Bank Account: {{ $payout->metadata['option'] }}</span>
+                                <span class="text-muted"><span class="dark-highlight">Bank Account:</span> {{ $payout->metadata['option'] }}</span>
                             </div>
                         @endif
                         @if ( $payout->metadata && $payout->metadata['type'] == 'Remit' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Money Remittance: {{ $payout->metadata['option'] }}</span>
+                                <span class="text-muted"><span class="dark-highlight">Money Remittance:</span> {{ $payout->metadata['option'] }}</span>
                             </div>
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Address: {{ $payout->metadata['address'] }}</span>
+                                <span class="text-muted"><span class="dark-highlight">Address:</span> {{ $payout->metadata['address'] }}</span>
                             </div>
                         @endif
                         {{-- <div class="col-12 mb-3">
                             <span class="text-muted">GCash reference number: {{ $payout->gcash_ref }}</span>
                         </div> --}}
                         <div class="col-12 mb-3">
-                            <span class="text-muted">Amount: ₱ {{ AppHelpers::numeric( $payout->amount ) }}</span>
+                            <span class="text-muted">
+                                <span class="dark-highlight">Amount:</span> ₱ {{ AppHelpers::numeric( $payout->amount ) }}
+                                @if ( $is_remittance )
+                                    (addt'l ₱{{ AppHelpers::numeric( $payout->metadata['remitt_amount'] ) }})
+                                @endif
+                            </span>
                         </div>
                         @if ( $payout->status == '2' )
                             <div class="col-12 mb-3">
-                                <span class="text-muted">Reason for rejecting: {{ $payout->reject_reason }}</span>
+                                <span class="text-muted"><span class="dark-highlight">Reason for rejecting:</span> {{ $payout->reject_reason }}</span>
                             </div>
                         @endif
                     </div>

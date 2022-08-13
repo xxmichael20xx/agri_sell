@@ -76,10 +76,33 @@ class SellerPayoutAmount implements Rule
         $total_sales = $total_sales - $payoutTotal - $refundsAmount;
         if ( $total_sales < 1 ) $total_sales = 0;
 
-        if ( $total_sales < $this->request->amount ) {
+        $is_remittance = $this->request->payout_type == 'remit';
+        $_amount = $this->request->amount;
+        $remittances = config( 'remittance' );
+        $remittance_amount = 0;
+
+        if ( $is_remittance ) {
+            foreach( $remittances as $remittance ) {
+                $min = intval( $remittance[0] );
+                $max = intval( $remittance[1] );
+                $remit = intval( $remittance[2] );
+
+                if ( $_amount >= $min && $_amount <= $max ) {
+                    $_amount += $remit;
+                    $remittance_amount = $remit;
+                    break;
+                }
+            }
+        }
+
+        if ( $total_sales < $_amount ) {
             // $total_sales = "₱ " . Helpers::numeric( $total_sales, 2 );
             // $this->message = "You don't have enough sales to request a payout. <br> Maximum: {$total_sales}";
             $this->message = "You don't have enough sales to request a payout.";
+            
+            if ( $is_remittance ) {
+                $this->message .= " Additional ₱{$remittance_amount} payment is added based on the amount.";
+            }
 
             return false;
         }

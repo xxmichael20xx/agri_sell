@@ -76,14 +76,19 @@ class SellerPayouts implements FromCollection, WithHeadings, WithDrawings, WithC
             }
 
             $type = "GCash";
+            $amount = $payout->amount;
 
             if ( isset( $payout->metadata['type'] ) ) {
                $type = $payout->metadata['type'];
+
+               if ( $type == 'Remit' ) {
+                   $amount += intval( $payout->metadata['remitt_amount'] );
+               }
             }
 
             $_data = [
                 $type,
-                "Peso " . $this->helpers->numeric( $payout->amount ),
+                "Peso " . $this->helpers->numeric( $amount ),
                 $this->helpers->humanDate( $payout->payout->week_start, false ) . " - " . $this->helpers->humanDate( $payout->payout->week_end, false ),
                 $this->helpers->humanDate( $payout->created_at ),
                 $status

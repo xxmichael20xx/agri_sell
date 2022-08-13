@@ -84,9 +84,16 @@
                             </thead>
                             <tbody>
                                 @foreach ( $payouts as $index => $payout )
+                                    @php
+                                        $amount = $payout->amount;
+
+                                        if ( $payout->metadata && $payout->metadata['type'] == 'Remit' ) {
+                                            $amount += intval( $payout->metadata['remitt_amount'] );
+                                        }
+                                    @endphp
                                     <tr>
                                         <td>
-                                            ₱ {{ AppHelpers::numeric( $payout->amount ) }}
+                                            ₱ {{ AppHelpers::numeric( $amount ) }}
                                         </td>
                                         <td>
                                             {{ AppHelpers::humanDate( $payout->payout->week_start, false ) }} - {{ AppHelpers::humanDate( $payout->payout->week_end, false ) }}

@@ -172,11 +172,31 @@ class SellerPayoutController extends Controller
                 break;
         }
 
+        $is_remittance = $request->payout_type == 'remit';
+        $_amount = $request->amount;
+        $remittances = config( 'remittance' );
+        $remittance_amount = 0;
+
+        if ( $is_remittance ) {
+            foreach( $remittances as $remittance ) {
+                $min = intval( $remittance[0] );
+                $max = intval( $remittance[1] );
+                $remit = intval( $remittance[2] );
+
+                if ( $_amount >= $min && $_amount <= $max ) {
+                    $_amount += $remit;
+                    $remittance_amount = $remit;
+                    break;
+                }
+            }
+        }
+
         $request->request->add( [
             'metadata' => [
                 'address' => $request->gcash_address ?? NULL,
                 'type' => $type,
-                'option' => $request->payout_option
+                'option' => $request->payout_option,
+                'remitt_amount' => $remittance_amount
             ]
         ] );
         $sellerPayout = SellerPayoutRequest::create( $request->all() );

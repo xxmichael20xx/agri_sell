@@ -36,12 +36,20 @@
                 </thead>
                 <tbody>
                     @foreach ( $data as $_index => $item )
+                        @php
+                            $type = "GCash";
+                            $amount = $item->amount;
+
+                            if ( $item->metadata && $item->metadata['type'] == 'Remit' ) {
+                                $amount += intval( $item->metadata['remitt_amount'] );
+                            }
+                        @endphp
                         <tr>
                             <td>
                                 {{ $item->seller->name }}
                             </td>
                             <td>
-                                ₱ {{ AppHelpers::numeric( $item->amount ) }}
+                                ₱ {{ AppHelpers::numeric( $amount ) }}
                             </td>
                             <td>
                                 Payout #{{ $item->id }}

@@ -51,7 +51,7 @@
                         @if ( isset( $product->category->category_id ) && $product->category->category_id == $category_id )
                             <tr>
                                 <td>{{ $product->name }}</td>
-                                <td><img src="{{ asset( 'storage/'.$product->featured_image ) }}" height="100" alt=""></td>
+                                <td><img src="{{ asset( 'storage/'.$product->featured_image ) }}" width="100" height="100"></td>
                                 <td>
                                     @if($product->is_sale == 1)
                                         {{$product->sale_pct_deduction}} % off

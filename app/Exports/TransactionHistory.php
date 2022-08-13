@@ -27,7 +27,7 @@ class TransactionHistory implements FromCollection, WithHeadings, WithDrawings, 
 
     public function headings(): array
     {
-        $headers = [ "Transaction #", "Name", "Transaction type", "Amount", "Transaction Reference ID", "Date" ];
+        $headers = [ "Name", "Transaction type", "Amount", "Transaction Reference ID", "Date" ];
         return [ [ "List of Transactions" ], $headers ];
     }
 
@@ -68,7 +68,6 @@ class TransactionHistory implements FromCollection, WithHeadings, WithDrawings, 
                     $amount = "Peso 0 ( no payment )";
                 }
                 $_data = [
-                    '#' . $transaction->id,
                     $transaction->user_master->name,
                     $transaction->trans_type,
                     $amount,

@@ -58,7 +58,7 @@ class RiderDeliveries implements FromCollection, WithHeadings, WithDrawings, Wit
 
         switch ( $this->type ) {
             case 'today':
-                $orders = $orders->whereDate( 'created_at', Carbon::today() )->get();
+                $orders = $orders->whereDate( 'updated_at', Carbon::today() )->get();
                 break;
 
             case 'monthly':

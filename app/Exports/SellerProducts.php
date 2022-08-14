@@ -265,7 +265,6 @@ class SellerProducts implements FromCollection, WithHeadings, WithDrawings, With
                         
                         $_data_head_empty = [ '', '', '', '', '' ];
                         $_data_head = [
-                            "#" . $order->order->id,
                             $order->order->shipping_fullname,
                             "Peso " . Helpers::numeric( $order->order->grand_total ),
                             $isPaid . ", Method: {$method}",

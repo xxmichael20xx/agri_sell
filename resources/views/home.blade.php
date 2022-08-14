@@ -240,7 +240,7 @@
                                     </div>
                                     <div class="fruits-choose-content">
                                     <h4 style="color: #FBF3E4;">Faster delivery</h4>
-                                    <p class="text-white">Agrisell has multiple rider configuration.</p>
+                                    <p class="text-white">Agrisell has its trusted rider for secure and fast delivery.</p>
                                     </div>
                                 </div>
                             </div>

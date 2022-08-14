@@ -266,7 +266,7 @@ class SellerProducts implements FromCollection, WithHeadings, WithDrawings, With
                         $_data_head_empty = [ '', '', '', '', '' ];
                         $_data_head = [
                             $order->order->shipping_fullname,
-                            "Peso - count " . count( $items ) . " - " . Helpers::numeric( $order->order->grand_total ),
+                            "Peso " . Helpers::numeric( $order->order->grand_total ),
                             $isPaid . ", Method: {$method}",
                             $order_status
                         ];
@@ -275,8 +275,8 @@ class SellerProducts implements FromCollection, WithHeadings, WithDrawings, With
                             $item->name,
                             Helpers::numeric( $item->pivot->quantity ),
                             $product_variety_ent->variation_name,
-                            "Peso 23 - " . Helpers::numeric( $item_product_price_proc ),
-                            "Peso 23 - " . Helpers::numeric( $item->pivot->quantity * $item->pivot->price ) 
+                            "Peso " . Helpers::numeric( $item_product_price_proc ),
+                            "Peso " . Helpers::numeric( $item->pivot->quantity * $item->pivot->price ) 
                         ];
 
                         $which_head = $item_index == 0 ? $_data_head : $_data_head_empty;

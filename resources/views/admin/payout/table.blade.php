@@ -23,9 +23,9 @@
                         <th>
                             Amount
                         </th>
-                        <th>
+                        {{-- <th>
                             Payout #
-                        </th>
+                        </th> --}}
                         @if ( $index == 1)
                             Reject Reason
                         @endif
@@ -52,9 +52,9 @@
                             <td>
                                 ₱ {{ AppHelpers::numeric( $amount ) }}
                             </td>
-                            <td>
+                            {{-- <td>
                                 Payout #{{ $item->id }}
-                            </td>
+                            </td> --}}
                             @if ( $index == 1)
                                 <td>
                                     {{ $item->reject_reason }}

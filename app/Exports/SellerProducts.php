@@ -259,28 +259,32 @@ class SellerProducts implements FromCollection, WithHeadings, WithDrawings, With
                     $this->collection->push( $data );
 
                 } else {
-                    foreach ( $items as $item_index => $item ) {
+                    foreach ( $items as $items_index => $item ) {
                         $product_variety_ent = ProductVariation::where( 'id', $item->pivot->variation_id )->first();
                         $item_product_price_proc = $product_variety_ent->variation_price_per;
                         
-                        $_data_head_empty = [ '', '', '', '', '' ];
-                        $_data_head = [
-                            $order->order->shipping_fullname,
-                            "Peso " . Helpers::numeric( $order->order->grand_total ),
-                            $isPaid . ", Method: {$method}",
-                            $order_status
-                        ];
+                        if ( $items_index > 0 ) {
+                            $_data = [
+                                ' ', ' ', ' ', ' ', ' ',
+                                Helpers::numeric( $item->pivot->quantity ),
+                                $product_variety_ent->variation_name,
+                                "Peso" . Helpers::numeric( $item_product_price_proc ),
+                                "Peso" . Helpers::numeric( $item->pivot->quantity * $item->pivot->price ) 
+                            ];
 
-                        $_data_body = [
-                            $item->name,
-                            Helpers::numeric( $item->pivot->quantity ),
-                            $product_variety_ent->variation_name,
-                            "Peso " . Helpers::numeric( $item_product_price_proc ),
-                            "Peso " . Helpers::numeric( $item->pivot->quantity * $item->pivot->price ) 
-                        ];
-
-                        $which_head = $item_index == 0 ? $_data_head : $_data_head_empty;
-                        $_data = array_merge( $which_head, $_data_body );
+                        } else {
+                            $_data = [
+                                $order->order->shipping_fullname,
+                                "Peso " . Helpers::numeric( $order->order->grand_total ),
+                                $isPaid . ", Method: {$method}",
+                                $order_status,
+                                $item->name,
+                                Helpers::numeric( $item->pivot->quantity ),
+                                $product_variety_ent->variation_name,
+                                "Peso" . Helpers::numeric( $item_product_price_proc ),
+                                "Peso" . Helpers::numeric( $item->pivot->quantity * $item->pivot->price ) 
+                            ];
+                        }
         
                         $data = ( object ) $_data;
                         $this->collection->push( $data );

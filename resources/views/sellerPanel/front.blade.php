@@ -234,6 +234,7 @@ Coded by www.creative-tim.com
   @include('sellerPanel.additional_scripts')
   @yield('custom-scripts')
   @yield('custom-scripts-addl')
+  @yield('export_script')
 
   <script>
     (function($) {

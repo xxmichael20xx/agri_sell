@@ -223,6 +223,7 @@ Coded by www.creative-tim.com
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('admin.additional_scripts')
     @yield('custom.scripts')
+    @yield('export_script')
 </body>
 
 

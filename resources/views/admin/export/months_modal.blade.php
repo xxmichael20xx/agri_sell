@@ -80,22 +80,24 @@ if ( isset( $is_seller ) ) {
         </div>
     </div>
 </div>
-<script>
-    (function($) {
-        $( document ).ready(function() {
-            $( document ).on( 'change', '.select-type', function() {
-                const key = $( this ).data( 'key' )
-                const val = $( this ).val()
+@section( 'export_script' )
+    <script>
+        (function($) {
+            $( document ).ready(function() {
+                $( document ).on( 'change', '.select-type', function() {
+                    const key = $( this ).data( 'key' )
+                    const val = $( this ).val()
 
-                if ( val == 'csv' ) {
-                    $( `#report-csv-${key}` ).removeClass( 'collapse' )
-                    $( `#report-pdf-${key}` ).addClass( 'collapse' )
+                    if ( val == 'csv' ) {
+                        $( `#report-csv-${key}` ).removeClass( 'collapse' )
+                        $( `#report-pdf-${key}` ).addClass( 'collapse' )
 
-                } else {
-                    $( `#report-csv-${key}` ).addClass( 'collapse' )
-                    $( `#report-pdf-${key}` ).removeClass( 'collapse' )
-                }
-            } )
-        })
-    })(jQuery)
-</script>
+                    } else {
+                        $( `#report-csv-${key}` ).addClass( 'collapse' )
+                        $( `#report-pdf-${key}` ).removeClass( 'collapse' )
+                    }
+                } )
+            })
+        })(jQuery)
+    </script>
+@endsection

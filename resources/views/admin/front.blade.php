@@ -489,5 +489,6 @@ Coded by www.creative-tim.com
   </script>
   @include('admin.additional_scripts')
   @yield('admin.custom_scripts')
+  @yield('export_script')
 </body>
 </html>

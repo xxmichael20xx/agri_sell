@@ -29,9 +29,9 @@
 
 <script>
     window.onload = () => {
-        /* window.print()
+        window.print()
         setTimeout(() => {
             window.close()
-        } ) */
+        } )
     }
 </script>

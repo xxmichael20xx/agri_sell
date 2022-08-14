@@ -215,7 +215,7 @@
                                 <div class="tab-pane" id="step-3" role="tabpanel" aria-labelledby="step-3-tab">
                                     <span class="text-muted font-weight-bold">Admins Approval</span>
                                     <ul class="pl-3">
-                                        <li>Kindly wait within 24-48 hours for the admin to process your payout that will be sent to your Gcash/Bank Account.</li>
+                                        <li>Kindly wait within 24-48 hours for the admin to process your payout that will be sent to your Gcash/Bank Account or Money Remittance.</li>
                                     </ul>
 
                                     <hr>

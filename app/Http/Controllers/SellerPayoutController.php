@@ -91,12 +91,15 @@ class SellerPayoutController extends Controller
             if ( $payout->status !== 2 ) {
                 return redirect( '/sellerpanel/payout' );
             }
-        } 
+        }
+
+        $rates = config( 'remittance' );
 
         $panel_name = 'payout';
         return view( 'sellerPanel.payout.new', compact(
             'panel_name',
-            'payout'
+            'payout',
+            'rates'
         ) );
     }
 

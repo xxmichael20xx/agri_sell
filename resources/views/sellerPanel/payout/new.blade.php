@@ -62,7 +62,7 @@
     <a href="/sellerpanel/payout" class="btn btn-outline-dark btn-round mb-4">Go back</a>
 
     <div class="row">
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-md-8 md-4">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Payout Request Form {{ $payout ? "- Update" : "" }}</h5>
@@ -213,6 +213,48 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-12 col-md-8" id="remitt-fees" style="display: none;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <p>
+                                <span class="dark-highlight">Reminder: </span> Know the fees and charges for sending money through Money Remittances, that it's so easy to send and accept money, since customers only need to present a single valid ID for transactions. Check out the rates below.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Amount</th>
+                                        <th>Fee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ( $rates as $rate )
+                                        <tr>
+                                            <td>₱ {{ AppHelpers::numeric( $rate[0], 2 ) }}</td>
+                                            <td>₱ {{ AppHelpers::numeric( $rate[1], 2 ) }}</td>
+                                            <td>₱ {{ AppHelpers::numeric( $rate[2], 2 ) }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3">
+                                                <label class="text-dark h6">No money remittance charges added yet.</label>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -271,6 +313,7 @@
 
                         $( '#remit--container' ).hide()
                         $( '#gcash_address' ).val(  '' )
+                        $( '#remitt-fees' ).hide()
 
                     } else if ( val == 'Remit' ) {
                         addRemit.find( 'img' ).attr( 'src', src )
@@ -278,6 +321,7 @@
 
                         $( '#remit--container' ).show()
                         $( '#gcash_address' ).val(  '' )
+                        $( '#remitt-fees' ).show()
 
                     } else {
                         const img = addBank.find( 'img' )
@@ -292,6 +336,7 @@
 
                         $( '#remit--container' ).hide()
                         $( '#gcash_address' ).val(  '' )
+                        $( '#remitt-fees' ).hide()
                     }
 
                     $( '#payout_option' ).val( bank || 'GCash' )

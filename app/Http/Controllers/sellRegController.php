@@ -21,9 +21,9 @@ class sellRegController extends Controller
     function admin_panel_index(){
         $users = seller_reg_fee::where( 'status', 0 )->where( 'trans_id', '!=', '' )->where( 'payment_proof', '!=', '' )->get();
 
-        /* foreach ( $users as $user_index => $user ) {
+        foreach ( $users as $user_index => $user ) {
             if ( ! $user->shop || ! $user->owner ) $users->forget( $user_index );
-        } */
+        }
 
         $panel_name = "- Seller Registration";
         return view('admin.sell_reg_fees.index')->with(compact('users', 'panel_name'));

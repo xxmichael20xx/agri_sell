@@ -93,6 +93,10 @@ class SellerPanelController extends Controller
             }
         }
 
+        if ( isset( $_GET['dev'] ) ) {
+            dd( $total_sales, $payoutTotal, $refundsAmount );
+        }
+
         $total_sales_deduction_diff = $total_sales - $payoutTotal - $refundsAmount;
         if ( $total_sales_deduction_diff < 1 ) $total_sales_deduction_diff = 0;
         

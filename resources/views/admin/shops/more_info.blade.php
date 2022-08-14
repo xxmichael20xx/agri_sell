@@ -134,7 +134,7 @@
                     <div class="row">
                         <div class="col-md-12 pr-1">
                             <div class="form-group">
-                                <label>Transaction code</label>
+                                <label class="dark-highlight">Transaction code</label>
                                 <text class="form-control border-0">{{ $payment_details_obj->trans_id ?? 'not available'  }} </text>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                     <div class="row">
                     <div class="col-md-6 pr-1">
                             <div class="form-group">
-                                <label>Date created at</label>
+                                <label class="dark-highlight">Date created at</label>
                                 <text class="form-control border-0">{{ $payment_details_obj->created_at ?? 'not available'}} </text>
                             </div>
                         </div>

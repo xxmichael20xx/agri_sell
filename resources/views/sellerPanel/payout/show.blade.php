@@ -64,7 +64,7 @@
                             <span class="text-muted">
                                 <span class="dark-highlight">Amount:</span> ₱ {{ AppHelpers::numeric( $payout->amount ) }}
                                 @if ( $is_remittance && isset( $payout->metadata['remitt_amount'] ) )
-                                    (additional ₱{{ AppHelpers::numeric( $payout->metadata['remitt_amount'] ) }})
+                                    (+ ₱{{ AppHelpers::numeric( $payout->metadata['remitt_amount'] ) }} payout rate charges)
                                 @endif
                             </span>
                         </div>

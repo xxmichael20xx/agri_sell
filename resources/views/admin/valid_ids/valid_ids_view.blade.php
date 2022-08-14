@@ -122,13 +122,13 @@
                     <div class="row">
                         <div class="col-md-6 pr-1">
                             <div class="form-group">
-                                <label>Email</label>
+                                <label class="dark-highlight">Email</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->email }}</text>
                             </div>
                         </div>
                         <div class="col-md-6 pl-1">
                             <div class="form-group">
-                                <label>Mobile</label>
+                                <label class="dark-highlight">Mobile</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->mobile }}</text>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Birth day</label>
+                                <label class="dark-highlight">Birth day</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->bday }}</text>
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Address line/Purok</label>
+                                <label class="dark-highlight">Address line/Purok</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->address }}</text>
                             </div>
                         </div>
@@ -152,20 +152,20 @@
                     <div class="row">
                         <div class="col-md-4 pr-1">
                             <div class="form-group">
-                                <label>Barangay</label>
+                                <label class="dark-highlight">Barangay</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->barangay }}</text>
                             </div>
                         </div>
                        
                         <div class="col-md-4 pl-1">
                             <div class="form-group">
-                                <label>Town/City</label>
+                                <label class="dark-highlight">Town/City</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->town }}</text>
                             </div>
                         </div>
                         <div class="col-md-4 px-1">
                             <div class="form-group">
-                                <label>Province</label>
+                                <label class="dark-highlight">Province</label>
                                 <text class="form-control border-0">{{ $valid_id_user->owner->province }}</text>
                             </div>
                         </div>

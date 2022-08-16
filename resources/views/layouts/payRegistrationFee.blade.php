@@ -50,32 +50,30 @@
     <form method="POST" action="confirm_registration_fee" enctype="multipart/form-data">
         @csrf
         <div class="row justify-content-center mt-5">
-
             <div class="col col-lg-12 col-md-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="form-group row">
-                            
                             <label for="exampleFormControlFile1 text-secondary">
-                                Please send a clear proof of sending the fee<br>
-                                Click the choose file to upload the picture</label>
+                                Please send a clear proof of sending the fee
+                                <br>
+                                Click the choose file to upload the picture
+                            </label>
                             <input type="file" class="form-control-file" name="proofSellRegPayment" id="exampleFormControlFile1" required>
-                            
                         </div>
                         <div class="form-group row">
-                            
-                            <label for="trans_code col-4">
-                                Transaction code</label>                          
+                            <label for="trans_code col-4">Transaction code</label>                          
                             <input type="text" class="form-control col-12" name="trans_code" id="transaction_code" required>
-                                    
+                            @if( $errors->has( 'trans_code' ) )
+                                <span class="invalid-feedback d-block" role="alert">
+                                    <strong class="text-danger">{{ $errors->first( 'trans_code' ) }}</strong>
+                                </span>
+                            @enderror
                         </div>
-                </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    
-      
         <div class="row justify-content-center mt-5">
             <div class="col col-md-5">
                 <button type="submit" class="btn btn-primary w-100 p-2">Submit</button>

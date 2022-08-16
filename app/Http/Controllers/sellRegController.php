@@ -194,6 +194,11 @@ class sellRegController extends Controller
 
     // when user click submit payment in seller registration
     function confirm_registration_fee( Request $request ) {
+        $this->validate( $request, [
+            'proofSellRegPayment' => 'required',
+            'trans_code' => [ 'required', 'unique:seller_registration_fee,trans_id' ]
+        ] );
+
         $proofSellRegPaymentImage = $request->file('proofSellRegPayment');
         $proofImageSaveAsName = time() . uniqid() . "-paymentSellReg." . $proofSellRegPaymentImage->getClientOriginalExtension();
         

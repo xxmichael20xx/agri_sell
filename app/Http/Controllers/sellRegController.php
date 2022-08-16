@@ -22,7 +22,7 @@ class sellRegController extends Controller
         $users = seller_reg_fee::where( 'status', 0 )->where( 'trans_id', '!=', '' )->where( 'payment_proof', '!=', '' )->get();
 
         foreach ( $users as $user_index => $user ) {
-            if ( ! $user->shop || ! $user->owner ) $users->forget( $user_index );
+            if ( ! $user->owner ) $users->forget( $user_index );
         }
 
         $panel_name = "- Seller Registration";

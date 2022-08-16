@@ -8,7 +8,7 @@
 
         @forelse( $orders as $order )
             @php
-                $order_items = App\OrderItem::where( 'order_id', '=', $order->order->id )->latest()->get();
+                $order_items = App\OrderItem::where( 'order_id', $order->order->id )->latest()->get();
                 $grand_total = 0;
                 $vendors = [];
 
@@ -25,7 +25,7 @@
                 <div class="card mt-1 border-0">
                     <div class="card-body">
                         <table class="table">
-                            @foreach($order_items as $order_item_index => $order_item)
+                            @foreach( $order_items as $order_item_index => $order_item )
                                 @php
                                     $product_item = App\Product::find( $order_item->product_id );
                                     $grand_total = $order_item->price * $order_item->quantity;

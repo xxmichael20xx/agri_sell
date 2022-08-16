@@ -8,9 +8,9 @@
                 if ( ! $_order->has_items ) $orders->forget( $_index );
             }
         @endphp
-        @forelse($orders as $order)
+        @forelse( $orders as $order )
             @php
-                $order_items = App\SubOrderItem::where( 'sub_order_id', $order->order->id )->get();
+                $order_items = App\OrderItem::where( 'order_id', $order->order->id )->latest()->get();
                 $grand_total = 0;
                 $vendors = [];
 

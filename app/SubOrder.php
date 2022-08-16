@@ -49,7 +49,7 @@ class SubOrder extends Model
     }
 
     public function getHasItemsAttribute() {
-        $items = SubOrderItem::where( 'sub_order_id', $this->order_id )->get()->count();
+        $items = SubOrderItem::where( 'sub_order_id', $this->id )->get()->count();
         return ( $items > 0 ) ? true : false;
     }
 }

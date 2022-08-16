@@ -53,12 +53,12 @@
                         </div>
                         <div class="col-12 mb-2">
                             <p class="description mb-0 text-dark">
-                                Shop name: {{ $user_obj->shop->name }}
+                                <span class="dark-highlight">Shop name:</span> {{ $user_obj->shop->name }}
                             </p>
                         </div>
                         <div class="col-12 mb-2">
                             <p class="description mb-0 text-dark">
-                                Shop description: {{ $user_obj->shop->description }}
+                                <span class="dark-highlight">Shop description:</span> {{ $user_obj->shop->description }}
                             </p>
                         </div>
                         <div class="col-12 mb-2 mt-4">
@@ -66,12 +66,12 @@
                         </div>
                         <div class="col-12 mb-2">
                             <p class="description mb-0 text-dark">
-                                Name: {{ $user_obj->name }}
+                                <span class="dark-highlight">Name:</span> {{ $user_obj->name }}
                             </p>
                         </div>
                         <div class="col-12 mb-2">
                             <p class="description mb-0 text-dark">
-                                Address: {{ $user_obj->address }} {{ $user_obj->barangay }} {{ $user_obj->town }} {{ $user_obj->province }}
+                                <span class="dark-highlight">Address:</span> {{ $user_obj->address }} {{ $user_obj->barangay }} {{ $user_obj->town }} {{ $user_obj->province }}
                             </p>
                         </div>
                         @if ( $user->status !== '0' )

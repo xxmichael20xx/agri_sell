@@ -21,7 +21,7 @@
                                     {{ $user->owner->name }}
                                 </td>
                                 <td>
-                                    <img src="{{ asset( 'storage/'.$user->valid_id_path ) }}" height="100" alt="">
+                                    <img src="{{ asset( 'storage/'.$user->valid_id_path ) }}" width="150" height="100" alt="">
                                 </td>
                                 <td>
                                     @if ($user->is_valid == '1')

@@ -117,7 +117,11 @@
                                             @else
                                                 <span>₱ {{ AppHelpers::numeric( $item['price'] ) }}</span>
                                             @endif --}}
-                                            <span>₱ {{ AppHelpers::numeric( $item['price'] ) }}</span>
+                                            @if ( $variation_ent->is_variation_wholesale == 'yes' && $item['quantity'] >= $variation_ent->variation_min_qty_wholesale )
+                                                <span>₱ {{ AppHelpers::numeric( $variation_ent->variation_wholesale_price_per ) }}</span>
+                                            @else
+                                                <span>₱ {{ AppHelpers::numeric( $item['price'] ) }}</span>
+                                            @endif
                                         </span>
                                     </td>
                                     

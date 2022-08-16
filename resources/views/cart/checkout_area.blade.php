@@ -26,15 +26,23 @@
                         <tr class="cart_item" style="border-top: none !important;">
                             <td style="border: none !important;" class="product-name text-left ">{{ $item['name'] }}</td>
                             <td style="border: none !important;" class="product-total text-left text-left">
+                                @php
+                                    $variation_ent = App\ProductVariation::where('id', $item['id'])->first();
+                                    $price = $item['price'];
+
+                                    if ( $variation_ent->is_variation_wholesale == 'yes' ) {
+                                        $price = $variation_ent->variation_wholesale_price_per;
+                                    }
+                                @endphp
                                 <span class="amount">
-                                    <span>Price per product ₱ {{ $item['price'] }}</span>
+                                    <span>Price per product ₱ {{ $price }}</span>
                                     <br>
-                                    <span>₱ {{ $item['price'] }}</span>
+                                    <span>₱ {{ $price }}</span>
                                     x
                                     {{ $item['quantity'] }}
                                 </span>
                                 <br>
-                                <span class="amount">Total = ₱ {{ number_format( $item['price'] * $item['quantity'] ) }}</span>
+                                <span class="amount">Total = ₱ {{ number_format( $price * $item['quantity'] ) }}</span>
                             </td>
                         </tr>
                     @endforeach

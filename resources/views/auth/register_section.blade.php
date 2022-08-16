@@ -1,15 +1,12 @@
 <script>
-
         function setName() {
             var last_name = document.getElementById('last_name').value;
             var first_name = document.getElementById('first_name').value;
             var middle_initial = document.getElementById('middle_initial').value;
             document.getElementById('name').value = first_name + " " + middle_initial + " " + last_name;
         }
-
-    </script>
+</script>
 <!-- Large modal -->
-
 
 <div class="card border-0 shadow-lg">
     <div class="card-header border-0 text-white bg-success p-4">{{ __('Register') }}
@@ -17,38 +14,28 @@
  
     <div class="card-body">
         <div class="form-group row" hidden>
-            <label for="name"
-                   class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
+            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
             <div class="col-md-6">
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                       name="name" value="{{ old('name') }}" required autocomplete="name"
-                       autofocus>
-
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                 @error('name')
-                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                </span>
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
                 @enderror
             </div>
         </div>
 
         <div class="form-group row">
             <div class="col-md-5">
-                    <label for="first_name"
-                        class=" col-form-label text-md-right">{{ __('First Name') }}</label>
-                        <div class="input-group has-validation">
+                <label for="first_name" class=" col-form-label text-md-right">{{ __('First Name') }}</label>
+                <div class="input-group has-validation">
                     <input id="first_name" type="text" class="form-control" onchange="setName()" name="first_name" value="{{ old( 'first_name' ) }}" required>
-
-                    <div class="invalid-feedback">
-                    Please input your first name
-                    </div>
+                    <div class="invalid-feedback">Please input your first name</div>
                 </div>
             </div>
             <div class="col-md-4">
                 
-                <label for="last_name"
-                       class=" col-form-label text-md-right">{{ __('Last Name') }}</label>
+                <label for="last_name"class=" col-form-label text-md-right">{{ __('Last Name') }}</label>
                 <div class="input-group has-validation">
                 <input id="last_name" onchange="" type="text" onchange="setName()" class="form-control" name="last_name" value="{{ old( 'last_name' ) }}" required>
                 <div class="invalid-feedback">
@@ -60,7 +47,7 @@
             <div class="col-md-3">
                 <label for="first_name"
                        class=" col-form-label text-md-right">{{ __('Middle Initial') }}</label>
-                <input id="middle_initial" type="text" class="form-control" onchange="setName()" name="middle_initial" value="{{ old( 'middle_initial' ) }}" required>
+                <input id="middle_initial" type="text" class="form-control" onchange="setName()" name="middle_initial" value="{{ old( 'middle_initial' ) }}">
                 <div class="invalid-feedback">
                     Please enter your middle initial
                 </div>

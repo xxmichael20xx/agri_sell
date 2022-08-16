@@ -73,7 +73,6 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-
         $request = request();
 
         $valid_idImage = $request->file('valid_id');

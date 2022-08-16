@@ -11,7 +11,7 @@ class GuestController extends Controller
         $validator = Validator::make( $request->all(), [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'middle_initial' => ['required', 'string', 'max:1'],
+            'middle_initial' => ['nullable', 'string', 'max:1'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'mobile' => ['required', 'regex:/^[0-9]{11}+$/'],

@@ -93,7 +93,7 @@ class SellerPayoutController extends Controller
             }
         }
 
-        $rates = config( 'remittance' );
+        $rates = config( 'remittance.display' );
 
         $panel_name = 'payout';
         return view( 'sellerPanel.payout.new', compact(
@@ -177,7 +177,7 @@ class SellerPayoutController extends Controller
 
         $is_remittance = $request->payout_type == 'remit';
         $_amount = $request->amount;
-        $remittances = config( 'remittance' );
+        $remittances = config( 'remittance.code' );
         $remittance_amount = 0;
 
         if ( $is_remittance ) {

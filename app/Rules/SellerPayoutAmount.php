@@ -86,7 +86,7 @@ class SellerPayoutAmount implements Rule
 
         $is_remittance = $this->request->payout_type == 'remit';
         $_amount = $this->request->amount;
-        $remittances = config( 'remittance' );
+        $remittances = config( 'remittance.code' );
         $remittance_amount = 0;
 
         if ( $is_remittance ) {

@@ -230,16 +230,14 @@
                                 <thead>
                                     <tr>
                                         <th>Amount</th>
-                                        <th>Amount</th>
                                         <th>Fee</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ( $rates as $rate )
                                         <tr>
-                                            <td>₱ {{ AppHelpers::numeric( $rate[0], 2 ) }}</td>
+                                            <td>{{ $rate[0] }}</td>
                                             <td>₱ {{ AppHelpers::numeric( $rate[1], 2 ) }}</td>
-                                            <td>₱ {{ AppHelpers::numeric( $rate[2], 2 ) }}</td>
                                         </tr>
                                     @empty
                                         <tr>

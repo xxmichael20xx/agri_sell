@@ -106,13 +106,24 @@
                                                             <option value="" selected disabled>Select an option</option>
                                                             @if ( $payout->metadata && $payout->metadata['type'] == 'Bank' )
                                                                 <option value="Credit card expired">Credit card expired</option>
+                                                                <option value="Your bank account was closed">Your bank account was closed</option>
                                                                 <option value="Unverified Account Name/Number">Unverified Account Name/Number</option>
                                                                 <option value="Incorrect Account number">Incorrect Account number</option>
                                                                 <option value="Credit card declined">Credit card declined</option>
+                                                                <option value="Your information about your bank account is not valid (e.g. invalid account number)">Your information about your bank account is not valid (e.g. invalid account number)</option>
+                                                                <option value="Your account is frozen or has restrictions">Your account is frozen or has restrictions</option>
+                                                                <option value="Your bank does not accept the given currency, etc.">Your bank does not accept the given currency, etc.</option>
+                                                                <option value="Wrong control number">Wrong control number</option>
+                                                                <option value="Invalid id">Invalid id</option>
+                                                                <option value="Others">Others</option>
+                                                            @elseif( $payout->metadata && $payout->metadata['type'] == 'Remit' )
+                                                                <option value="The remit account details is not valid (e.g. invalid number)">The remit account details is not valid (e.g. invalid number)</option>
+                                                                <option value="Invalid id">Invalid id</option>
                                                                 <option value="Others">Others</option>
                                                             @else
                                                                 <option value="Unverified GCash name/number">Unverified GCash name/number</option>
                                                                 <option value="Invalid GCash number">Invalid GCash number</option>
+                                                                <option value="Invalid id">Invalid id</option>
                                                                 {{-- <option value="Payout amount exceeded your sales">Payout amount exceeded your sales</option> --}}
                                                                 <option value="Others">Others</option>
                                                             @endif

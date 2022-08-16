@@ -148,9 +148,8 @@
                 @enderror
             </div>
             <div class="col-md-6">
-                <label for="b-day"
-                       class="col-form-label text-md-right">{{ __('Birthday') }}</label>
-                <input type="date" name="bday" class="form-control" value="{{ old( 'bday' ) }}" required/>
+                <label for="b-day" class="col-form-label text-md-right">{{ __('Birthday') }}</label>
+                <input type="date" name="bday" id="bday" class="form-control" value="{{ old( 'bday' ) }}" max="{{ date('Y-m-d') }}" required/>
                 <div class="invalid-feedback">
                     Please select birth date
                 </div>

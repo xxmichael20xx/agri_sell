@@ -58,6 +58,7 @@ class SellerPanelController extends Controller
         
         foreach ( $order_items as $order_item ) {
             $mainOrder = Order::find( $order_item->order_id );
+            if ( ! $mainOrder ) continue;
             if ( $mainOrder->payment_method !== 'agrisell_coins' ) continue;
             if ( $order_item->status == 'completed' && $order_item->payout_request && count( $order_item->items ) > 0 ) {
                 foreach( $order_item->items as $item ) {

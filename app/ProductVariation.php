@@ -10,4 +10,8 @@ class ProductVariation extends Model
     protected $table = "product_variations";
     public $timestamps = false;
 
+    protected $casts = [
+        'metadata' => 'array'
+    ];
+
 }

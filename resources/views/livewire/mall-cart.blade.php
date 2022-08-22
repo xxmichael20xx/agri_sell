@@ -135,7 +135,21 @@
                                             @if ( $variation_ent->is_variation_wholesale == 'yes' && $item['quantity'] >= $variation_ent->variation_min_qty_wholesale )
                                                 <span>₱ {{ AppHelpers::numeric( $variation_ent->variation_wholesale_price_per ) }}</span>
                                             @else
-                                                <span>₱ {{ AppHelpers::numeric( $item['price'] ) }}</span>
+                                                <span>₱ {{ AppHelpers::numeric( $variation_ent->variation_price_per ) }}</span>
+                                            @endif
+
+                                            @if ( $variation_ent->metadata )
+                                                @if ( $variation_ent->is_variation_wholesale == 'yes' )
+                                                    @if ( isset( $variation_ent->metadata['whole_before'] ) )
+                                                        <span class="text-danger d-block">Before: ₱ {{ AppHelpers::numeric( $variation_ent->metadata['whole_before'] ) }}</span>
+                                                    @endif
+                                                @endif
+
+                                                @if ( $variation_ent->is_variation_wholesale != 'yes' )
+                                                    @if ( isset( $variation_ent->metadata['retail_before'] ) )
+                                                        <span class="text-danger d-block">Before: ₱ {{ AppHelpers::numeric( $variation_ent->metadata['retail_before'] ) }}</span>
+                                                    @endif
+                                                @endif
                                             @endif
                                         </span>
                                     </td>

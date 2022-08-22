@@ -12,6 +12,7 @@ use App\adminNotifModel;
 use App\ProductImage;
 use App\Rules\NumberChecker;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductMgmtPanelController extends Controller
 {
@@ -827,6 +828,18 @@ class ProductMgmtPanelController extends Controller
         $firstVariation = ProductVariation::where( 'product_id', $request->product_id )->first();
 
         if ( $firstVariation ) {
+            $current_price = $firstVariation->variation_price_per;
+            $current_whole_price = $firstVariation->variation_wholesale_price_per;
+            $var_metadata = NULL;
+
+            if ( $current_price != $request->retail_price ) {
+                $var_metadata['retail_before'] = $current_price;
+            }
+
+            if ( $is_wholesale && $current_whole_price != $request->wholesale_price ) {
+                $var_metadata['whole_before'] = $current_whole_price;
+            }
+
             $firstVariation->variation_name = $checkVariants ? $request->product_name : "Regular";
             $firstVariation->is_variation_wholesale = $is_wholesale ? 'yes' : 'no';
             $firstVariation->is_variation_wholesale_only = $is_wholesale ? 'yes' : 'no';
@@ -838,6 +851,7 @@ class ProductMgmtPanelController extends Controller
             $firstVariation->product_size = $request->product_size;
             $firstVariation->variation_net_weight = $request->standard_net_weight;
             $firstVariation->variation_net_weight_unit = $request->standard_net_weight_unit;
+            $firstVariation->metadata = $var_metadata;
             $firstVariation->save();
         }
 
@@ -866,6 +880,19 @@ class ProductMgmtPanelController extends Controller
                 }
 
                 $productVariation = isset( $multiple_variant_ids[$index] ) ? ProductVariation::find( $multiple_variant_ids[$index] ) : new ProductVariation;
+
+                $current_price = $productVariation->variation_price_per;
+                $current_whole_price = $productVariation->variation_wholesale_price_per;
+                $var_metadata = NULL;
+
+                if ( $current_price != $multiple_variation_prices[$index] ) {
+                    $var_metadata['retail_before'] = $current_price;
+                }
+
+                if ( $variant_wholesale && $current_whole_price != $multiple_variant_wholesale_price[$index] ) {
+                    $var_metadata['whole_before'] = $current_whole_price;
+                }
+
                 $productVariation->product_id = $request->product_id;
                 $productVariation->variation_name = $multiple_variation_names[$index];
                 $productVariation->variation_sold_per = $multiple_variant_soldper[$index];
@@ -878,6 +905,7 @@ class ProductMgmtPanelController extends Controller
                 $productVariation->is_variation_wholesale = $variant_wholesale ? 'yes' : 'no';
                 $productVariation->variation_price_per = $multiple_variation_prices[$index];
                 $productVariation->is_variation_wholesale_only = $variant_wholesale ? 'yes' : 'no';
+                $productVariation->metadata = $var_metadata;
                 $productVariation->save();
             }
         } else {

@@ -105,19 +105,28 @@ class Controller extends BaseController
     }
 
     public function sendEmailNotif( $data, $dev = false ) {
+        // Add a condition to set the email receiver
         switch ( $dev ) {
+            // if development is true set the email to a dummy email
             case true:
                 $email = 'test.test@mailinator.com';
                 break;
 
+            // else find the user by id and get the users' email
             default:
                 $user = User::find( $data['id'] );
                 $email = $user->email ?? 'test.test@mailinator.com';
                 break;
         }
+
+        // Changed the "to" data with the value of the condition above
         $data['to'] = $email;
 
+        // Added a logger/information text to check what recepient receives the email
         Log::info( json_encode( $data ) );
+
+        // Create a job/schedule to send an email
+        // the dispatch is a Laravel method to create a scheduled actions like email, sms, etc.
         dispatch( new SendEmailJob( $data ) );
     }
 }

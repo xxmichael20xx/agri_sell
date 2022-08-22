@@ -61,7 +61,7 @@
 
                     <tr class="cart-subtotal-additional text-left collapse" id="shipping_fee_dialog_additional">
                         <th class="text-left">
-                            Basket Additional Shipping fee
+                            Additional Delivery Fee
                             <br>
                             <small class="text-danger pr-3">Note: Additional shipping fee is added when you<br>reach the standard weight limit of your order.</small>
                         </th>

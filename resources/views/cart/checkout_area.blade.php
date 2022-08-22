@@ -55,7 +55,7 @@
                     </tr>
                   
                     <tr class="cart-subtotal text-left">
-                        <th class="text-left">Basket Shipping fee</th>
+                        <th class="text-left">Delivery Fee</th>
                         <td class="text-left"><span class="amount">  <span id="shipping_fee_dialog" data-shipping="₱ {{ \Cart::session(auth()->id())->getShippingFee() }}">₱ 0</span></span></td>
                     </tr>
 

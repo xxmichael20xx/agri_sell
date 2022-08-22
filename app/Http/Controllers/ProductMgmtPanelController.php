@@ -832,11 +832,15 @@ class ProductMgmtPanelController extends Controller
             $current_whole_price = $firstVariation->variation_wholesale_price_per;
             $var_metadata = NULL;
 
+            // Checked if the variant price has been changed
             if ( $current_price != $request->retail_price ) {
+                // Set the before retail price to the current price
                 $var_metadata['retail_before'] = $current_price;
             }
 
+            // Checked if the variant is wholesale and if the price has been changed
             if ( $is_wholesale && $current_whole_price != $request->wholesale_price ) {
+                // Set the before wholesale price to the current price
                 $var_metadata['whole_before'] = $current_whole_price;
             }
 
@@ -885,11 +889,15 @@ class ProductMgmtPanelController extends Controller
                 $current_whole_price = $productVariation->variation_wholesale_price_per;
                 $var_metadata = NULL;
 
+                // Checked if the variant price has been changed
                 if ( $current_price != $multiple_variation_prices[$index] ) {
+                    // Set the before retail price to the current price
                     $var_metadata['retail_before'] = $current_price;
                 }
 
+                // Checked if the variant is wholesale and if the price has been changed
                 if ( $variant_wholesale && $current_whole_price != $multiple_variant_wholesale_price[$index] ) {
+                    // Set the before wholesale price to the current price
                     $var_metadata['whole_before'] = $current_whole_price;
                 }
 

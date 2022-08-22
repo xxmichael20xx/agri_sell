@@ -68,7 +68,7 @@
                                     @php
                                         $product_inst = App\Product::where('id', $item['product_id'])->first();
                                         $var = App\ProductVariation::find($item['variation_id']);
-                                        $var_qty = $var->variation_quantity ?? '';
+                                        $var_qty = $var->variation_quantity ?? 0; // Saved the variant quantity to a variable
                                     @endphp
                                     <td class="product-thumbnail">
                                         <a href="/products/{{ $item['product_id'] }}">
@@ -78,19 +78,24 @@
 
                                     <td class="product-name">
                                         <a href="/products/{{ $item['product_id'] }}"> {{ $item['name'] }}</a>
-                                        @if ( $var_qty )
+                                        {{-- Check if the variant has price then display the sold per value --}}
+                                        @if ( $var->variation_sold_per )
                                             <p class="text-muted">Sold per: {{ $var->variation_sold_per }}</p>
                                         @endif
                                     </td>
 
                                     <td class="product-quantity">
                                         <livewire:cart-update-form :item="$item" :key="$item['id']" />
+                                        {{-- Check if the variant quantity is greater thand and less than 20 --}}
+                                        {{-- If Yes, then display the <qty> items left --}}
                                         @if ( $var_qty > 1 && $var_qty <= 20 )
                                             <span class="text-danger">
                                                 {{ $var_qty }} items left
                                             </span>
                                         @endif
 
+                                        {{-- Check if the variant quantity is 0 --}}
+                                        {{-- If Yes, then display Out of stock! --}}
                                         @if ( $var_qty < 1 )
                                             <span class="text-danger">
                                                 Out of stock!

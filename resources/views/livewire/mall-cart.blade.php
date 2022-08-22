@@ -67,7 +67,8 @@
                                 <tr>
                                     @php
                                         $product_inst = App\Product::where('id', $item['product_id'])->first();
-                                        $product_variation_obj = App\ProductVariation::find($item['variation_id']);
+                                        $var = App\ProductVariation::find($item['variation_id']);
+                                        $var_qty = $var->variation_quantity ?? '';
                                     @endphp
                                     <td class="product-thumbnail">
                                         <a href="/products/{{ $item['product_id'] }}">
@@ -77,14 +78,28 @@
 
                                     <td class="product-name">
                                         <a href="/products/{{ $item['product_id'] }}"> {{ $item['name'] }}</a>
+                                        @if ( $var_qty )
+                                            <p class="text-muted">Sold per: {{ $var->variation_sold_per }}</p>
+                                        @endif
                                     </td>
 
                                     <td class="product-quantity">
-                                        <livewire:cart-update-form :item="$item" :key="$item['id']" />                        
+                                        <livewire:cart-update-form :item="$item" :key="$item['id']" />
+                                        @if ( $var_qty > 1 && $var_qty <= 20 )
+                                            <span class="text-danger">
+                                                {{ $var_qty }} items left
+                                            </span>
+                                        @endif
+
+                                        @if ( $var_qty < 1 )
+                                            <span class="text-danger">
+                                                Out of stock!
+                                            </span>
+                                        @endif
                                     </td>
 
                                     <td class="product-name">
-                                        <span class="amount">{{ $product_variation_obj->variation_name ?? 'no variation' }}</span>
+                                        <span class="amount">{{ $var->variation_name ?? 'no variation' }}</span>
                                     </td>
 
                                     {{-- <td class="product-name">

@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Log;
 class coinsTopUp extends Controller
 {
     function submitTopUp(Request $request){
+        $this->validate( $request, [
+            'transaction_id' => [ 'required', 'regex:/^[0-9]+$/' ]
+        ], [
+            'transaction_id.regex' => 'Transaction number must be numbers only.'
+        ] );
+
         $is_trans_code_existed = TransactionCode::trans_code_duplicate_check_display($request->transaction_id);
 
         if ( $is_trans_code_existed == 'no' ) {

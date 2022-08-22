@@ -67,6 +67,11 @@
                     </select>
                     <label class="mt-3">Reference number: </label>
                     <input type="text" class="form-control-sm" name="transaction_id">
+                    @if ( $errors->has( 'transaction_id' ) )
+                        <span class="text-danger">
+                            {{ $errors->first( 'transaction_id' ) }}
+                        </span>
+                    @endif
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlFile1" class="text-secondary">
@@ -77,10 +82,16 @@
             </div>
 
         </div>
-        <div class="row ">
+        <div class="row">
             <div class="col col-md-12">
-            <div class="quickview-btn-cart">
-                    <a class="btn-hover-black text-white"  onclick="document.getElementById('coins_top_up').submit();">Submit</a>
+            <div class="quickview-btn-cart ml-0">
+                <a 
+                    class="btn-hover-black text-white" 
+                    onclick="document.getElementById('coins_top_up').submit();"
+                    style="cursor: pointer;"
+                >
+                    Submit
+                </a>
             </div>
             </div>
         </div>

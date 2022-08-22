@@ -62,6 +62,8 @@ class GlobalProductController extends Controller
             array_push( $vendors, $product_inst->shop->owner->town );
         }
 
+        $vendors = array_unique( $vendors );
+
         foreach ( $vendors as $vendor ) {
             $rate = DB::table( 'shipping_fee_table_matrix' )
                 ->where( 'customer_address', $town )

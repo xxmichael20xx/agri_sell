@@ -275,11 +275,15 @@
                 body: JSON.stringify( shippingData ) 
             } ).then( r => r.json() ).then( res => {
                 if ( res.success ) {
+                    const shipType = $( '#deliver_option' ).val()
                     const ship = $( '#shipping_fee_dialog' )
                     const total = $( '#order_total_delivery' )
-                    ship.attr( 'data-shipping' , `₱ ${res.rate}` )
-                    ship.text( `₱ ${res.rate}` )
-                    total.text( `₱ ${res.total}` )
+
+                    if ( shipType == 'delivery' ) {
+                        ship.attr( 'data-shipping' , `₱ ${res.rate}` )
+                        ship.text( `₱ ${res.rate}` )
+                        total.text( `₱ ${res.total}` )
+                    }
                 }
             } )
         }

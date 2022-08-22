@@ -44,6 +44,20 @@ class CoinsTopUpAdminController extends Controller
             $status_messages = '<br>Coins top up for <br>' . $coinsTopUp->reference_id . '<br>is completed';
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
+
+            $emailData = [
+                'id' => $notification_ent->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $notification_ent->notification_txt
+            ];
+            $this->sendEmailNotif( $emailData );
+
+            $emailData = [
+                'id' => $coinsTopUp->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $status_messages
+            ];
+            $this->sendEmailNotif( $emailData );
         // DB::table('coins_top_up')->where('id', $trans_id)->update(['remarks' => 1]);
         return back();
     }
@@ -62,7 +76,15 @@ class CoinsTopUpAdminController extends Controller
             $notification_ent->notification_title = 'Coins top up for ' . $coinsTopUp->reference_id;
             $status_messages = '<br>Coins top up for <br>' . $coinsTopUp->reference_id . '<br>is declined';
             $notification_ent->notification_txt = $status_messages;
-            $notification_ent->save();        return back();
+            $notification_ent->save();
+            
+            $emailData = [
+                'id' => $coinsTopUp->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $status_messages
+            ];
+            $this->sendEmailNotif( $emailData );
+            return back();
     }
 
     function edit_coins_top_up_submit(Request $req){

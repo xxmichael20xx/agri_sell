@@ -50,6 +50,13 @@ class AdminPayoutController extends Controller
         $adminNotification->notification_txt = $text;
         $adminNotification->save();
 
+        $emailData = [
+            'id' => $payout->user_id,
+            'subject' => $adminNotification->notification_title,
+            'details' => $adminNotification->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
+
         event( new PayoutEvent( [ 'user_id' => $payout->user_id ] ) );
         
         return response()->json( $data );

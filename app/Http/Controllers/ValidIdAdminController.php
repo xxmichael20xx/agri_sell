@@ -45,6 +45,13 @@ class ValidIdAdminController extends Controller
         $notification_ent->save();
         $user_valid_id->save();
 
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
+
         // $adminnotif_ent = new adminNotifModel();
         // $adminnotif_ent->action_type = 'Product addition';
         // $adminnotif_ent->user_id = Auth::user()->id;
@@ -96,6 +103,12 @@ class ValidIdAdminController extends Controller
         $notification_ent->notification_txt = $notification_txt;
         $notification_ent->save();
 
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
         event( new ShopEvent( [ 'customer_id' => $user_valid_id->user_id, 'type' => 'order-event' ] ) );
      
         return back();

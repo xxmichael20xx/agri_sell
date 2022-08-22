@@ -56,6 +56,13 @@ class sellRegController extends Controller
         $notification_ent->notification_txt = 'Invalid seller amount please register your shop again';
         $notification_ent->save();
 
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
+
         return back();
     }
      
@@ -83,6 +90,13 @@ class sellRegController extends Controller
         $notification_ent->notification_title = 'Seller registration fee status';
         $notification_ent->notification_txt = 'Your shop is approved you may now open<br>your shop in the <a class="btn btn-primary" href="/sellerpanel">Seller panel</a>';
         $notification_ent->save();
+
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
   
         return back();
     }
@@ -119,6 +133,13 @@ class sellRegController extends Controller
         $notification_ent->notification_txt = 'Invalid seller amount. Please register your payment again. <br>Reason: ' . $reason;
         $notification_ent->save();
 
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
+
         return redirect( '/admin/sell_reg_fees' )->with( 'info', "Seller Registration #{$request->sell_reg_id} has been marked as invalid." );
     }
 
@@ -152,6 +173,13 @@ class sellRegController extends Controller
         $notification_ent->save();
         // end of notification entity
         $sell_reg_inst->save();
+
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
         return back();
     }
 

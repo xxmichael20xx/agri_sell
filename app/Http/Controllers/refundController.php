@@ -90,6 +90,13 @@ class refundController extends Controller
         $notification_ent->notification_txt = 'Your refund process for : ' . Product::where('id', $req->product_id)->first()->name . ' is on progress<br>You can check your refund request in the <a href="/user_refund_requests"/ class="/btn btn-light"/> My refund requests section</a>';                ;
         $notification_ent->save();
 
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
+
         $coinUser = User::where( 'email', 'coins@agrisell.com' )->first();
         $adminUser = User::where( 'email', 'agrisell2077@gmail.com' )->first();
         $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
@@ -103,6 +110,13 @@ class refundController extends Controller
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
 
+            $emailData = [
+                'id' => $notification_ent->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $notification_ent->notification_txt
+            ];
+            $this->sendEmailNotif( $emailData );
+
             event( new ShopEvent( [ 'customer_id' => $coinUser->id ] ) );
         }
 
@@ -113,6 +127,13 @@ class refundController extends Controller
             $notification_ent->notification_title = 'Refund request for ' . $refund_request->refund_ref_id;
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
+            
+            $emailData = [
+                'id' => $notification_ent->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $notification_ent->notification_txt
+            ];
+            $this->sendEmailNotif( $emailData );
             event( new ShopEvent( [ 'customer_id' => $adminUser->id ] ) );
         }
 
@@ -157,6 +178,13 @@ class refundController extends Controller
         $notification_ent->notification_txt = 'Your refund process for : ' . Product::where('id', $refund_request->product_id)->first()->name . 'is ' . $status_name;
         $notification_ent->save();
         // end of notification entity
+
+        $emailData = [
+            'id' => $notification_ent->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $notification_ent->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
         return back();
 
     }

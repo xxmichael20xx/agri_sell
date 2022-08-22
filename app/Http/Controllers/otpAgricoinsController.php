@@ -145,6 +145,13 @@ class otpAgricoinsController extends Controller
             $notification_ent->notification_title = 'Otp agricoins status';
             $notification_ent->notification_txt = 'Your OTP verification for this order: ' . $order->order_number . '<br>You have paid ' . $order->grand_total;
             $notification_ent->save();
+
+            $emailData = [
+                'id' => $notification_ent->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $notification_ent->notification_txt
+            ];
+            $this->sendEmailNotif( $emailData );
             
             // end of notification entity
             $order_obj->save();
@@ -152,14 +159,23 @@ class otpAgricoinsController extends Controller
             // perform some unverfied suborder tables
             $order_obj = Order::where('order_number', $order_num)->first();
             $order_obj->agrisell_coins_payment_status = 'denied';
-              // notification entity
-              $notification_ent = new notification();
-              $notification_ent->user_id =  Auth::user()->id;
-              $notification_ent->frm_user_id = '1';
-              $notification_ent->notification_title = 'Otp agricoins status';
-              $notification_ent->notification_txt = 'Otp agricoins failed please try again for your order' . $order_num;
-              $notification_ent->save();
-              // end of notification entity
+
+            // notification entity
+            $notification_ent = new notification();
+            $notification_ent->user_id =  Auth::user()->id;
+            $notification_ent->frm_user_id = '1';
+            $notification_ent->notification_title = 'Otp agricoins status';
+            $notification_ent->notification_txt = 'Otp agricoins failed please try again for your order' . $order_num;
+            $notification_ent->save();
+            // end of notification entity
+
+            $emailData = [
+                'id' => $notification_ent->user_id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $notification_ent->notification_txt
+            ];
+            $this->sendEmailNotif( $emailData );
+
             $order_obj->save();
             $otp_verification = 'false';
         }

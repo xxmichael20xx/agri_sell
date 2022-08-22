@@ -227,6 +227,13 @@ class SellerPayoutController extends Controller
         $adminNotification->notification_txt = "Payout request from Seller '{$seller->name}'";
         $adminNotification->save();
 
+        $emailData = [
+            'id' => $adminNotification->user_id,
+            'subject' => $adminNotification->notification_title,
+            'details' => $adminNotification->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
+
         event( new PayoutEvent( [ 'user_id' => $admin_id->id ] ) );
 
         return response()->json( [
@@ -266,6 +273,12 @@ class SellerPayoutController extends Controller
         $adminNotification->notification_txt = "Payout request from Seller '{$seller->name}'";
         $adminNotification->save();
 
+        $emailData = [
+            'id' => $adminNotification->user_id,
+            'subject' => $adminNotification->notification_title,
+            'details' => $adminNotification->notification_txt
+        ];
+        $this->sendEmailNotif( $emailData );
         event( new PayoutEvent( [ 'user_id' => $admin_id->id ] ) );
 
         return response()->json( [

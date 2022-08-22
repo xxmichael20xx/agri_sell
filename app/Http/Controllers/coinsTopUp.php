@@ -11,6 +11,7 @@ use App\TransactionCode;
 use App\notification;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class coinsTopUp extends Controller
 {
@@ -50,12 +51,19 @@ class coinsTopUp extends Controller
 
             // notification entity for orders
             $notification_ent = new notification();
-            $notification_ent->user_id = Auth::user()->id;
+            $notification_ent->user_id = auth()->user()->id;
             $notification_ent->frm_user_id = '2';
             $notification_ent->notification_title = 'Coins top up for ' . $coinsTopUpModel->reference_id;
             $status_messages = '<br>Your coins top up for the value ' .$request->coins_top_up_amount .'<br>PLEASE WAIT FOR THE CONFIRMATION WITHIN 24 HOURS.</br>';
             $notification_ent->notification_txt = $status_messages;
             $notification_ent->save();
+
+            $emailData = [
+                'id' => auth()->user()->id,
+                'subject' => $notification_ent->notification_title,
+                'details' => $status_messages
+            ];
+            $this->sendEmailNotif( $emailData );
 
             $coinUser = User::where( 'email', 'coins@agrisell.com' )->first();
             $currentTime = Carbon::parse( time() )->format( 'M d, Y h:i:s' );
@@ -100,6 +108,13 @@ class coinsTopUp extends Controller
 
         $notification_ent->notification_txt = $status_messages;
         $notification_ent->save();
+
+        $emailData = [
+            'id' => $coinsTopUpModel->user_id,
+            'subject' => $notification_ent->notification_title,
+            'details' => $status_messages
+        ];
+        $this->sendEmailNotif( $emailData, 'others' );
 
         event( new CoinEvent( [ 'user_id' => $coinsTopUpModel->user_id, 'type' => 'update-top-up' ] ) );
         

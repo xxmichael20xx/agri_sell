@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Exports\Shop;
+use App\Jobs\SendEmailJob;
+use App\Mail\NotificationEmail;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class TestCommand extends Command
 {
@@ -38,8 +41,11 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $shopExport = new Shop( 'full', 'top' );
-
-        dd( $shopExport->collection() );
+        $data = [
+            'to' => 'test.test@mailinator.com',
+            'subject' => 'Test Subject',
+            'details' => "WITH DATA"
+        ];
+        dispatch( new SendEmailJob( $data ) );
     }
 }

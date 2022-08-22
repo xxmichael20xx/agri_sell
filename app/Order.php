@@ -75,7 +75,6 @@ class Order extends Model
             }
 
             $subOrderItems = SubOrderItem::where( 'sub_order_id', $suborder->id )->get();
-            \Log::info( json_encode( [ "COUNT" . $subOrderItems->count(), "ID -- " . $suborder->id ] ) );
             
             if ( $subOrderItems->count() > 0 ) {
                 foreach ( $subOrderItems as $key => $subOrderItem ) {

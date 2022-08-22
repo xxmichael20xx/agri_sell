@@ -58,14 +58,14 @@
             <div class="form-group">
             <label> It may take up to 24 hours for the money to be credited in your account</label><br>
                     <label>Amount in Pesos:</label>
-                    <input type="number" class="form-control-sm" name="coins_top_up_amount">
+                    <input type="number" class="form-control-sm mb-3" name="coins_top_up_amount">
                     <label>Transaction type</label>
                     <select name="coins_top_up_type">
                         <option value="gcash">Gcash</option>
                         <option value="paymaya">Paymaya</option>
                         <option value="rem_centers">Remittance centers</option>                   
                     </select>
-                    <label>Transaction/Reference # code: </label>
+                    <label class="mt-3">Reference number: </label>
                     <input type="text" class="form-control-sm" name="transaction_id">
                 </div>
                 <div class="form-group">

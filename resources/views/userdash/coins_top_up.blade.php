@@ -65,7 +65,7 @@
                         <option value="paymaya">Paymaya</option>
                         <option value="rem_centers">Remittance centers</option>                   
                     </select>
-                    <label class="mt-3">Reference number: </label>
+                    <label class="mt-3">Reference/Transaction number: </label>
                     <input type="text" class="form-control-sm" name="transaction_id">
                     @if ( $errors->has( 'transaction_id' ) )
                         <span class="text-danger">

@@ -188,6 +188,7 @@ class OrderController extends Controller
 
         $_is_pickup = $order->is_pick_up == 'yes' ? TRUE : FALSE;
         $order->grand_total = $cart_session->getTotal( $_is_pickup );
+        $order->tax = $request->tax;
         $order->shipping_fee = $_is_pickup ? 0 : $cart_session->getShippingFee( $request->town ) + $cart_session->getTotalnetweightShippingAdditionals();
         $order->item_count = $cart_session->getContent()->count();
 

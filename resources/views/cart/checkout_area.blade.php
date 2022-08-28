@@ -50,7 +50,15 @@
                 </tbody>
                 <tfoot>
                     <tr class="cart-subtotal text-left">
-                        <th class="text-left">Basket Subtotal</th>
+                        <th class="text-left">
+                            Basket Subtotal
+                            <br>
+                            @php
+                                $getSubTotal = \Cart::session(auth()->id())->getSubTotal();
+                                $tax = number_format( ( 12 / 100 ) * $getSubTotal );
+                            @endphp
+                            <small class="pr-3">Tax: ₱ {{ number_format( $tax ) }}</small>
+                        </th>
                         <td class="text-left"><span class="amount">₱ {{ number_format( \Cart::session(auth()->id())->getSubTotal() ) }}</span></td>
                     </tr>
                   

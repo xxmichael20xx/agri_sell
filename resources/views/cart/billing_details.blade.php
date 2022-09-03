@@ -90,11 +90,6 @@
                         <input type="text" name="shipping_state" value="{{ $autofill_data->province }}" placeholder="Province" readonly>
                     </div>
                 </div>
-                @php
-                    $getSubTotal = \Cart::session(auth()->id())->getSubTotal();
-                    $tax = number_format( ( 12 / 100 ) * $getSubTotal );
-                @endphp
-                <input type="hidden" name="tax" value="{{ $tax }}">
                 <input type="hidden" name="shipping_state" value="na" id="" class="form-control">
                 <input type="hidden" name="shipping_city" value="na" id="" class="form-control">
                 <input type="hidden" name="shipping_zipcode" value="na" id="" class="form-control">

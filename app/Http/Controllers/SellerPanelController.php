@@ -55,11 +55,10 @@ class SellerPanelController extends Controller
         
         $total_sales = 0;
         $order_items = $shop_orders;
-        $main_order_ids = [];
         
         foreach ( $order_items as $order_item ) {
-            $mainId = $order_item->order_id;
-            $mainOrder = Order::find( $mainId );
+            $mainOrder = Order::find( $order_item->order_id );
+
             if ( ! $mainOrder ) continue;
             if ( $mainOrder->payment_method !== 'agrisell_coins' ) continue;
             if ( $order_item->status == 'completed' && $order_item->payout_request && count( $order_item->items ) > 0 ) {
@@ -67,19 +66,6 @@ class SellerPanelController extends Controller
                     $item_pivot = $item->pivot;
                     $total_sales += $item_pivot->price * $item_pivot->quantity;
                 }
-            }
-
-            if ( ! in_array( $mainId, $main_order_ids ) ) {
-                array_push( $main_order_ids, $mainId );
-            }
-        }
-
-        foreach( $main_order_ids as $main_order_id ) {
-            $_main_order = Order::find( $main_order_id );
-
-            if ( $_main_order ) {
-                $taxes[] = isset( $_main_order->tax );
-                $total_sales = $total_sales - $_main_order->tax;
             }
         }
 

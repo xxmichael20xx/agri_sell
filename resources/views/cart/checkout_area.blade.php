@@ -56,10 +56,12 @@
                             @php
                                 $getSubTotal = \Cart::session(auth()->id())->getSubTotal();
                                 $tax = number_format( ( 12 / 100 ) * $getSubTotal );
+
+                                $newGetSubTotal = number_format( $getSubTotal - $tax );
                             @endphp
-                            <small class="pr-3">Tax: ₱ {{ number_format( $tax ) }}</small>
+                            <small class="pr-3">Tax: ₱ {{ $tax }}</small>
                         </th>
-                        <td class="text-left"><span class="amount">₱ {{ number_format( \Cart::session(auth()->id())->getSubTotal() ) }}</span></td>
+                        <td class="text-left"><span class="amount">₱ {{ $newGetSubTotal }}</span></td>
                     </tr>
                   
                     <tr class="cart-subtotal text-left">
